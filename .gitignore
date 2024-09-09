@@ -1,0 +1,10 @@
+
+server/apache/logs/access.log
+server/apache/logs/error.log
+server/install/install.sys
+server/mysql/data/aria_log.00000001
+server/mysql/data/aria_log_control
+server/mysql/data/ib_buffer_pool
+server/mysql/data/ib_logfile0
+server/mysql/data/ibdata1
+server/mysql/data/mysql_error.log
