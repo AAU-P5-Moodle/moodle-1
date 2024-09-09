@@ -11,3 +11,35 @@
 [Mon Sep 09 20:08:51.497224 2024] [mpm_winnt:notice] [pid 15688:tid 460] AH00422: Parent: Received shutdown signal -- Shutting down the server.
 [Mon Sep 09 20:09:02.142184 2024] [mpm_winnt:notice] [pid 5100:tid 484] AH00364: Child: All worker threads have exited.
 [Mon Sep 09 20:09:02.185101 2024] [mpm_winnt:notice] [pid 15688:tid 460] AH00430: Parent: Child process 5100 exited successfully.
+[Mon Sep 09 20:27:45.625434 2024] [ssl:warn] [pid 14036:tid 476] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:27:45.650551 2024] [ssl:warn] [pid 14036:tid 476] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:27:45.690548 2024] [mpm_winnt:notice] [pid 14036:tid 476] AH00455: Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.2.4 configured -- resuming normal operations
+[Mon Sep 09 20:27:45.690548 2024] [mpm_winnt:notice] [pid 14036:tid 476] AH00456: Apache Lounge VS16 Server built: Mar  7 2023 13:21:03
+[Mon Sep 09 20:27:45.690548 2024] [core:notice] [pid 14036:tid 476] AH00094: Command line: 'apache\\bin\\httpd.exe -d C:/moodle-1/server/apache -f conf\\httpd.conf'
+[Mon Sep 09 20:27:45.694551 2024] [mpm_winnt:notice] [pid 14036:tid 476] AH00418: Parent: Created child process 15832
+[Mon Sep 09 20:27:45.942981 2024] [ssl:warn] [pid 15832:tid 460] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:27:45.965981 2024] [ssl:warn] [pid 15832:tid 460] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:27:45.996981 2024] [mpm_winnt:notice] [pid 15832:tid 460] AH00354: Child: Starting 150 worker threads.
+[Mon Sep 09 20:29:53.250382 2024] [php:warn] [pid 15832:tid 1960] [client ::1:53784] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\\moodle-1\\server\\moodle\\lib\\dml\\mysqli_native_moodle_database.php on line 91, referer: http://localhost/install.php
+[Mon Sep 09 20:30:18.188008 2024] [php:warn] [pid 15832:tid 1956] [client ::1:53785] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\\moodle-1\\server\\moodle\\lib\\dml\\mysqli_native_moodle_database.php on line 91, referer: http://localhost/install.php
+[Mon Sep 09 20:32:29.334833 2024] [php:warn] [pid 15832:tid 1956] [client ::1:53866] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\\moodle-1\\server\\moodle\\lib\\dml\\mysqli_native_moodle_database.php on line 91, referer: http://localhost/install.php
+[Mon Sep 09 20:33:55.661740 2024] [mpm_winnt:notice] [pid 14036:tid 476] AH00422: Parent: Received shutdown signal -- Shutting down the server.
+[Mon Sep 09 20:34:25.675839 2024] [mpm_winnt:notice] [pid 14036:tid 476] AH00431: Parent: Forcing termination of child process 15832
+[Mon Sep 09 20:34:49.321346 2024] [ssl:warn] [pid 5652:tid 472] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:34:49.343349 2024] [ssl:warn] [pid 5652:tid 472] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:34:49.375346 2024] [mpm_winnt:notice] [pid 5652:tid 472] AH00455: Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.2.4 configured -- resuming normal operations
+[Mon Sep 09 20:34:49.375346 2024] [mpm_winnt:notice] [pid 5652:tid 472] AH00456: Apache Lounge VS16 Server built: Mar  7 2023 13:21:03
+[Mon Sep 09 20:34:49.375346 2024] [core:notice] [pid 5652:tid 472] AH00094: Command line: 'apache\\bin\\httpd.exe -d C:/moodle-1/server/apache -f conf\\httpd.conf'
+[Mon Sep 09 20:34:49.378346 2024] [mpm_winnt:notice] [pid 5652:tid 472] AH00418: Parent: Created child process 9804
+[Mon Sep 09 20:34:49.619360 2024] [ssl:warn] [pid 9804:tid 468] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:34:49.639359 2024] [ssl:warn] [pid 9804:tid 468] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:34:49.666359 2024] [mpm_winnt:notice] [pid 9804:tid 468] AH00354: Child: Starting 150 worker threads.
+[Mon Sep 09 20:35:08.739867 2024] [php:warn] [pid 9804:tid 1936] [client ::1:53917] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\\moodle-1\\server\\moodle\\lib\\dml\\mysqli_native_moodle_database.php on line 91, referer: http://localhost/install.php
+[Mon Sep 09 20:35:18.661871 2024] [php:warn] [pid 9804:tid 1892] [client ::1:53918] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\\moodle-1\\server\\moodle\\lib\\dml\\mysqli_native_moodle_database.php on line 91, referer: http://localhost/install.php
+[Mon Sep 09 20:36:41.447915 2024] [php:warn] [pid 9804:tid 1936] [client ::1:53942] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\\moodle-1\\server\\moodle\\lib\\dml\\mysqli_native_moodle_database.php on line 91, referer: http://localhost/install.php
+[Mon Sep 09 20:36:47.229514 2024] [php:warn] [pid 9804:tid 1892] [client ::1:53943] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\\moodle-1\\server\\moodle\\lib\\dml\\mysqli_native_moodle_database.php on line 91, referer: http://localhost/install.php
+[Mon Sep 09 20:40:20.993424 2024] [php:warn] [pid 9804:tid 1936] [client ::1:53954] PHP Warning:  mysqli::__construct(): (HY000/2002): No connection could be made because the target machine actively refused it in C:\\moodle-1\\server\\moodle\\lib\\dml\\mysqli_native_moodle_database.php on line 91, referer: http://localhost/install.php
+[Mon Sep 09 20:42:51.516429 2024] [php:warn] [pid 9804:tid 1892] [client ::1:54195] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\\moodle-1\\server\\moodle\\lib\\dml\\mysqli_native_moodle_database.php on line 91, referer: http://localhost/install.php
+[Mon Sep 09 21:00:25.918442 2024] [mpm_winnt:notice] [pid 5652:tid 472] AH00422: Parent: Received shutdown signal -- Shutting down the server.
+[Mon Sep 09 21:00:42.037927 2024] [mpm_winnt:notice] [pid 9804:tid 468] AH00364: Child: All worker threads have exited.
+[Mon Sep 09 21:00:42.077917 2024] [mpm_winnt:notice] [pid 5652:tid 472] AH00430: Parent: Child process 9804 exited successfully.
