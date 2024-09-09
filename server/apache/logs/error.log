@@ -55,3 +55,15 @@
 [Mon Sep 09 21:19:07.760905 2024] [mpm_winnt:notice] [pid 15188:tid 452] AH00422: Parent: Received shutdown signal -- Shutting down the server.
 [Mon Sep 09 21:19:09.769711 2024] [mpm_winnt:notice] [pid 12712:tid 432] AH00364: Child: All worker threads have exited.
 [Mon Sep 09 21:19:09.790539 2024] [mpm_winnt:notice] [pid 15188:tid 452] AH00430: Parent: Child process 12712 exited successfully.
+[Mon Sep 09 21:40:55.819595 2024] [ssl:warn] [pid 5504:tid 436] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 21:40:55.842594 2024] [ssl:warn] [pid 5504:tid 436] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 21:40:55.872595 2024] [mpm_winnt:notice] [pid 5504:tid 436] AH00455: Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.2.4 configured -- resuming normal operations
+[Mon Sep 09 21:40:55.872595 2024] [mpm_winnt:notice] [pid 5504:tid 436] AH00456: Apache Lounge VS16 Server built: Mar  7 2023 13:21:03
+[Mon Sep 09 21:40:55.872595 2024] [core:notice] [pid 5504:tid 436] AH00094: Command line: 'apache\\bin\\httpd.exe -d C:/moodle-1/server/apache -f conf\\httpd.conf'
+[Mon Sep 09 21:40:55.875595 2024] [mpm_winnt:notice] [pid 5504:tid 436] AH00418: Parent: Created child process 22784
+[Mon Sep 09 21:40:56.049594 2024] [ssl:warn] [pid 22784:tid 456] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 21:40:56.068594 2024] [ssl:warn] [pid 22784:tid 456] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 21:40:56.094597 2024] [mpm_winnt:notice] [pid 22784:tid 456] AH00354: Child: Starting 150 worker threads.
+[Mon Sep 09 21:42:44.296254 2024] [mpm_winnt:notice] [pid 5504:tid 436] AH00422: Parent: Received shutdown signal -- Shutting down the server.
+[Mon Sep 09 21:42:46.324614 2024] [mpm_winnt:notice] [pid 22784:tid 456] AH00364: Child: All worker threads have exited.
+[Mon Sep 09 21:42:46.364401 2024] [mpm_winnt:notice] [pid 5504:tid 436] AH00430: Parent: Child process 22784 exited successfully.
