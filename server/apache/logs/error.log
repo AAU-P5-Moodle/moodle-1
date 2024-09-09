@@ -1,0 +1,13 @@
+[Mon Sep 09 20:03:49.643682 2024] [ssl:warn] [pid 15688:tid 460] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:03:49.685682 2024] [ssl:warn] [pid 15688:tid 460] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:03:53.568669 2024] [mpm_winnt:notice] [pid 15688:tid 460] AH00455: Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.2.4 configured -- resuming normal operations
+[Mon Sep 09 20:03:53.568669 2024] [mpm_winnt:notice] [pid 15688:tid 460] AH00456: Apache Lounge VS16 Server built: Mar  7 2023 13:21:03
+[Mon Sep 09 20:03:53.568669 2024] [core:notice] [pid 15688:tid 460] AH00094: Command line: 'apache\\bin\\httpd.exe -d C:/Users/ida-0/Documents/GitHub/moodle-1/server/apache -f conf\\httpd.conf'
+[Mon Sep 09 20:03:53.595664 2024] [mpm_winnt:notice] [pid 15688:tid 460] AH00418: Parent: Created child process 5100
+[Mon Sep 09 20:03:53.896665 2024] [ssl:warn] [pid 5100:tid 484] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:03:53.922665 2024] [ssl:warn] [pid 5100:tid 484] AH01909: www.example.com:443:0 server certificate does NOT include an ID which matches the server name
+[Mon Sep 09 20:03:53.952665 2024] [mpm_winnt:notice] [pid 5100:tid 484] AH00354: Child: Starting 150 worker threads.
+[Mon Sep 09 20:07:20.527518 2024] [php:warn] [pid 5100:tid 1948] [client ::1:53358] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\\Users\\ida-0\\Documents\\GitHub\\moodle-1\\server\\moodle\\lib\\dml\\mysqli_native_moodle_database.php on line 91, referer: http://localhost/install.php
+[Mon Sep 09 20:08:51.497224 2024] [mpm_winnt:notice] [pid 15688:tid 460] AH00422: Parent: Received shutdown signal -- Shutting down the server.
+[Mon Sep 09 20:09:02.142184 2024] [mpm_winnt:notice] [pid 5100:tid 484] AH00364: Child: All worker threads have exited.
+[Mon Sep 09 20:09:02.185101 2024] [mpm_winnt:notice] [pid 15688:tid 460] AH00430: Parent: Child process 5100 exited successfully.
