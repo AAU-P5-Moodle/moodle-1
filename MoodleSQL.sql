@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `mdl_adminpresets` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Table to store presets data';
 
 -- Dumping data for table moodle.mdl_adminpresets: ~2 rows (approximately)
-INSERT INTO `mdl_adminpresets` (`id`, `userid`, `name`, `comments`, `site`, `author`, `moodleversion`, `moodlerelease`, `iscore`, `timecreated`, `timeimported`) VALUES
+INSERT IGNORE INTO `mdl_adminpresets` (`id`, `userid`, `name`, `comments`, `site`, `author`, `moodleversion`, `moodlerelease`, `iscore`, `timecreated`, `timeimported`) VALUES
 	(1, 0, 'Starter', 'Moodle with all of the most popular features, including Assignment, Feedback, Forum, H5P, Quiz and Completion tracking.', 'http://localhost', '', '', '', 1, 1725907902, 0),
 	(2, 0, 'Full', 'All the Starter features plus External (LTI) tool, SCORM, Workshop, Analytics, Badges, Competencies, Learning plans and lots more.', 'http://localhost', '', '', '', 2, 1725907903, 0);
 
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `mdl_adminpresets_it` (
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Table to store settings';
 
 -- Dumping data for table moodle.mdl_adminpresets_it: ~24 rows (approximately)
-INSERT INTO `mdl_adminpresets_it` (`id`, `adminpresetid`, `plugin`, `name`, `value`) VALUES
+INSERT IGNORE INTO `mdl_adminpresets_it` (`id`, `adminpresetid`, `plugin`, `name`, `value`) VALUES
 	(1, 1, 'none', 'usecomments', '0'),
 	(2, 1, 'none', 'usetags', '0'),
 	(3, 1, 'none', 'enablenotes', '0'),
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `mdl_adminpresets_plug` (
 ) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Admin presets plugins status, to store information about whe';
 
 -- Dumping data for table moodle.mdl_adminpresets_plug: ~113 rows (approximately)
-INSERT INTO `mdl_adminpresets_plug` (`id`, `adminpresetid`, `plugin`, `name`, `enabled`) VALUES
+INSERT IGNORE INTO `mdl_adminpresets_plug` (`id`, `adminpresetid`, `plugin`, `name`, `enabled`) VALUES
 	(1, 1, 'mod', 'chat', 0),
 	(2, 1, 'mod', 'data', 0),
 	(3, 1, 'mod', 'lti', 0),
@@ -307,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `mdl_analytics_models` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Analytic models.';
 
 -- Dumping data for table moodle.mdl_analytics_models: ~5 rows (approximately)
-INSERT INTO `mdl_analytics_models` (`id`, `enabled`, `trained`, `name`, `target`, `indicators`, `timesplitting`, `predictionsprocessor`, `version`, `contextids`, `timecreated`, `timemodified`, `usermodified`) VALUES
+INSERT IGNORE INTO `mdl_analytics_models` (`id`, `enabled`, `trained`, `name`, `target`, `indicators`, `timesplitting`, `predictionsprocessor`, `version`, `contextids`, `timecreated`, `timemodified`, `usermodified`) VALUES
 	(1, 0, 0, NULL, '\\core_course\\analytics\\target\\course_dropout', '["\\\\core\\\\analytics\\\\indicator\\\\any_access_after_end","\\\\core\\\\analytics\\\\indicator\\\\any_access_before_start","\\\\core\\\\analytics\\\\indicator\\\\any_write_action_in_course","\\\\core\\\\analytics\\\\indicator\\\\read_actions","\\\\core_course\\\\analytics\\\\indicator\\\\completion_enabled","\\\\core_course\\\\analytics\\\\indicator\\\\potential_cognitive_depth","\\\\core_course\\\\analytics\\\\indicator\\\\potential_social_breadth","\\\\mod_assign\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_assign\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_book\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_book\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_chat\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_chat\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_choice\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_choice\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_data\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_data\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_feedback\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_feedback\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_folder\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_folder\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_forum\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_forum\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_glossary\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_glossary\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_imscp\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_imscp\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_label\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_label\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_lesson\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_lesson\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_lti\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_lti\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_page\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_page\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_quiz\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_quiz\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_resource\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_resource\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_scorm\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_scorm\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_survey\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_survey\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_url\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_url\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_wiki\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_wiki\\\\analytics\\\\indicator\\\\social_breadth","\\\\mod_workshop\\\\analytics\\\\indicator\\\\cognitive_depth","\\\\mod_workshop\\\\analytics\\\\indicator\\\\social_breadth"]', NULL, NULL, 1725907908, NULL, 1725907908, 1725907908, 0),
 	(2, 1, 1, NULL, '\\core_course\\analytics\\target\\no_teaching', '["\\\\core_course\\\\analytics\\\\indicator\\\\no_teacher","\\\\core_course\\\\analytics\\\\indicator\\\\no_student"]', '\\core\\analytics\\time_splitting\\single_range', NULL, 1725907908, NULL, 1725907908, 1725907908, 0),
 	(3, 1, 1, NULL, '\\core_user\\analytics\\target\\upcoming_activities_due', '["\\\\core_course\\\\analytics\\\\indicator\\\\activities_due"]', '\\core\\analytics\\time_splitting\\upcoming_week', NULL, 1725907908, NULL, 1725907908, 1725907908, 0),
@@ -978,7 +978,7 @@ CREATE TABLE IF NOT EXISTS `mdl_badge_external_backpack` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Defines settings for site level backpacks that a user can co';
 
 -- Dumping data for table moodle.mdl_badge_external_backpack: ~1 rows (approximately)
-INSERT INTO `mdl_badge_external_backpack` (`id`, `backpackapiurl`, `backpackweburl`, `apiversion`, `sortorder`, `oauth2_issuerid`) VALUES
+INSERT IGNORE INTO `mdl_badge_external_backpack` (`id`, `backpackapiurl`, `backpackweburl`, `apiversion`, `sortorder`, `oauth2_issuerid`) VALUES
 	(1, 'https://api.badgr.io/v2', 'https://badgr.io', '2', 1, NULL);
 
 -- Dumping structure for table moodle.mdl_badge_external_identifier
@@ -1149,7 +1149,7 @@ CREATE TABLE IF NOT EXISTS `mdl_block` (
 ) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='contains all installed blocks';
 
 -- Dumping data for table moodle.mdl_block: ~43 rows (approximately)
-INSERT INTO `mdl_block` (`id`, `name`, `cron`, `lastcron`, `visible`) VALUES
+INSERT IGNORE INTO `mdl_block` (`id`, `name`, `cron`, `lastcron`, `visible`) VALUES
 	(1, 'accessreview', 0, 0, 1),
 	(2, 'activity_modules', 0, 0, 1),
 	(3, 'activity_results', 0, 0, 1),
@@ -1216,7 +1216,7 @@ CREATE TABLE IF NOT EXISTS `mdl_block_instances` (
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='This table stores block instances. The type of block this is';
 
 -- Dumping data for table moodle.mdl_block_instances: ~8 rows (approximately)
-INSERT INTO `mdl_block_instances` (`id`, `blockname`, `parentcontextid`, `showinsubcontexts`, `requiredbytheme`, `pagetypepattern`, `subpagepattern`, `defaultregion`, `defaultweight`, `configdata`, `timecreated`, `timemodified`) VALUES
+INSERT IGNORE INTO `mdl_block_instances` (`id`, `blockname`, `parentcontextid`, `showinsubcontexts`, `requiredbytheme`, `pagetypepattern`, `subpagepattern`, `defaultregion`, `defaultweight`, `configdata`, `timecreated`, `timemodified`) VALUES
 	(1, 'admin_bookmarks', 1, 0, 0, 'admin-*', NULL, 'side-pre', 2, '', 1725907958, 1725907958),
 	(2, 'recentlyaccesseditems', 1, 0, 0, 'my-index', '2', 'side-post', 0, '', 1725907958, 1725907958),
 	(3, 'timeline', 1, 0, 0, 'my-index', '2', 'content', 0, '', 1725907958, 1725907958),
@@ -1386,7 +1386,7 @@ CREATE TABLE IF NOT EXISTS `mdl_cache_flags` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Cache of time-sensitive flags';
 
 -- Dumping data for table moodle.mdl_cache_flags: ~2 rows (approximately)
-INSERT INTO `mdl_cache_flags` (`id`, `flagtype`, `name`, `timemodified`, `value`, `expiry`) VALUES
+INSERT IGNORE INTO `mdl_cache_flags` (`id`, `flagtype`, `name`, `timemodified`, `value`, `expiry`) VALUES
 	(1, 'userpreferenceschanged', '2', 1725908367, '1', 1725937167),
 	(2, 'accesslib/dirtyusers', '2', 1725910951, '1', 1725939751);
 
@@ -1403,7 +1403,7 @@ CREATE TABLE IF NOT EXISTS `mdl_capabilities` (
 ) ENGINE=InnoDB AUTO_INCREMENT=732 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='this defines all capabilities';
 
 -- Dumping data for table moodle.mdl_capabilities: ~731 rows (approximately)
-INSERT INTO `mdl_capabilities` (`id`, `name`, `captype`, `contextlevel`, `component`, `riskbitmask`) VALUES
+INSERT IGNORE INTO `mdl_capabilities` (`id`, `name`, `captype`, `contextlevel`, `component`, `riskbitmask`) VALUES
 	(1, 'moodle/site:config', 'write', 10, 'moodle', 62),
 	(2, 'moodle/site:configview', 'read', 10, 'moodle', 0),
 	(3, 'moodle/site:readallmessages', 'read', 10, 'moodle', 8),
@@ -2704,7 +2704,7 @@ CREATE TABLE IF NOT EXISTS `mdl_config` (
 ) ENGINE=InnoDB AUTO_INCREMENT=586 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Moodle configuration variables';
 
 -- Dumping data for table moodle.mdl_config: ~581 rows (approximately)
-INSERT INTO `mdl_config` (`id`, `name`, `value`) VALUES
+INSERT IGNORE INTO `mdl_config` (`id`, `name`, `value`) VALUES
 	(2, 'rolesactive', '1'),
 	(3, 'auth', 'email'),
 	(4, 'enrol_plugins_enabled', 'manual,guest,self,cohort'),
@@ -3302,7 +3302,7 @@ CREATE TABLE IF NOT EXISTS `mdl_config_log` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1928 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Changes done in server configuration through admin UI';
 
 -- Dumping data for table moodle.mdl_config_log: ~1,927 rows (approximately)
-INSERT INTO `mdl_config_log` (`id`, `userid`, `timemodified`, `plugin`, `name`, `value`, `oldvalue`) VALUES
+INSERT IGNORE INTO `mdl_config_log` (`id`, `userid`, `timemodified`, `plugin`, `name`, `value`, `oldvalue`) VALUES
 	(1, 0, 1725907909, NULL, 'enableuserfeedback', '0', NULL),
 	(2, 0, 1725907909, NULL, 'userfeedback_nextreminder', '1', NULL),
 	(3, 0, 1725907909, NULL, 'userfeedback_remindafter', '90', NULL),
@@ -5242,7 +5242,7 @@ CREATE TABLE IF NOT EXISTS `mdl_config_plugins` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2147 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Moodle modules and plugins configuration variables';
 
 -- Dumping data for table moodle.mdl_config_plugins: ~2,061 rows (approximately)
-INSERT INTO `mdl_config_plugins` (`id`, `plugin`, `name`, `value`) VALUES
+INSERT IGNORE INTO `mdl_config_plugins` (`id`, `plugin`, `name`, `value`) VALUES
 	(1, 'question', 'multichoice_sortorder', '1'),
 	(2, 'question', 'truefalse_sortorder', '2'),
 	(3, 'question', 'match_sortorder', '3'),
@@ -7343,7 +7343,7 @@ CREATE TABLE IF NOT EXISTS `mdl_context` (
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='one of these must be set';
 
 -- Dumping data for table moodle.mdl_context: ~14 rows (approximately)
-INSERT INTO `mdl_context` (`id`, `contextlevel`, `instanceid`, `path`, `depth`, `locked`) VALUES
+INSERT IGNORE INTO `mdl_context` (`id`, `contextlevel`, `instanceid`, `path`, `depth`, `locked`) VALUES
 	(1, 10, 0, '/1', 1, 0),
 	(2, 50, 1, '/1/2', 2, 0),
 	(3, 40, 1, '/1/3', 2, 0),
@@ -7418,7 +7418,7 @@ CREATE TABLE IF NOT EXISTS `mdl_course` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Central course table';
 
 -- Dumping data for table moodle.mdl_course: ~2 rows (approximately)
-INSERT INTO `mdl_course` (`id`, `category`, `sortorder`, `fullname`, `shortname`, `idnumber`, `summary`, `summaryformat`, `format`, `showgrades`, `newsitems`, `startdate`, `enddate`, `relativedatesmode`, `marker`, `maxbytes`, `legacyfiles`, `showreports`, `visible`, `visibleold`, `downloadcontent`, `groupmode`, `groupmodeforce`, `defaultgroupingid`, `lang`, `calendartype`, `theme`, `timecreated`, `timemodified`, `requested`, `enablecompletion`, `completionnotify`, `cacherev`, `originalcourseid`, `showactivitydates`, `showcompletionconditions`, `pdfexportfont`) VALUES
+INSERT IGNORE INTO `mdl_course` (`id`, `category`, `sortorder`, `fullname`, `shortname`, `idnumber`, `summary`, `summaryformat`, `format`, `showgrades`, `newsitems`, `startdate`, `enddate`, `relativedatesmode`, `marker`, `maxbytes`, `legacyfiles`, `showreports`, `visible`, `visibleold`, `downloadcontent`, `groupmode`, `groupmodeforce`, `defaultgroupingid`, `lang`, `calendartype`, `theme`, `timecreated`, `timemodified`, `requested`, `enablecompletion`, `completionnotify`, `cacherev`, `originalcourseid`, `showactivitydates`, `showcompletionconditions`, `pdfexportfont`) VALUES
 	(1, 0, 1, 'Moodle P5 Multi-Project', 'MoodleP5', '', '<p>development server for moodle p5 multiproject.</p>', 0, 'site', 1, 3, 0, 0, 0, 0, 0, 0, 0, 1, 1, NULL, 0, 0, 0, '', '', '', 1725907897, 1725908361, 0, 0, 0, 1725908008, NULL, 0, NULL, NULL),
 	(2, 1, 10001, 'Test Course', 'TC', '', '<p>Test course for moodle database setup</p>', 1, 'topics', 1, 5, 1725919200, 1757455200, 0, 0, 0, 0, 0, 1, 1, NULL, 0, 0, 0, '', '', '', 1725910951, 1725910951, 0, 1, 0, 1725910957, NULL, 1, 1, NULL);
 
@@ -7443,7 +7443,7 @@ CREATE TABLE IF NOT EXISTS `mdl_course_categories` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Course categories';
 
 -- Dumping data for table moodle.mdl_course_categories: ~1 rows (approximately)
-INSERT INTO `mdl_course_categories` (`id`, `name`, `idnumber`, `description`, `descriptionformat`, `parent`, `sortorder`, `coursecount`, `visible`, `visibleold`, `timemodified`, `depth`, `path`, `theme`) VALUES
+INSERT IGNORE INTO `mdl_course_categories` (`id`, `name`, `idnumber`, `description`, `descriptionformat`, `parent`, `sortorder`, `coursecount`, `visible`, `visibleold`, `timemodified`, `depth`, `path`, `theme`) VALUES
 	(1, 'Category 1', NULL, NULL, 1, 0, 10000, 1, 1, 1, 1725907897, 1, '/1', NULL);
 
 -- Dumping structure for table moodle.mdl_course_completions
@@ -7549,7 +7549,7 @@ CREATE TABLE IF NOT EXISTS `mdl_course_format_options` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Stores format-specific options for the course or course sect';
 
 -- Dumping data for table moodle.mdl_course_format_options: ~3 rows (approximately)
-INSERT INTO `mdl_course_format_options` (`id`, `courseid`, `format`, `sectionid`, `name`, `value`) VALUES
+INSERT IGNORE INTO `mdl_course_format_options` (`id`, `courseid`, `format`, `sectionid`, `name`, `value`) VALUES
 	(1, 1, 'site', 0, 'numsections', '1'),
 	(2, 2, 'topics', 0, 'hiddensections', '1'),
 	(3, 2, 'topics', 0, 'coursedisplay', '0');
@@ -7590,7 +7590,7 @@ CREATE TABLE IF NOT EXISTS `mdl_course_modules` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='course_modules table retrofitted from MySQL';
 
 -- Dumping data for table moodle.mdl_course_modules: ~1 rows (approximately)
-INSERT INTO `mdl_course_modules` (`id`, `course`, `module`, `instance`, `section`, `idnumber`, `added`, `score`, `indent`, `visible`, `visibleoncoursepage`, `visibleold`, `groupmode`, `groupingid`, `completion`, `completiongradeitemnumber`, `completionview`, `completionexpected`, `completionpassgrade`, `showdescription`, `availability`, `deletioninprogress`, `downloadcontent`, `lang`) VALUES
+INSERT IGNORE INTO `mdl_course_modules` (`id`, `course`, `module`, `instance`, `section`, `idnumber`, `added`, `score`, `indent`, `visible`, `visibleoncoursepage`, `visibleold`, `groupmode`, `groupingid`, `completion`, `completiongradeitemnumber`, `completionview`, `completionexpected`, `completionpassgrade`, `showdescription`, `availability`, `deletioninprogress`, `downloadcontent`, `lang`) VALUES
 	(1, 2, 9, 1, 1, NULL, 1725910951, 0, 0, 1, 1, 1, 0, 0, 0, NULL, 0, 0, 0, 0, NULL, 0, 1, NULL);
 
 -- Dumping structure for table moodle.mdl_course_modules_completion
@@ -7674,7 +7674,7 @@ CREATE TABLE IF NOT EXISTS `mdl_course_sections` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='to define the sections for each course';
 
 -- Dumping data for table moodle.mdl_course_sections: ~5 rows (approximately)
-INSERT INTO `mdl_course_sections` (`id`, `course`, `section`, `name`, `summary`, `summaryformat`, `sequence`, `visible`, `availability`, `component`, `itemid`, `timemodified`) VALUES
+INSERT IGNORE INTO `mdl_course_sections` (`id`, `course`, `section`, `name`, `summary`, `summaryformat`, `sequence`, `visible`, `availability`, `component`, `itemid`, `timemodified`) VALUES
 	(1, 2, 0, NULL, '', 1, '1', 1, NULL, NULL, NULL, 1725910951),
 	(2, 2, 1, NULL, '', 1, '', 1, NULL, NULL, NULL, 1725910951),
 	(3, 2, 2, NULL, '', 1, '', 1, NULL, NULL, NULL, 1725910951),
@@ -7911,7 +7911,7 @@ CREATE TABLE IF NOT EXISTS `mdl_enrol` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Instances of enrolment plugins used in courses, fields marke';
 
 -- Dumping data for table moodle.mdl_enrol: ~3 rows (approximately)
-INSERT INTO `mdl_enrol` (`id`, `enrol`, `status`, `courseid`, `sortorder`, `name`, `enrolperiod`, `enrolstartdate`, `enrolenddate`, `expirynotify`, `expirythreshold`, `notifyall`, `password`, `cost`, `currency`, `roleid`, `customint1`, `customint2`, `customint3`, `customint4`, `customint5`, `customint6`, `customint7`, `customint8`, `customchar1`, `customchar2`, `customchar3`, `customdec1`, `customdec2`, `customtext1`, `customtext2`, `customtext3`, `customtext4`, `timecreated`, `timemodified`) VALUES
+INSERT IGNORE INTO `mdl_enrol` (`id`, `enrol`, `status`, `courseid`, `sortorder`, `name`, `enrolperiod`, `enrolstartdate`, `enrolenddate`, `expirynotify`, `expirythreshold`, `notifyall`, `password`, `cost`, `currency`, `roleid`, `customint1`, `customint2`, `customint3`, `customint4`, `customint5`, `customint6`, `customint7`, `customint8`, `customchar1`, `customchar2`, `customchar3`, `customdec1`, `customdec2`, `customtext1`, `customtext2`, `customtext3`, `customtext4`, `timecreated`, `timemodified`) VALUES
 	(1, 'manual', 0, 2, 0, NULL, 0, 0, 0, 0, 86400, 0, NULL, NULL, NULL, 5, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1725910951, 1725910951),
 	(2, 'guest', 1, 2, 1, NULL, 0, 0, 0, 0, 0, 0, '', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1725910951, 1725910951),
 	(3, 'self', 1, 2, 2, NULL, 0, 0, 0, 0, 86400, 0, NULL, NULL, NULL, 5, 0, 0, 0, 1, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1725910951, 1725910951);
@@ -8363,7 +8363,7 @@ CREATE TABLE IF NOT EXISTS `mdl_external_functions` (
 ) ENGINE=InnoDB AUTO_INCREMENT=748 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='list of all external functions';
 
 -- Dumping data for table moodle.mdl_external_functions: ~747 rows (approximately)
-INSERT INTO `mdl_external_functions` (`id`, `name`, `classname`, `methodname`, `classpath`, `component`, `capabilities`, `services`) VALUES
+INSERT IGNORE INTO `mdl_external_functions` (`id`, `name`, `classname`, `methodname`, `classpath`, `component`, `capabilities`, `services`) VALUES
 	(1, 'core_auth_confirm_user', 'core_auth_external', 'confirm_user', NULL, 'moodle', '', NULL),
 	(2, 'core_auth_request_password_reset', 'core_auth_external', 'request_password_reset', NULL, 'moodle', '', NULL),
 	(3, 'core_auth_is_minor', 'core_auth_external', 'is_minor', NULL, 'moodle', '', NULL),
@@ -9130,7 +9130,7 @@ CREATE TABLE IF NOT EXISTS `mdl_external_services` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='built in and custom external services';
 
 -- Dumping data for table moodle.mdl_external_services: ~1 rows (approximately)
-INSERT INTO `mdl_external_services` (`id`, `name`, `enabled`, `requiredcapability`, `restrictedusers`, `component`, `timecreated`, `timemodified`, `shortname`, `downloadfiles`, `uploadfiles`) VALUES
+INSERT IGNORE INTO `mdl_external_services` (`id`, `name`, `enabled`, `requiredcapability`, `restrictedusers`, `component`, `timecreated`, `timemodified`, `shortname`, `downloadfiles`, `uploadfiles`) VALUES
 	(1, 'Moodle mobile web service', 0, NULL, 0, 'moodle', 1725907907, 1725908177, 'moodle_mobile_app', 1, 1);
 
 -- Dumping structure for table moodle.mdl_external_services_functions
@@ -9143,7 +9143,7 @@ CREATE TABLE IF NOT EXISTS `mdl_external_services_functions` (
 ) ENGINE=InnoDB AUTO_INCREMENT=432 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='lists functions available in each service group';
 
 -- Dumping data for table moodle.mdl_external_services_functions: ~431 rows (approximately)
-INSERT INTO `mdl_external_services_functions` (`id`, `externalserviceid`, `functionname`) VALUES
+INSERT IGNORE INTO `mdl_external_services_functions` (`id`, `externalserviceid`, `functionname`) VALUES
 	(1, 1, 'core_badges_get_badge'),
 	(2, 1, 'core_badges_get_user_badges'),
 	(3, 1, 'core_badges_get_user_badge_by_hash'),
@@ -9808,7 +9808,7 @@ CREATE TABLE IF NOT EXISTS `mdl_files` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='description of files, content is stored in sha1 file pool';
 
 -- Dumping data for table moodle.mdl_files: ~5 rows (approximately)
-INSERT INTO `mdl_files` (`id`, `contenthash`, `pathnamehash`, `contextid`, `component`, `filearea`, `itemid`, `filepath`, `filename`, `userid`, `filesize`, `mimetype`, `status`, `source`, `author`, `license`, `timecreated`, `timemodified`, `sortorder`, `referencefileid`) VALUES
+INSERT IGNORE INTO `mdl_files` (`id`, `contenthash`, `pathnamehash`, `contextid`, `component`, `filearea`, `itemid`, `filepath`, `filename`, `userid`, `filesize`, `mimetype`, `status`, `source`, `author`, `license`, `timecreated`, `timemodified`, `sortorder`, `referencefileid`) VALUES
 	(1, '5f8e911d0da441e36f47c5c46f4393269211ca56', '508e674d49c30d4fde325fe6c7f6fd3d56b247e1', 1, 'assignfeedback_editpdf', 'stamps', 0, '/', 'smile.png', 2, 1085, 'image/png', 0, NULL, NULL, NULL, 1725907989, 1725907989, 0, NULL),
 	(2, 'da39a3ee5e6b4b0d3255bfef95601890afd80709', '70b7cdade7b4e27d4e83f0cdaad10d6a3c0cccb5', 1, 'assignfeedback_editpdf', 'stamps', 0, '/', '.', 2, 0, NULL, 0, NULL, NULL, NULL, 1725907989, 1725907989, 0, NULL),
 	(3, '75c101cb8cb34ea573cd25ac38f8157b1de901b8', '68317eab56c67d32aeaee5acf509a0c4aa828b6b', 1, 'assignfeedback_editpdf', 'stamps', 0, '/', 'sad.png', 2, 966, 'image/png', 0, NULL, NULL, NULL, 1725907989, 1725907989, 0, NULL),
@@ -9863,7 +9863,7 @@ CREATE TABLE IF NOT EXISTS `mdl_filter_active` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Stores information about which filters are active in which c';
 
 -- Dumping data for table moodle.mdl_filter_active: ~6 rows (approximately)
-INSERT INTO `mdl_filter_active` (`id`, `filter`, `contextid`, `active`, `sortorder`) VALUES
+INSERT IGNORE INTO `mdl_filter_active` (`id`, `filter`, `contextid`, `active`, `sortorder`) VALUES
 	(1, 'activitynames', 1, 1, 2),
 	(2, 'displayh5p', 1, 1, 1),
 	(3, 'emoticon', 1, 1, 4),
@@ -9940,7 +9940,7 @@ CREATE TABLE IF NOT EXISTS `mdl_forum` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Forums contain and structure discussion';
 
 -- Dumping data for table moodle.mdl_forum: ~1 rows (approximately)
-INSERT INTO `mdl_forum` (`id`, `course`, `type`, `name`, `intro`, `introformat`, `duedate`, `cutoffdate`, `assessed`, `assesstimestart`, `assesstimefinish`, `scale`, `grade_forum`, `grade_forum_notify`, `maxbytes`, `maxattachments`, `forcesubscribe`, `trackingtype`, `rsstype`, `rssarticles`, `timemodified`, `warnafter`, `blockafter`, `blockperiod`, `completiondiscussions`, `completionreplies`, `completionposts`, `displaywordcount`, `lockdiscussionafter`) VALUES
+INSERT IGNORE INTO `mdl_forum` (`id`, `course`, `type`, `name`, `intro`, `introformat`, `duedate`, `cutoffdate`, `assessed`, `assesstimestart`, `assesstimefinish`, `scale`, `grade_forum`, `grade_forum_notify`, `maxbytes`, `maxattachments`, `forcesubscribe`, `trackingtype`, `rsstype`, `rssarticles`, `timemodified`, `warnafter`, `blockafter`, `blockperiod`, `completiondiscussions`, `completionreplies`, `completionposts`, `displaywordcount`, `lockdiscussionafter`) VALUES
 	(1, 2, 'news', 'Announcements', 'General news and announcements', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1725910951, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- Dumping structure for table moodle.mdl_forum_digests
@@ -10216,7 +10216,7 @@ CREATE TABLE IF NOT EXISTS `mdl_glossary_formats` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Setting of the display formats';
 
 -- Dumping data for table moodle.mdl_glossary_formats: ~7 rows (approximately)
-INSERT INTO `mdl_glossary_formats` (`id`, `name`, `popupformatname`, `visible`, `showgroup`, `showtabs`, `defaultmode`, `defaulthook`, `sortkey`, `sortorder`) VALUES
+INSERT IGNORE INTO `mdl_glossary_formats` (`id`, `name`, `popupformatname`, `visible`, `showgroup`, `showtabs`, `defaultmode`, `defaulthook`, `sortkey`, `sortorder`) VALUES
 	(1, 'continuous', 'continuous', 1, 1, 'standard,category,date', '', '', '', ''),
 	(2, 'dictionary', 'dictionary', 1, 1, 'standard', '', '', '', ''),
 	(3, 'encyclopedia', 'encyclopedia', 1, 1, 'standard,category,date,author', '', '', '', ''),
@@ -11175,7 +11175,7 @@ CREATE TABLE IF NOT EXISTS `mdl_license` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='store licenses used by moodle';
 
 -- Dumping data for table moodle.mdl_license: ~9 rows (approximately)
-INSERT INTO `mdl_license` (`id`, `shortname`, `fullname`, `source`, `enabled`, `version`, `custom`, `sortorder`) VALUES
+INSERT IGNORE INTO `mdl_license` (`id`, `shortname`, `fullname`, `source`, `enabled`, `version`, `custom`, `sortorder`) VALUES
 	(1, 'unknown', 'Licence not specified', '', 1, 2010033100, 0, 1),
 	(2, 'allrightsreserved', 'All rights reserved', 'https://en.wikipedia.org/wiki/All_rights_reserved', 1, 2010033100, 0, 2),
 	(3, 'public', 'Public domain', 'https://en.wikipedia.org/wiki/Public_domain', 1, 2010033100, 0, 3),
@@ -11257,7 +11257,7 @@ CREATE TABLE IF NOT EXISTS `mdl_logstore_standard_log` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1289 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Standard log table';
 
 -- Dumping data for table moodle.mdl_logstore_standard_log: ~1,288 rows (approximately)
-INSERT INTO `mdl_logstore_standard_log` (`id`, `eventname`, `component`, `action`, `target`, `objecttable`, `objectid`, `crud`, `edulevel`, `contextid`, `contextlevel`, `contextinstanceid`, `userid`, `courseid`, `relateduserid`, `anonymous`, `other`, `timecreated`, `origin`, `ip`, `realuserid`) VALUES
+INSERT IGNORE INTO `mdl_logstore_standard_log` (`id`, `eventname`, `component`, `action`, `target`, `objecttable`, `objectid`, `crud`, `edulevel`, `contextid`, `contextlevel`, `contextinstanceid`, `userid`, `courseid`, `relateduserid`, `anonymous`, `other`, `timecreated`, `origin`, `ip`, `realuserid`) VALUES
 	(1, '\\core\\event\\user_loggedin', 'core', 'loggedin', 'user', 'user', 2, 'r', 0, 1, 10, 0, 2, 0, NULL, 0, 'a:2:{s:8:"username";s:5:"admin";s:13:"extrauserinfo";a:0:{}}', 1725908014, 'web', '0:0:0:0:0:0:0:1', NULL),
 	(2, '\\core\\event\\user_password_updated', 'core', 'updated', 'user_password', NULL, NULL, 'u', 0, 5, 30, 2, 2, 0, 2, 0, 'a:1:{s:14:"forgottenreset";b:0;}', 1725908160, 'web', '0:0:0:0:0:0:0:1', NULL),
 	(3, '\\core\\event\\user_updated', 'core', 'updated', 'user', 'user', 2, 'u', 0, 5, 30, 2, 2, 0, 2, 0, 'N;', 1725908160, 'web', '0:0:0:0:0:0:0:1', NULL),
@@ -12560,7 +12560,7 @@ CREATE TABLE IF NOT EXISTS `mdl_log_display` (
 ) ENGINE=InnoDB AUTO_INCREMENT=196 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='For a particular module/action, specifies a moodle table/fie';
 
 -- Dumping data for table moodle.mdl_log_display: ~195 rows (approximately)
-INSERT INTO `mdl_log_display` (`id`, `module`, `action`, `mtable`, `field`, `component`) VALUES
+INSERT IGNORE INTO `mdl_log_display` (`id`, `module`, `action`, `mtable`, `field`, `component`) VALUES
 	(1, 'course', 'user report', 'user', 'CONCAT(firstname, \' \', lastname)', 'moodle'),
 	(2, 'course', 'view', 'course', 'fullname', 'moodle'),
 	(3, 'course', 'view section', 'course_sections', 'name', 'moodle'),
@@ -13032,7 +13032,7 @@ CREATE TABLE IF NOT EXISTS `mdl_messageinbound_handlers` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Inbound Message Handler definitions.';
 
 -- Dumping data for table moodle.mdl_messageinbound_handlers: ~3 rows (approximately)
-INSERT INTO `mdl_messageinbound_handlers` (`id`, `component`, `classname`, `defaultexpiration`, `validateaddress`, `enabled`) VALUES
+INSERT IGNORE INTO `mdl_messageinbound_handlers` (`id`, `component`, `classname`, `defaultexpiration`, `validateaddress`, `enabled`) VALUES
 	(1, 'core', '\\core\\message\\inbound\\private_files_handler', 0, 1, 0),
 	(2, 'mod_forum', '\\mod_forum\\message\\inbound\\reply_handler', 604800, 1, 0),
 	(3, 'tool_messageinbound', '\\tool_messageinbound\\message\\inbound\\invalid_recipient_handler', 604800, 0, 1);
@@ -13204,7 +13204,7 @@ CREATE TABLE IF NOT EXISTS `mdl_message_processors` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='List of message output plugins';
 
 -- Dumping data for table moodle.mdl_message_processors: ~3 rows (approximately)
-INSERT INTO `mdl_message_processors` (`id`, `name`, `enabled`) VALUES
+INSERT IGNORE INTO `mdl_message_processors` (`id`, `name`, `enabled`) VALUES
 	(1, 'airnotifier', 1),
 	(2, 'email', 1),
 	(3, 'popup', 1);
@@ -13220,7 +13220,7 @@ CREATE TABLE IF NOT EXISTS `mdl_message_providers` (
 ) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='This table stores the message providers (modules and core sy';
 
 -- Dumping data for table moodle.mdl_message_providers: ~51 rows (approximately)
-INSERT INTO `mdl_message_providers` (`id`, `name`, `component`, `capability`) VALUES
+INSERT IGNORE INTO `mdl_message_providers` (`id`, `name`, `component`, `capability`) VALUES
 	(1, 'newlogin', 'moodle', NULL),
 	(2, 'notices', 'moodle', 'moodle/site:config'),
 	(3, 'errors', 'moodle', 'moodle/site:config'),
@@ -13380,7 +13380,7 @@ CREATE TABLE IF NOT EXISTS `mdl_mnet_application` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Information about applications on remote hosts';
 
 -- Dumping data for table moodle.mdl_mnet_application: ~2 rows (approximately)
-INSERT INTO `mdl_mnet_application` (`id`, `name`, `display_name`, `xmlrpc_server_url`, `sso_land_url`, `sso_jump_url`) VALUES
+INSERT IGNORE INTO `mdl_mnet_application` (`id`, `name`, `display_name`, `xmlrpc_server_url`, `sso_land_url`, `sso_jump_url`) VALUES
 	(1, 'moodle', 'Moodle', '/mnet/xmlrpc/server.php', '/auth/mnet/land.php', '/auth/mnet/jump.php'),
 	(2, 'mahara', 'Mahara', '/api/xmlrpc/server.php', '/auth/xmlrpc/land.php', '/auth/xmlrpc/jump.php');
 
@@ -13407,7 +13407,7 @@ CREATE TABLE IF NOT EXISTS `mdl_mnet_host` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Information about the local and remote hosts for RPC';
 
 -- Dumping data for table moodle.mdl_mnet_host: ~2 rows (approximately)
-INSERT INTO `mdl_mnet_host` (`id`, `deleted`, `wwwroot`, `ip_address`, `name`, `public_key`, `public_key_expires`, `transport`, `portno`, `last_connect_time`, `last_log_id`, `force_theme`, `theme`, `applicationid`, `sslverification`) VALUES
+INSERT IGNORE INTO `mdl_mnet_host` (`id`, `deleted`, `wwwroot`, `ip_address`, `name`, `public_key`, `public_key_expires`, `transport`, `portno`, `last_connect_time`, `last_log_id`, `force_theme`, `theme`, `applicationid`, `sslverification`) VALUES
 	(1, 0, 'http://localhost', '::1', '', '', 0, 0, 0, 0, 0, 0, NULL, 1, 0),
 	(2, 0, '', '', 'All Hosts', '', 0, 0, 0, 0, 0, 0, NULL, 1, 0);
 
@@ -13457,7 +13457,7 @@ CREATE TABLE IF NOT EXISTS `mdl_mnet_remote_rpc` (
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='This table describes functions that might be called remotely';
 
 -- Dumping data for table moodle.mdl_mnet_remote_rpc: ~16 rows (approximately)
-INSERT INTO `mdl_mnet_remote_rpc` (`id`, `functionname`, `xmlrpcpath`, `plugintype`, `pluginname`, `enabled`) VALUES
+INSERT IGNORE INTO `mdl_mnet_remote_rpc` (`id`, `functionname`, `xmlrpcpath`, `plugintype`, `pluginname`, `enabled`) VALUES
 	(1, 'user_authorise', 'auth/mnet/auth.php/user_authorise', 'auth', 'mnet', 1),
 	(2, 'keepalive_server', 'auth/mnet/auth.php/keepalive_server', 'auth', 'mnet', 1),
 	(3, 'kill_children', 'auth/mnet/auth.php/kill_children', 'auth', 'mnet', 1),
@@ -13485,7 +13485,7 @@ CREATE TABLE IF NOT EXISTS `mdl_mnet_remote_service2rpc` (
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Group functions or methods under a service';
 
 -- Dumping data for table moodle.mdl_mnet_remote_service2rpc: ~16 rows (approximately)
-INSERT INTO `mdl_mnet_remote_service2rpc` (`id`, `serviceid`, `rpcid`) VALUES
+INSERT IGNORE INTO `mdl_mnet_remote_service2rpc` (`id`, `serviceid`, `rpcid`) VALUES
 	(1, 1, 1),
 	(2, 1, 2),
 	(3, 1, 3),
@@ -13521,7 +13521,7 @@ CREATE TABLE IF NOT EXISTS `mdl_mnet_rpc` (
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Functions or methods that we may publish or subscribe to';
 
 -- Dumping data for table moodle.mdl_mnet_rpc: ~15 rows (approximately)
-INSERT INTO `mdl_mnet_rpc` (`id`, `functionname`, `xmlrpcpath`, `plugintype`, `pluginname`, `enabled`, `help`, `profile`, `filename`, `classname`, `static`) VALUES
+INSERT IGNORE INTO `mdl_mnet_rpc` (`id`, `functionname`, `xmlrpcpath`, `plugintype`, `pluginname`, `enabled`, `help`, `profile`, `filename`, `classname`, `static`) VALUES
 	(1, 'user_authorise', 'auth/mnet/auth.php/user_authorise', 'auth', 'mnet', 1, 'Return user data for the provided token, compare with user_agent string.', 'a:2:{s:10:"parameters";a:2:{i:0;a:3:{s:4:"name";s:5:"token";s:4:"type";s:6:"string";s:11:"description";s:37:"The unique ID provided by remotehost.";}i:1;a:3:{s:4:"name";s:9:"useragent";s:4:"type";s:6:"string";s:11:"description";s:18:"User Agent string.";}}s:6:"return";a:2:{s:4:"type";s:5:"array";s:11:"description";s:44:"$userdata Array of user info for remote host";}}', 'auth.php', 'auth_plugin_mnet', 0),
 	(2, 'keepalive_server', 'auth/mnet/auth.php/keepalive_server', 'auth', 'mnet', 1, 'Receives an array of usernames from a remote machine and prods their\nsessions to keep them alive', 'a:2:{s:10:"parameters";a:1:{i:0;a:3:{s:4:"name";s:5:"array";s:4:"type";s:5:"array";s:11:"description";s:21:"An array of usernames";}}s:6:"return";a:2:{s:4:"type";s:6:"string";s:11:"description";s:28:""All ok" or an error message";}}', 'auth.php', 'auth_plugin_mnet', 0),
 	(3, 'kill_children', 'auth/mnet/auth.php/kill_children', 'auth', 'mnet', 1, 'The IdP uses this function to kill child sessions on other hosts', 'a:2:{s:10:"parameters";a:2:{i:0;a:3:{s:4:"name";s:8:"username";s:4:"type";s:6:"string";s:11:"description";s:28:"Username for session to kill";}i:1;a:3:{s:4:"name";s:9:"useragent";s:4:"type";s:6:"string";s:11:"description";s:35:"SHA1 hash of user agent to look for";}}s:6:"return";a:2:{s:4:"type";s:6:"string";s:11:"description";s:39:"A plaintext report of what has happened";}}', 'auth.php', 'auth_plugin_mnet', 0),
@@ -13549,7 +13549,7 @@ CREATE TABLE IF NOT EXISTS `mdl_mnet_service` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='A service is a group of functions';
 
 -- Dumping data for table moodle.mdl_mnet_service: ~4 rows (approximately)
-INSERT INTO `mdl_mnet_service` (`id`, `name`, `description`, `apiversion`, `offer`) VALUES
+INSERT IGNORE INTO `mdl_mnet_service` (`id`, `name`, `description`, `apiversion`, `offer`) VALUES
 	(1, 'sso_idp', '', '1', 1),
 	(2, 'sso_sp', '', '1', 1),
 	(3, 'mnet_enrol', '', '1', 1),
@@ -13565,7 +13565,7 @@ CREATE TABLE IF NOT EXISTS `mdl_mnet_service2rpc` (
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Group functions or methods under a service';
 
 -- Dumping data for table moodle.mdl_mnet_service2rpc: ~15 rows (approximately)
-INSERT INTO `mdl_mnet_service2rpc` (`id`, `serviceid`, `rpcid`) VALUES
+INSERT IGNORE INTO `mdl_mnet_service2rpc` (`id`, `serviceid`, `rpcid`) VALUES
 	(1, 1, 1),
 	(2, 1, 2),
 	(3, 1, 3),
@@ -13626,7 +13626,7 @@ CREATE TABLE IF NOT EXISTS `mdl_modules` (
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='modules available in the site';
 
 -- Dumping data for table moodle.mdl_modules: ~24 rows (approximately)
-INSERT INTO `mdl_modules` (`id`, `name`, `cron`, `lastcron`, `search`, `visible`) VALUES
+INSERT IGNORE INTO `mdl_modules` (`id`, `name`, `cron`, `lastcron`, `search`, `visible`) VALUES
 	(1, 'assign', 0, 0, '', 1),
 	(2, 'bigbluebuttonbn', 0, 0, '', 0),
 	(3, 'book', 0, 0, '', 1),
@@ -13679,7 +13679,7 @@ CREATE TABLE IF NOT EXISTS `mdl_my_pages` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Extra user pages for the My Moodle system';
 
 -- Dumping data for table moodle.mdl_my_pages: ~4 rows (approximately)
-INSERT INTO `mdl_my_pages` (`id`, `userid`, `name`, `private`, `sortorder`) VALUES
+INSERT IGNORE INTO `mdl_my_pages` (`id`, `userid`, `name`, `private`, `sortorder`) VALUES
 	(1, NULL, '__default', 0, 0),
 	(2, NULL, '__default', 1, 0),
 	(3, NULL, '__courses', 0, 0),
@@ -14931,7 +14931,7 @@ CREATE TABLE IF NOT EXISTS `mdl_quiz_reports` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Lists all the installed quiz reports and their display order';
 
 -- Dumping data for table moodle.mdl_quiz_reports: ~4 rows (approximately)
-INSERT INTO `mdl_quiz_reports` (`id`, `name`, `displayorder`, `capability`) VALUES
+INSERT IGNORE INTO `mdl_quiz_reports` (`id`, `name`, `displayorder`, `capability`) VALUES
 	(1, 'grading', 6000, 'mod/quiz:grade'),
 	(2, 'overview', 10000, NULL),
 	(3, 'responses', 9000, NULL),
@@ -15158,7 +15158,7 @@ CREATE TABLE IF NOT EXISTS `mdl_repository` (
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='This table contains one entry for every configured external ';
 
 -- Dumping data for table moodle.mdl_repository: ~8 rows (approximately)
-INSERT INTO `mdl_repository` (`id`, `type`, `visible`, `sortorder`) VALUES
+INSERT IGNORE INTO `mdl_repository` (`id`, `type`, `visible`, `sortorder`) VALUES
 	(1, 'areafiles', 1, 1),
 	(2, 'contentbank', 1, 2),
 	(3, 'local', 1, 3),
@@ -15186,7 +15186,7 @@ CREATE TABLE IF NOT EXISTS `mdl_repository_instances` (
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='This table contains one entry for every configured external ';
 
 -- Dumping data for table moodle.mdl_repository_instances: ~8 rows (approximately)
-INSERT INTO `mdl_repository_instances` (`id`, `name`, `typeid`, `userid`, `contextid`, `username`, `password`, `timecreated`, `timemodified`, `readonly`) VALUES
+INSERT IGNORE INTO `mdl_repository_instances` (`id`, `name`, `typeid`, `userid`, `contextid`, `username`, `password`, `timecreated`, `timemodified`, `readonly`) VALUES
 	(1, '', 1, 0, 1, NULL, NULL, 1725907969, 1725907969, 0),
 	(2, '', 2, 0, 1, NULL, NULL, 1725907970, 1725907970, 0),
 	(3, '', 3, 0, 1, NULL, NULL, 1725907971, 1725907971, 0),
@@ -15281,7 +15281,7 @@ CREATE TABLE IF NOT EXISTS `mdl_role` (
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='moodle roles';
 
 -- Dumping data for table moodle.mdl_role: ~8 rows (approximately)
-INSERT INTO `mdl_role` (`id`, `name`, `shortname`, `description`, `sortorder`, `archetype`) VALUES
+INSERT IGNORE INTO `mdl_role` (`id`, `name`, `shortname`, `description`, `sortorder`, `archetype`) VALUES
 	(1, '', 'manager', '', 1, 'manager'),
 	(2, '', 'coursecreator', '', 2, 'coursecreator'),
 	(3, '', 'editingteacher', '', 3, 'editingteacher'),
@@ -15303,7 +15303,7 @@ CREATE TABLE IF NOT EXISTS `mdl_role_allow_assign` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='this defines what role can assign what role';
 
 -- Dumping data for table moodle.mdl_role_allow_assign: ~7 rows (approximately)
-INSERT INTO `mdl_role_allow_assign` (`id`, `roleid`, `allowassign`) VALUES
+INSERT IGNORE INTO `mdl_role_allow_assign` (`id`, `roleid`, `allowassign`) VALUES
 	(1, 1, 1),
 	(2, 1, 2),
 	(3, 1, 3),
@@ -15324,7 +15324,7 @@ CREATE TABLE IF NOT EXISTS `mdl_role_allow_override` (
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='this defines what role can override what role';
 
 -- Dumping data for table moodle.mdl_role_allow_override: ~11 rows (approximately)
-INSERT INTO `mdl_role_allow_override` (`id`, `roleid`, `allowoverride`) VALUES
+INSERT IGNORE INTO `mdl_role_allow_override` (`id`, `roleid`, `allowoverride`) VALUES
 	(1, 1, 1),
 	(2, 1, 2),
 	(3, 1, 3),
@@ -15349,7 +15349,7 @@ CREATE TABLE IF NOT EXISTS `mdl_role_allow_switch` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='This table stores which which other roles a user is allowed ';
 
 -- Dumping data for table moodle.mdl_role_allow_switch: ~9 rows (approximately)
-INSERT INTO `mdl_role_allow_switch` (`id`, `roleid`, `allowswitch`) VALUES
+INSERT IGNORE INTO `mdl_role_allow_switch` (`id`, `roleid`, `allowswitch`) VALUES
 	(1, 1, 3),
 	(2, 1, 4),
 	(3, 1, 5),
@@ -15372,7 +15372,7 @@ CREATE TABLE IF NOT EXISTS `mdl_role_allow_view` (
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='This table stores which which other roles a user is allowed ';
 
 -- Dumping data for table moodle.mdl_role_allow_view: ~24 rows (approximately)
-INSERT INTO `mdl_role_allow_view` (`id`, `roleid`, `allowview`) VALUES
+INSERT IGNORE INTO `mdl_role_allow_view` (`id`, `roleid`, `allowview`) VALUES
 	(1, 1, 1),
 	(2, 1, 2),
 	(3, 1, 3),
@@ -15420,7 +15420,7 @@ CREATE TABLE IF NOT EXISTS `mdl_role_assignments` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='assigning roles in different context';
 
 -- Dumping data for table moodle.mdl_role_assignments: ~1 rows (approximately)
-INSERT INTO `mdl_role_assignments` (`id`, `roleid`, `contextid`, `userid`, `timemodified`, `modifierid`, `component`, `itemid`, `sortorder`) VALUES
+INSERT IGNORE INTO `mdl_role_assignments` (`id`, `roleid`, `contextid`, `userid`, `timemodified`, `modifierid`, `component`, `itemid`, `sortorder`) VALUES
 	(1, 3, 14, 2, 1725910951, 2, '', 0, 0);
 
 -- Dumping structure for table moodle.mdl_role_capabilities
@@ -15441,7 +15441,7 @@ CREATE TABLE IF NOT EXISTS `mdl_role_capabilities` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1508 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='permission has to be signed, overriding a capability for a p';
 
 -- Dumping data for table moodle.mdl_role_capabilities: ~1,507 rows (approximately)
-INSERT INTO `mdl_role_capabilities` (`id`, `contextid`, `roleid`, `capability`, `permission`, `timemodified`, `modifierid`) VALUES
+INSERT IGNORE INTO `mdl_role_capabilities` (`id`, `contextid`, `roleid`, `capability`, `permission`, `timemodified`, `modifierid`) VALUES
 	(1, 1, 1, 'moodle/site:configview', 1, 1725907897, 0),
 	(2, 1, 2, 'moodle/site:configview', 1, 1725907897, 0),
 	(3, 1, 1, 'moodle/site:readallmessages', 1, 1725907897, 0),
@@ -16961,7 +16961,7 @@ CREATE TABLE IF NOT EXISTS `mdl_role_context_levels` (
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Lists which roles can be assigned at which context levels. T';
 
 -- Dumping data for table moodle.mdl_role_context_levels: ~11 rows (approximately)
-INSERT INTO `mdl_role_context_levels` (`id`, `roleid`, `contextlevel`) VALUES
+INSERT IGNORE INTO `mdl_role_context_levels` (`id`, `roleid`, `contextlevel`) VALUES
 	(1, 1, 10),
 	(4, 2, 10),
 	(2, 1, 40),
@@ -17004,7 +17004,7 @@ CREATE TABLE IF NOT EXISTS `mdl_scale` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Defines grading scales';
 
 -- Dumping data for table moodle.mdl_scale: ~2 rows (approximately)
-INSERT INTO `mdl_scale` (`id`, `courseid`, `userid`, `name`, `scale`, `description`, `descriptionformat`, `timemodified`) VALUES
+INSERT IGNORE INTO `mdl_scale` (`id`, `courseid`, `userid`, `name`, `scale`, `description`, `descriptionformat`, `timemodified`) VALUES
 	(1, 0, 0, 'Separate and Connected ways of knowing', 'Mostly separate knowing,Separate and connected,Mostly connected knowing', 'The scale based on the theory of separate and connected knowing. This theory describes two different ways that we can evaluate and learn about the things we see and hear.<ul><li><strong>Separate knowers</strong> remain as objective as possible without including feelings and emotions. In a discussion with other people, they like to defend their own ideas, using logic to find holes in opponent\'s ideas.</li><li><strong>Connected knowers</strong> are more sensitive to other people. They are skilled at empathy and tend to listen and ask questions until they feel they can connect and "understand things from their point of view". They learn by trying to share the experiences that led to the knowledge they find in other people.</li></ul>', 0, 1725907902),
 	(2, 0, 0, 'Default competence scale', 'Not yet competent,Competent', 'A binary rating scale that provides no further information beyond whether someone has demonstrated proficiency or not.', 0, 1725907902);
 
@@ -17329,7 +17329,7 @@ CREATE TABLE IF NOT EXISTS `mdl_sessions` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Database based session storage - now recommended';
 
 -- Dumping data for table moodle.mdl_sessions: ~2 rows (approximately)
-INSERT INTO `mdl_sessions` (`id`, `state`, `sid`, `userid`, `sessdata`, `timecreated`, `timemodified`, `firstip`, `lastip`) VALUES
+INSERT IGNORE INTO `mdl_sessions` (`id`, `state`, `sid`, `userid`, `sessdata`, `timecreated`, `timemodified`, `firstip`, `lastip`) VALUES
 	(1, 0, 'u277dtcovksn0hkgqqn9u26olb', 0, NULL, 1725908012, 1725908014, '0:0:0:0:0:0:0:1', '0:0:0:0:0:0:0:1'),
 	(2, 0, 'cjuufbjl3obolpbh47c59d5t50', 2, NULL, 1725908014, 1725910950, '0:0:0:0:0:0:0:1', '0:0:0:0:0:0:0:1');
 
@@ -17486,7 +17486,7 @@ CREATE TABLE IF NOT EXISTS `mdl_survey` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Each record is one SURVEY module with its configuration';
 
 -- Dumping data for table moodle.mdl_survey: ~5 rows (approximately)
-INSERT INTO `mdl_survey` (`id`, `course`, `template`, `days`, `timecreated`, `timemodified`, `name`, `intro`, `introformat`, `questions`, `completionsubmit`) VALUES
+INSERT IGNORE INTO `mdl_survey` (`id`, `course`, `template`, `days`, `timecreated`, `timemodified`, `name`, `intro`, `introformat`, `questions`, `completionsubmit`) VALUES
 	(1, 0, 0, 0, 985017600, 985017600, 'collesaname', 'collesaintro', 0, '25,26,27,28,29,30,43,44', 0),
 	(2, 0, 0, 0, 985017600, 985017600, 'collespname', 'collespintro', 0, '31,32,33,34,35,36,43,44', 0),
 	(3, 0, 0, 0, 985017600, 985017600, 'collesapname', 'collesapintro', 0, '37,38,39,40,41,42,43,44', 0),
@@ -17536,7 +17536,7 @@ CREATE TABLE IF NOT EXISTS `mdl_survey_questions` (
 ) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='the questions conforming one survey';
 
 -- Dumping data for table moodle.mdl_survey_questions: ~73 rows (approximately)
-INSERT INTO `mdl_survey_questions` (`id`, `text`, `shorttext`, `multi`, `intro`, `type`, `options`) VALUES
+INSERT IGNORE INTO `mdl_survey_questions` (`id`, `text`, `shorttext`, `multi`, `intro`, `type`, `options`) VALUES
 	(1, 'colles1', 'colles1short', '', '', 1, 'scaletimes5'),
 	(2, 'colles2', 'colles2short', '', '', 1, 'scaletimes5'),
 	(3, 'colles3', 'colles3short', '', '', 1, 'scaletimes5'),
@@ -17649,7 +17649,7 @@ CREATE TABLE IF NOT EXISTS `mdl_tag_area` (
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Defines various tag areas, one area is identified by compone';
 
 -- Dumping data for table moodle.mdl_tag_area: ~13 rows (approximately)
-INSERT INTO `mdl_tag_area` (`id`, `component`, `itemtype`, `enabled`, `tagcollid`, `callback`, `callbackfile`, `showstandard`, `multiplecontexts`) VALUES
+INSERT IGNORE INTO `mdl_tag_area` (`id`, `component`, `itemtype`, `enabled`, `tagcollid`, `callback`, `callbackfile`, `showstandard`, `multiplecontexts`) VALUES
 	(1, 'core', 'user', 1, 1, 'user_get_tagged_users', '/user/lib.php', 2, 0),
 	(2, 'core', 'course', 1, 1, 'course_get_tagged_courses', '/course/lib.php', 0, 0),
 	(3, 'core_question', 'question', 1, 1, NULL, NULL, 0, 1),
@@ -17677,7 +17677,7 @@ CREATE TABLE IF NOT EXISTS `mdl_tag_coll` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Defines different set of tags';
 
 -- Dumping data for table moodle.mdl_tag_coll: ~1 rows (approximately)
-INSERT INTO `mdl_tag_coll` (`id`, `name`, `isdefault`, `component`, `sortorder`, `searchable`, `customurl`) VALUES
+INSERT IGNORE INTO `mdl_tag_coll` (`id`, `name`, `isdefault`, `component`, `sortorder`, `searchable`, `customurl`) VALUES
 	(1, NULL, 1, NULL, 0, 1, NULL);
 
 -- Dumping structure for table moodle.mdl_tag_correlation
@@ -17734,7 +17734,7 @@ CREATE TABLE IF NOT EXISTS `mdl_task_adhoc` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='List of adhoc tasks waiting to run.';
 
 -- Dumping data for table moodle.mdl_task_adhoc: ~1 rows (approximately)
-INSERT INTO `mdl_task_adhoc` (`id`, `component`, `classname`, `nextruntime`, `faildelay`, `customdata`, `userid`, `timecreated`, `timestarted`, `hostname`, `pid`, `attemptsavailable`, `firststartingtime`) VALUES
+INSERT IGNORE INTO `mdl_task_adhoc` (`id`, `component`, `classname`, `nextruntime`, `faildelay`, `customdata`, `userid`, `timecreated`, `timestarted`, `hostname`, `pid`, `attemptsavailable`, `firststartingtime`) VALUES
 	(1, 'tool_moodlenet', '\\tool_moodlenet\\task\\post_install', 1725907982, 0, '', NULL, 1725907983, NULL, NULL, NULL, 12, NULL);
 
 -- Dumping structure for table moodle.mdl_task_log
@@ -17783,7 +17783,7 @@ CREATE TABLE IF NOT EXISTS `mdl_task_scheduled` (
 ) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='List of scheduled tasks to be run by cron.';
 
 -- Dumping data for table moodle.mdl_task_scheduled: ~117 rows (approximately)
-INSERT INTO `mdl_task_scheduled` (`id`, `component`, `classname`, `lastruntime`, `nextruntime`, `minute`, `hour`, `day`, `month`, `dayofweek`, `faildelay`, `customised`, `disabled`, `timestarted`, `hostname`, `pid`) VALUES
+INSERT IGNORE INTO `mdl_task_scheduled` (`id`, `component`, `classname`, `lastruntime`, `nextruntime`, `minute`, `hour`, `day`, `month`, `dayofweek`, `faildelay`, `customised`, `disabled`, `timestarted`, `hostname`, `pid`) VALUES
 	(1, 'moodle', '\\core\\task\\session_cleanup_task', 0, 1725907920, '*', '*', '*', '*', '*', 0, 0, 0, NULL, NULL, NULL),
 	(2, 'moodle', '\\core\\task\\delete_unconfirmed_users_task', 0, 1725908400, '0', '*', '*', '*', '*', 0, 0, 0, NULL, NULL, NULL),
 	(3, 'moodle', '\\core\\task\\delete_incomplete_users_task', 0, 1725908700, '5', '*', '*', '*', '*', 0, 0, 0, NULL, NULL, NULL),
@@ -17995,7 +17995,7 @@ CREATE TABLE IF NOT EXISTS `mdl_tool_brickfield_checks` (
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Checks details';
 
 -- Dumping data for table moodle.mdl_tool_brickfield_checks: ~31 rows (approximately)
-INSERT INTO `mdl_tool_brickfield_checks` (`id`, `checktype`, `shortname`, `checkgroup`, `status`, `severity`) VALUES
+INSERT IGNORE INTO `mdl_tool_brickfield_checks` (`id`, `checktype`, `shortname`, `checkgroup`, `status`, `severity`) VALUES
 	(1, 'full', 'a_links_dont_open_new_window', 4, 1, 1),
 	(2, 'full', 'a_must_contain_text', 4, 1, 1),
 	(3, 'full', 'area_dont_open_new_window', 4, 1, 1),
@@ -18575,7 +18575,7 @@ CREATE TABLE IF NOT EXISTS `mdl_tool_usertours_steps` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Steps in an tour';
 
 -- Dumping data for table moodle.mdl_tool_usertours_steps: ~9 rows (approximately)
-INSERT INTO `mdl_tool_usertours_steps` (`id`, `tourid`, `title`, `content`, `contentformat`, `targettype`, `targetvalue`, `sortorder`, `configdata`) VALUES
+INSERT IGNORE INTO `mdl_tool_usertours_steps` (`id`, `tourid`, `title`, `content`, `contentformat`, `targettype`, `targetvalue`, `sortorder`, `configdata`) VALUES
 	(1, 1, 'tour_gradebook_search_title,tool_usertours', 'tour_gradebook_search_content,tool_usertours', 1, 0, '.tertiary-navigation .user-search', 0, '{}'),
 	(2, 1, 'tour_gradebook_filter_title,tool_usertours', 'tour_gradebook_filter_content,tool_usertours', 1, 0, '.tertiary-navigation .initials-selector', 1, '{}'),
 	(3, 1, 'tour_gradebook_action_title,tool_usertours', 'tour_gradebook_action_content,tool_usertours', 1, 0, 'tr.heading th.highlightable .action-menu.grader', 2, '{}'),
@@ -18601,7 +18601,7 @@ CREATE TABLE IF NOT EXISTS `mdl_tool_usertours_tours` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='List of tours';
 
 -- Dumping data for table moodle.mdl_tool_usertours_tours: ~5 rows (approximately)
-INSERT INTO `mdl_tool_usertours_tours` (`id`, `name`, `description`, `pathmatch`, `enabled`, `sortorder`, `endtourlabel`, `configdata`, `displaystepnumbers`) VALUES
+INSERT IGNORE INTO `mdl_tool_usertours_tours` (`id`, `name`, `description`, `pathmatch`, `enabled`, `sortorder`, `endtourlabel`, `configdata`, `displaystepnumbers`) VALUES
 	(1, 'tour_gradebook_tour_name,tool_usertours', 'tour_gradebook_tour_description,tool_usertours', '/grade/report/grader/index.php%', 1, 4, '', '{"placement":"bottom","orphan":"0","backdrop":"1","reflex":"0","filtervalues":{"accessdate":{"filter_accessdate":"tool_usertours_accountcreation","filter_accessdate_range":0,"filter_accessdate_enabled":"0"},"category":[],"course":[],"courseformat":[],"role":[],"theme":[],"cssselector":[]},"majorupdatetime":1683276000,"shipped_tour":true,"shipped_filename":"42_tour_gradebook_grader_report.json","shipped_version":1}', 1),
 	(2, 'tour_navigation_course_student_tour_name,tool_usertours', 'tour_navigation_course_student_tour_des,tool_usertours', '/course/view.php%', 1, 3, '', '{"placement":"right","orphan":"0","backdrop":"1","reflex":"0","filtervalues":{"accessdate":{"filter_accessdate":"tool_usertours_accountcreation","filter_accessdate_range":0,"filter_accessdate_enabled":"0"},"category":[],"course":[],"courseformat":[],"role":["student"],"theme":["boost"],"cssselector":[]},"majorupdatetime":1641972472,"shipped_tour":true,"shipped_filename":"40_tour_navigation_course_student.json","shipped_version":3}', 1),
 	(3, 'tour_navigation_course_teacher_tour_name,tool_usertours', 'tour_navigation_course_teacher_tour_des,tool_usertours', '/course/view.php%', 1, 2, '', '{"placement":"bottom","orphan":"0","backdrop":"1","reflex":"0","filtervalues":{"accessdate":{"filter_accessdate":"tool_usertours_accountcreation","filter_accessdate_range":0,"filter_accessdate_enabled":"0"},"category":[],"course":[],"courseformat":[],"role":["-1","coursecreator","manager","teacher","editingteacher"],"theme":["boost"],"cssselector":[]},"majorupdatetime":1641972470,"shipped_tour":true,"shipped_filename":"40_tour_navigation_course_teacher.json","shipped_version":3}', 1),
@@ -18627,7 +18627,7 @@ CREATE TABLE IF NOT EXISTS `mdl_upgrade_log` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1332 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Upgrade logging';
 
 -- Dumping data for table moodle.mdl_upgrade_log: ~1,331 rows (approximately)
-INSERT INTO `mdl_upgrade_log` (`id`, `type`, `plugin`, `version`, `targetversion`, `info`, `details`, `backtrace`, `userid`, `timemodified`) VALUES
+INSERT IGNORE INTO `mdl_upgrade_log` (`id`, `type`, `plugin`, `version`, `targetversion`, `info`, `details`, `backtrace`, `userid`, `timemodified`) VALUES
 	(1, 0, 'core', '2024090300', '2024090300', 'Upgrade savepoint reached', NULL, '', 0, 1725907904),
 	(2, 0, 'core', '2024090300', '2024090300', 'Core installed', NULL, '', 0, 1725907924),
 	(3, 0, 'antivirus_clamav', NULL, '2024042200', 'Starting plugin installation', NULL, '', 0, 1725907925),
@@ -20047,7 +20047,7 @@ CREATE TABLE IF NOT EXISTS `mdl_user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='One record for each person';
 
 -- Dumping data for table moodle.mdl_user: ~2 rows (approximately)
-INSERT INTO `mdl_user` (`id`, `auth`, `confirmed`, `policyagreed`, `deleted`, `suspended`, `mnethostid`, `username`, `password`, `idnumber`, `firstname`, `lastname`, `email`, `emailstop`, `phone1`, `phone2`, `institution`, `department`, `address`, `city`, `country`, `lang`, `calendartype`, `theme`, `timezone`, `firstaccess`, `lastaccess`, `lastlogin`, `currentlogin`, `lastip`, `secret`, `picture`, `description`, `descriptionformat`, `mailformat`, `maildigest`, `maildisplay`, `autosubscribe`, `trackforums`, `timecreated`, `timemodified`, `trustbitmask`, `imagealt`, `lastnamephonetic`, `firstnamephonetic`, `middlename`, `alternatename`, `moodlenetprofile`) VALUES
+INSERT IGNORE INTO `mdl_user` (`id`, `auth`, `confirmed`, `policyagreed`, `deleted`, `suspended`, `mnethostid`, `username`, `password`, `idnumber`, `firstname`, `lastname`, `email`, `emailstop`, `phone1`, `phone2`, `institution`, `department`, `address`, `city`, `country`, `lang`, `calendartype`, `theme`, `timezone`, `firstaccess`, `lastaccess`, `lastlogin`, `currentlogin`, `lastip`, `secret`, `picture`, `description`, `descriptionformat`, `mailformat`, `maildigest`, `maildisplay`, `autosubscribe`, `trackforums`, `timecreated`, `timemodified`, `trustbitmask`, `imagealt`, `lastnamephonetic`, `firstnamephonetic`, `middlename`, `alternatename`, `moodlenetprofile`) VALUES
 	(1, 'manual', 1, 0, 0, 0, 1, 'guest', '$6$rounds=10000$CfEU7teGq1sjUMs5$i2sU.EYwnWjqHsfPK6fxKl5d8cnaY2/O4N8cK59JkhkhniAYFSLDTjMhZDNhUAycXkd/kJa9hG2F/SJ6Gr8o/1', '', 'Guest user', ' ', 'root@localhost', 0, '', '', '', '', '', '', '', 'en', 'gregorian', '', '99', 0, 0, 0, 0, '', '', 0, 'This user is a special user that allows read-only access to some courses.', 1, 1, 0, 2, 1, 0, 0, 1725907897, 0, NULL, NULL, NULL, NULL, NULL, NULL),
 	(2, 'manual', 1, 0, 0, 0, 1, 'admin', '$6$rounds=10000$Gf8enF357C2raSVz$5fM7rlKHPinUlQzx.XwV8sS3QyCOmBEXZAHI88PEaBDhBccgBnUS0.lonv0WvyXEF2rkRSfRv9HWXrRfoVciN/', '', 'Admin', 'User', 'ibda21@student.aau.dk', 0, '', '', '', '', '', '', '', 'en', 'gregorian', '', '99', 1725908014, 1725910951, 0, 1725908014, '0:0:0:0:0:0:0:1', '', 0, '', 1, 1, 0, 1, 1, 0, 0, 1725908160, 0, NULL, '', '', '', '', NULL);
 
@@ -20092,7 +20092,7 @@ CREATE TABLE IF NOT EXISTS `mdl_user_enrolments` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Users participating in courses (aka enrolled users) - everyb';
 
 -- Dumping data for table moodle.mdl_user_enrolments: ~1 rows (approximately)
-INSERT INTO `mdl_user_enrolments` (`id`, `status`, `enrolid`, `userid`, `timestart`, `timeend`, `modifierid`, `timecreated`, `timemodified`) VALUES
+INSERT IGNORE INTO `mdl_user_enrolments` (`id`, `status`, `enrolid`, `userid`, `timestart`, `timeend`, `modifierid`, `timecreated`, `timemodified`) VALUES
 	(1, 0, 1, 2, 0, 0, 2, 1725910951, 1725910951);
 
 -- Dumping structure for table moodle.mdl_user_info_category
@@ -20196,7 +20196,7 @@ CREATE TABLE IF NOT EXISTS `mdl_user_preferences` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED COMMENT='Allows modules to store arbitrary user preferences';
 
 -- Dumping data for table moodle.mdl_user_preferences: ~7 rows (approximately)
-INSERT INTO `mdl_user_preferences` (`id`, `userid`, `name`, `value`) VALUES
+INSERT IGNORE INTO `mdl_user_preferences` (`id`, `userid`, `name`, `value`) VALUES
 	(1, 2, 'core_message_migrate_data', '1'),
 	(2, 2, 'auth_manual_passwordupdatetime', '1725908160'),
 	(3, 2, 'email_bounce_count', '1'),
