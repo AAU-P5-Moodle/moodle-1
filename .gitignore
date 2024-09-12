@@ -10,3 +10,5 @@ server/mysql/data/ibdata1
 server/mysql/data/mysql_error.log
 adminer.php
 /mariadb_data
+adminer_router.php
+server/moodledata/cache/core_component.php
