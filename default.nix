@@ -1,25 +1,23 @@
 { pkgs ? import <nixpkgs> {} }:
 
 let
-
   mariadb_data_dir = "./mariadb_data";
   mariadb_socket = "/tmp/mysqld.sock";
   adminer_port = 8080;
   moodle_db_name = "moodle";
   moodle_sql_file = "./MoodleSQL.sql";
   root_password = "root";
+  php_custom_config = "./custom_php.ini";
 
 in
 
 pkgs.mkShell {
-
   buildInputs = with pkgs; [
     mariadb
     php
     wget
     procps
     lsof
-    
   ];
 
   shellHook = ''
@@ -53,7 +51,7 @@ pkgs.mkShell {
       # Start MariaDB temporarily to set up the database
       mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} --skip-grant-tables &
       TEMP_MYSQL_PID=$!
-      sleep 15  # Increased wait time to ensure MariaDB is ready
+      sleep 15 # Increased wait time to ensure MariaDB is ready
 
       # Set root password and authentication method
       echo "Setting root password..."
@@ -103,7 +101,7 @@ EOF
       echo "Starting MariaDB..."
       mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} &
       MARIADB_PID=$!
-      sleep 10  # Increased wait time to ensure MariaDB is ready
+      sleep 10 # Increased wait time to ensure MariaDB is ready
 
       # Check if MariaDB socket file is created
       if [ ! -S ${mariadb_socket} ]; then
@@ -119,7 +117,6 @@ EOF
         echo "Downloading Adminer..."
         wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php -O adminer.php
       fi
-
       if [ -f "adminer.php" ]; then
         echo "Starting Adminer..."
         echo "<?php
@@ -141,10 +138,22 @@ EOF
       fi
     }
 
+    # Create custom PHP configuration
+    create_php_config() {
+      echo "Creating custom PHP configuration..."
+      cat << EOF > ${php_custom_config}
+max_input_vars = 5000
+memory_limit = 256M
+post_max_size = 50M
+upload_max_filesize = 50M
+EOF
+    }
+
     # Start PHP built-in server for Moodle
     start_php_server() {
       echo "Starting PHP built-in server for Moodle..."
-      php -S 0.0.0.0:8000 -t ./server/moodle &
+      create_php_config
+      php -S 0.0.0.0:8000 -t ./server/moodle -c ${php_custom_config} &
       PHP_SERVER_PID=$!
     }
 
@@ -168,10 +177,10 @@ EOF
     echo "Adminer is available at http://localhost:${toString adminer_port}"
     echo "Moodle is available at http://localhost:8000"
     echo "To connect to MariaDB, use:"
-    echo "  Host: 127.0.0.1 or localhost"
-    echo "  Username: root"
-    echo "  Password: ${root_password}"
-    echo "  Database: ${moodle_db_name}"
+    echo " Host: 127.0.0.1 or localhost"
+    echo " Username: root"
+    echo " Password: ${root_password}"
+    echo " Database: ${moodle_db_name}"
     echo "Press Ctrl+C to stop the services and exit."
   '';
 }
