@@ -1,1 +1,0 @@
-a:10:{s:7:"api_key";s:0:"";s:10:"api_region";s:14:"ap-southeast-2";s:10:"api_secret";s:0:"";s:11:"countrycode";s:1:"0";s:8:"duration";s:4:"1800";s:7:"enabled";s:1:"0";s:7:"gateway";s:7:"aws_sns";s:12:"usecredchain";s:1:"0";s:7:"version";s:10:"2024042200";s:6:"weight";s:3:"100";}
