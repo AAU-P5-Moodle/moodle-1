@@ -1,5 +1,6 @@
 <?php
 
+global $OUTPUT, $PAGE;
 require_once('../../config.php');
 
 $id = required_param('id', PARAM_INT); // Course ID
