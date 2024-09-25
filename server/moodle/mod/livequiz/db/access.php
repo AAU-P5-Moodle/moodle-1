@@ -7,7 +7,7 @@ defined('MOODLE_INTERNAL') || die();
 $capabilities = [
 
     //Allows all roles to view the livequiz
-    'mod/quiz:view' => [
+    'mod/livequiz:view' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
@@ -20,7 +20,7 @@ $capabilities = [
     ],
 
     // Functionality to add the activity to course
-    'mod/quiz:addinstance' => [
+    'mod/livequiz:addinstance' => [
         'riskbitmask' => RISK_XSS,
 
         'captype' => 'write',
