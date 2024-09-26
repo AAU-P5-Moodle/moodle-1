@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the quiz module ettings form.
+ * Defines the quiz module settings form.
  *
  * @package    mod_quiz
  * @copyright  2006 Jamie Pratt
