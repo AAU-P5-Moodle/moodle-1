@@ -34,6 +34,7 @@ class mod_livequiz_lib_test extends advanced_testcase {
         $id = livequiz_add_instance($quizdata);
         $this->assertIsInt($id);
         $this->assertEquals('Test Quiz', $DB->get_field('livequiz', 'name', ['id' => $id]));
+        $this->assertEquals('This is a test quiz.', $DB->get_field('livequiz', 'intro', ['id' => $id]));
         $this->assertTrue($DB->record_exists('livequiz', ['id' => $id]));
     }
 
