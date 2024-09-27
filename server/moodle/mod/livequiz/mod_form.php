@@ -24,6 +24,9 @@
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
 class mod_livequiz_mod_form extends moodleform_mod {
+    /**
+     * @return void
+     */
     function definition() {
         global $CFG, $DB, $OUTPUT;
         // Used to add fields to form.

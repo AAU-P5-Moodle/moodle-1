@@ -3,6 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
+  // This file keeps track of the database schema for the livequiz module.
+  // FOR DATABASE GROUP: THIS IS ONLY AN EXAMPLE TABLE THIS IS WHERE YOU DEFINE THE TABLES THAT YOUR PLUGIN NEEDS
+  // SO YOU NEED TO REPLACE THIS WITH YOUR OWN TABLES
   <TABLES>
     <TABLE NAME="livequiz" COMMENT="The settings for each live quiz.">
       <FIELDS>

@@ -10,7 +10,8 @@
  *
  * @package   mod_livequiz
  */
-
+// These strings are used in the livequiz module.
+// The strings in the brackets will be replaced by the actual values.
 $string['modulename'] = 'Live Quiz';
 $string['modulenameplural'] = 'Live Quizzes';
 $string['modulename_help'] = 'Use the live quiz module to create interactive quizzes.';

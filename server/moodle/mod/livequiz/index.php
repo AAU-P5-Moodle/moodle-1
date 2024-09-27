@@ -14,21 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-global $OUTPUT, $PAGE, $COURSE;
+global $OUTPUT, $PAGE, $COURSE, $DB;
 require_once('../../config.php');
 
-// Course ID.
+
+// The `id` parameter is the course id.
 $id = required_param('id', PARAM_INT);
-$course = get_core($id);
 
+// Fetch the requested course.
+$course = $DB->get_record('course', ['id'=> $id], '*', MUST_EXIST);
 
-$PAGE->set_url('/mod/livequiz/index.php', ['id' => $id]);
-$PAGE->set_context(\context_course::instance($id));
+// Require that the user is logged into the course.
+require_course_login($course);
 
+$modinfo = get_fast_modinfo($course);
 
-$PAGE->set_title(get_string('modulename', 'mod_livequiz'));
-$PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
-
-echo $OUTPUT->header();
-echo $OUTPUT->heading('Live Quiz');
-echo $OUTPUT->footer();
+foreach ($modinfo->get_instances_of('livequiz') as $instanceid => $cm) {
+    // Display information about your activity.
+}

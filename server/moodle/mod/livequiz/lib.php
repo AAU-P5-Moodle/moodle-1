@@ -15,6 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * @param $quizdata
+ * @return bool|int
+ * @throws dml_exception
+ */
 function livequiz_add_instance($quizdata){
     global $DB;
 
@@ -26,6 +31,11 @@ function livequiz_add_instance($quizdata){
     return $quizdata->id;
 }
 
+/**
+ * @param $quizdata
+ * @return bool
+ * @throws dml_exception
+ */
 function livequiz_update_instance($quizdata){
     global $DB;
 
@@ -37,7 +47,11 @@ function livequiz_update_instance($quizdata){
     return true;
 }
 
-
+/**
+ * @param $id
+ * @return bool
+ * @throws dml_exception
+ */
 function livequiz_delete_instance($id){
     global $DB;
 

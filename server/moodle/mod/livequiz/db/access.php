@@ -16,7 +16,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-
+// The capabilities for the livequiz module.
+// Capabilities define different levels of permissions for the module.
 $capabilities = [
 
     //Allows all roles to view the livequiz.

@@ -17,6 +17,7 @@
 global $ADMIN;
 defined('MOODLE_INTERNAL') || die();
 
+// Add settings page.
 if ($ADMIN->fulltree) {
     $settings->add(new admin_settingpage('mod_livequiz', get_string('pluginname', 'mod_livequiz')));
 

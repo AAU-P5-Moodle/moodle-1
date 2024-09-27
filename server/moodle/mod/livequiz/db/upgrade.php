@@ -24,6 +24,7 @@ function xmldb_livequiz_upgrade($oldversion) {
         $table = new xmldb_table('livequiz');
 
         // Adding fields to table livequiz.
+        // THIS SHOULD BE COMPLIANT WITH THE TABELS DEFINED IN db/install.xml
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('name', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
         $table->add_field('intro', XMLDB_TYPE_TEXT, null, null, null, null, null);

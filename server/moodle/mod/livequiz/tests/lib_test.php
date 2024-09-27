@@ -24,10 +24,17 @@ class mod_livequiz_lib_test extends advanced_testcase {
         $this->resetAfterTest(true);
     }
 
+    /**
+     * Test the livequiz_add_instance function.
+     * This function should add a new livequiz instance to the database.
+     * It should return the ID of the new instance.
+     * It should set the name and intro fields of the new instance.
+     * It should return false if the instance cannot be added.
+     */
     public function test_livequiz_add_instance() {
         global $DB;
 
-        $quizdata = new stdClass();
+        $quizdata = new stdClass(); // Create a new stdClass object (empty object).
         $quizdata->name = 'Test Quiz';
         $quizdata->intro = 'This is a test quiz.';
 
@@ -38,6 +45,12 @@ class mod_livequiz_lib_test extends advanced_testcase {
         $this->assertTrue($DB->record_exists('livequiz', ['id' => $id]));
     }
 
+    /**
+     * Test the livequiz_update_instance function.
+     * This function should update an existing livequiz instance in the database.
+     * It should return true if the instance is updated successfully.
+     * It should return false if the instance cannot be updated.
+     */
     public function test_livequiz_update_instance() {
         global $DB;
 
@@ -55,6 +68,12 @@ class mod_livequiz_lib_test extends advanced_testcase {
         $this->assertEquals('Updated Test Quiz', $record->name);
     }
 
+    /**
+     * Test the livequiz_delete_instance function.
+     * This function should delete an existing livequiz instance from the database.
+     * It should return true if the instance is deleted successfully.
+     * It should return false if the instance cannot be deleted.
+     */
     public function test_livequiz_delete_instance() {
         global $DB;
 

@@ -33,21 +33,29 @@ class test_mod_livequiz_setup extends advanced_testcase {
 
     /**
      * Activity Setup Test function.
+     * This function should test the mod_form_setup function.
+     * It should call the definition function.
+     * It should call the standard_coursemodule_elements function.
+     * It should call the add_action_buttons function.
      */
     public function test_mod_form_setup() {
         $this->resetAfterTest(true);
 
         // Create a mock object for mod_livequiz_mod_form
+        // getMockBuilder() creates a mock object for the specified class
+        // disableOriginalConstructor() prevents the constructor from being called
+        // onlyMethods() specifies the methods that should be mocked
         $mock = $this->getMockBuilder(mod_livequiz_mod_form::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['standard_coursemodule_elements', 'add_action_buttons'])
             ->getMock();
         $mockClass = $this->createMock(mod_livequiz_mod_form::class);
 
-        // Set expectation that definition function will be called once
+        // Set expectations for the mockClass object
         $mockClass->expects($this->once())
             ->method('definition');
 
+        // Set expectations for the mock object
         $mock->expects($this->once())
             ->method('standard_coursemodule_elements');
 
