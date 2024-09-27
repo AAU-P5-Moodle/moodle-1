@@ -27,16 +27,35 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once($CFG->dirroot . '/mod/livequiz/lib.php');
+require_once($CFG->dirroot . '/mod/livequiz/mod_form.php');
 
 class test_mod_livequiz_setup extends advanced_testcase {
 
     /**
      * Activity Setup Test function.
      */
-    public function test_example() {
+    public function test_mod_form_setup() {
         $this->resetAfterTest(true);
 
-        // Your test code here.
-        $this->assertTrue(true);
+        // Create a mock object for mod_livequiz_mod_form
+        $mock = $this->getMockBuilder(mod_livequiz_mod_form::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['standard_coursemodule_elements', 'add_action_buttons'])
+            ->getMock();
+        $mockClass = $this->createMock(mod_livequiz_mod_form::class);
+
+        // Set expectation that definition function will be called once
+        $mockClass->expects($this->once())
+            ->method('definition');
+
+        $mock->expects($this->once())
+            ->method('standard_coursemodule_elements');
+
+        $mock->expects($this->once())
+            ->method('add_action_buttons');
+
+        // Call the definition function
+        $mock->definition();
+        $mockClass->definition();
     }
 }
