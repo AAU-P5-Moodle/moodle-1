@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/mod/livequiz/lib.php');
 
-class mod_livequiz_setup extends advanced_testcase {
+class test_mod_livequiz_setup extends advanced_testcase {
 
     /**
      * Activity Setup Test function.

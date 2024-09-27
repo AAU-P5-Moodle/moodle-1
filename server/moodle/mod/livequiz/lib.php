@@ -30,7 +30,7 @@ function livequiz_update_instance($quizdata){
     global $DB;
 
     $quizdata->timemodified = time();
-    $quizdata->id = $quizdata->instance;
+    //$quizdata->id = $quizdata->instance;
 
     $DB->update_record('livequiz', $quizdata);
 
