@@ -103,6 +103,7 @@ UPGRADING-CURRENT.md
 /server/moodledata/sessions
 /server/moodledata/phpunit
 /server/moodledata/temp
+/server/moodledata/moodle_test_data
 custom_php.ini
 
 # IDE phpStorm
