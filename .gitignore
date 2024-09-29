@@ -1,14 +1,104 @@
-
+# Apache Logs
 server/apache/logs/access.log
 server/apache/logs/error.log
+
+# Installer System Files
 server/install/install.sys
-server/mysql/data/aria_log.00000001
-server/mysql/data/aria_log_control
+
+# MySQL/MariaDB Data and Logs
+server/mysql/data/aria_log.*
 server/mysql/data/ib_buffer_pool
-server/mysql/data/ib_logfile0
-server/mysql/data/ibdata1
+server/mysql/data/ib_logfile*
+server/mysql/data/ibdata*
 server/mysql/data/mysql_error.log
+server/mysql/data/slow_log.*
+server/mysql/data/general_log.*
+
+# Moodle Database Files
+server/mysql/data/moodle/*
+server/mysql/data/moodle/*.ibd
+server/mysql/data/moodle/*.frm
+
+
+# Entire MariaDB folder (linux and macos)
+mariadb_data/
+
+# Temporary Files
+server/mysql/data/tmp/*
+
+# Miscellaneous Database Files
+server/mysql/data/db.opt
+server/mysql_upgrade_info
+server/performance_schema
+server/sys
+server/mysql
+server/multi-master.info
+
+# Adminer tool
 adminer.php
-/mariadb_data
-adminer_router.php
-server/moodledata/cache/core_component.php
+
+# Logs and sensitive data
+logs/
+*.log
+*.sys
+*.pid
+
+# Moodle specific ignores
+/config.php
+/tags
+/TAGS
+/cscope.*
+/.patches/
+/.idea/
+.phpstorm.*
+!/.phpstorm.meta.php/
+/.phpstorm.meta.php/*
+!/.phpstorm.meta.php/di.php
+/nbproject/
+CVS
+.DS_Store
+/.settings/
+/.project
+/.buildpath
+/.cache
+.phpunit.result.cache
+phpunit.xml
+
+# Composer support
+composer.phar
+/vendor/
+/behat.yml
+
+# YUI coverage files
+*/yui/build/*/*-coverage.js
+/lib/yuilib/*/build/*/*-coverage.js
+/lib/yuilib/*/*/*-coverage.js
+
+# Other
+atlassian-ide-plugin.xml
+/node_modules/
+/.vscode/
+moodle-plugin-ci.phar
+.eslintignore
+.stylelintignore
+/jsdoc
+/admin/tool/componentlibrary/docs
+/admin/tool/componentlibrary/hugo/site/data/my-index.json
+.hugo_build.lock
+phpcs.xml
+jsconfig.json
+UPGRADING-CURRENT.md
+
+# Swap files (vim)
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Temporary files including undo
+*~
+/server/moodledata/cache
+/server/moodledata/localcache
+/server/moodledata/sessions
+custom_php.ini
