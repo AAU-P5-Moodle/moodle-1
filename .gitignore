@@ -105,7 +105,3 @@ UPGRADING-CURRENT.md
 /server/moodledata/temp
 /server/moodledata/moodle_test_data
 custom_php.ini
-
-
-# Javascript build files.
-/server/moodle/mod/livequiz/amd/build
