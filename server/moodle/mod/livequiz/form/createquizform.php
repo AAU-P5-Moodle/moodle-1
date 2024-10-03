@@ -7,14 +7,14 @@ class createquizform extends moodleform {
 
         $mform = $this->_form;
 
-        $mform->addElement('text', 'name', get_string('livequizname', 'local_livequiz'));
+        $mform->addElement('text', 'name', "Quiz Name");
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', get_string('missingname'), 'required', null, 'client');
 
-        $mform->addElement('textarea', get_string('livequizdescription', 'local_livequiz', 'wrap="virtual" rows="10" cols="50"'));
+        $mform->addElement('textarea', "quiz_Description", "Description");
         $mform->setType('description', PARAM_TEXT);
 
-        $mform->addElement('button', 'buttonaddquestion', get_string('addquestion', 'local_livequiz'));
+        $mform->addElement('button', 'buttonaddquestion',"add question");
     }
 }
 

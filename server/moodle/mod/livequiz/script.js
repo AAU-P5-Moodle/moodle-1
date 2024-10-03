@@ -3,6 +3,7 @@ const path = require('path');
 const uglifyJS = require('uglify-js');
 
 /*
+* THIS IS A TEMPORARY SCRIPT. A PROPER SOLUTION SHOULD BE IMPLEMENTED WITH GRUNT
 * Dette script skal køres når du ønsker at se ændringer fra dit js.
 *
 * */
