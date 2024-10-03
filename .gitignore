@@ -109,3 +109,4 @@ custom_php.ini
 
 # Javascript build files.
 /server/moodle/mod/livequiz/amd/build
+adminer_router.php
