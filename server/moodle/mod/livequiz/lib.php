@@ -59,3 +59,4 @@ function livequiz_delete_instance($id){
 
     return true;
 }
+
