@@ -11,20 +11,14 @@ define(['jquery'], function ($) {
     };
     function open_question_creation_modal() {
         // Corrected button ID
-        let add_question_button = document.getElementById("id_buttonaddquestion"); // Links to button that creates questions
-
-        if (add_question_button === null) {
-            console.log("Button not found");
-        } else {
-            console.log("Button is found and locked in");
-            console.log(add_question_button);
+        let add_question_button = document.getElementById("id_buttonaddquestion");
 
             add_question_button.addEventListener('click', () => {create_question_modal()});
-        }
+
     }
 
     function create_question_modal() {
-        let modal_div = document.createElement("div");
+        let modal_div = document.createElement("div"); // Sådan laver man en div.
         modal_div.className = "Modal_div"; // Styles for this modal div to be handled in styles.css
 
         let page = document.getElementById("page-mod-livequiz-quizcreator");
@@ -87,19 +81,18 @@ define(['jquery'], function ($) {
         file_picker_input.accept = ['image/*', 'video/*'];
 
         const image = document.createElement("img");
-        // const video = document.createElement("video");
 
         file_picker_input.addEventListener('change', () => {
             const file = file_picker_input.files[0];
-            console.log('Selected file:', file.name);
+
             image.src = URL.createObjectURL(file);
-            // video.src = URL.createObjectURL(file);
+
 
         });
 
         let file_container = document.createElement("div");
         file_container.appendChild(file_picker_input);
-        // file_container.appendChild(video);
+
         file_container.appendChild(image);
 
         return file_container;
