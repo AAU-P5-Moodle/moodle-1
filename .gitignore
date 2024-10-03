@@ -102,5 +102,3 @@ UPGRADING-CURRENT.md
 /server/moodledata/localcache
 /server/moodledata/sessions
 custom_php.ini
-
-Dockerfile
