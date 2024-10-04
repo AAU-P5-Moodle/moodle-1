@@ -55,4 +55,3 @@ $question->display();
 
 // Din indholdskode her (HTML eller noget andet indhold).
 echo $OUTPUT->footer();
-
