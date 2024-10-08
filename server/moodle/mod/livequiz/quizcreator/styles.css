@@ -11,8 +11,8 @@
     background: gainsboro; /*Funny collor  name*/
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centrerer elementerne vertikalt */
-    align-items: center; /* Centrerer elementerne horisontalt */
+    justify-content: center; 
+    align-items: center; 
     border: 3px solid black;
     border-radius: 25px; /* Rounded corners */
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); /* Shadow effect */
@@ -71,10 +71,10 @@
     transform: translate(-50%, -50%);
     overflow: auto;
     background: gainsboro; /*Funny collor  name*/
-    display: flex; /* Gør div'en til en flex container */
-    flex-direction: column; /* Placerer elementerne vertikalt som en kolonne */
-    justify-content: center; /* Centrerer elementerne vertikalt */
-    align-items: center; /* Centrerer elementerne horisontalt */
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
     border: 3px solid black;
     border-radius: 25px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); /* Shadow effect */
