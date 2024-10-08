@@ -102,3 +102,9 @@ UPGRADING-CURRENT.md
 /server/moodledata/localcache
 /server/moodledata/sessions
 custom_php.ini
+
+# For opening the plugin in an editor
+server/moodle/mod/livequiz/.idea/livequiz.iml
+server/moodle/mod/livequiz/.idea/modules.xml
+server/moodle/mod/livequiz/.idea/php.xml
+server/moodle/mod/livequiz/.idea/workspace.xml
