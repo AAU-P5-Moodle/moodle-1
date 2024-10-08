@@ -18,7 +18,7 @@ define(['jquery'], function ($) {
     }
 
     function create_question_modal() {
-        let modal_div = document.createElement("div"); // Sådan laver man en div.
+        let modal_div = document.createElement("div"); 
         modal_div.className = "Modal_div"; // Styles for this modal div to be handled in styles.css
 
         let page = document.getElementById("page-mod-livequiz-quizcreator");
