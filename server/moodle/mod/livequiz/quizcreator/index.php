@@ -13,12 +13,12 @@ $PAGE->set_heading("Create a quiz");
 
 echo $OUTPUT->header();
 
-// Opret formular
+
 $mform = new createquizform();
 
 
 
-// Vis formularen
+
 $mform->display();
 $PAGE->requires->js_call_amd('mod_livequiz/quizcreator', 'init');
 echo $OUTPUT->footer();
