@@ -1,14 +1,12 @@
+import $ from 'jquery';
 
-define(['jquery'], function ($) {
-    return {
-        init: function () {
-            $(document).ready(function () { // Ensure DOM is fully loaded
-                console.log("Make quiz JS loaded");
+export const init = () => {
+    $(document).ready(()=> {
+        console.log("quizcreator JS loaded");
+        open_question_creation_modal();
+    });
+}
 
-                open_question_creation_modal();
-            });
-        }
-    };
     function open_question_creation_modal() {
         // Corrected button ID
         let add_question_button = document.getElementById("id_buttonaddquestion");
