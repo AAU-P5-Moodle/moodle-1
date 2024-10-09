@@ -61,6 +61,18 @@
     font-size: larger;
 }
 
+.save_button {
+    background-color: green; /* Set the background color */
+    color: white; /* Set the text color */
+    padding: 5px 10px; /* Add padding */
+    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+    font-size: larger;
+    border-radius: 5px;
+    margin-right: 10px; /* Add some margin to separate from the Cancel button */
+}
+
+
+
 .toast_promise_deletion_div {
     width: 40%;
     height: 40%;

@@ -20,5 +20,10 @@ $mform = new createquizform();
 
 // Vis formularen
 $mform->display();
+
+echo '<div class="quiz_modal_buttons">';
+echo '<button id="saveQuiz" class="save_button">Save</button>';
+echo '<button id="cancelQuiz" class="discard_question_button">Cancel</button>';
+echo '</div>';
 $PAGE->requires->js_call_amd('mod_livequiz/quizcreator', 'init');
 echo $OUTPUT->footer();
