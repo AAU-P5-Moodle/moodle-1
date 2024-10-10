@@ -20,6 +20,7 @@
         modal_div.appendChild(question_input);
         
         let file_picker = create_file_picker();
+        modal_div.appendChild(create_file_picker());
         modal_div.appendChild(create_timer_element());
 
         let all_answers_for_question_div = document.createElement("div");
