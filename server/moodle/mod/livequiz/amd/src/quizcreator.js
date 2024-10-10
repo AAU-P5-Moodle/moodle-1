@@ -1,20 +1,10 @@
 
-define(['jquery'], function ($) {
-    return {
-        init: function () {
-            $(document).ready(function () { // Ensure DOM is fully loaded
-                console.log("Make quiz JS loaded");
-
-                open_question_creation_modal();
-            });
-        }
-    };
     function open_question_creation_modal() {
         // Corrected button ID
         let add_question_button = document.getElementById("id_buttonaddquestion");
-
+        if (add_question_button){
             add_question_button.addEventListener('click', () => {create_question_modal()});
-
+        }    
     }
 
     function create_question_modal() {
@@ -201,4 +191,8 @@ define(['jquery'], function ($) {
         });
         return add_new_answer_to_question;
     }
-});
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+        console.log("quizcreator JS loaded");
+        open_question_creation_modal();
+    });

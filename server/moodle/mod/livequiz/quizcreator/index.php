@@ -28,5 +28,6 @@ echo '<button id="uploadImage" class="save_button">Upload</button>';
 echo '<button id="saveQuiz" class="save_button">Save</button>';
 echo '<button id="cancelQuiz" class="discard_question_button">Cancel</button>';
 echo '</div>';
-$PAGE->requires->js_call_amd('mod_livequiz/quizcreator', 'init');
+
+$PAGE->requires->js(new moodle_url('../amd/src/quizcreator.js'));
 echo $OUTPUT->footer();
