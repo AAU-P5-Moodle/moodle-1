@@ -20,5 +20,5 @@ $mform = new createquizform();
 
 // Vis formularen
 $mform->display();
-$PAGE->requires->js_call_amd('mod_livequiz/quizcreator', 'init');
+$PAGE->requires->js(new moodle_url('../amd/src/quizcreator.js'));
 echo $OUTPUT->footer();
