@@ -104,4 +104,5 @@ UPGRADING-CURRENT.md
 /server/moodledata/phpunit
 /server/moodledata/temp
 /server/moodledata/moodle_test_data
+/server/moodledata/behat
 custom_php.ini
