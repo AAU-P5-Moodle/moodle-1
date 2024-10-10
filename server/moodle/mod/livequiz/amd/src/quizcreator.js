@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 
     function open_question_creation_modal() {
         // Corrected button ID
