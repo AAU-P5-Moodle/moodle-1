@@ -22,6 +22,9 @@ $mform = new createquizform();
 $mform->display();
 
 echo '<div class="quiz_modal_buttons">';
+echo '<label for="imageUpload">Upload Image:</label>';
+echo '<input type="file" id="imageUpload" name="quizImage" accept="image/png" />';
+echo '<button id="uploadImage" class="save_button">Upload</button>';
 echo '<button id="saveQuiz" class="save_button">Save</button>';
 echo '<button id="cancelQuiz" class="discard_question_button">Cancel</button>';
 echo '</div>';
