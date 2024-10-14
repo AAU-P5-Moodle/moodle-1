@@ -13,14 +13,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+/**
+ * @package mod_livequiz
+ * @copyright 2023
+ * @license GNU General Public License
+ */
+
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
+ * Adds a new instance of the livequiz to the database.
  * @param $quizdata
  * @return bool|int
  * @throws dml_exception
- * @package mod_livequiz
  */
 function livequiz_add_instance($quizdata) {
     global $DB;
@@ -34,6 +40,7 @@ function livequiz_add_instance($quizdata) {
 }
 
 /**
+ * Updates an existing livequiz instance in the database.
  * @param $quizdata
  * @return bool
  * @throws dml_exception
@@ -51,6 +58,7 @@ function livequiz_update_instance($quizdata) {
 }
 
 /**
+ * Deletes a livequiz instance from the database.
  * @param $id
  * @return bool
  * @throws dml_exception

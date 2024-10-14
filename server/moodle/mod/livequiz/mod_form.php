@@ -13,16 +13,15 @@ mod_livequiz// This file is part of Moodle - http://moodle.org/
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
 /**
- * Activity creation/editing form for the mod_livequiz plugin.
- *
- * @package
- * @copyright
- * @license
+ Activity creation/editing form for the mod_livequiz plugin.
+ * @package mod_livequiz
+ * @copyright 2023
+ * @license GNU General Public License
  */
-
 require_once($CFG->dirroot .'/course/moodleform_mod.php');
-
+defined('MOODLE_INTERNAL') || die(); 
 class mod_livequiz_mod_form extends moodleform_mod {
     /**
      * @return void

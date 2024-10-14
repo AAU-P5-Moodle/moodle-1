@@ -13,9 +13,16 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+/**
+ * @package mod_livequiz
+ * @copyright 2023
+ * @license GNU General Public License
+ */
 
 global $OUTPUT, $PAGE, $DB;
 require_once('../../config.php');
+
+defined('MOODLE_INTERNAL') || die(); 
 
 $id = required_param('id', PARAM_INT); // Course module ID
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');

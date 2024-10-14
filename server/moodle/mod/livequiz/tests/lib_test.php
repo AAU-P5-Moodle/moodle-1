@@ -13,7 +13,11 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
+/**
+ * @package mod_livequiz
+ * @copyright 2023
+ * @license GNU General Public License
+ */
 defined('MOODLE_INTERNAL') || die();
 
 use mod_livequiz\lib;
@@ -25,6 +29,7 @@ final class lib_test extends advanced_testcase {
     }
 
     /**
+     * @covers livequiz_add_instance function
      * Test the livequiz_add_instance function.
      * This function should add a new livequiz instance to the database.
      * It should return the ID of the new instance.
@@ -46,6 +51,7 @@ final class lib_test extends advanced_testcase {
     }
 
     /**
+     * @covers livequiz_update_instance
      * Test the livequiz_update_instance function.
      * This function should update an existing livequiz instance in the database.
      * It should return true if the instance is updated successfully.
@@ -69,6 +75,7 @@ final class lib_test extends advanced_testcase {
     }
 
     /**
+     * @covers livequiz_delete_instance
      * Test the livequiz_delete_instance function.
      * This function should delete an existing livequiz instance from the database.
      * It should return true if the instance is deleted successfully.
