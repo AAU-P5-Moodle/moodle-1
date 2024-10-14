@@ -1,5 +1,0 @@
-# This is a CODEOWNERS file
-
-# deekahy will be the default owner for everything in the repo to make sure nobody tries to bypass the review process.
-* @deekahy
-* @ZeroConfidence
