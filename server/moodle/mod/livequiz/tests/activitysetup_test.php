@@ -29,8 +29,7 @@ global $CFG;
 require_once($CFG->dirroot . '/mod/livequiz/lib.php');
 require_once($CFG->dirroot . '/mod/livequiz/mod_form.php');
 
-class test_mod_livequiz_setup extends advanced_testcase {
-
+final class activitysetup_test extends advanced_testcase {
     /**
      * Activity Setup Test function.
      * This function should test the mod_form_setup function.
@@ -38,7 +37,7 @@ class test_mod_livequiz_setup extends advanced_testcase {
      * It should call the standard_coursemodule_elements function.
      * It should call the add_action_buttons function.
      */
-    public function test_mod_form_setup() {
+    public function test_mod_form_setup(): void {
         $this->resetAfterTest(true);
 
         // Create a mock object for mod_livequiz_mod_form
@@ -49,10 +48,10 @@ class test_mod_livequiz_setup extends advanced_testcase {
             ->disableOriginalConstructor()
             ->onlyMethods(['standard_coursemodule_elements', 'add_action_buttons'])
             ->getMock();
-        $mockClass = $this->createMock(mod_livequiz_mod_form::class);
+        $mockclass = $this->createMock(mod_livequiz_mod_form::class);
 
         // Set expectations for the mockClass object
-        $mockClass->expects($this->once())
+        $mockclass->expects($this->once())
             ->method('definition');
 
         // Set expectations for the mock object
@@ -64,6 +63,6 @@ class test_mod_livequiz_setup extends advanced_testcase {
 
         // Call the definition function
         $mock->definition();
-        $mockClass->definition();
+        $mockclass->definition();
     }
 }

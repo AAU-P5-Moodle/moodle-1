@@ -20,7 +20,7 @@ defined('MOODLE_INTERNAL') || die();
 // Capabilities define different levels of permissions for the module.
 $capabilities = [
 
-    //Allows all roles to view the livequiz.
+    // Allows all roles to view the livequiz.
     'mod/livequiz:view' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,

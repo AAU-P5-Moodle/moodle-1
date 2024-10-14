@@ -13,14 +13,16 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * @param $quizdata
  * @return bool|int
  * @throws dml_exception
+ * @package mod_livequiz
  */
-function livequiz_add_instance($quizdata){
+function livequiz_add_instance($quizdata) {
     global $DB;
 
     $quizdata->timecreated = time();
@@ -35,12 +37,13 @@ function livequiz_add_instance($quizdata){
  * @param $quizdata
  * @return bool
  * @throws dml_exception
+ * @package mod_livequiz
  */
-function livequiz_update_instance($quizdata){
+function livequiz_update_instance($quizdata) {
     global $DB;
 
     $quizdata->timemodified = time();
-    //$quizdata->id = $quizdata->instance;
+    // $quizdata->id = $quizdata->instance;
 
     $DB->update_record('livequiz', $quizdata);
 
@@ -51,8 +54,9 @@ function livequiz_update_instance($quizdata){
  * @param $id
  * @return bool
  * @throws dml_exception
+ * @package mod_livequiz
  */
-function livequiz_delete_instance($id){
+function livequiz_delete_instance($id) {
     global $DB;
 
     $DB->delete_records('livequiz', ['id' => $id]);

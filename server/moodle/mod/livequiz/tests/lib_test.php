@@ -16,11 +16,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use \mod_livequiz\lib;
+use mod_livequiz\lib;
 
-class mod_livequiz_lib_test extends advanced_testcase {
-
+final class lib_test extends advanced_testcase {
     protected function setUp(): void {
+        parent::setUp();
         $this->resetAfterTest(true);
     }
 
@@ -31,7 +31,7 @@ class mod_livequiz_lib_test extends advanced_testcase {
      * It should set the name and intro fields of the new instance.
      * It should return false if the instance cannot be added.
      */
-    public function test_livequiz_add_instance() {
+    public function test_livequiz_add_instance(): void {
         global $DB;
 
         $quizdata = new stdClass(); // Create a new stdClass object (empty object).
@@ -51,7 +51,7 @@ class mod_livequiz_lib_test extends advanced_testcase {
      * It should return true if the instance is updated successfully.
      * It should return false if the instance cannot be updated.
      */
-    public function test_livequiz_update_instance() {
+    public function test_livequiz_update_instance(): void {
         global $DB;
 
         $quizdata = new stdClass();
@@ -74,7 +74,7 @@ class mod_livequiz_lib_test extends advanced_testcase {
      * It should return true if the instance is deleted successfully.
      * It should return false if the instance cannot be deleted.
      */
-    public function test_livequiz_delete_instance() {
+    public function test_livequiz_delete_instance(): void {
         global $DB;
 
         $quizdata = new stdClass();
