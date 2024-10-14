@@ -30,6 +30,6 @@ echo '</div>';
 
 
 
-// Vis formularen
+// show form
 
 echo $OUTPUT->footer();
