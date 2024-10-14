@@ -1,9 +1,6 @@
 
 
-
-    console.log("first check")
     function open_question_creation_modal() {
-        console.log("second check")
         // Corrected button ID
         let add_question_button = document.getElementById("id_buttonaddquestion");
         if (add_question_button){
