@@ -25,4 +25,8 @@ $PAGE->set_url('/mod/livequiz/view.php', array('id' => $id));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
-header("Location: /mod/livequiz/quizcreator/");
+
+//Make hub.
+
+
+header("Location: /mod/livequiz/hub/");
