@@ -105,3 +105,5 @@ UPGRADING-CURRENT.md
 /server/moodledata/temp
 /server/moodledata/moodle_test_data
 custom_php.ini
+server/moodledata/muc/config.php
+server/moodledata/temp/theme/boost/all.css
