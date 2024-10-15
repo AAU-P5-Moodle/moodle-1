@@ -1,11 +1,11 @@
 @mod @mod_livequiz @javascript
 
-Feature: Add LiveQuiz activity
+Feature: Open a LiveQuiz activity
   In order to let students see a livequiz
   As a teacher
   I need to add a livequiz activity to a course
 
-Background:
+  Background:
     Given the following "users" exist:
       | username | firstname | lastname | email                |
       | teacher1 | Teacher   | 1        | teacher1@example.com |
@@ -16,25 +16,17 @@ Background:
       | user | course | role |
       | teacher1 | TC | editingteacher |
     And the following "activity" exists:
-    | activity | livequiz             |
-    | course   | TC               |
-    | idnumber | 1                |
-    | name     | livequiz_tester  |
-    | intro    | Test description |
-    | section  | 0                |
+      | activity | livequiz             |
+      | course   | TC               |
+      | idnumber | 1                |
+      | name     | livequiz_tester  |
+      | intro    | Test description |
+      | section  | 0                |
     And I log in as "teacher1"
     And I am on "Test Course" course homepage with editing mode on
 
-
-Scenario: Add a livequiz to a course
-  Then I wait until the page is ready
-  And I should see "Add an activity or resource"
-  And I press "Add an activity or resource"
-  And I should see "Live Quiz"
-  And I click on "Live Quiz" "link"
-  And I should see "New Live Quiz"
-  And I press "Save and return to course"
-  And I wait "5" seconds
-  And I should see "livequiz"
-
+Scenario: Open a livequiz on course
+  When I am on the "Test Course" course page
+  Then I should see "livequiz_tester"
+    And I click on "livequiz_tester" "link"
 
