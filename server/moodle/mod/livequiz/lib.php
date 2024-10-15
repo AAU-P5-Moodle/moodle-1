@@ -21,7 +21,7 @@
  * @copyright  2023
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- defined('MOODLE_INTERNAL') || die();
+
 /**
  * Adds a new instance of the livequiz to the database.
  *

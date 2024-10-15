@@ -36,7 +36,3 @@ $course = $DB->get_record('course', ['id' => $id], '*', MUST_EXIST);
 require_course_login($course);
 
 $modinfo = get_fast_modinfo($course);
-
-// foreach ($modinfo->get_instances_of('livequiz') as $instanceid => $cm) {
-// Display information about your activity.
-// }

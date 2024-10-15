@@ -23,6 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_livequiz;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -46,7 +47,7 @@ final class activitysetup_test extends advanced_testcase {
      * It should call the definition function.
      * It should call the standard_coursemodule_elements function.
      * It should call the add_action_buttons function.
-     *
+     * @covers \mod_livequiz\activitysetup_test::test_mod_form_setup
      */
     public function test_mod_form_setup(): void {
         $this->resetAfterTest(true);
