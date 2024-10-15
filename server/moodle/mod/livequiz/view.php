@@ -16,22 +16,21 @@
 
 /**
  * Displays the livequiz view page.
- * 
  * @package   mod_livequiz
  * @copyright 2023 John Doe
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+defined('MOODLE_INTERNAL') || die();
 global $OUTPUT, $PAGE, $DB;
 require_once('../../config.php');
 
-defined('MOODLE_INTERNAL') || die();
+
 
 $id = required_param('id', PARAM_INT); // Course module ID.
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
-require_login($course, true, $cm); // Ensure the user is logged in and has access. code sniffer throws warnings if its not included
+require_login($course, true, $cm); // Ensure the user is logged in and has access. code sniffer throws warnings if its not included!
 
 $PAGE->set_url('/mod/livequiz/view.php', ['id' => $id]);
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));

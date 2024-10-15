@@ -21,8 +21,11 @@
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+ defined('MOODLE_INTERNAL') || die();
+
 global $plugin;
-defined('MOODLE_INTERNAL') || die();
+
 
 $plugin = new stdClass(); // Initialize $plugin as an object
 $plugin->version = 2024072500;

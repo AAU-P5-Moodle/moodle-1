@@ -107,3 +107,13 @@ UPGRADING-CURRENT.md
 custom_php.ini
 server/moodledata/muc/config.php
 server/moodledata/temp/theme/boost/all.css
+local/codechecker/
+phpcs.bat
+moodle-cs/
+composer.lock
+composer.json
+server/moodle/lib/editor/tiny/plugins/html/build/package-lock.json
+server/moodle/lib/editor/tiny/plugins/html/build/package.json
+server/moodle/lib/editor/tiny/plugins/html/build/package.json
+server/moodle/npm-shrinkwrap.json
+server/moodle/package.json
