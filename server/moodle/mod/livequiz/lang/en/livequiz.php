@@ -18,7 +18,10 @@
  * Strings for component 'livequiz', language 'en'
  *
  * @package   mod_livequiz
+ * @copyright Computer science Aalborg university  {@link http:/aau.dk}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 // These strings are used in the livequiz module.
 // The strings in the brackets will be replaced by the actual values.
 $string['livequiz:addinstance'] = 'Add a new live quiz';

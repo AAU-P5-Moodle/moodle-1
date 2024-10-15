@@ -27,7 +27,7 @@
 global $plugin;
 
 
-$plugin = new stdClass(); // Initialize $plugin as an object
+$plugin = new stdClass(); // Initialize $plugin as an object.
 $plugin->version = 2024072500;
 $plugin->requires = 2024041600;
 $plugin->component = 'mod_livequiz';
