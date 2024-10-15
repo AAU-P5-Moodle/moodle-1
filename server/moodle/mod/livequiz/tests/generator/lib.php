@@ -32,6 +32,7 @@ class mod_livequiz_generator extends testing_module_generator {
         global $DB,$CFG;
 
         require_once($CFG->dirroot.'/mod/livequiz/lib.php');
+
         $record = (object)(array)$record;
 
         $defaultlivequizsettings = [
@@ -43,14 +44,12 @@ class mod_livequiz_generator extends testing_module_generator {
 
         ];
 
-
         foreach ($defaultlivequizsettings as $name => $value) {
             if (!isset($record->{$name})) {
                 $record->{$name} = $value;
             }
         }
 
-        //$record -> id = $DB -> insert_record('livequiz', $record);
 
         return parent::create_instance($record, (array)$options);
     }

@@ -16,7 +16,7 @@ Feature: Open a LiveQuiz activity
       | user | course | role |
       | teacher1 | TC | editingteacher |
     And the following "activity" exists:
-      | activity | livequiz             |
+      | activity | livequiz         |
       | course   | TC               |
       | idnumber | 1                |
       | name     | livequiz_tester  |
@@ -26,7 +26,6 @@ Feature: Open a LiveQuiz activity
     And I am on "Test Course" course homepage with editing mode on
 
 Scenario: Open a livequiz on course
-  When I am on the "Test Course" course page
-  Then I should see "livequiz_tester"
-    And I click on "livequiz_tester" "link"
-
+  When I click on "livequiz_tester" "link" in the "livequiz" activity
+  And I wait "2" seconds
+  And I should see "Live Quiz"

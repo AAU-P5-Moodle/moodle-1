@@ -15,13 +15,6 @@ Background:
     And the following "course enrolments" exist:
       | user | course | role |
       | teacher1 | TC | editingteacher |
-    And the following "activity" exists:
-    | activity | livequiz             |
-    | course   | TC               |
-    | idnumber | 1                |
-    | name     | livequiz_tester  |
-    | intro    | Test description |
-    | section  | 0                |
     And I log in as "teacher1"
     And I am on "Test Course" course homepage with editing mode on
 
@@ -36,5 +29,7 @@ Scenario: Add a livequiz to a course
   And I press "Save and return to course"
   And I wait "5" seconds
   And I should see "livequiz"
+  When I click on "livequiz" "link" in the "livequiz" activity
+  Then I should see "livequiz"
 
 
