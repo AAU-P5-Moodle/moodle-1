@@ -120,3 +120,4 @@ server/moodle/package.json
 server/moodle/package.json
 server/moodle/npm-shrinkwrap.json
 server/moodle/lib/editor/tiny/plugins/html/build/package.json
+phpcbf.bat

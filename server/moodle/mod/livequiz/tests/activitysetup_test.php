@@ -23,12 +23,22 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once($CFG->dirroot . '/mod/livequiz/lib.php');
 require_once($CFG->dirroot . '/mod/livequiz/mod_form.php');
 
+
+/**
+ * Unit test for the mod_livequiz activity setup.
+ *
+ * @package    mod_livequiz
+ * @category   test
+ * @copyright  2023
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 final class activitysetup_test extends advanced_testcase {
     /**
      * Activity Setup Test function.
@@ -36,32 +46,33 @@ final class activitysetup_test extends advanced_testcase {
      * It should call the definition function.
      * It should call the standard_coursemodule_elements function.
      * It should call the add_action_buttons function.
+     *
      */
     public function test_mod_form_setup(): void {
         $this->resetAfterTest(true);
 
-        // Create a mock object for mod_livequiz_mod_form
-        // getMockBuilder() creates a mock object for the specified class
-        // disableOriginalConstructor() prevents the constructor from being called
-        // onlyMethods() specifies the methods that should be mocked
+        // Create a mock object for mod_livequiz_mod_form!
+        // GetMockBuilder() creates a mock object for the specified class!
+        // DisableOriginalConstructor() prevents the constructor from being called!
+        // OnlyMethods() specifies the methods that should be mocked!
         $mock = $this->getMockBuilder(mod_livequiz_mod_form::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['standard_coursemodule_elements', 'add_action_buttons'])
             ->getMock();
         $mockclass = $this->createMock(mod_livequiz_mod_form::class);
 
-        // Set expectations for the mockClass object
+        // Set expectations for the mockClass object!
         $mockclass->expects($this->once())
             ->method('definition');
 
-        // Set expectations for the mock object
+        // Set expectations for the mock object!
         $mock->expects($this->once())
             ->method('standard_coursemodule_elements');
 
         $mock->expects($this->once())
             ->method('add_action_buttons');
 
-        // Call the definition function
+        // Call the definition function!
         $mock->definition();
         $mockclass->definition();
     }
