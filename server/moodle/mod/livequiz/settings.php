@@ -14,15 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-global $ADMIN;
+/**
+ * Displays the livequiz view page.
+ * @package   mod_livequiz
+ * @copyright 2023 John Doe
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
+
+global $ADMIN;
+
 
 // Add settings page.
 if ($ADMIN->fulltree) {
     $settings->add(new admin_settingpage('mod_livequiz', get_string('pluginname', 'mod_livequiz')));
 
-    $settings->add(new admin_setting_configtext('livequiz/some_setting',
-        get_string('somesetting', 'mod_livequiz'), get_string('somesetting_desc', 'mod_livequiz'), 'default_value'));
-    
+    $settings->add(new admin_setting_configtext(
+        'livequiz/some_setting',
+        get_string('somesetting', 'mod_livequiz'),
+        get_string('somesetting_desc', 'mod_livequiz'),
+        'default_value'
+    ));
+
     $ADMIN->add('modsettings', $settings);
 }

@@ -14,21 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-global $OUTPUT, $PAGE, $COURSE, $DB;
+/**
+ * Livequiz activity version information.
+ *
+ * @package   mod_livequiz
+ * @copyright Computer science Aalborg university  {@link http:/aau.dk}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once('../../config.php');
+global $OUTPUT, $PAGE, $COURSE, $DB;
 
 
 // The `id` parameter is the course id.
 $id = required_param('id', PARAM_INT);
 
 // Fetch the requested course.
-$course = $DB->get_record('course', ['id'=> $id], '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $id], '*', MUST_EXIST);
 
 // Require that the user is logged into the course.
 require_course_login($course);
 
 $modinfo = get_fast_modinfo($course);
-
-foreach ($modinfo->get_instances_of('livequiz') as $instanceid => $cm) {
-    // Display information about your activity.
-}
