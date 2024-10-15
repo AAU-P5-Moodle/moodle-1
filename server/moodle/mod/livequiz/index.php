@@ -22,8 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-global $OUTPUT, $PAGE, $COURSE, $DB;
 require_once('../../config.php');
+global $OUTPUT, $PAGE, $COURSE, $DB;
 
 
 // The `id` parameter is the course id.
@@ -38,5 +38,5 @@ require_course_login($course);
 $modinfo = get_fast_modinfo($course);
 
 // foreach ($modinfo->get_instances_of('livequiz') as $instanceid => $cm) {
-//     // Display information about your activity.
+// Display information about your activity.
 // }

@@ -22,6 +22,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/**
+ * xmldb_livequiz_upgrade function installs/upgrades if older version is installed
+ *
+ * @param int   $oldversion is the old installed version
+ */
 
 function xmldb_livequiz_upgrade($oldversion) {
     global $DB;
