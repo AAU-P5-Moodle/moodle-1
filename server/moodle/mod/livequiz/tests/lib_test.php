@@ -15,14 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * This is the test file
  * @package mod_livequiz
  * @copyright 2023
- * @license GNU General Public License
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
 
 use mod_livequiz\lib;
-
+/**
+ * Testing examples!
+ */
 final class lib_test extends advanced_testcase {
     protected function setUp(): void {
         parent::setUp();
@@ -30,7 +32,9 @@ final class lib_test extends advanced_testcase {
     }
 
     /**
-     * @covers livequiz_add_instance function
+     * Tests the addition of a new live quiz instance.
+     *
+     * @covers \mod_livequiz\lib::livequiz_add_instance
      * Test the livequiz_add_instance function.
      * This function should add a new livequiz instance to the database.
      * It should return the ID of the new instance.
@@ -52,7 +56,9 @@ final class lib_test extends advanced_testcase {
     }
 
     /**
-     * @covers livequiz_update_instance
+     * This test updates instance.
+     *
+     * @covers \mod_livequiz\lib::livequiz_update_instance
      * Test the livequiz_update_instance function.
      * This function should update an existing livequiz instance in the database.
      * It should return true if the instance is updated successfully.
@@ -76,7 +82,9 @@ final class lib_test extends advanced_testcase {
     }
 
     /**
-     * @covers livequiz_delete_instance
+     * This test the delete instance.
+     *
+     * @covers \mod_livequiz\lib::livequiz_delete_instance
      * Test the livequiz_delete_instance function.
      * This function should delete an existing livequiz instance from the database.
      * It should return true if the instance is deleted successfully.
