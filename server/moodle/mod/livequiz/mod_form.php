@@ -1,4 +1,5 @@
-mod_livequiz// This file is part of Moodle - http://moodle.org/
+<?php
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,20 +14,31 @@ mod_livequiz// This file is part of Moodle - http://moodle.org/
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 /**
- Activity creation/editing form for the mod_livequiz plugin.
+ * Activity creation/editing form for the mod_livequiz plugin.
+ *
  * @package mod_livequiz
  * @copyright 2023
- * @license GNU General Public License
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once($CFG->dirroot .'/course/moodleform_mod.php');
-defined('MOODLE_INTERNAL') || die(); 
+
+require_once('../../config.php');
+require_once($CFG->dirroot . '/course/moodleform_mod.php');
+
+require_login();
+
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Form for creating/editing a livequiz activity.
+ */
 class mod_livequiz_mod_form extends moodleform_mod {
     /**
+     * Defines the form elements.
+     *
      * @return void
      */
-    function definition() {
+    public function definition() {
         global $CFG, $DB, $OUTPUT;
         // Used to add fields to form.
         $mform =& $this->_form;
@@ -34,8 +46,18 @@ class mod_livequiz_mod_form extends moodleform_mod {
         // Standard Moodle form buttons.
         $this->add_action_buttons();
     }
-    function validation($data, $files) {
-    }
-    function data_preprocessing(&$defaultvalues) {
+
+    /**
+     * Performs validation on the form data.
+     *
+     * @param array $data array of ("fieldname"=>value) of submitted data
+     * @param array $files array of uploaded files "element_name"=>tmp_file_path
+     * @return array of "element_name"=>"error_description" if there are errors,
+     *         or an empty array if everything is OK.
+     */
+    public function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+        // Add custom validation logic here if needed.
+        return $errors;
     }
 }
