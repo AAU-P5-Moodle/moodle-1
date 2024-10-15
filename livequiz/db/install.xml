@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/livequiz/db" VERSION="20241010" COMMENT="XMLDB file for Moodle mod/livequiz"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="livequiz" COMMENT="The settings for each live quiz.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Standard Moodle primary key."/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name of the live quiz."/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The course that this live quiz belongs to."/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Introduction text for the live quiz."/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Format of the introduction text."/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Timestamp when the record was created."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Timestamp when the record was last modified."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_course" TYPE="foreign" FIELDS="course" REFTABLE="mdl_course" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="questions" COMMENT="Questions which quizzes consist of.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="title" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Title of the question"/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Description of the question."/>
+        <FIELD NAME="timelimit" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Optional time limit for the question."/>
+        <FIELD NAME="explanation" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Explanation of the right answer, after the students have answered."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="answers" COMMENT="Answers for questions.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="correct" TYPE="binary" NOTNULL="true" SEQUENCE="false" COMMENT="Whether or not this answer option is correct."/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="The text which describes this answer option."/>
+        <FIELD NAME="explanation" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Explanation of why this answer is correct or incorrect."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="quiz_student" COMMENT="Relationship table between Students and Quiz">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="livequiz_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="student_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of a student who is participating in a quiz"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_livequiz" TYPE="foreign" FIELDS="livequiz_id" REFTABLE="livequiz" REFFIELDS="id" COMMENT="key to a quiz in which a student is participating"/>
+        <KEY NAME="fk_student" TYPE="foreign" FIELDS="student_id" REFTABLE="mdl_user" REFFIELDS="id" COMMENT="Key to student who is participating in a course"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="quiz_lecturer" COMMENT="Keeps track the creator(s) of a quiz.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="lecturer_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Id to the lecturer that created this quiz"/>
+        <FIELD NAME="quiz_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID to the quiz that a lecturer made."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_lecturer" TYPE="foreign" FIELDS="lecturer_id" REFTABLE="mdl_user" REFFIELDS="id" COMMENT="Key to the lecturer"/>
+        <KEY NAME="fk_quiz" TYPE="foreign" FIELDS="quiz_id" REFTABLE="livequiz" REFFIELDS="id" COMMENT="Id to the quiz."/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="quiz_questions" COMMENT="Relationship table between quizzes and questions.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="quiz_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Foreign key of the question."/>
+        <FIELD NAME="question_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Foreign key of the question."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_quiz" TYPE="foreign" FIELDS="quiz_id" REFTABLE="livequiz" REFFIELDS="id" COMMENT="Foreign key to quiz."/>
+        <KEY NAME="fk_question" TYPE="foreign" FIELDS="question_id" REFTABLE="questions" REFFIELDS="id" COMMENT="Key to question."/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="questions_answers" COMMENT="Relationship table between questions and answers!">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="question_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID to the relevant question."/>
+        <FIELD NAME="answer_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID to the relevant answer."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_question" TYPE="foreign" FIELDS="question_id" REFTABLE="questions" REFFIELDS="id" COMMENT="Foreign key to question."/>
+        <KEY NAME="fk_answer" TYPE="foreign" FIELDS="answer_id" REFTABLE="answers" REFFIELDS="id" COMMENT="Foreign key to answer."/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="questions_lecturer" COMMENT="Relationship table between questions and lecturers(users).">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="question_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID to the question."/>
+        <FIELD NAME="lecturer_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID to the lecturer, which is a user."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_question" TYPE="foreign" FIELDS="question_id" REFTABLE="questions" REFFIELDS="id" COMMENT="Foreign key to question."/>
+        <KEY NAME="fk_lecturer" TYPE="foreign" FIELDS="lecturer_id" REFTABLE="mdl_user" REFFIELDS="id" COMMENT="Foreign key to the lecturer(user)."/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="students_answers" COMMENT="Relationship table between students and answers.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="student_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of the student."/>
+        <FIELD NAME="answer_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID to the answer."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_student" TYPE="foreign" FIELDS="student_id" REFTABLE="mdl_user" REFFIELDS="id" COMMENT="Foreign key to student(user)."/>
+        <KEY NAME="fk_answer" TYPE="foreign" FIELDS="answer_id" REFTABLE="answers" REFFIELDS="id" COMMENT="Foreign key to an answer."/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="course_quiz" COMMENT="Relationship table between live quiz and course.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of the course."/>
+        <FIELD NAME="quiz_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of the quiz."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fk_course" TYPE="foreign" FIELDS="course_id" REFTABLE="mdl_course" REFFIELDS="id" COMMENT="Foreign key to the course."/>
+        <KEY NAME="fk_quiz" TYPE="foreign" FIELDS="quiz_id" REFTABLE="livequiz" REFFIELDS="id" COMMENT="Foreign key to the quiz."/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

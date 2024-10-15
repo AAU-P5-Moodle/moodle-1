@@ -3,8 +3,7 @@ version: '3.8'
 services:
   web:
     #For x64 architecture
-    #image: kodomoheichou/moodle-web:x64
-    image: kodomoheichou/moodle-web:arm
+    build: .
     container_name: moodle-web
     ports:
       - "80:80"
@@ -13,7 +12,9 @@ services:
     volumes:
       - ./custom.ini:/usr/local/etc/php/conf.d/custom.ini
       #Remove this line for production testing
-      - ./server/moodle/mod/livequiz:/var/www/html/mod/livequiz
+      - ./livequiz:/var/www/html/mod/livequiz
+      - ./amd/build/net8.0/publish/wwwroot:/var/www/html/mod/livequiz/wwwroot
+      - ./amd/src/index.php:/var/www/html/mod/livequiz/wwwroot/index.php
 
   db:
     image: postgres:16
