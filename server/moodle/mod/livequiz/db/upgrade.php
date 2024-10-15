@@ -26,8 +26,8 @@
  * xmldb_livequiz_upgrade function installs/upgrades if older version is installed
  *
  * @param int   $oldversion is the old installed version
+ * @return bool returns true
  */
-
 function xmldb_livequiz_upgrade($oldversion) {
     global $DB;
 
