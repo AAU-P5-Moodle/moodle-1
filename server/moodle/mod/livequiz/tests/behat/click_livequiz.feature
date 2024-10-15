@@ -27,5 +27,4 @@ Feature: Open a LiveQuiz activity
 
 Scenario: Open a livequiz on course
   When I click on "livequiz_tester" "link" in the "livequiz" activity
-  And I wait "2" seconds
   And I should see "Live Quiz"

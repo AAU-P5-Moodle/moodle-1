@@ -6,7 +6,7 @@ class behat_mod_livequiz_generator extends behat_generator_base
     {
         return [
             'livequizzes' =>[
-                'datagenerator' => 'instance',
+                'datagenerator' => 'livequiz',
                 'required' => ['id'],
             ],
         ];
