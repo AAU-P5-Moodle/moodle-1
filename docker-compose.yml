@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  web:
+    #For x64 architecture
+    build: .
+    container_name: moodle-web
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    volumes:
+      - ./custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      #Remove this line for production testing
+      - ./livequiz:/var/www/html/mod/livequiz
+      - ./amd/build/net8.0/publish/wwwroot:/var/www/html/mod/livequiz/wwwroot
+      - ./amd/src/index.php:/var/www/html/mod/livequiz/wwwroot/index.php
+
+  db:
+    image: postgres:16
+    container_name: moodle-postgres-db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+    environment:
+      - POSTGRES_DB=moodle
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
