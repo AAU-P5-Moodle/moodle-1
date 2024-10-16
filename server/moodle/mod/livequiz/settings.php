@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
-global $settings, $ADMIN;
+global $ADMIN;
 if ($ADMIN->fulltree) {
     $settings->add(new admin_settingpage('mod_livequiz', get_string('pluginname', 'mod_livequiz')));
 
