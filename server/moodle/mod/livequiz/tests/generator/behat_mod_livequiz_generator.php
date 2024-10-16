@@ -15,8 +15,7 @@ class behat_mod_livequiz_generator extends behat_generator_base
         ];
     }
 
-    //A way for behat to fetch livequiz Activity Module Id
-    /**
+    /** A way for behat to fetch livequiz Activity Module Id
      * @throws dml_exception
      * @throws Exception
      */
