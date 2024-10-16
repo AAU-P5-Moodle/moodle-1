@@ -31,15 +31,24 @@ require_once('../../../config.php');
 require_once('question.php');
 require_once('answer/slider.php');
 require_once('answer/multichoice.php');
+require_once('../hub/NavBar.php');
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizrunner'));
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title("Play quiz");
 $PAGE->set_heading("Join a quiz");
-
-echo '<link rel="stylesheet" type="text/css" href="' . new moodle_url('/mod/livequiz/quizrunner/styles.css') . '">';
+$PAGE->requires->css(new moodle_url('/mod/livequiz/quizrunner/RunnerStyles.css'));
 
 echo $OUTPUT->header();
+
+if (class_exists('createNavbar')) {
+    $Navbar = new createNavbar(); // Create an instance of the Navbar class
+    $Navbar->display($activeTab); // Call the display method with the active tab
+} else {
+    // Handle the error if the class does not exist
+    echo "Navbar class does not exist.";
+}
+
 
 $question = new question();
 $question->image = 'fish.png';
