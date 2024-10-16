@@ -37,6 +37,6 @@ Scenario: Add a livequiz to a course
   And I should see "livequiz"
   When I click on "livequiz" "link" in the "livequiz" activity
   Then I should see "livequiz"
-  And I should see "this is the livequiz view page"
+  And I should see "This is the livequiz view page"
   
 

@@ -22,12 +22,10 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../config.php');
+defined('MOODLE_INTERNAL') || die();
+global $CFG;
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
-require_login();
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Form for creating/editing a livequiz activity.
@@ -38,10 +36,8 @@ class mod_livequiz_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    public function definition() {
-        global $CFG, $DB, $OUTPUT;
+    public function definition(): void {
         // Used to add fields to form.
-        $mform =& $this->_form;
         $this->standard_coursemodule_elements();
         // Standard Moodle form buttons.
         $this->add_action_buttons();
@@ -55,9 +51,8 @@ class mod_livequiz_mod_form extends moodleform_mod {
      * @return array of "element_name"=>"error_description" if there are errors,
      *         or an empty array if everything is OK.
      */
-    public function validation($data, $files) {
-        $errors = parent::validation($data, $files);
+    public function validation($data, $files): array {
         // Add custom validation logic here if needed.
-        return $errors;
+        return parent::validation($data, $files);
     }
 }

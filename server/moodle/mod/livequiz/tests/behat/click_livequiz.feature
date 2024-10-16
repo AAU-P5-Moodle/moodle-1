@@ -30,7 +30,7 @@ Scenario: Open a livequiz on course
   #Testing we can open the livequiz activity
   When I click on "livequiz_tester" "link" in the "livequiz" activity
   And I should see "Live Quiz"
-  And I should see "this is the livequiz view page"
+  And I should see "This is the livequiz view page"
   And I should see "Test description"
 
 Scenario: Delete livequiz

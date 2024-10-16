@@ -17,11 +17,14 @@
 /**
  * Displays the livequiz view page.
  * @package   mod_livequiz
- * @copyright 2023 John Doe
+ * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 defined('MOODLE_INTERNAL') || die();
-global $OUTPUT, $PAGE, $DB;
+global $CFG, $OUTPUT, $PAGE, $DB;
+
+
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 
