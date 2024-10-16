@@ -20,7 +20,7 @@ class multichoice implements answer {
 	}
 
 	public function html() : string { 
-		$output = '<form action="quizrunner/wait.php" method="POST" class="answer multichoice">';
+		$output = '<form action="wait.php" method="POST" class="answer multichoice">';
 
 		foreach ($this->choices as $choice){
 			$output .= "<button type='submit' name='answer' value='$choice->value'>$choice->display</button>";

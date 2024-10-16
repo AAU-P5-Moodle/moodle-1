@@ -12,7 +12,7 @@ class slider implements answer {
 
 	public function html() : string {
 		return "
-			<form action='quizrunner/wait.php' method='POST' class='answer slider'>
+			<form action='wait.php' method='POST' class='answer slider'>
 				<output>24</output><br>
 				<input type='range' name='answer' min='$this->min' max='$this->max' oninput='this.previousElementSibling.previousElementSibling.value = this.value'>
 				<button type='submit' name='submit''>Submit</button>
