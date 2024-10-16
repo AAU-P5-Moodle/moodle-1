@@ -42,6 +42,8 @@ Scenario: Delete livequiz
   And I should see "Delete"
   And I click on "Delete" "link"
   And I should see "This will delete livequiz_tester and any user data it contains."
+  And "Delete" "button" should exist
+  And "Cancel" "button" should exist
   And I should see "Delete"
   And I click on "Delete" "button" in the "[class=modal-content]" "css_element"
   And I should not see "livequiz"
