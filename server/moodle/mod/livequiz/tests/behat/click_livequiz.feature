@@ -52,5 +52,6 @@ Scenario: Delete livequiz
   And "Cancel" "button" should exist
   #We should see the delete confirmation page
   And I should see "Delete"
+  #We use a class selector here since behat cannot find the correct delete button with: I press
   And I click on "Delete" "button" in the "[class=modal-content]" "css_element"
   And I should not see "livequiz"

@@ -26,6 +26,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+//This class is designed to generate instances of a "live quiz" module when testing
+//By extending the parent class and overriding this method, 
+//mod_livequiz_generator customizes the instance creation process to include specific defaults for live quizzes.
 class mod_livequiz_generator extends testing_module_generator {
     /**
      * @throws coding_exception
@@ -38,6 +41,7 @@ class mod_livequiz_generator extends testing_module_generator {
 
         $record = (object)(array)$record; // Cast to object.
 
+        //Define default values if not specified by the record, so it can be created anyway if not all fields are provided
         $defaultlivequizsettings = [
             'name' => 'Live Quiz',
             'intro' => 'This is a live quiz',
@@ -46,7 +50,7 @@ class mod_livequiz_generator extends testing_module_generator {
             'timemodified' => time(),
 
         ];
-
+        //Loop over record and insert values where they are missing
         foreach ($defaultlivequizsettings as $name => $value) {
             // Set default values if not set.
             if (!isset($record->{$name})) {
