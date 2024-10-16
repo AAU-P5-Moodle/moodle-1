@@ -34,6 +34,7 @@ Scenario: Open a livequiz on course
   And I should see "Test description"
 
 Scenario: Delete livequiz
+  #Testing we can delete the livequiz activity
   Given I am on "Test Course" course homepage with editing mode on
   When I click on "action-menu-toggle-2" "link" in the "livequiz" activity
   #action-menu-toggle-2 is used because behat cannot find the correct action menu toggle
@@ -43,10 +44,13 @@ Scenario: Delete livequiz
   And I should see "Hide"
   And I should see "Assign roles"
   And I should see "Delete"
+  #We should see the default action menu options
   And I click on "Delete" "link"
+  And I should see "Delete activity?"
   And I should see "This will delete livequiz_tester and any user data it contains."
   And "Delete" "button" should exist
   And "Cancel" "button" should exist
+  #We should see the delete confirmation page
   And I should see "Delete"
   And I click on "Delete" "button" in the "[class=modal-content]" "css_element"
   And I should not see "livequiz"
