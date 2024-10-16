@@ -4,17 +4,17 @@
  * EXPLANATION STUFF FOR HOW ALL THIS IS SET UP
  * ============================================
  *
- * We've made a object-oriented representation of the quiz runner. 
+ * We've made a object-oriented representation of the quiz runner.
  * 
- * At the top is an interface `answer` (`answer/answer.php`), which 
- * only has the method `html()`, which makes the answer form. We 
+ * At the top is an interface `answer` (`answer/answer.php`), which
+ * only has the method `html()`, which makes the answer form. We
  * expect it to contain a submit button that goes to `wait.php`. 
  *
- * We're not quite sure how we want to structure the overall flow of 
+ * We're not quite sure how we want to structure the overall flow of
  * the program, so that's something we need to figure out.
  *
  * Then we have the more specific classes, so `slider` 
- * (`answer/slider.php`), and `multichoice` (`answer/multichoice.php`), 
+ * (`answer/slider.php`), and `multichoice` (`answer/multichoice.php`),
  * whose file also contains the `multichoice_choice` class. For an 
  * example on how to initialise there, see the code in this file.
  *
@@ -36,6 +36,8 @@ $PAGE->set_url(new moodle_url('/mod/livequiz/quizrunner'));
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title("Play quiz");
 $PAGE->set_heading("Join a quiz");
+
+echo '<link rel="stylesheet" type="text/css" href="' . new moodle_url('/mod/livequiz/quizrunner/styles.css') . '">';
 
 echo $OUTPUT->header();
 
