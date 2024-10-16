@@ -29,11 +29,11 @@ defined('MOODLE_INTERNAL') || die();
 class mod_livequiz_generator extends testing_module_generator {
     public function create_instance($record = null, ?array $options = null)
     {
-        global $DB,$CFG;
+        global $CFG;
 
         require_once($CFG->dirroot.'/mod/livequiz/lib.php');
 
-        $record = (object)(array)$record;
+        $record = (object)(array)$record; // Cast to object.
 
         $defaultlivequizsettings = [
             'name' => 'Live Quiz',
@@ -45,36 +45,12 @@ class mod_livequiz_generator extends testing_module_generator {
         ];
 
         foreach ($defaultlivequizsettings as $name => $value) {
+            // Set default values if not set.
             if (!isset($record->{$name})) {
                 $record->{$name} = $value;
             }
         }
-
-
+        // By calling the parent method, we will create the instance with provided or default settings.
         return parent::create_instance($record, (array)$options);
     }
-
 }
-
-//Coding error detected, it must be fixed by a programmer: module generator requires $record->course (core\exception\coding_exception)
-/*
- *  public function create_instance($record = null, ?array $options = null)
-    {
-        global $DB,$CFG;
-
-        require_once($CFG->dirroot.'/mod/livequiz/lib.php');
-        $record = (object)(array)$record;
-
-        $defaultlivequizsetings = [
-            'id' => 1,
-            'name' => 'Live Quiz',
-            'intro' => 'This is a live quiz',
-            'introformat' => 1,
-            'timecreated' => time(),
-            'timemodified' => time(),
-        ];
-
-        $record = (object)array_merge($defaultlivequizsetings, (array)$record);
-        $DB -> insert_record('livequiz', $record);
-    }
- */
