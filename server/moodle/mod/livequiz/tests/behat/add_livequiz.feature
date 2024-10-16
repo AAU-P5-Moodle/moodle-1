@@ -28,11 +28,14 @@ Scenario: Add a livequiz to a course
   And I should see "New Live Quiz"
   And I should see "Common module settings"
   And I should see "Restrict access"
-  And I should see "Completion conditions"
+  #This is not visible in the page because the course does not have completion tracking enabled in settings
+  #And I should see "Completion conditions"
   And I should see "Tags"
   And I should see "Competencies"
   And I press "Save and return to course"
   And I should see "livequiz"
   When I click on "livequiz" "link" in the "livequiz" activity
   Then I should see "livequiz"
+  And I should see "this is the livequiz view page"
+  
 
