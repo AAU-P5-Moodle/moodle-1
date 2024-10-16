@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -26,22 +25,31 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-//This class is designed to generate instances of a "live quiz" module when testing
-//By extending the parent class and overriding this method, 
-//mod_livequiz_generator customizes the instance creation process to include specific defaults for live quizzes.
+
+/**
+ * Data generator for the Live Quiz module.
+ *
+ * @package   mod_livequiz
+ * @category  test
+ * @copyright 2024 Software AAU
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_livequiz_generator extends testing_module_generator {
     /**
+     * This class is designed to generate instances of a "live quiz" module when testing.
+     * By extending the parent class and overriding this method,
+     * mod_livequiz_generator customizes the instance creation process to include specific defaults for live quizzes
+     *
      * @throws coding_exception
      */
-    public function create_instance($record = null, ?array $options = null): stdClass
-    {
+    public function create_instance($record = null, ?array $options = null): stdClass {
         global $CFG;
 
         require_once($CFG->dirroot.'/mod/livequiz/lib.php');
 
         $record = (object)(array)$record; // Cast to object.
 
-        //Define default values if not specified by the record, so it can be created anyway if not all fields are provided
+        // Define default values if not specified by the record, so it can be created anyway if not all fields are provided.
         $defaultlivequizsettings = [
             'name' => 'Live Quiz',
             'intro' => 'This is a live quiz',
@@ -50,7 +58,7 @@ class mod_livequiz_generator extends testing_module_generator {
             'timemodified' => time(),
 
         ];
-        //Loop over record and insert values where they are missing
+        // Loop over record and insert values where they are missing.
         foreach ($defaultlivequizsettings as $name => $value) {
             // Set default values if not set.
             if (!isset($record->{$name})) {
