@@ -16,6 +16,7 @@ Feature: Open a LiveQuiz activity
       | user | course | role |
       | teacher1 | TC | editingteacher |
     And the following "activity" exists:
+    # Create a livequiz activity before the test
       | activity | livequiz         |
       | course   | TC               |
       | idnumber | 1                |
@@ -26,6 +27,7 @@ Feature: Open a LiveQuiz activity
     And I am on "Test Course" course homepage with editing mode off
 
 Scenario: Open a livequiz on course
+  #Testing we can open the livequiz activity
   When I click on "livequiz_tester" "link" in the "livequiz" activity
   And I should see "Live Quiz"
   And I should see "this is the livequiz view page"
@@ -34,6 +36,7 @@ Scenario: Open a livequiz on course
 Scenario: Delete livequiz
   Given I am on "Test Course" course homepage with editing mode on
   When I click on "action-menu-toggle-2" "link" in the "livequiz" activity
+  #action-menu-toggle-2 is used because behat cannot find the correct action menu toggle
   Then I should see "Edit settings"
   And I should see "Move"
   And I should see "Move right"

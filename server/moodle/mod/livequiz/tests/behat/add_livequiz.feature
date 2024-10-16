@@ -20,6 +20,7 @@ Background:
 
 
 Scenario: Add a livequiz to a course
+  #Testing we can add a livequiz activity
   Then I wait until the page is ready
   And I should see "Add an activity or resource"
   And I press "Add an activity or resource"
