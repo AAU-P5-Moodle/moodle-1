@@ -31,4 +31,19 @@ Scenario: Open a livequiz on course
   And I should see "this is the livequiz view page"
   And I should see "Test description"
 
-  
+Scenario: Delete livequiz
+  Given I am on "Test Course" course homepage with editing mode on
+  When I click on "action-menu-toggle-2" "link" in the "livequiz" activity
+  And I should see "Edit settings"
+  And I should see "Move"
+  And I should see "Move right"
+  And I should see "Hide"
+  And I should see "Assign roles"
+  And I should see "Delete"
+  And I click on "Delete" "link"
+  And I wait until the page is ready
+  And I should see "Delete activity?"
+  #And I should see "This will delete livequiz and any user data it contains."
+  And I click on "Delete" "link"
+  And I wait "1" seconds
+  Then I should not see "Live Quiz"
