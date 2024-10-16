@@ -23,10 +23,12 @@ Feature: Open a LiveQuiz activity
       | intro    | Test description |
       | section  | 0                |
     And I log in as "teacher1"
-    And I am on "Test Course" course homepage with editing mode on
+    And I am on "Test Course" course homepage with editing mode off
 
 Scenario: Open a livequiz on course
   When I click on "livequiz_tester" "link" in the "livequiz" activity
   And I should see "Live Quiz"
   And I should see "this is the livequiz view page"
+  And I should see "Test description"
+
   
