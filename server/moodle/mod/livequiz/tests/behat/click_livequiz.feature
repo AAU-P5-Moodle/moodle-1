@@ -34,16 +34,14 @@ Scenario: Open a livequiz on course
 Scenario: Delete livequiz
   Given I am on "Test Course" course homepage with editing mode on
   When I click on "action-menu-toggle-2" "link" in the "livequiz" activity
-  And I should see "Edit settings"
+  Then I should see "Edit settings"
   And I should see "Move"
   And I should see "Move right"
   And I should see "Hide"
   And I should see "Assign roles"
   And I should see "Delete"
   And I click on "Delete" "link"
-  And I wait until the page is ready
-  And I should see "Delete activity?"
-  #And I should see "This will delete livequiz and any user data it contains."
-  And I click on "Delete" "link"
-  And I wait "1" seconds
-  Then I should not see "Live Quiz"
+  And I should see "This will delete livequiz_tester and any user data it contains."
+  And I should see "Delete"
+  And I click on "Delete" "button" in the "[class=modal-content]" "css_element"
+  And I should not see "livequiz"
