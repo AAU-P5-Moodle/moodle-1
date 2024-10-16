@@ -27,7 +27,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 class mod_livequiz_generator extends testing_module_generator {
-    public function create_instance($record = null, ?array $options = null)
+    /**
+     * @throws coding_exception
+     */
+    public function create_instance($record = null, ?array $options = null): stdClass
     {
         global $CFG;
 

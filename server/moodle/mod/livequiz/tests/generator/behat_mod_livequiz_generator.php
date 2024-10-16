@@ -13,6 +13,10 @@ class behat_mod_livequiz_generator extends behat_generator_base
     }
 
 
+    /**
+     * @throws dml_exception
+     * @throws Exception
+     */
     protected function get_livequiz_id(string $quizname): int {
         global $DB;
 
