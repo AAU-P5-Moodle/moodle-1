@@ -21,13 +21,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-global $CFG, $OUTPUT, $PAGE, $DB;
-
-
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 
+global $OUTPUT, $PAGE, $DB;
 
 
 $id = required_param('id', PARAM_INT); // Course module ID.
