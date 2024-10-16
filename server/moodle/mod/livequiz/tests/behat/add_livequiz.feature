@@ -32,4 +32,3 @@ Scenario: Add a livequiz to a course
   When I click on "livequiz" "link" in the "livequiz" activity
   Then I should see "livequiz"
 
-

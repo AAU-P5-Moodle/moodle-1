@@ -16,10 +16,15 @@
 
 global $OUTPUT, $PAGE, $DB;
 require_once('../../config.php');
+require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 
 $id = required_param('id', PARAM_INT); // Course module ID
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id'=> $cm->instance], '*', MUST_EXIST);
+
+require_login($course, true, $cm); // Ensure the user is logged in and can access this module.
+$context = context_module::instance($cm->id); // Set the context for the course module.
+$PAGE->set_context($context); // Make sure to set the page context.
 
 $PAGE->set_url('/mod/livequiz/view.php', array('id' => $id));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
