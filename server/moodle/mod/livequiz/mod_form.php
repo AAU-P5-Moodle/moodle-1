@@ -42,5 +42,4 @@ class mod_livequiz_mod_form extends moodleform_mod {
         // Standard Moodle form buttons.
         $this->add_action_buttons();
     }
-
 }
