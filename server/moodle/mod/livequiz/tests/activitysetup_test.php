@@ -23,6 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_livequiz;
+use mod_livequiz_mod_form;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -39,7 +41,7 @@ require_once($CFG->dirroot . '/mod/livequiz/mod_form.php');
  * @copyright  2023
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class activitysetup_test extends advanced_testcase {
+final class activitysetup_test extends \advanced_testcase {
     /**
      * Activity Setup Test function.
      * This function should test the mod_form_setup function.
