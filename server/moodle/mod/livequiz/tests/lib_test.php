@@ -21,11 +21,10 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_livequiz;
-use mod_livequiz\lib;
 /**
  * Testing examples!
  */
-final class lib_test extends advanced_testcase {
+final class lib_test extends \advanced_testcase {
     protected function setUp(): void {
         parent::setUp();
         $this->resetAfterTest(true);
@@ -44,7 +43,7 @@ final class lib_test extends advanced_testcase {
     public function test_livequiz_add_instance(): void {
         global $DB;
 
-        $quizdata = new stdClass(); // Create a new stdClass object (empty object).
+        $quizdata = new \stdClass(); // Create a new stdClass object (empty object).
         $quizdata->name = 'Test Quiz';
         $quizdata->intro = 'This is a test quiz.';
 
@@ -67,7 +66,7 @@ final class lib_test extends advanced_testcase {
     public function test_livequiz_update_instance(): void {
         global $DB;
 
-        $quizdata = new stdClass();
+        $quizdata = new \stdClass();
         $quizdata->name = 'Test Quiz';
         $quizdata->intro = 'This is a test quiz.';
 
@@ -93,7 +92,7 @@ final class lib_test extends advanced_testcase {
     public function test_livequiz_delete_instance(): void {
         global $DB;
 
-        $quizdata = new stdClass();
+        $quizdata = new \stdClass();
         $quizdata->name = 'Test Quiz';
         $quizdata->intro = 'This is a test quiz.';
 
