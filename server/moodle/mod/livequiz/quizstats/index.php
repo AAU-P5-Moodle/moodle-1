@@ -4,11 +4,13 @@ require_once('../hub/NavBar.php');
 
 require_login();
 
+$PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
 // Getting the quiz id form the url parameter (assuming this is how we'll do it)
 //$quizid = required_param('quizid', PARAM_INT);
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
 $PAGE->requires->css(new moodle_url('/mod/livequiz/styles.css'));
+
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title("View quiz statistics");
 $PAGE->set_heading("Statistics");
