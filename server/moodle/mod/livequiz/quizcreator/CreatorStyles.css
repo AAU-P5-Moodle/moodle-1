@@ -2,54 +2,180 @@
 
 .Modal_div {
     width: 80%;
-    height: 80%;
-    color: grey;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: #333;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    overflow: auto;
-    background: white; /*Funny collor  name*/
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Centrerer elementerne vertikalt */
-    align-items: center; /* Centrerer elementerne horisontalt */
-    border: 3px solid black;
-    border-radius: 25px; /* Rounded corners */
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); /* Shadow effect */
-
+    background: #f5f5f5;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1000;
 }
 
+.question_input_large {
+    width: 100%;
+    height: 100px; 
+    font-size: 1.3em;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px; 
+    border: 2px solid #ccc;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
 .all_answers_for_question_div {
-    max-height: 50%;
-    max-width: 60%;
-    width: 60%;
-    height: 50%;
-    padding-left: 5%;
     display: flex;
-    flex-wrap: wrap; /* Allows items to wrap onto the next line if needed */
-    justify-content: flex-start; /* Aligns items to the start of the container */
+    flex-wrap: wrap;
+    gap: 15px; 
+    margin-top: 10px;
+}
+ 
+.flex_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; 
 }
 
 
 .container_for_new_answer {
-    width: 40%;
-    height: 15%;
-    max-height: 15%;
-    max-width: 40%;
-
+    display: flex;
+    width: 49%;
+    align-items: center; 
+    gap: 10px;          
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    background-color: #f0f0f0;
+    position: relative;
+    margin-bottom: 10px; 
 }
 
-.question_input {
-    background: white;
-    width: 85%;
-    height: 20%;
-    border: 2px solid black;
-    border-radius: 2px;
-    box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.5);
-    font-size: large;
+.answer_checkbox {
+    margin-right: 10px;  
+}
+ 
+.answer_input {
+    flex-grow: 1;       
+    padding: 10px;      
+    border: 2px solid #ccc;
+    background: transparent;
+    font-size: 1.2em;
+    border-radius: 5px;
+}
+ 
+.delete_answer_button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    background-image: url('/mod/livequiz/quizcreator/images/trashcan.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    position: absolute;
+    top: 25px;
+    right: 10px;
+}
+ 
+.answer_input:focus {
+    outline: none;
+}
+.delete_answer_button:hover {
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
+.add_new_answer_to_question:hover {
+    background-color: #004edf;
+}
+
+/* File upload section */
+.file_upload_section img {
+    margin-top: 10px;
+    max-width: 50%; 
+    max-height: 200px; 
+    display: block;
+    object-fit: contain; 
+    margin-left: auto;
+    margin-right: auto;
+}
+ 
+.file_upload_section input[type="file"] {
+    display: none; /* Hide the default file input */
+}
+ 
+.file_upload_section label {
+    width: 100%; 
+    height: 80px; 
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    background-color: #fafafa;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    color: #888;
+    font-weight: bold;
     text-align: center;
+}
+
+.time_limit_container {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+ 
+.time_limit_label {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+ 
+.timer_input_container {
+    display: flex;
+    align-items: center;     
+    gap: 10px;              
+}
+ 
+.time_limit_checkbox {
+    margin-right: 10px;     
+}
+ 
+.set_timer_input {
+    width: 150px;             
+    padding: 5px 10px;      
+    border: 2px solid #ccc;  
+    border-radius: 10px;    
+    font-size: 1.1em;        
+    text-align: center;      
+    outline: none;
+}
+
+.add_new_answer_to_question {
+    background-color: #0059ff;  
+    color: white;
+    padding: 10px 15px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    align-self: flex-end; 
+}
+
+.save_button:hover {
+    background-color: #4cae4c; 
+}
+ 
+.discard_question_button:hover {
+    background-color: #c10600;
 }
 
 .file_upload_container {
@@ -96,23 +222,24 @@
 
 
 .toast_promise_deletion_div {
-    width: 40%;
-    height: 40%;
-    color: black;
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    overflow: auto;
-    background: gainsboro; /*Funny collor  name*/
-    display: flex; /* Gør div'en til en flex container */
-    flex-direction: column; /* Placerer elementerne vertikalt som en kolonne */
-    justify-content: center; /* Centrerer elementerne vertikalt */
-    align-items: center; /* Centrerer elementerne horisontalt */
-    border: 3px solid black;
-    border-radius: 25px;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); /* Shadow effect */
-    font-size: larger;
+    background-color: #fff;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 60%;
+}
+ 
+.toast_promise_deletion_div button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    cursor: pointer;
 }
 
 #id_buttonaddquestion {

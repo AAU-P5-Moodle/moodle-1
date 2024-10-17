@@ -1,36 +1,46 @@
 <?php
-require_once("$CFG->libdir/formslib.php");
-
-class modalform extends moodleform {
-    public function definition() {
-        global $CFG;
-
-        $mform = $this->_form;
-
-        $mform->addElement('text', 'question', get_string('livequizname', 'local_livequiz'));
-        $mform->setType('question', PARAM_TEXT);
-        $mform->addRule('name', get_string('missingquestion'), 'required', null, 'client');
-
-        $fileoptions = array(
-            'subdirs' => 0,
-            'maxbytes' => $CFG->maxbytes,
-            'maxfiles' => 1,
-            'accepted_types' => array('image/png', 'image/jpeg', 'image/gif',
-                'video/mp4', 'video/mp3'),
-        );
-
-        $mform->addElement('filepicker', 'filename', get_string('uploadfile', 'local_livequiz'), null, $fileoptions);
-
-//        $mform->addElement('advcheckbox', 'timelimit', 'timelimit', null, ['group' => 1]);
-//        $this->add_checkbox_controller(1);
-
-
-
-        $mform->addElement('button', 'buttonaddanswer', get_string('addanswer', 'local_livequiz'));
-
-        $mform->addElement('button', 'buttondiscard', get_string('discardform', 'local_livequiz'));
-        $mform->addElement('button', 'buttonsave', get_string('saveform', 'local_livequiz'));
-
-
-    }
+require_once('../../../config.php');
+require_once('../form/createquizform.php');
+require_login();
+ 
+$PAGE->set_url(new moodle_url('/mod/livequiz/quizcreator'));
+ 
+$PAGE->requires->css(new moodle_url('/mod/livequiz/quizcreator/styles.css'));
+ 
+$PAGE->set_context(context_system::instance());
+$PAGE->set_title("Make a quiz");
+$PAGE->set_heading("Create a quiz");
+ 
+echo $OUTPUT->header();
+ 
+if (class_exists('createNavbar')) {
+    $navbar = new createNavbar(); // Create an instance of the Navbar class
+    $navbar->display($activeTab); // Call the display method with the active tab
+} else {
+    echo "Navbar class does not exist.";
 }
+ 
+ 
+// Opret formular
+$mform = new createquizform();
+ 
+ 
+ 
+// Vis formularen
+$mform->display();
+ 
+echo '<div class="quiz_modal_buttons">';
+ 
+echo '<div class="image_upload_container">';
+echo '<div id="imagePreviewContainer"><img id="imagePreview" src="#" alt="Image Preview" /></div>';
+echo '<label for="imageUpload" class="custom-file-upload">Add Image</label>';
+echo '<input type="file" id="imageUpload" name="quizImage" accept="image/png" />';
+echo '</div>';
+ 
+ 
+echo '<button id="saveQuiz" class="save_button">Save</button>';
+echo '<button id="cancelQuiz" class="discard_question_button">Cancel</button>';
+echo '</div>';
+ 
+$PAGE->requires->js(new moodle_url('../amd/src/quizcreator.js'));
+echo $OUTPUT->footer();
