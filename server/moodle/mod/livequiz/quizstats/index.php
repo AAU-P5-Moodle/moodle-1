@@ -1,5 +1,6 @@
 <?php
 require_once('../../../config.php');
+require_once('../hub/NavBar.php');
 
 require_login();
 
@@ -13,6 +14,14 @@ $PAGE->set_title("View quiz statistics");
 $PAGE->set_heading("Statistics");
 
 echo $OUTPUT->header();
+
+if (class_exists('createNavbar')) {
+    $Navbar = new createNavbar(); // Create an instance of the Navbar class
+    $Navbar->display($activeTab); // Call the display method with the active tab
+} else {
+    // Handle the error if the class does not exist
+    echo "Navbar class does not exist.";
+}
 
 //query to get the questions for the given quiz.
 $sql_questions = " "; // insert sql query for geting the questions for the given quiz inside " ".
