@@ -43,28 +43,39 @@ let savedQuestions = [];
  
     function create_discard_button() {
         let discard_question_button = create_element("discard_button", "div", "discard_question_button", "Discard");
- 
+    
         discard_question_button.addEventListener('click', () => {
             let toast_promise_deletion_div = create_element("toast_promise_deletion_div", 'div', "toast_promise_deletion_div", "Are you sure you want to delete this question?");
             let cancel_question_deletion_button = create_element("cancel_question_deletion_button", 'button', "cancel_question_deletion_button", "Hell naw");
             let continue_question_deletion_button = create_element("continue_question_deletion_button", 'button', "continue_question_deletion_button", "Yes");
- 
+    
             toast_promise_deletion_div.appendChild(cancel_question_deletion_button);
             toast_promise_deletion_div.appendChild(continue_question_deletion_button);
- 
+    
             let modal_div = document.querySelector('.Modal_div');
             modal_div.appendChild(toast_promise_deletion_div);
- 
+    
             continue_question_deletion_button.addEventListener('click', () => {
                 modal_div.remove();
             });
- 
+    
             cancel_question_deletion_button.addEventListener('click', () => {
                 toast_promise_deletion_div.remove();
             });
         });
- 
+    
         return discard_question_button;
+    }
+
+    function create_cancel_button() {
+        let cancel_button = create_element("cancel_button", "button", "cancel_button", "Cancel");
+    
+        cancel_button.addEventListener('click', () => {
+            console.log('Cancel button clicked!');
+            // Add cancel functionality here
+        });
+    
+        document.body.appendChild(cancel_button);  // Append it to the body for fixed positioning
     }
  
     function create_file_picker() {

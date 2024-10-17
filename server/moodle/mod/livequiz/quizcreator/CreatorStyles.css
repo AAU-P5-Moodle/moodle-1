@@ -168,6 +168,7 @@
     cursor: pointer;
     border: none;
     align-self: flex-end; 
+    z-index: 100;
 }
 
 .save_button:hover {
@@ -197,15 +198,15 @@
     border-radius: 5px;
 }
 .discard_question_button {
-    position: absolute; /* Absolute positioning relative to the nearest positioned ancestor */
-    bottom: 10px; /* Align to the bottom of the container */
-    right: 20px; /* Align it to the right of the container */
-    background-color: red; /* Set the background color to red */
-    color: white; /* Set text color to white for contrast */
-    padding: 5px 10px; /* Add some padding for spacing */
-    border-radius: 5px; /* Optional: Add rounded corners */
-    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
-    font-size: larger; /* Optional: Increase font size */
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: larger;
 }
 .save_button {
     position: fixed;  /* Fixed position to ensure it's always at the bottom-left */
@@ -217,6 +218,19 @@
     font-size: large;   /* Optional: Increase font size */
     border-radius: 5px; /* Optional: Add rounded corners */
     cursor: pointer;    /* Optional: Change cursor to pointer */
+}
+/* Styling the cancel button to always appear at the bottom-right of the window */
+.cancel_button {
+    position: fixed;       
+    bottom: 10px;
+    right: 100px;
+    background-color: blue;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: large;
+    cursor: pointer;
+    z-index: 1000;
 }
 
 
@@ -252,6 +266,7 @@
     font-size: large;   /* Optional: Increase font size */
     border-radius: 5px; /* Optional: Add rounded corners */
     cursor: pointer;    /* Optional: Change cursor to pointer */
+    z-index: 100;
 }
 
 .question_for_main_page {
@@ -296,12 +311,10 @@
 }
 
 .image_upload_container {
-    position: absolute;     /* Position it relative to the page */
-    top: 100px;              /* Move 20px from the top */
-    left: 20px;             /* Move 20px from the left */
-    display: flex;
-    flex-direction: column; /* Stack preview and button vertically */
-    align-items: center;    /* Center items horizontally */
+    position: relative;  /* Ensures it's placed relative to its normal position */
+    margin-top: 20px;    /* Add margin to push it down from the Navbar */
+    width: 100%;         /* Span the full width (or adjust as needed) */
+    padding: 10px 0;     /* Optional: Add some padding */
 }
 
 #imagePreviewContainer {

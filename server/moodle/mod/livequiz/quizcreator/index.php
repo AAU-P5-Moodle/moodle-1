@@ -5,7 +5,6 @@ require_once('../hub/NavBar.php');
 require_login();
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizcreator'));
- 
 $PAGE->requires->css(new moodle_url('/mod/livequiz/quizcreator/CreatorStyles.css'));
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title("Make a quiz");
@@ -21,11 +20,8 @@ if (class_exists('createNavbar')) {
     echo "Navbar class does not exist.";
 }
 
-
 // Opret formular
 $mform = new createquizform();
-
-
 
 // Vis formularen
 $mform->display();
@@ -38,9 +34,12 @@ echo '<label for="imageUpload" class="custom-file-upload">Add Image</label>';
 echo '<input type="file" id="imageUpload" name="quizImage" accept="image/png" />';
 echo '</div>';
 
-
+// Save button (unchanged)
 echo '<button id="saveQuiz" class="save_button">Save</button>';
-echo '<button id="cancelQuiz" class="discard_question_button">Cancel</button>';
+
+// Cancel button with new class 'cancel_button'
+echo '<button id="cancelQuiz" class="cancel_button">Cancel</button>';
+
 echo '</div>';
 
 $PAGE->requires->js(new moodle_url('../amd/src/quizcreator.js'));
