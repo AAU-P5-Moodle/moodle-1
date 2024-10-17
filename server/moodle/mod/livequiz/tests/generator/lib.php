@@ -15,18 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Behat data generator for mod_livequiz.
- *
- * @package   mod_livequiz
- * @category  test
- * @copyright 2024 Software AAU
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-defined('MOODLE_INTERNAL') || die();
-
-
-/**
  * Data generator for the Live Quiz module.
  *
  * @package   mod_livequiz
