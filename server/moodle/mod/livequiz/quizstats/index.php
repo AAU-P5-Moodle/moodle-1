@@ -5,9 +5,9 @@ require_once('../hub/NavBar.php');
 require_login();
 
 // Getting the quiz id form the url parameter (assuming this is how we'll do it)
-$quizid = required_param('quizid', PARAM_INT);
+//$quizid = required_param('quizid', PARAM_INT);
 
-$PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php', ['quizid' => $quizid]));
+$PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
 $PAGE->requires->css(new moodle_url('/mod/livequiz/styles.css'));
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title("View quiz statistics");
@@ -22,6 +22,7 @@ if (class_exists('createNavbar')) {
     // Handle the error if the class does not exist
     echo "Navbar class does not exist.";
 }
+/*
 
 //query to get the questions for the given quiz.
 $sql_questions = " "; // insert sql query for geting the questions for the given quiz inside " ".
@@ -51,7 +52,14 @@ foreach ($questions as $question) {
 
         $questionData[$questionId][] = $responseCount;
     }
-}
+}*/
+
+$questionData = [
+    [10, 20, 30, 40],
+    [15, 5, 25],
+    [22, 13],
+    [18, 12, 20, 10, 5]
+];
 
 
 // imports moodles own charting liberay.
