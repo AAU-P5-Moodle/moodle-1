@@ -19,7 +19,8 @@
         question_input.className = "question_input";
 
         modal_div.appendChild(question_input);
-
+        
+        let file_picker = create_file_picker();
         modal_div.appendChild(create_file_picker());
         modal_div.appendChild(create_timer_element());
 
@@ -29,7 +30,7 @@
         modal_div.appendChild(create_answer_button(all_answers_for_question_div));
         modal_div.appendChild(all_answers_for_question_div);
 
-        modal_div.appendChild(save_question(page, question_input, modal_div, all_answers_for_question_div));
+        modal_div.appendChild(save_question(page, question_input, modal_div, all_answers_for_question_div, file_picker));
         modal_div.appendChild(create_discard_button());
 
         page.appendChild(modal_div);
@@ -123,14 +124,14 @@
         return timer_div;
     }
 
-    function save_question(page, question_input, modal_div, answers_div) {
+    function save_question(page, question_input, modal_div, answers_div, file_picker) {
         let save_question_button = create_element("save_question_button",
             'button', "save_button", "Save question");
-
+    
         save_question_button.addEventListener('click', () => {
             let question_for_main_page = create_element("question_for_main_page",
                 'button', 'question_for_main_page', question_input.value);
-
+    
             let answers_count = answers_div.children.length;
             let answers_is_filled = true;
             for (let i = 0; i < answers_count; i++) {
@@ -139,16 +140,24 @@
                     break;
                 }
             }
+            let file_input = file_picker.querySelector('input[type="file"]');
+            let file = file_input.files[0];
+    
             if (question_input.value.trim() === "" || answers_count < 2 || !answers_is_filled) {
-                console.log("Could not save if no question is added or not all answers are filled.")
+                console.log("Could not save if no question is added or not all answers are filled.");
             } else {
+                if (file) {
+                    console.log("Selected file: ", file.name);
+                }
+    
                 page.appendChild(question_for_main_page);
                 modal_div.remove();
             }
-        })
-
-        return save_question_button
+        });
+    
+        return save_question_button;
     }
+    
 
     function create_answer_button(parent_element) {
         let add_new_answer_to_question = create_element("add_answer_button", 'button', 'add_new_answer_to_question', 'Add Answer');
