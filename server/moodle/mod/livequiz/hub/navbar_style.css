@@ -1,25 +1,4 @@
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.container {
-  max-width: 1000px;
-  margin: 20px;
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  text-align: center;
-}
-
 /* Styles for the navigation buttons */
 .nav-tabs {
   display: flex;
@@ -27,13 +6,12 @@ body {
 }
 
 .nav-tabs .tab-button {
-  display: inline-block;  /* Make links behave like buttons */
-  padding: 5px 10px;    /* Add some padding */ 
-  margin: 15px;           /* Add space between buttons */
+  
+  padding: 0px 10px;    /* Add some padding */ 
+  margin: 0px;           /* Add space between buttons */
   border: none;          /* Remove default border */
-  border-radius: 2px;    /* Rounded corners */
-  background-color: var(--button-default-bg, #a0a0a0); /* Default button color */
-  color: white;          /* Text color */
+  
+  border-radius: 4px;
   text-align: center;    /* Center the text */
   text-decoration: none;  /* Remove underline */
   cursor: pointer;       /* Pointer on hover */
@@ -42,11 +20,11 @@ body {
 
 /* Styles for active button */
 .nav-tabs .tab-button.active {
-  background-color: var(--button-active-bg, #0056b3); /* Active button color */
+  background-color: var(--button-active-bg, #9da6b0); /* Active button color */
   font-weight: bold;  /* Bold text for active button */
 }
 
 /* Optional: Hover effect */
 .nav-tabs .tab-button:hover {
-  background-color: var(--button-hover-bg, #0056b3); /* Color change on hover */
+  background-color: var(--button-hover-bg, #9da6b0); /* Color change on hover */
 }

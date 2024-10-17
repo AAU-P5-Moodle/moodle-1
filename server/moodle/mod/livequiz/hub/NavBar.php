@@ -14,7 +14,6 @@ class createNavbar{
 
         //Active tab does not currently work
         return"
-            <div class='container'>
                 <!-- Navigation Tabs as Links -->
                 <div class='nav-tabs'>
                     <a href='{$base_url}/quizcreator/?tab=quizcreator' class='tab-button" . ($this->activeTab === 'quizcreator' ? ' active' : '') . "'>Quiz Creator</a>
@@ -22,17 +21,6 @@ class createNavbar{
                     <a href='{$base_url}/quizstats/?tab=quizstats' class='tab-button" . ($this->activeTab === 'quizstats' ? ' active' : '') . "'>Quiz Stats</a>
                     <a href='{$base_url}/questionbank/?tab=questionbank' class='tab-button" . ($this->activeTab === 'questionbank' ? ' active' : '') . "'>Question Bank</a>
                 </div>
-            </div>
-
-            <script>
-                function showTab(evt, tabName) {
-                    var tabButtons = document.getElementsByClassName('tab-button');
-                    for (var i = 0; i < tabButtons.length; i++) {
-                        tabButtons[i].classList.remove('active');
-                    }
-                    evt.currentTarget.classList.add('active');
-                }
-            </script>
         ";
     }
     public function display() {

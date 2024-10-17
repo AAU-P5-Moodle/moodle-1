@@ -5,7 +5,10 @@ require_once('../hub/NavBar.php');
 require_login();
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
+// Getting the quiz id form the url parameter (assuming this is how we'll do it)
+//$quizid = required_param('quizid', PARAM_INT);
 
+$PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
 $PAGE->requires->css(new moodle_url('/mod/livequiz/styles.css'));
 
 $PAGE->set_context(context_system::instance());
@@ -14,7 +17,6 @@ $PAGE->set_heading("Statistics");
 
 echo $OUTPUT->header();
 
-<<<<<<< HEAD
 if (class_exists('createNavbar')) {
     $Navbar = new createNavbar(); // Create an instance of the Navbar class
     $Navbar->display($activeTab); // Call the display method with the active tab
@@ -22,21 +24,44 @@ if (class_exists('createNavbar')) {
     // Handle the error if the class does not exist
     echo "Navbar class does not exist.";
 }
+/*
 
 //query to get the questions for the given quiz.
 $sql_questions = " "; // insert sql query for geting the questions for the given quiz inside " ".
 $params = ['quizid' => $quizid];
 $questins = $DB->get_records_sql($spl_questions, $params);
-=======
-// example data.
+
+
+$questionData = [];
+$questionLabels = [];
+$currentQuestionId = 0;
+
+foreach ($questions as $question) {
+    $questionId = $question->questionid;
+    $questionLabels[$questionId] = $question->questionname;
+
+    //query to get the answers for the current question.
+    $sql_answers = ""; // insert sql query for geting the answer option for the given quiz inside " ".
+    $answerParams = ['questionid' => $questionId];
+    $answers = $DB->get_records_sql($sql_answers, $answerParams);
+
+    $questionData[$questionId] = [];
+    foreach ($answer as $answer) {
+        // quary to count how many students selected this answer.
+        $sql_count = ""; // insert sql query for geting the student asnwers for the given question inside " ".
+        $countParams = ['answerid' => $answer->answerid];
+        $responseCount = $DB->get_field_sql($sql_count, $countParams);
+
+        $questionData[$questionId][] = $responseCount;
+    }
+}*/
+
 $questionData = [
     [10, 20, 30, 40],
     [15, 5, 25],
     [22, 13],
     [18, 12, 20, 10, 5]
 ];
->>>>>>> parent of 156aeba6 (added sql querie setup for retrieveing quiz, questions, answer options and student responses for the quiz statistics pages (still needs the actual query questions))
-
 
 
 // imports moodles own charting liberay.
