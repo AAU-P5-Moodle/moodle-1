@@ -1,0 +1,167 @@
+@import url('../hub/navbar_style.css');
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.question-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.question-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+/*multichoice Button Styling */
+.answer.multichoice {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 20px;
+    justify-items: center;
+}
+
+/* Ensure all buttons have the same size */
+.answer.multichoice button {
+    width: 200px;
+    height: 60px;
+    font-size: 16px;
+    padding: 10px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: #0073e6;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect */
+.answer.multichoice button:hover {
+    background-color: #005bb5;
+}
+
+/* Responsive Grid Adjustments */
+@media (max-width: 600px) {
+    .answer.multichoice {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Slider Styles */
+.answer.slider input[type="range"] {
+    width: 100%;
+    height: 25px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.3s;
+}
+
+.answer.slider input[type="range"]::-webkit-slider-thumb {
+    width: 25px;
+    height: 25px;
+    background-color: #0073e6;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Slider Value Display */
+.answer.slider output {
+    font-size: 20px;
+    margin-top: 10px;
+    display: block;
+}
+
+/* Progress Bar Styling */
+.progress-bar {
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 600px;
+    height: 20px;
+}
+
+/* Progress Indicator (inner div) */
+.progress-bar div {
+    height: 100%;
+    background: linear-gradient(to right, #4CAF50, #81C784);
+    transition: width 0.4s ease-in-out;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    padding: 0 5px;
+}
+
+/* Progress Text (if placed outside the bar) */
+.progress-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    line-height: 20px;
+    color: #333;           /* Darker text color if progress is shown outside */
+    z-index: 1;            /* Ensure text appears above the progress bar */
+}
+
+
+/* Styling for the quiz prompt */
+.prompt {
+    width: 420px;
+    background-color: #f9f9f9;
+    border: 2px solid #0073e6;
+    border-radius: 10px;
+    margin: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form button {
+    background-color: #0073e6; /* Moodle's primary button color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+form button:hover {
+    background-color: #005bb5;
+}

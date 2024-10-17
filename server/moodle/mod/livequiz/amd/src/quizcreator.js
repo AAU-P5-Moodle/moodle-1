@@ -1,4 +1,5 @@
 
+
     function open_question_creation_modal() {
         // Corrected button ID
         let add_question_button = document.getElementById("id_buttonaddquestion");

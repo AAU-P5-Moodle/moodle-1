@@ -16,13 +16,26 @@
 
 global $OUTPUT, $PAGE, $DB;
 require_once('../../config.php');
+require_once('hub/NavBar.php');
 
 $id = required_param('id', PARAM_INT); // Course module ID
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id'=> $cm->instance], '*', MUST_EXIST);
-
+$PAGE->requires->css(new moodle_url('/mod/livequiz/hub/navbar_style.css'));
 $PAGE->set_url('/mod/livequiz/view.php', array('id' => $id));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
-header("Location: /mod/livequiz/quizcreator/");
+
+$activeTab = optional_param('tab', 'normal', PARAM_ALPHA);
+
+echo $OUTPUT->header();
+
+if (class_exists('createNavbar')) {
+    // Create an instance of the Navbar class, passing the active tab
+    $Navbar = new createNavbar($activeTab);
+    $Navbar->display(); // Call the display method
+} else {
+    echo "Navbar class does not exist.";
+}
+echo $OUTPUT->footer();
