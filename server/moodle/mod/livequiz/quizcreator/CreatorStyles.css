@@ -9,7 +9,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     overflow: auto;
-    background: gainsboro; /*Funny collor  name*/
+    background: white; /*Funny collor  name*/
     display: flex;
     flex-direction: column;
     justify-content: center; /* Centrerer elementerne vertikalt */
@@ -19,6 +19,7 @@
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); /* Shadow effect */
 
 }
+
 
 .all_answers_for_question_div {
     max-height: 50%;
@@ -42,8 +43,8 @@
 
 .question_input {
     background: white;
-    width: 20%;
-    height: 10%;
+    width: 85%;
+    height: 20%;
     border: 2px solid black;
     border-radius: 2px;
     box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.5);
@@ -51,25 +52,45 @@
     text-align: center;
 }
 
-.discard_question_button {
-    position: absolute; /* Absolute positioning relative to the nearest positioned ancestor */
-    bottom: 0; /* Align to the bottom of the container */
-    left: 0; /* Align to the left of the container */
-    background-color: red; /* Set the background color to red */
-    color: white; /* Optional: Set text color to white for contrast */
-    padding: 5px 10px; /* Add some padding */
-    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
-    font-size: larger;
+.file_upload_container {
+    margin-bottom: 20px;
 }
 
-.save_button {
-    background-color: green; /* Set the background color */
-    color: white; /* Set the text color */
-    padding: 5px 10px; /* Add padding */
-    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
-    font-size: larger;
+.file_upload_input {
+    border: 1px solid #ccc;
+    padding: 8px;
     border-radius: 5px;
-    margin-right: 10px; /* Add some margin to separate from the Cancel button */
+    font-size: 1rem;
+}
+
+.file_upload_preview {
+    display: block;
+    margin-top: 10px;
+    max-width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.discard_question_button {
+    position: absolute; /* Absolute positioning relative to the nearest positioned ancestor */
+    bottom: 10px; /* Align to the bottom of the container */
+    right: 20px; /* Align it to the right of the container */
+    background-color: red; /* Set the background color to red */
+    color: white; /* Set text color to white for contrast */
+    padding: 5px 10px; /* Add some padding for spacing */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+    font-size: larger; /* Optional: Increase font size */
+}
+.save_button {
+    position: fixed;  /* Fixed position to ensure it's always at the bottom-left */
+    bottom: 10px;     /* Position it 10px from the bottom of the page */
+    left: 170px;       /* Position it 10px from the left of the page */
+    background-color: green; /* Optional: Customize the background color */
+    color: white;     /* Optional: Customize the text color */
+    padding: 10px 20px; /* Optional: Add padding to make it larger */
+    font-size: large;   /* Optional: Increase font size */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    cursor: pointer;    /* Optional: Change cursor to pointer */
 }
 
 
@@ -92,5 +113,105 @@
     border-radius: 25px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); /* Shadow effect */
     font-size: larger;
+}
+
+#id_buttonaddquestion {
+    position: fixed;  /* Fixed position to ensure it's always at the bottom-left */
+    bottom: 10px;     /* Position it 10px from the bottom of the page */
+    left: 10px;       /* Position it 10px from the left of the page */
+    background-color: green; /* Optional: Customize the background color */
+    color: white;     /* Optional: Customize the text color */
+    padding: 10px 20px; /* Optional: Add padding to make it larger */
+    font-size: large;   /* Optional: Increase font size */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    cursor: pointer;    /* Optional: Change cursor to pointer */
+}
+
+.question_for_main_page {
+    position: fixed;      /* Fix the button in place, relative to the viewport */
+    bottom: 70px;         /* Position it 70px from the bottom (adjust based on your design) */
+    left: 10px;           /* Align it to the left of the page */
+    background-color: grey; /* Optional: Adjust background color */
+    color: white;         /* Optional: Adjust text color */
+    padding: 10px;        /* Optional: Add padding */
+    font-size: large;     /* Optional: Adjust font size */
+    border-radius: 5px;   /* Optional: Add rounded corners */
+    z-index: 10;          /* Ensure it appears above other elements */
+}
+
+.quiz_form_container {
+    display: flex;
+    flex-direction: column;  /* Align items vertically */
+    width: 50%;              /* Take up the right half of the screen */
+    margin-left: 50%;        /* Push the form to the right half of the screen */
+    padding: 20px;           /* Add some padding for spacing */
+    box-sizing: border-box;   /* Ensure padding does not overflow the container */
+}
+
+.quiz_form_container .fitem {
+    display: flex;
+    flex-direction: column;  /* Stack label and input vertically */
+    margin-bottom: 15px;     /* Add space between form fields */
+}
+
+.quiz_form_container label {
+    margin-bottom: 5px;      /* Add space between the label and input field */
+    font-weight: bold;       /* Make the label text bold */
+}
+
+.quiz_form_container input, 
+.quiz_form_container textarea {
+    width: 100%;             /* Make the input/textarea take the full width of the container */
+    padding: 10px;           /* Add padding for better appearance */
+    border: 1px solid #ccc;  /* Add a border to the inputs */
+    border-radius: 5px;      /* Optional: Rounded corners */
+    font-size: 1rem;         /* Optional: Increase font size */
+}
+
+.image_upload_container {
+    position: absolute;     /* Position it relative to the page */
+    top: 100px;              /* Move 20px from the top */
+    left: 20px;             /* Move 20px from the left */
+    display: flex;
+    flex-direction: column; /* Stack preview and button vertically */
+    align-items: center;    /* Center items horizontally */
+}
+
+#imagePreviewContainer {
+    width: 300px;           /* Constrain the width of the preview */
+    height: 200px;          /* Constrain the height of the preview */
+    border: 2px solid #ccc; /* Add a border to the preview area */
+    border-radius: 10px;    /* Rounded corners */
+    margin-bottom: 15px;    /* Add space between the preview and button */
+    overflow: hidden;       /* Ensure image fits within the box */
+    display: flex;          /* Center the image within the box */
+    justify-content: center;
+    align-items: center;
+}
+
+#imagePreview {
+    max-width: 100%;        /* Scale the image to fit within the box */
+    max-height: 100%;       /* Ensure the image does not overflow vertically */
+    display: none;          /* Initially hidden until an image is uploaded */
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;     /* Add padding for the button */
+    cursor: pointer;        /* Make it look clickable */
+    background-color: #007bff; /* Button background color (can be customized) */
+    color: white;           /* White text */
+    border: 2px solid #007bff; /* Border matches background color */
+    border-radius: 10px;    /* Rounded corners */
+    font-size: 1rem;        /* Text size */
+    text-align: center;     /* Center the text */
+}
+
+.custom-file-upload:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+#imageUpload {
+    display: none;          /* Hide the default file input */
 }
 
