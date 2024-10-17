@@ -45,7 +45,7 @@ class mod_livequiz_generator extends testing_module_generator {
     public function create_instance($record = null, ?array $options = null): stdClass {
         global $CFG;
 
-        require_once($CFG->dirroot.'/mod/livequiz/lib.php');
+        require_once($CFG->dirroot . '/mod/livequiz/lib.php');
 
         $record = (object)(array)$record; // Cast to object.
 
