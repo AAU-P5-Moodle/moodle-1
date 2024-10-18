@@ -13,14 +13,23 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-defined('MOODLE_INTERNAL') || die();
 
 /**
- * @param $quizdata
- * @return bool|int
- * @throws dml_exception
+ * Functions for managing livequiz instances in the Moodle database.
+ *
+ * @package    mod_livequiz
+ * @copyright  2023
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-function livequiz_add_instance($quizdata){
+
+/**
+ * Adds a new instance of the livequiz to the database.
+ *
+ * @param object $quizdata Quiz data object
+ * @return bool|int The ID of the new quiz instance or false on failure
+ * @throws dml_exception When a database error occurs
+ */
+function livequiz_add_instance($quizdata) {
     global $DB;
 
     $quizdata->timecreated = time();
@@ -32,15 +41,18 @@ function livequiz_add_instance($quizdata){
 }
 
 /**
- * @param $quizdata
- * @return bool
- * @throws dml_exception
+ * Updates an existing livequiz instance in the database.
+ *
+ * @param object $quizdata Quiz data object
+ * @return bool True on success
+ * @throws dml_exception When a database error occurs
  */
-function livequiz_update_instance($quizdata){
+function livequiz_update_instance($quizdata) {
     global $DB;
 
     $quizdata->timemodified = time();
-    //$quizdata->id = $quizdata->instance;
+    // Uncomment the following line if needed.!
+    // $quizdata->id = $quizdata->instance;!
 
     $DB->update_record('livequiz', $quizdata);
 
@@ -48,11 +60,13 @@ function livequiz_update_instance($quizdata){
 }
 
 /**
- * @param $id
- * @return bool
- * @throws dml_exception
+ * Deletes a livequiz instance from the database.
+ *
+ * @param int $id ID of the quiz instance
+ * @return bool True on success
+ * @throws dml_exception When a database error occurs
  */
-function livequiz_delete_instance($id){
+function livequiz_delete_instance($id) {
     global $DB;
 
     $DB->delete_records('livequiz', ['id' => $id]);
