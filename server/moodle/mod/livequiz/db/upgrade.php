@@ -33,7 +33,7 @@ function xmldb_livequiz_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2024072506) {
+    if ($oldversion < 2024072507) {
         // Define table livequiz to be created.
         $livequiztable = new xmldb_table('livequiz');
         $courseid = new xmldb_field('course', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
@@ -53,7 +53,9 @@ function xmldb_livequiz_upgrade($oldversion) {
 
         // Conditionally launch create table for livequiz.
         if ($dbman->table_exists($livequiztable)) {
-            $dbman->add_field($livequiztable, $courseid);
+            if(!$dbman->field_exists($livequiztable, $courseid)) {
+                $dbman->add_field($livequiztable, $courseid);
+            }
         } else {
             $dbman->create_table($livequiztable);
         }
@@ -222,7 +224,7 @@ function xmldb_livequiz_upgrade($oldversion) {
         }
 
         // Livequiz savepoint reached.
-          upgrade_mod_savepoint(true, 2024072506, 'livequiz');
+          upgrade_mod_savepoint(true, 2024072507, 'livequiz');
     }
 
     return true;
