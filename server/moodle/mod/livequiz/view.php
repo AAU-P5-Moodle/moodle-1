@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
 /**
  * Displays the livequiz view page.
  * @package   mod_livequiz
@@ -23,6 +24,7 @@
 
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
+require_once('hub/NavBar.php');
 
 global $OUTPUT, $PAGE, $DB;
 
@@ -38,6 +40,19 @@ $PAGE->set_context($context); // Make sure to set the page context.
 $PAGE->set_url('/mod/livequiz/view.php', ['id' => $id]);
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
+$PAGE->requires->css(new moodle_url('/mod/livequiz/hub/navbar_style.css'));
+
+$activeTab = optional_param('tab', 'normal', PARAM_ALPHA);
+
+echo $OUTPUT->header();
+
+if (class_exists('createNavbar')) {
+    // Create an instance of the Navbar class, passing the active tab
+    $Navbar = new createNavbar($activeTab);
+    $Navbar->display(); // Call the display method
+} else {
+    echo "Navbar class does not exist.";
+}
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading('This is the livequiz view page');

@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -22,7 +23,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- defined('MOODLE_INTERNAL') || die();
+
+defined('MOODLE_INTERNAL') || die();
 
 global $plugin;
 
@@ -31,3 +33,4 @@ $plugin = new stdClass(); // Initialize $plugin as an object.
 $plugin->version = 2024072500;
 $plugin->requires = 2024041600;
 $plugin->component = 'mod_livequiz';
+

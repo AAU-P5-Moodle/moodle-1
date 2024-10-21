@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
 /**
  * This is the test file
  * @package mod_livequiz
@@ -27,6 +28,7 @@ namespace mod_livequiz;
 final class lib_test extends \advanced_testcase {
     protected function setUp(): void {
         parent::setUp();
+
         $this->resetAfterTest(true);
     }
 
@@ -34,12 +36,14 @@ final class lib_test extends \advanced_testcase {
      * Tests the addition of a new live quiz instance.
      *
      * @covers \mod_livequiz\lib::livequiz_add_instance
+
      * Test the livequiz_add_instance function.
      * This function should add a new livequiz instance to the database.
      * It should return the ID of the new instance.
      * It should set the name and intro fields of the new instance.
      * It should return false if the instance cannot be added.
      */
+
     public function test_livequiz_add_instance(): void {
         global $DB;
 
@@ -55,14 +59,17 @@ final class lib_test extends \advanced_testcase {
     }
 
     /**
+
      * This test updates instance.
      *
      * @covers \mod_livequiz\lib::livequiz_update_instance
+
      * Test the livequiz_update_instance function.
      * This function should update an existing livequiz instance in the database.
      * It should return true if the instance is updated successfully.
      * It should return false if the instance cannot be updated.
      */
+
     public function test_livequiz_update_instance(): void {
         global $DB;
 
@@ -84,11 +91,13 @@ final class lib_test extends \advanced_testcase {
      * This test the delete instance.
      *
      * @covers \mod_livequiz\lib::livequiz_delete_instance
+
      * Test the livequiz_delete_instance function.
      * This function should delete an existing livequiz instance from the database.
      * It should return true if the instance is deleted successfully.
      * It should return false if the instance cannot be deleted.
      */
+
     public function test_livequiz_delete_instance(): void {
         global $DB;
 
@@ -101,4 +110,5 @@ final class lib_test extends \advanced_testcase {
         $this->assertTrue($result);
         $this->assertFalse($DB->record_exists('livequiz', ['id' => $id]));
     }
+
 }

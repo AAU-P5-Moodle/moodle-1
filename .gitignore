@@ -104,6 +104,7 @@ UPGRADING-CURRENT.md
 /server/moodledata/phpunit
 /server/moodledata/temp
 /server/moodledata/moodle_test_data
+
 /server/moodledata/behat
 custom_php.ini
 server/moodledata/muc/config.php
@@ -121,5 +122,7 @@ server/moodle/package.json
 server/moodle/package.json
 server/moodle/npm-shrinkwrap.json
 server/moodle/lib/editor/tiny/plugins/html/build/package.json
+/server/moodle/mod/livequiz/amd/build
 phpcbf.bat
+custom_php.ini
 adminer_router.php
