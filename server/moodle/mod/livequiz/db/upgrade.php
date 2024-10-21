@@ -14,6 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
+/**
+ * 'Livequiz upgrade file'
+ *
+ * @package   mod_livequiz
+ * @copyright Computer science Aalborg university  {@link http:/aau.dk}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
+ * xmldb_livequiz_upgrade function installs/upgrades if older version is installed
+ *
+ * @param int   $oldversion is the old installed version
+ * @return bool returns true
+ */
+
 function xmldb_livequiz_upgrade($oldversion) {
     global $DB;
 
@@ -24,7 +40,9 @@ function xmldb_livequiz_upgrade($oldversion) {
         $table = new xmldb_table('livequiz');
 
         // Adding fields to table livequiz.
-        // THIS SHOULD BE COMPLIANT WITH THE TABELS DEFINED IN db/install.xml
+
+        // THIS SHOULD BE COMPLIANT WITH THE TABELS DEFINED IN db/install.xml!
+
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('name', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
         $table->add_field('intro', XMLDB_TYPE_TEXT, null, null, null, null, null);

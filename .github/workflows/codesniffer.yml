@@ -1,0 +1,31 @@
+name: codesniffer
+on:
+  push:
+    branches: [ "main", "staging" ]
+  pull_request:
+    branches: [ "main", "staging"  ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # Set up Composer
+    - name: Set up Composer
+      run: |
+        composer global config minimum-stability dev
+        composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+        composer global require moodlehq/moodle-cs
+    # Add Composer global bin to PATH
+    - name: Add Composer global bin to PATH
+      run: echo "PATH=$HOME/.composer/vendor/bin:$PATH" >> $GITHUB_ENV
+
+    # Run PHP_CodeSniffer
+    - name: Run Code Sniffer
+      run: phpcs server/moodle/mod/livequiz/

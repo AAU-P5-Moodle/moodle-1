@@ -14,13 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
+/**
+ * Livequiz access information file
+ *
+ * @package   mod_livequiz
+ * @copyright Computer science Aalborg university  {@link http:/aau.dk}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 // The capabilities for the livequiz module.
 // Capabilities define different levels of permissions for the module.
 $capabilities = [
 
-    //Allows all roles to view the livequiz.
+
+    // Allows all roles to view the livequiz.
     'mod/livequiz:view' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,

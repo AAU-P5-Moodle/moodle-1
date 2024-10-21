@@ -13,21 +13,31 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+
 /**
  * Activity creation/editing form for the mod_livequiz plugin.
  *
- * @package
- * @copyright
- * @license
+ * @package mod_livequiz
+ * @copyright 2024 Software AAU
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once($CFG->dirroot.'/course/moodleform_mod.php');
+defined('MOODLE_INTERNAL') || die();
+global $CFG;
+require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
+
+/**
+ * Form for creating/editing a livequiz activity.
+ */
 class mod_livequiz_mod_form extends moodleform_mod {
     /**
+     * Defines the form elements.
+     *
      * @return void
      */
-    function definition() {
+    public function definition(): void {
         global $CFG, $DB, $OUTPUT;
         // Used to add fields to form.
         $mform =& $this->_form;
@@ -35,6 +45,7 @@ class mod_livequiz_mod_form extends moodleform_mod {
         // Standard Moodle form buttons.
         $this->add_action_buttons();
     }
+
     function validation($data, $files) {
 
     }
@@ -43,3 +54,4 @@ class mod_livequiz_mod_form extends moodleform_mod {
     }
 
 }
+
