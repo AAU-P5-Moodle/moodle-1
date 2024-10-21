@@ -14,198 +14,211 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Livequiz activity version information.
+ *
+ * @package   mod_livequiz
+ * @copyright Department of Computer Science, Aalborg University, 2024  {@link https://aau.dk}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
+ * xmldb_livequiz_upgrade upgrades the database for the LiveQuiz module.
+ *
+ * @param $oldversion
+ * @return true
+ */
 function xmldb_livequiz_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2024072506) {
-
         // Define table livequiz to be created.
-        $livequiz_table = new xmldb_table('livequiz');
-        $course_id = new xmldb_field('course', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $livequiztable = new xmldb_table('livequiz');
+        $courseid = new xmldb_field('course', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding fields to table livequiz.
-        $livequiz_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $livequiz_table->add_field('name', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
-        $livequiz_table->add_field('course', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $livequiz_table->add_field('intro', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $livequiz_table->add_field('introformat', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, '0');
-        $livequiz_table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $livequiz_table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $livequiztable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $livequiztable->add_field('name', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $livequiztable->add_field('course', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $livequiztable->add_field('intro', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $livequiztable->add_field('introformat', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, '0');
+        $livequiztable->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $livequiztable->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
 
         // Adding keys to table livequiz.
-        $livequiz_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $livequiz_table->add_key('fk_course', XMLDB_KEY_FOREIGN, ['course'], 'mdl_course', ['id']);
+        $livequiztable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $livequiztable->add_key('fk_course', XMLDB_KEY_FOREIGN, ['course'], 'mdl_course', ['id']);
 
         // Conditionally launch create table for livequiz.
-        if ($dbman->table_exists($livequiz_table)) {
-            $dbman->add_field($livequiz_table, $course_id);
+        if ($dbman->table_exists($livequiztable)) {
+            $dbman->add_field($livequiztable, $courseid);
         } else {
-            $dbman->create_table($livequiz_table);
+            $dbman->create_table($livequiztable);
         }
 
         // Define table questions to be created.
-        $questions_table = new xmldb_table('questions');
+        $questionstable = new xmldb_table('questions');
 
         // Adding fields to table questions.
-        $questions_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $questions_table->add_field('title', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
-        $questions_table->add_field('description', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $questions_table->add_field('timelimit', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
-        $questions_table->add_field('explanation', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $questionstable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $questionstable->add_field('title', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+        $questionstable->add_field('description', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $questionstable->add_field('timelimit', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $questionstable->add_field('explanation', XMLDB_TYPE_TEXT, null, null, null, null, null);
 
         // Adding keys to table questions.
-        $questions_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $questionstable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
 
         // Conditionally launch create table for questions.
-        if (!$dbman->table_exists($questions_table)) {
-            $dbman->create_table($questions_table);
+        if (!$dbman->table_exists($questionstable)) {
+            $dbman->create_table($questionstable);
         }
 
         // Define table answers to be created.
-        $answers_table = new xmldb_table('answers');
+        $answerstable = new xmldb_table('answers');
 
         // Adding fields to table answers.
-        $answers_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $answers_table->add_field('correct', XMLDB_TYPE_BINARY, null, null, XMLDB_NOTNULL, null, null);
-        $answers_table->add_field('description', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
-        $answers_table->add_field('explanation', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $answerstable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $answerstable->add_field('correct', XMLDB_TYPE_BINARY, null, null, XMLDB_NOTNULL, null, null);
+        $answerstable->add_field('description', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+        $answerstable->add_field('explanation', XMLDB_TYPE_TEXT, null, null, null, null, null);
 
         // Adding keys to table answers.
-        $answers_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $answerstable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
 
         // Conditionally launch create table for answers.
-        if (!$dbman->table_exists($answers_table)) {
-            $dbman->create_table($answers_table);
+        if (!$dbman->table_exists($answerstable)) {
+            $dbman->create_table($answerstable);
         }
 
         // Define table quiz_student to be created.
-        $quiz_student_table = new xmldb_table('quiz_student');
+        $quizstudenttable = new xmldb_table('quiz_student');
 
         // Adding fields to table quiz_student.
-        $quiz_student_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $quiz_student_table->add_field('livequiz_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $quiz_student_table->add_field('student_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $quizstudenttable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $quizstudenttable->add_field('livequiz_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $quizstudenttable->add_field('student_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding keys to table quiz_student.
-        $quiz_student_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $quiz_student_table->add_key('fk_livequiz', XMLDB_KEY_FOREIGN, ['livequiz_id'], 'livequiz', ['id']);
-        $quiz_student_table->add_key('fk_student', XMLDB_KEY_FOREIGN, ['student_id'], 'mdl_user', ['id']);
+        $quizstudenttable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $quizstudenttable->add_key('fk_livequiz', XMLDB_KEY_FOREIGN, ['livequiz_id'], 'livequiz', ['id']);
+        $quizstudenttable->add_key('fk_student', XMLDB_KEY_FOREIGN, ['student_id'], 'mdl_user', ['id']);
 
         // Conditionally launch create table for quiz_student.
-        if (!$dbman->table_exists($quiz_student_table)) {
-            $dbman->create_table($quiz_student_table);
+        if (!$dbman->table_exists($quizstudenttable)) {
+            $dbman->create_table($quizstudenttable);
         }
 
         // Define table quiz_lecturer to be created.
-        $quiz_lecturer_table = new xmldb_table('quiz_lecturer');
+        $quizlecturertable = new xmldb_table('quiz_lecturer');
 
         // Adding fields to table quiz_lecturer.
-        $quiz_lecturer_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $quiz_lecturer_table->add_field('lecturer_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $quiz_lecturer_table->add_field('quiz_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $quizlecturertable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $quizlecturertable->add_field('lecturer_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $quizlecturertable->add_field('quiz_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding keys to table quiz_lecturer.
-        $quiz_lecturer_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $quiz_lecturer_table->add_key('fk_lecturer', XMLDB_KEY_FOREIGN, ['lecturer_id'], 'mdl_user', ['id']);
-        $quiz_lecturer_table->add_key('fk_quiz', XMLDB_KEY_FOREIGN, ['quiz_id'], 'livequiz', ['id']);
+        $quizlecturertable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $quizlecturertable->add_key('fk_lecturer', XMLDB_KEY_FOREIGN, ['lecturer_id'], 'mdl_user', ['id']);
+        $quizlecturertable->add_key('fk_quiz', XMLDB_KEY_FOREIGN, ['quiz_id'], 'livequiz', ['id']);
 
         // Conditionally launch create table for quiz_lecturer.
-        if (!$dbman->table_exists($quiz_lecturer_table)) {
-            $dbman->create_table($quiz_lecturer_table);
+        if (!$dbman->table_exists($quizlecturertable)) {
+            $dbman->create_table($quizlecturertable);
         }
 
         // Define table quiz_questions to be created.
-        $quiz_questions_table = new xmldb_table('quiz_questions');
+        $quizquestionstable = new xmldb_table('quiz_questions');
 
         // Adding fields to table quiz_questions.
-        $quiz_questions_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $quiz_questions_table->add_field('quiz_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $quiz_questions_table->add_field('question_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $quizquestionstable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $quizquestionstable->add_field('quiz_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $quizquestionstable->add_field('question_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding keys to table quiz_questions.
-        $quiz_questions_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $quiz_questions_table->add_key('fk_quiz', XMLDB_KEY_FOREIGN, ['quiz_id'], 'livequiz', ['id']);
-        $quiz_questions_table->add_key('fk_question', XMLDB_KEY_FOREIGN, ['question_id'], 'questions', ['id']);
+        $quizquestionstable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $quizquestionstable->add_key('fk_quiz', XMLDB_KEY_FOREIGN, ['quiz_id'], 'livequiz', ['id']);
+        $quizquestionstable->add_key('fk_question', XMLDB_KEY_FOREIGN, ['question_id'], 'questions', ['id']);
 
         // Conditionally launch create table for quiz_questions.
-        if (!$dbman->table_exists($quiz_questions_table)) {
-            $dbman->create_table($quiz_questions_table);
+        if (!$dbman->table_exists($quizquestionstable)) {
+            $dbman->create_table($quizquestionstable);
         }
 
 
         // Define table questions_answers to be created.
-        $questions_answers_table = new xmldb_table('questions_answers');
+        $questionsanswerstable = new xmldb_table('questions_answers');
 
         // Adding fields to table questions_answers.
-        $questions_answers_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $questions_answers_table->add_field('question_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $questions_answers_table->add_field('answer_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $questionsanswerstable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $questionsanswerstable->add_field('question_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $questionsanswerstable->add_field('answer_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding keys to table questions_answers.
-        $questions_answers_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $questions_answers_table->add_key('fk_question', XMLDB_KEY_FOREIGN, ['question_id'], 'questions', ['id']);
-        $questions_answers_table->add_key('fk_answer', XMLDB_KEY_FOREIGN, ['answer_id'], 'answers', ['id']);
+        $questionsanswerstable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $questionsanswerstable->add_key('fk_question', XMLDB_KEY_FOREIGN, ['question_id'], 'questions', ['id']);
+        $questionsanswerstable->add_key('fk_answer', XMLDB_KEY_FOREIGN, ['answer_id'], 'answers', ['id']);
 
         // Conditionally launch create table for questions_answers.
-        if (!$dbman->table_exists($questions_answers_table)) {
-            $dbman->create_table($questions_answers_table);
+        if (!$dbman->table_exists($questionsanswerstable)) {
+            $dbman->create_table($questionsanswerstable);
         }
 
 
         // Define table questions_lecturer to be created.
-        $questions_lecturer_table = new xmldb_table('questions_lecturer');
+        $questionslecturertable = new xmldb_table('questions_lecturer');
 
         // Adding fields to table questions_lecturer.
-        $questions_lecturer_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $questions_lecturer_table->add_field('question_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $questions_lecturer_table->add_field('lecturer_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $questionslecturertable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $questionslecturertable->add_field('question_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $questionslecturertable->add_field('lecturer_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding keys to table questions_lecturer.
-        $questions_lecturer_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $questions_lecturer_table->add_key('fk_question', XMLDB_KEY_FOREIGN, ['question_id'], 'questions', ['id']);
-        $questions_lecturer_table->add_key('fk_lecturer', XMLDB_KEY_FOREIGN, ['lecturer_id'], 'mdl_user', ['id']);
+        $questionslecturertable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $questionslecturertable->add_key('fk_question', XMLDB_KEY_FOREIGN, ['question_id'], 'questions', ['id']);
+        $questionslecturertable->add_key('fk_lecturer', XMLDB_KEY_FOREIGN, ['lecturer_id'], 'mdl_user', ['id']);
 
         // Conditionally launch create table for questions_lecturer.
-        if (!$dbman->table_exists($questions_lecturer_table)) {
-            $dbman->create_table($questions_lecturer_table);
+        if (!$dbman->table_exists($questionslecturertable)) {
+            $dbman->create_table($questionslecturertable);
         }
 
         // Define table students_answers to be created.
-        $students_answers_table = new xmldb_table('students_answers');
+        $studentsanswerstable = new xmldb_table('students_answers');
 
         // Adding fields to table students_answers.
-        $students_answers_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $students_answers_table->add_field('student_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $students_answers_table->add_field('answer_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $studentsanswerstable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $studentsanswerstable->add_field('student_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $studentsanswerstable->add_field('answer_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding keys to table students_answers.
-        $students_answers_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $students_answers_table->add_key('fk_student', XMLDB_KEY_FOREIGN, ['student_id'], 'mdl_user', ['id']);
-        $students_answers_table->add_key('fk_answer', XMLDB_KEY_FOREIGN, ['answer_id'], 'answers', ['id']);
+        $studentsanswerstable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $studentsanswerstable->add_key('fk_student', XMLDB_KEY_FOREIGN, ['student_id'], 'mdl_user', ['id']);
+        $studentsanswerstable->add_key('fk_answer', XMLDB_KEY_FOREIGN, ['answer_id'], 'answers', ['id']);
 
         // Conditionally launch create table for students_answers.
-        if (!$dbman->table_exists($students_answers_table)) {
-            $dbman->create_table($students_answers_table);
+        if (!$dbman->table_exists($studentsanswerstable)) {
+            $dbman->create_table($studentsanswerstable);
         }
 
         // Define table course_quiz to be created.
-        $course_quiz_table = new xmldb_table('course_quiz');
+        $coursequiztable = new xmldb_table('course_quiz');
 
         // Adding fields to table course_quiz.
-        $course_quiz_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $course_quiz_table->add_field('course_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $course_quiz_table->add_field('quiz_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $coursequiztable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $coursequiztable->add_field('course_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $coursequiztable->add_field('quiz_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding keys to table course_quiz.
-        $course_quiz_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $course_quiz_table->add_key('fk_course', XMLDB_KEY_FOREIGN, ['course_id'], 'mdl_course', ['id']);
-        $course_quiz_table->add_key('fk_quiz', XMLDB_KEY_FOREIGN, ['quiz_id'], 'livequiz', ['id']);
+        $coursequiztable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $coursequiztable->add_key('fk_course', XMLDB_KEY_FOREIGN, ['course_id'], 'mdl_course', ['id']);
+        $coursequiztable->add_key('fk_quiz', XMLDB_KEY_FOREIGN, ['quiz_id'], 'livequiz', ['id']);
 
         // Conditionally launch create table for course_quiz.
-        if (!$dbman->table_exists($course_quiz_table)) {
-            $dbman->create_table($course_quiz_table);
+        if (!$dbman->table_exists($coursequiztable)) {
+            $dbman->create_table($coursequiztable);
         }
 
         // Livequiz savepoint reached.
