@@ -53,7 +53,7 @@ function xmldb_livequiz_upgrade($oldversion) {
 
         // Conditionally launch create table for livequiz.
         if ($dbman->table_exists($livequiztable)) {
-            if(!$dbman->field_exists($livequiztable, $courseid)) {
+            if (!$dbman->field_exists($livequiztable, $courseid)) {
                 $dbman->add_field($livequiztable, $courseid);
             }
         } else {
