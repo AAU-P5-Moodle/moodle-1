@@ -17,7 +17,6 @@ jobs:
           sudo apt install mariadb-server
           sudo systemctl disable mariadb
           sudo systemctl stop mariadb
-        # uses: getong/mariadb-action@v1.11
         
       - name: Setup PHP
         id: setup-php
@@ -27,22 +26,22 @@ jobs:
           tools: composer
 
       
-      - name: Set up php.ini
-        run: >
-          REPO_ROOT="`pwd`"
-          sed -i
-          -e 's/;extension=gd/extension=gd/'
-          -e 's/;extension=intl/extension=intl/'
-          -e 's/;extension=sodium/extension=sodium/'
-          -e 's/;extension=zip/extension=zip/'
-          -e "s|curl\.cainfo.*|curl.cainfo=\"$REPO_ROOT/cacert.pem\"|"
-          -e "s|openssl\.cafile.*|openssl.cafile=\"$REPO_ROOT\"/server/apache/bin/curl-ca-bundle.crt|"
-          -e '$a\\max_input_vars=5000'
-          -e '$a\\memory_limit_256M'
-          -e '$a\\post_max_size=50M'
-          -e '$a\\upload_max_filesize=50M'
-          -e '$a\\extension=phar.so'
-          server/php/php.ini
+      # - name: Set up php.ini
+      #   run: >
+      #     REPO_ROOT="`pwd`"
+      #     sed -i
+      #     -e 's/;extension=gd/extension=gd/'
+      #     -e 's/;extension=intl/extension=intl/'
+      #     -e 's/;extension=sodium/extension=sodium/'
+      #     -e 's/;extension=zip/extension=zip/'
+      #     -e "s|curl\.cainfo.*|curl.cainfo=\"$REPO_ROOT/cacert.pem\"|"
+      #     -e "s|openssl\.cafile.*|openssl.cafile=\"$REPO_ROOT\"/server/apache/bin/curl-ca-bundle.crt|"
+      #     -e '$a\\max_input_vars=5000'
+      #     -e '$a\\memory_limit_256M'
+      #     -e '$a\\post_max_size=50M'
+      #     -e '$a\\upload_max_filesize=50M'
+      #     -e '$a\\extension=phar.so'
+      #     server/php/php.ini
 
       # - name: Install composer
       #   run: |
@@ -50,13 +49,13 @@ jobs:
       #     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
       #     php composer-setup.php
 
-      - name: Check enabled PHP extensions
-        run: | 
-          php -m | grep -E 'gd|intl|zip'
-          php -r "echo phpversion('phar');"
-          php -r "echo ini_get('max_input_vars');"
-          more php.ini
-          realpath php.ini
+      # - name: Check enabled PHP extensions
+      #   run: | 
+      #     php -m | grep -E 'gd|intl|zip'
+      #     php -r "echo phpversion('phar');"
+      #     php -r "echo ini_get('max_input_vars');"
+      #     more php.ini
+      #     realpath php.ini
 
       # - name: Copy php.ini to PHP-CLI directory
       #   run: |
@@ -77,13 +76,13 @@ jobs:
           sudo composer self-update
           composer -v
 
-      - name: Check enabled PHP extensions
-        run: | 
-          php -m
-          php --ini
+      # - name: Check enabled PHP extensions
+      #   run: | 
+      #     php -m
+      #     php --ini
       
-      - name: Install the curl certificate
-        run: curl https://curl.se/ca/cacert.pem >cacert.pem
+      # - name: Install the curl certificate
+      #   run: curl https://curl.se/ca/cacert.pem >cacert.pem
 
       - name: Set up the database and start mariadb
         run: |
@@ -197,7 +196,7 @@ jobs:
           # Start PHP built-in server for Moodle
           start_php_server() {
             echo "Starting PHP built-in server for Moodle..."
-            php -S 0.0.0.0:8000 -t ./server/moodle -c ./server/php/php.ini &
+            php -S 0.0.0.0:8000 -t ./server/moodle -c ./etc/php/8.3/cli/php.ini &
             PHP_SERVER_PID=$!
           }
 
