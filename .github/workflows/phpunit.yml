@@ -3,6 +3,8 @@ name: PHPUnit
 on:
   pull_request:
     branches: [ "main", "staging"  ]
+  push:
+    branches: [ "Refractor-branch" ]
 
 jobs:
   build-test:
