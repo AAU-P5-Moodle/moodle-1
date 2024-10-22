@@ -27,46 +27,6 @@ jobs:
           extensions: phar, iconv, mbstring, gd, intl, sodium, zip
           tools: composer
 
-      
-      # - name: Set up php.ini
-      #   run: >
-      #     REPO_ROOT="`pwd`"
-      #     sed -i
-      #     -e 's/;extension=gd/extension=gd/'
-      #     -e 's/;extension=intl/extension=intl/'
-      #     -e 's/;extension=sodium/extension=sodium/'
-      #     -e 's/;extension=zip/extension=zip/'
-      #     -e "s|curl\.cainfo.*|curl.cainfo=\"$REPO_ROOT/cacert.pem\"|"
-      #     -e "s|openssl\.cafile.*|openssl.cafile=\"$REPO_ROOT\"/server/apache/bin/curl-ca-bundle.crt|"
-      #     -e '$a\\max_input_vars=5000'
-      #     -e '$a\\memory_limit_256M'
-      #     -e '$a\\post_max_size=50M'
-      #     -e '$a\\upload_max_filesize=50M'
-      #     -e '$a\\extension=phar.so'
-      #     server/php/php.ini
-
-      # - name: Install composer
-      #   run: |
-      #     cd server/moodle
-      #     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-      #     php composer-setup.php
-
-      # - name: Check enabled PHP extensions
-      #   run: | 
-      #     php -m | grep -E 'gd|intl|zip'
-      #     php -r "echo phpversion('phar');"
-      #     php -r "echo ini_get('max_input_vars');"
-      #     more php.ini
-      #     realpath php.ini
-
-      # - name: Copy php.ini to PHP-CLI directory
-      #   run: |
-      #     sudo cp server/php/php.ini /etc/php/8.2/cli/php.ini
-
-      # - uses: "ramsey/composer-install@v3"
-      #   with:
-      #     working-directory: "/etc/php/8.2/cli/php.ini"
-
       - name: install composer
         run: |
           cd server/moodle
@@ -77,14 +37,6 @@ jobs:
           sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
           sudo composer self-update
           composer -v
-
-      # - name: Check enabled PHP extensions
-      #   run: | 
-      #     php -m
-      #     php --ini
-      
-      # - name: Install the curl certificate
-      #   run: curl https://curl.se/ca/cacert.pem >cacert.pem
 
       - name: Set up the database and start mariadb
         run: |
@@ -239,10 +191,6 @@ jobs:
           cd "$REPO_ROOT"/server/moodle
           composer require --dev phpunit/phpunit
 
-          # if [ ! -d "$REPO_ROOT/server/moodledata/phpunit" ]; then
-          #   mkdir "$REPO_ROOT/server/moodledata/phpunit"
-          # fi
-
           php admin/cli/install.php \
               --lang=en \
               --wwwroot="http://localhost:8000/" \
@@ -257,14 +205,6 @@ jobs:
               --fullname="Moodle testing thing" \
               --shortname="mtt" \
               --adminpass="hunter2"
-
-          # echo "This is the path: $(realpath config.php)"
-
-          # if [ -f "$REPO_ROOT/server/moodle/config.php" ]; then
-          #   echo "File $("$REPO_ROOT/server/moodle/config.php") exist."
-          # else
-          #   echo "Can not find $("$REPO_ROOT/server/moodle/config.php") file"
-          # fi
           
           echo "\$CFG->phpunit_prefix = 'phpu_';" >>"$REPO_ROOT/server/moodle/config.php"
           echo "\$CFG->phpunit_dataroot = '$(realpath "$REPO_ROOT/server/moodledata/phpunit")';">>"$REPO_ROOT/server/moodle/config.php"
