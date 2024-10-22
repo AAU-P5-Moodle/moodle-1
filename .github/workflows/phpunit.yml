@@ -196,11 +196,11 @@ jobs:
           # Adminer is not required for testing, so we skip the setup
 
           # Start PHP built-in server for Moodle
-          # start_php_server() {
-          #   echo "Starting PHP built-in server for Moodle..."
-          #   php -S 0.0.0.0:8000 -t ./server/moodle -c ./etc/php/8.3/cli/php.ini &
-          #   PHP_SERVER_PID=$!
-          # }
+          start_php_server() {
+            echo "Starting PHP built-in server for Moodle..."
+            php -S 0.0.0.0:8000 -t ./server/moodle -c ./etc/php/8.3/cli/php.ini &
+            PHP_SERVER_PID=$!
+          }
 
           # Function to stop services
           stop_services() {
@@ -239,9 +239,9 @@ jobs:
           cd "$REPO_ROOT"/server/moodle
           composer require --dev phpunit/phpunit
 
-          if [ ! -d "$REPO_ROOT/server/moodledata/phpunit" ]; then
-            mkdir "$REPO_ROOT/server/moodledata/phpunit"
-          fi
+          # if [ ! -d "$REPO_ROOT/server/moodledata/phpunit" ]; then
+          #   mkdir "$REPO_ROOT/server/moodledata/phpunit"
+          # fi
 
           php admin/cli/install.php \
               --lang=en \
@@ -258,16 +258,16 @@ jobs:
               --shortname="mtt" \
               --adminpass="hunter2"
 
-          echo "This is the path: $(realpath config.php)"
+          # echo "This is the path: $(realpath config.php)"
 
-          if [ -f "$REPO_ROOT/server/moodle/config.php" ]; then
-            echo "File $("$REPO_ROOT/server/moodle/config.php") exist."
-          else
-            echo "Can not find $("$REPO_ROOT/server/moodle/config.php") file"
-          fi
+          # if [ -f "$REPO_ROOT/server/moodle/config.php" ]; then
+          #   echo "File $("$REPO_ROOT/server/moodle/config.php") exist."
+          # else
+          #   echo "Can not find $("$REPO_ROOT/server/moodle/config.php") file"
+          # fi
           
-          echo "\$CFG->phpunit_prefix = 'phpu_';" >>"$REPO_ROOT/server/moodle/config.php"
-          echo "\$CFG->phpunit_dataroot = '$(realpath "$REPO_ROOT/server/moodledata/phpunit")';">>"$REPO_ROOT/server/moodle/config.php"
+          # echo "\$CFG->phpunit_prefix = 'phpu_';" >>"$REPO_ROOT/server/moodle/config.php"
+          # echo "\$CFG->phpunit_dataroot = '$(realpath "$REPO_ROOT/server/moodledata/phpunit")';">>"$REPO_ROOT/server/moodle/config.php"
           
           php admin/tool/phpunit/cli/init.php
 
