@@ -12,13 +12,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         
-      - name: install mariadb
-        run: | 
-          sudo apt install mariadb-server
-          sudo systemctl disable mariadb
-          sudo systemctl stop mariadb
+      # - name: install mariadb
+      #   run: | 
+      #     sudo apt install mariadb-server
+      #     sudo systemctl disable mariadb
+      #     sudo systemctl stop mariadb
         
       - name: Setup PHP
         id: setup-php
@@ -39,6 +39,7 @@ jobs:
       #     composer -v
 
       - name: Set up the database and start mariadb
+        uses: getong/mariadb-action@v1.11
         run: |
           set -x
           mariadb_data_dir="./mariadb_data"
@@ -222,4 +223,3 @@ jobs:
               
 
       
-
