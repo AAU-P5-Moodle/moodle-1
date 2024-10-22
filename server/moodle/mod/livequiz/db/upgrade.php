@@ -28,7 +28,8 @@
  * @param $oldversion
  * @return true
  */
-function xmldb_livequiz_upgrade($oldversion) {
+function xmldb_livequiz_upgrade($oldversion)
+{
     global $DB;
 
     $dbman = $DB->get_manager();
@@ -224,8 +225,100 @@ function xmldb_livequiz_upgrade($oldversion) {
         }
 
         // Livequiz savepoint reached.
-          upgrade_mod_savepoint(true, 2024072507, 'livequiz');
+        upgrade_mod_savepoint(true, 2024072507, 'livequiz');
     }
 
+    if ($oldversion < 2024072510) {
+        // Rename table questions to livequiz_questions.
+        $questionstable = new xmldb_table('questions');
+        if ($dbman->table_exists($questionstable)) {
+            $dbman->rename_table($questionstable, 'livequiz_questions');
+        }
+
+        // Rename table answers to livequiz_answers.
+        $answerstable = new xmldb_table('answers');
+        if ($dbman->table_exists($answerstable)) {
+            $dbman->rename_table($answerstable, 'livequiz_answers');
+        }
+
+        // Rename table quiz_student to livequiz_quiz_student.
+        $quizstudenttable = new xmldb_table('quiz_student');
+        if ($dbman->table_exists($quizstudenttable)) {
+            $dbman->rename_table($quizstudenttable, 'livequiz_quiz_student');
+        }
+
+        // Rename table quiz_lecturer to livequiz_quiz_lecturer.
+        $quizlecturertable = new xmldb_table('quiz_lecturer');
+        if ($dbman->table_exists($quizlecturertable)) {
+            $dbman->rename_table($quizlecturertable, 'livequiz_quiz_lecturer');
+        }
+
+        //Array for tables with foreign keys
+        $tables = array();
+
+        // Rename table quiz_questions to livequiz_quiz_questions and updated foreign key reftables accordingly.
+        $quizquestionstable = new xmldb_table('quiz_questions');
+        $tables[] = $quizquestionstable;
+        if ($dbman->table_exists($quizquestionstable)) {
+            $dbman->rename_table($quizquestionstable, 'livequiz_quiz_questions');
+        }
+
+        // Rename table questions_answers to livequiz_questions_answers and updated foreign key reftables accordingly.
+        $questionsanswerstable = new xmldb_table('questions_answers');
+        $tables[] = ($questionsanswerstable);
+        if ($dbman->table_exists($questionsanswerstable)) {
+            $dbman->rename_table($questionsanswerstable, 'livequiz_questions_answers');
+        }
+
+
+        // Rename table questions_lecturer to livequiz_questions_lecturer and updated foreign key reftables accordingly.
+        $questionslecturertable = new xmldb_table('questions_lecturer');
+        $tables[] = $questionslecturertable;
+        if ($dbman->table_exists($questionslecturertable)) {
+            $dbman->rename_table($questionslecturertable, 'livequiz_quiestions_lecturer');
+        }
+
+        // Rename table students_answers to livequiz_students_answers and updated foreign key reftables accordingly.
+        $studentsanswerstable = new xmldb_table('students_answers');
+        $tables[] = $studentsanswerstable;
+        if ($dbman->table_exists($studentsanswerstable)) {
+            $dbman->rename_table($studentsanswerstable, 'livequiz_students_answers');
+        }
+
+        // Rename table course_quiz to livequiz_course_quiz.
+        $coursequiztable = new xmldb_table('course_quiz');
+        if ($dbman->table_exists($coursequiztable)) {
+            $dbman->rename_table($coursequiztable, 'livequiz_course_quiz');
+        }
+
+        // Change reftable to match new table names for foreign keys in all the relevant intermediate tables
+        foreach ($tables as $table) {
+            if ($dbman->table_exists($table)) {
+                $oldkey = new xmldb_key('fk_question');
+                if ($dbman->find_key_name($table, $oldkey)) {
+                    $dbman->drop_key($table, $oldkey);
+
+                    $newkey = new xmldb_key('fk_question');
+                    $newkey->set_attributes(XMLDB_KEY_FOREIGN, array('fk_question'), 'livequiz_questions', array('id'));
+
+                    $dbman->add_key($table, $newkey);
+                }
+
+                $oldkey = new xmldb_key('fk_answer');
+                if ($dbman->find_key_name($table, $oldkey)) {
+                    $dbman->drop_key($table, $oldkey);
+
+                    $newkey = new xmldb_key('fk_answer');
+                    $newkey->set_attributes(XMLDB_KEY_FOREIGN, array('fk_answer'), 'livequiz_answers', array('id'));
+
+                    $dbman->add_key($table, $newkey);
+                }
+            }
+        }
+
+        // Livequiz savepoint reached.
+        upgrade_mod_savepoint(true, 2024072510, 'livequiz');
+
+    }
     return true;
 }
