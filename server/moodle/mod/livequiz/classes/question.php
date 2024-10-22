@@ -23,6 +23,9 @@ namespace mod_livequiz\classes;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class question {
+    /** @var int $id the id of the question*/
+    public int $id;
+
     /** @var string $image if the question has an image to display*/
     public string $image;
 
@@ -40,4 +43,18 @@ class question {
 
     /** @var array $answers array of answers to the question*/
     public array $answers = [];
+
+    /**
+     * question constructor.
+     * @param $id
+     * @param $title
+     * @param $description
+     * @param $timelimit
+     */
+    public function __construct($id, $title, $description, $timelimit) {
+        $this->id = $id;
+        $this->title = $title;
+        $this->description = $description;
+        $this->timelimit = $timelimit;
+    }
 }

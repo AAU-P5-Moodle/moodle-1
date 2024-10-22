@@ -23,8 +23,11 @@ namespace mod_livequiz\classes;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class answer {
-    /** @var string $text the text of the answer*/
-    public string $text;
+    /** @var int $id the id of the answer*/
+    public int $id;
+
+    /** @var string $description the text of the answer*/
+    public string $description;
 
     /** @var bool $correct if the answer is correct*/
     public bool $correct;
@@ -33,12 +36,15 @@ class answer {
     public string $explanation;
 
     /**
-     * @param string $text
+     * answer constructor.
+     * @param int $id
+     * @param string $description
      * @param bool $correct
      * @param string $explanation
      */
-    public function __construct(string $text, bool $correct, string $explanation) {
-        $this->text = $text;
+    public function __construct(int $id, string $description, bool $correct, string $explanation) {
+        $this->id = $id;
+        $this->description = $description;
         $this->correct = $correct;
         $this->explanation = $explanation;
     }

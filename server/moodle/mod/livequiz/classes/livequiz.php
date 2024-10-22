@@ -23,11 +23,17 @@ namespace mod_livequiz\classes;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class livequiz {
+    /** @var int $id id of the livequiz */
+    private int $id;
+
     /** @var string $name name of the livequiz */
     private string $name;
 
     /** @var int $courseid id of the course the quiz is in */
     private int $courseid;
+
+    /** @var string $course name of the course the quiz is in */
+    private string $course;
 
     /** @var string $intro introduction to the quiz */
     private string $intro;
@@ -48,14 +54,17 @@ class livequiz {
      * LiveQuiz constructor.
      * @param $name
      * @param $courseid
+     * @param $course
      * @param $intro
      * @param $introformat
      * @param $timecreated
      * @param $timemodified
      */
-    public function __construct($name, $courseid, $intro, $introformat, $timecreated, $timemodified) {
+    public function __construct($id, $name, $courseid, $course, $intro, $introformat, $timecreated, $timemodified) {
+        $this->id = $id;
         $this->name = $name;
         $this->courseid = $courseid;
+        $this->course = $course;
         $this->intro = $intro;
         $this->introformat = $introformat;
         $this->timecreated = $timecreated;

@@ -23,6 +23,8 @@
 
 require_once('../../config.php');
 
+global $PAGE, $OUTPUT;
+
 // Get submitted parameters.
 $id = required_param('cmid', PARAM_INT); // Course module id.
 $forcenew = optional_param('forcenew', false, PARAM_BOOL); // Used to force a new preview.
@@ -37,7 +39,26 @@ require_login($course, false, $cm);
 //$PAGE->set_url('/mod/livequiz/startquiz.php', ['id' => $id]);
 $PAGE->set_heading($course->fullname);
 
+$jsonobject = file_get_contents("demodata.json");
+$jsondata = json_decode($jsonobject, true);
+
+/*
+ *  temp console log to check if data is fetched
+ */
+echo '<script>';
+echo 'console.log(1: ' . $jsondata['name'] . ');';
+echo 'console.log(2: ' . $jsonobject . ');';
+echo '</script>';
+
+$hejbesked = 'det skulle gerne stå over dette';
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading('This is the livequiz startquiz page');
+if ($jsondata === null) {
+    echo $OUTPUT->heading('den er helt gal');
+}
+else {
+    echo $OUTPUT->heading($jsondata);
+    echo $OUTPUT->heading($hejbesked);
+}
 echo $OUTPUT->footer();

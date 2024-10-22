@@ -1,0 +1,69 @@
+{
+  "quiz1": {
+    "id": "1",
+    "name": "Quiz 1",
+    "course": "2",
+    "introformat": "1",
+    "intro": "This is the first quiz",
+    "timecreated": "1234567890",
+    "timemodified": "1234567890",
+    "questions": [
+      {
+        "id": "1",
+        "title": "Quiz 1 Questions",
+        "description": "This is the first quiz questions",
+        "explanation": "This is the first quiz questions explanation",
+        "timelimit": "60",
+        "answers": [
+            {
+                "id": "1",
+                "description": "Answer 1",
+                "correct": "1",
+                "explanation": "This is the first answer feedback"
+            },
+            {
+                "id": "2",
+                "description": "Answer 2",
+                "correct": "0",
+                "explanation": "This is the second answer feedback"
+            },
+            {
+                "id": "3",
+                "description": "Answer 3",
+                "correct": "0",
+                "explanation": "This is the third answer feedback"
+            }
+        ]
+      },
+      {
+        "id": "2",
+        "title": "Quiz 2 Questions",
+        "description": "This is the second quiz questions",
+        "explanation": "This is the second quiz questions explanation",
+        "timelimit": "60",
+        "answers": [
+            {
+                "id": "4",
+                "description": "Answer 1",
+                "correct": "0",
+                "explanation": "This is the first answer feedback"
+            },
+            {
+                "id": "5",
+                "description": "Answer 2",
+                "correct": "1",
+                "explanation": "This is the second answer feedback"
+            },
+            {
+                "id": "6",
+                "description": "Answer 3",
+                "correct": "0",
+                "explanation": "This is the third answer feedback"
+            }
+        ]
+      }
+    ]
+  }
+}
+
+
