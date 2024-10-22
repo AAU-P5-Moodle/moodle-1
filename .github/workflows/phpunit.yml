@@ -273,7 +273,7 @@ jobs:
       - name: Run tests
         run: |
           cd server/moodle
-          for $file in `find mod/livequiz/tests/phpunit -type f`
+          for file in `find mod/livequiz/tests/phpunit -type f`
           do
             echo Running tests in $file
             vendor/bin/phpunit $file
