@@ -37,9 +37,15 @@ jobs:
       #     sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
       #     sudo composer self-update
       #     composer -v
+      - name: test
+        uses: getong/mariadb-action@v1.11
+        with:
+          mysql database: 'moodle' # Optional, default value is "test". The specified database which will be create
+          mysql root password: 'root' # Required if "mysql user" is empty, default is empty. The root superuser password
+          mysql user: 'root' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+          mysql password: 'root'
 
       - name: Set up the database and start mariadb
-        uses: getong/mariadb-action@v1.11
         run: |
           set -x
           mariadb_data_dir="./mariadb_data"
