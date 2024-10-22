@@ -272,11 +272,12 @@ jobs:
 
       - name: Run tests
         run: |
-          pwd
-          echo useless line
           cd server/moodle
-          ls mod/livequiz/tests
-          vendor/bin/phpunit `find mod/livequiz/tests/ -type f`
+          for $file in `find mod/livequiz/tests/phpunit -type f`
+          do
+            echo Running tests in $file
+            vendor/bin/phpunit $file
+          done
               
 
       
