@@ -18,7 +18,7 @@
  * Functions for managing livequiz instances in the Moodle database.
  *
  * @package    mod_livequiz
- * @copyright  2023
+ * @copyright  2024 Software AAU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,7 +29,7 @@
  * @return bool|int The ID of the new quiz instance or false on failure
  * @throws dml_exception When a database error occurs
  */
-function livequiz_add_instance($quizdata) {
+function livequiz_add_instance(object $quizdata): bool|int {
     global $DB;
 
     $quizdata->timecreated = time();
@@ -47,7 +47,7 @@ function livequiz_add_instance($quizdata) {
  * @return bool True on success
  * @throws dml_exception When a database error occurs
  */
-function livequiz_update_instance($quizdata) {
+function livequiz_update_instance(object $quizdata): bool {
     global $DB;
 
     $quizdata->timemodified = time();
@@ -66,7 +66,7 @@ function livequiz_update_instance($quizdata) {
  * @return bool True on success
  * @throws dml_exception When a database error occurs
  */
-function livequiz_delete_instance($id) {
+function livequiz_delete_instance(int $id): bool {
     global $DB;
 
     $DB->delete_records('livequiz', ['id' => $id]);

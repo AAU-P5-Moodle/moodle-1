@@ -18,16 +18,14 @@
  * Activity creation/editing form for the mod_livequiz plugin.
  *
  * @package mod_livequiz
- * @copyright 2023
+ * @copyright 2024 Software AAU
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../config.php');
+defined('MOODLE_INTERNAL') || die();
+global $CFG;
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
-require_login();
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Form for creating/editing a livequiz activity.
@@ -38,26 +36,10 @@ class mod_livequiz_mod_form extends moodleform_mod {
      *
      * @return void
      */
-    public function definition() {
-        global $CFG, $DB, $OUTPUT;
+    public function definition(): void {
         // Used to add fields to form.
-        $mform =& $this->_form;
         $this->standard_coursemodule_elements();
         // Standard Moodle form buttons.
         $this->add_action_buttons();
-    }
-
-    /**
-     * Performs validation on the form data.
-     *
-     * @param array $data array of ("fieldname"=>value) of submitted data
-     * @param array $files array of uploaded files "element_name"=>tmp_file_path
-     * @return array of "element_name"=>"error_description" if there are errors,
-     *         or an empty array if everything is OK.
-     */
-    public function validation($data, $files) {
-        $errors = parent::validation($data, $files);
-        // Add custom validation logic here if needed.
-        return $errors;
     }
 }
