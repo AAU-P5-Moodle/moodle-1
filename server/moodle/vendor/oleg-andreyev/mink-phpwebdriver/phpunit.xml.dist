@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor-bin/phpunit/vendor/phpunit/phpunit/phpunit.xsd"
+    colors="true"
+    bootstrap="vendor/autoload.php"
+>
+    <testsuites>
+        <testsuite name="Driver test suite">
+            <directory>tests</directory>
+            <directory>vendor/mink/driver-testsuite/tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <listeners>
+        <listener class="OAndreyev\Mink\Tests\Driver\ScreenshotListener"/>
+    </listeners>
+
+    <php>
+        <var name="driver_config_factory" value="OAndreyev\Mink\Tests\Driver\WebDriverConfig::getInstance" />
+
+        <!-- Docker for Mac, see https://docs.docker.com/docker-for-mac/networking/#there-is-no-docker0-bridge-on-macos#i-want-to-connect-from-a-container-to-a-service-on-the-host -->
+<!--        <server name="WEB_FIXTURES_HOST" value="http://host.docker.internal:8002"/>-->
+        <!-- See default value in \Behat\Mink\Tests\Driver\AbstractConfig::getWebFixturesUrl -->
+<!--        <server name="WEB_FIXTURES_HOST" value="http://localhost:8002"/>-->
+
+<!--        <env name="BROWSER_NAME" value="chrome"/>-->
+        <!-- https://peter.sh/experiments/chromium-command-line-switches/ -->
+<!--        <env name="DRIVER_OPTIONS" value='{"args":["headless"]}'/>-->
+
+<!--        <env name="BROWSER_NAME" value="firefox"/>-->
+<!--        https://developer.mozilla.org/en-US/docs/Web/WebDriver/Capabilities/firefoxOptions#binary-->
+<!--        <env name="DRIVER_OPTIONS" value='{"log": {"level":"trace"}, "args": ["-headless"], "binary": "/Applications/Firefox Developer Edition.app/Contents/MacOS/firefox-bin"}'/>-->
+<!--        <env name="DRIVER_OPTIONS" value='{"log": {"level":"trace"}, "binary": "/Applications/Firefox Developer Edition.app/Contents/MacOS/firefox-bin"}'/>-->
+
+        <!-- where driver will connect to -->
+        <server name="DRIVER_URL" value="http://localhost:4444" />
+        <!-- Docker for Mac, see https://docs.docker.com/docker-for-mac/networking/#there-is-no-docker0-bridge-on-macos#i-want-to-connect-from-a-container-to-a-service-on-the-host -->
+<!--        <server name="DRIVER_URL" value="http://host.docker.internal:4444/wd/hub" />-->
+    </php>
+
+    <filter>
+        <whitelist>
+            <directory>./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
