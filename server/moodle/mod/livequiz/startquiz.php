@@ -23,4 +23,21 @@
 
 require_once('../../config.php');
 
+// Get submitted parameters.
+$id = required_param('cmid', PARAM_INT); // Course module id.
+$forcenew = optional_param('forcenew', false, PARAM_BOOL); // Used to force a new preview.
+$page = optional_param('page', -1, PARAM_INT); // Page to jump to in the attempt.
+[$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 
+$context = context_module::instance($cm->id); // Set the context for the course module.
+$PAGE->set_context($context); // Make sure to set the page context.
+require_login($course, false, $cm);
+
+
+//$PAGE->set_url('/mod/livequiz/startquiz.php', ['id' => $id]);
+$PAGE->set_heading($course->fullname);
+
+
+echo $OUTPUT->header();
+echo $OUTPUT->heading('This is the livequiz startquiz page');
+echo $OUTPUT->footer();

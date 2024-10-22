@@ -14,20 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace mod_livequiz\classes;
+
 /**
- * Livequiz activity version information.
- *
- * @package   mod_livequiz
+ * Class answer
+ * @package mod_livequiz
  * @copyright 2024 Software AAU
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+class answer {
+    /** @var string $text the text of the answer*/
+    public string $text;
 
- defined('MOODLE_INTERNAL') || die();
+    /** @var bool $correct if the answer is correct*/
+    public bool $correct;
 
-global $plugin;
+    /** @var string $explanation */
+    public string $explanation;
 
-
-$plugin = new stdClass(); // Initialize $plugin as an object.
-$plugin->version = 2024072500;
-$plugin->requires = 2024041600;
-$plugin->component = 'mod_livequiz';
+    /**
+     * @param string $text
+     * @param bool $correct
+     * @param string $explanation
+     */
+    public function __construct(string $text, bool $correct, string $explanation) {
+        $this->text = $text;
+        $this->correct = $correct;
+        $this->explanation = $explanation;
+    }
+}
