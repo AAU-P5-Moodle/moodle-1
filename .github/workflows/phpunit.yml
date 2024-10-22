@@ -14,11 +14,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         
-      # - name: install mariadb
-      #   run: | 
-      #     sudo apt install mariadb-server
-      #     sudo systemctl disable mariadb
-      #     sudo systemctl stop mariadb
+      - name: install mariadb
+        run: | 
+          sudo apt install mariadb-server
+          sudo systemctl disable mariadb
+          sudo systemctl stop mariadb
         
       - name: Setup PHP
         id: setup-php
@@ -27,19 +27,8 @@ jobs:
           extensions: phar, iconv, mbstring, gd, intl, sodium, zip
           tools: composer
 
-      # - name: install composer
-      #   run: |
-      #     cd server/moodle
-      #     sudo apt-get update
-      #     sudo apt-get install curl
-      #     sudo apt-get install php php-curl
-      #     curl -sS https://getcomposer.org/installer -o composer-setup.php
-      #     sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-      #     sudo composer self-update
-      #     composer -v
 
       - name: Set up the database and start mariadb
-        uses: getong/mariadb-action@v1.11
         run: |
           set -x
           mariadb_data_dir="./mariadb_data"
