@@ -196,11 +196,11 @@ jobs:
           # Adminer is not required for testing, so we skip the setup
 
           # Start PHP built-in server for Moodle
-          start_php_server() {
-            echo "Starting PHP built-in server for Moodle..."
-            php -S 0.0.0.0:8000 -t ./server/moodle -c ./etc/php/8.3/cli/php.ini &
-            PHP_SERVER_PID=$!
-          }
+          # start_php_server() {
+          #   echo "Starting PHP built-in server for Moodle..."
+          #   php -S 0.0.0.0:8000 -t ./server/moodle -c ./etc/php/8.3/cli/php.ini &
+          #   PHP_SERVER_PID=$!
+          # }
 
           # Function to stop services
           stop_services() {
