@@ -28,8 +28,7 @@
  * @param $oldversion
  * @return true
  */
-function xmldb_livequiz_upgrade($oldversion)
-{
+function xmldb_livequiz_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();
@@ -253,8 +252,8 @@ function xmldb_livequiz_upgrade($oldversion)
             $dbman->rename_table($quizlecturertable, 'livequiz_quiz_lecturer');
         }
 
-        //Array for tables with foreign keys
-        $tables = array();
+        // Array for tables with foreign keys.
+        $tables = [];
 
         // Rename table quiz_questions to livequiz_quiz_questions and updated foreign key reftables accordingly.
         $quizquestionstable = new xmldb_table('quiz_questions');
@@ -291,7 +290,7 @@ function xmldb_livequiz_upgrade($oldversion)
             $dbman->rename_table($coursequiztable, 'livequiz_course_quiz');
         }
 
-        // Change reftable to match new table names for foreign keys in all the relevant intermediate tables
+        // Change reftable to match new table names for foreign keys in all the relevant intermediate tables.
         foreach ($tables as $table) {
             if ($dbman->table_exists($table)) {
                 $oldkey = new xmldb_key('fk_question');
@@ -299,7 +298,7 @@ function xmldb_livequiz_upgrade($oldversion)
                     $dbman->drop_key($table, $oldkey);
 
                     $newkey = new xmldb_key('fk_question');
-                    $newkey->set_attributes(XMLDB_KEY_FOREIGN, array('fk_question'), 'livequiz_questions', array('id'));
+                    $newkey->set_attributes(XMLDB_KEY_FOREIGN, ['fk_question'], 'livequiz_questions', ['id']);
 
                     $dbman->add_key($table, $newkey);
                 }
@@ -309,7 +308,7 @@ function xmldb_livequiz_upgrade($oldversion)
                     $dbman->drop_key($table, $oldkey);
 
                     $newkey = new xmldb_key('fk_answer');
-                    $newkey->set_attributes(XMLDB_KEY_FOREIGN, array('fk_answer'), 'livequiz_answers', array('id'));
+                    $newkey->set_attributes(XMLDB_KEY_FOREIGN, ['fk_answer'], 'livequiz_answers', ['id']);
 
                     $dbman->add_key($table, $newkey);
                 }
@@ -318,7 +317,6 @@ function xmldb_livequiz_upgrade($oldversion)
 
         // Livequiz savepoint reached.
         upgrade_mod_savepoint(true, 2024072510, 'livequiz');
-
     }
     return true;
 }
