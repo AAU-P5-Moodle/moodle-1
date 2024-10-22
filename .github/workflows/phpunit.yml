@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: install mariadb
         run: | 
@@ -27,16 +27,16 @@ jobs:
           extensions: phar, iconv, mbstring, gd, intl, sodium, zip
           tools: composer
 
-      - name: install composer
-        run: |
-          cd server/moodle
-          sudo apt-get update
-          sudo apt-get install curl
-          sudo apt-get install php php-curl
-          curl -sS https://getcomposer.org/installer -o composer-setup.php
-          sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-          sudo composer self-update
-          composer -v
+      # - name: install composer
+      #   run: |
+      #     cd server/moodle
+      #     sudo apt-get update
+      #     sudo apt-get install curl
+      #     sudo apt-get install php php-curl
+      #     curl -sS https://getcomposer.org/installer -o composer-setup.php
+      #     sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+      #     sudo composer self-update
+      #     composer -v
 
       - name: Set up the database and start mariadb
         run: |
