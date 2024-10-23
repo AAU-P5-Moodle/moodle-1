@@ -5,7 +5,7 @@ namespace mod_livequiz\livequiz;
 use DateTime;
 use dml_exception;
 use mod_livequiz\question\question;
-
+use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
 
 
 class livequiz
@@ -45,23 +45,6 @@ class livequiz
         return $quiz_id;
     }
 
-    public static function append_questions_to_quiz($questions, $quiz_id): void
-    {
-        global $DB;
-        try {
-            $transaction = $DB->start_delegated_transaction();
-
-            foreach ($questions as $question) {
-                $question_id = $DB->insert_record('livequiz_questions', $question);
-                $DB->insert_record('livequiz_quiz_questions', ['quiz_id' => $quiz_id, 'question_id' => $question_id]);
-            }
-
-            $transaction->allow_commit();
-        } catch (dml_exception $e) {
-            $transaction->rollback($e);
-        }
-    }
-
     /**
      * @throws dml_exception
      */
@@ -69,32 +52,19 @@ class livequiz
     {
         global $DB;
         $new_quiz = new \stdClass();
-        $quiz_instace = $DB->get_record('livequiz', [$id]);
-        $new_quiz->id = $quiz_instace->id;
-        $new_quiz->name = $quiz_instace->name;
-        $new_quiz->course = $quiz_instace->course;
-        $new_quiz->intro = $quiz_instace->intro;
-        $new_quiz->introformat = $quiz_instace->introformat;
-        $new_quiz->timecreated = $quiz_instace->timecreated;
-        $new_quiz->timemodified = $quiz_instace->timemodified;
+        $quiz_instance = $DB->get_record('livequiz', ['id'=>$id]);
+        $new_quiz->id = $quiz_instance->id;
+        $new_quiz->name = $quiz_instance->name;
+        $new_quiz->course = $quiz_instance->course;
+        $new_quiz->intro = $quiz_instance->intro;
+        $new_quiz->introformat = $quiz_instance->introformat;
+        $new_quiz->timecreated = $quiz_instance->timecreated;
+        $new_quiz->timemodified = $quiz_instance->timemodified;
 
-//        $question_ids = $DB->get_records('livequiz_quiz_questions', ['quiz_id'=>$new_quiz->id], '', 'question_id');
-//        $questions = [];
-//        foreach ($question_ids as $question_id){
-//            $questions[] = $DB->get_record('livequiz_questions', $question_id);
-//        }
-//
-//        $new_quiz->questions = $questions;
+        $questions = quiz_questions_relation::get_questions_from_quiz_id($new_quiz->$id);
 
+        $new_quiz->questions = $questions;
 
-
-
-//        $new_quiz = $DB->get_record_sql('
-//            SELECT lq.*
-//            FROM {livequiz} lq
-//            JOIN {livequiz_quiz_questions} lqi ON lq.id = lqi.quiz_id
-//            JOIN {livequiz_questions} lqz ON lqi.question_id = lqz.id
-//            WHERE lq.id = ?', array($id));
-        return $quiz_instace;
+        return $new_quiz;
     }
 }

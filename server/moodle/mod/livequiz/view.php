@@ -43,8 +43,10 @@ $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 
+echo $OUTPUT->header();
+
 // TODO Delete
-try {
+//try {
 //    $test_question = new \stdClass();
 //    $test_question->title = 'What is the capital of Denmark?';
 //    $test_question->description = 'Copenhagen';
@@ -60,12 +62,25 @@ try {
 //
 //    livequiz::append_questions_to_quiz($test_questions, $instance->id);
     $test_quiz = livequiz::get_livequiz_instance($instance->id);
-} catch (dml_exception $e) {
-    echo $e->getMessage();
+//} catch (dml_exception $e) {
+//    echo $e->getMessage();
+//}
+
+// Check if $test_quiz is an object and then display its properties
+echo "<h2>Instance ID: {$instance->id}</h2>";
+
+if (true) {
+
+    echo "<h2>Live Quiz Details</h2>";
+    echo "<p><strong>ID:</strong> $test_quiz->id</p>";
+    echo "<p><strong>Name:</strong> {$test_quiz->name}</p>";
+    echo "<p><strong>Course ID:</strong> {$test_quiz->course}</p>";
+    echo "<p><strong>Introduction:</strong> {$test_quiz->intro}</p>";
+    echo "<p><strong>Time Created:</strong> " . userdate($test_quiz->timecreated) . "</p>";
+    echo "<p><strong>Last Modified:</strong> " . userdate($test_quiz->timemodified) . "</p>";
+    echo "<p><strong>Questions:</strong>" . print_r($test_quiz->questions) . "</p>";
+} else {
+    echo "<p>No quiz found.</p>";
 }
 
-echo $OUTPUT->header();
-//TODO Delete
-echo "<h2>$test_quiz</h2>";
-echo $OUTPUT->heading(print_r('Test Quiz: '.$test_quiz));
 echo $OUTPUT->footer();
