@@ -140,7 +140,7 @@ jobs:
             mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} &
             MARIADB_PID=$!
             UP=$(pgrep mysql | wc -l);
-            while [ -S ${mariadb_socket} ];
+            while [ ! -S ${mariadb_socket} ];
             do
               echo "no socket file.";
               echo "Waiting 2 secs and trying again"
