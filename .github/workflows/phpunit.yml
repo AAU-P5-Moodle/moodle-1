@@ -77,7 +77,7 @@ jobs:
             TEMP_MYSQL_PID=$!
 
             UP=$(pgrep mysql | wc -l);
-            while [ "$UP" != 1];
+            while [ "$UP" != 1 ];
             do
               echo "MariaDB is down.";
               echo "Waiting 2 secs and trying again"
@@ -85,7 +85,7 @@ jobs:
               UP=$(pgrep mysql | wc -l);
 
             done
-            
+
             echo "MariaDB is up continuing.";
             
             
@@ -139,8 +139,17 @@ jobs:
             echo "Starting MariaDB..."
             mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} &
             MARIADB_PID=$!
-            sleep 10 # Increased wait time to ensure MariaDB is ready
+            UP=$(pgrep mysql | wc -l);
+            while [ "$UP" != 1 ];
+            do
+              echo "MariaDB is down.";
+              echo "Waiting 2 secs and trying again"
+              sleep 2
+              UP=$(pgrep mysql | wc -l);
 
+            done
+
+            echo "MariaDB is up continuing.";
             # Check if MariaDB socket file is created
             if [ ! -S ${mariadb_socket} ]; then
               echo "Error: MariaDB socket file not found at ${mariadb_socket}. Exiting..."
