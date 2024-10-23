@@ -198,11 +198,11 @@ jobs:
           # server/php/php.ini`
           echo "my part"
           REPO_ROOT="`pwd`"
-          cd "$REPO_ROOT"/server/moodle
           export PATH="$REPO_ROOT/server/moodle/vendor/bin:$PATH"
-          composer global show
           chmod +x vendor/bin/phpunit
           phpunit --version
+          cd "$REPO_ROOT"/server/moodle
+          composer install --prefer-dist
           echo "done with my part"
           php admin/cli/install.php \
               --lang=en \
