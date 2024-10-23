@@ -76,13 +76,11 @@ jobs:
             mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} --skip-grant-tables &
             TEMP_MYSQL_PID=$!
 
-            UP=$(pgrep mysql | wc -l);
-            while [ "$UP" != 1 ];
+            while [ ! -S ${mariadb_socket} ];
             do
-              echo "MariaDB is down.";
+              echo "no socket file.";
               echo "Waiting 2 secs and trying again"
               sleep 2
-              UP=$(pgrep mysql | wc -l);
 
             done
 
@@ -139,7 +137,6 @@ jobs:
             echo "Starting MariaDB..."
             mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} &
             MARIADB_PID=$!
-            UP=$(pgrep mysql | wc -l);
             while [ ! -S ${mariadb_socket} ];
             do
               echo "no socket file.";
