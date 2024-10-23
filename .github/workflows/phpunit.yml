@@ -1,0 +1,284 @@
+name: PHPUnit
+
+on:
+  pull_request:
+    branches: [ "main", "staging"  ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: install mariadb
+        run: | 
+          sudo apt install mariadb-server
+          sudo systemctl disable mariadb
+          sudo systemctl stop mariadb
+        # uses: getong/mariadb-action@v1.11
+        
+      - name: Setup PHP
+        id: setup-php
+        uses: shivammathur/setup-php@v2
+        with:
+          extensions: phar, iconv, mbstring, gd, intl, sodium, zip
+          tools: composer
+
+      
+      - name: Set up php.ini
+        run: >
+          REPO_ROOT="`pwd`"
+          sed -i
+          -e 's/;extension=gd/extension=gd/'
+          -e 's/;extension=intl/extension=intl/'
+          -e 's/;extension=sodium/extension=sodium/'
+          -e 's/;extension=zip/extension=zip/'
+          -e "s|curl\.cainfo.*|curl.cainfo=\"$REPO_ROOT/cacert.pem\"|"
+          -e "s|openssl\.cafile.*|openssl.cafile=\"$REPO_ROOT\"/server/apache/bin/curl-ca-bundle.crt|"
+          -e '$a\\max_input_vars=5000'
+          -e '$a\\memory_limit_256M'
+          -e '$a\\post_max_size=50M'
+          -e '$a\\upload_max_filesize=50M'
+          -e '$a\\extension=phar.so'
+          server/php/php.ini
+
+      # - name: Install composer
+      #   run: |
+      #     cd server/moodle
+      #     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+      #     php composer-setup.php
+
+      - name: Check enabled PHP extensions
+        run: | 
+          php -m | grep -E 'gd|intl|zip'
+          php -r "echo phpversion('phar');"
+          php -r "echo ini_get('max_input_vars');"
+          more php.ini
+          realpath php.ini
+
+      # - name: Copy php.ini to PHP-CLI directory
+      #   run: |
+      #     sudo cp server/php/php.ini /etc/php/8.2/cli/php.ini
+
+      # - uses: "ramsey/composer-install@v3"
+      #   with:
+      #     working-directory: "/etc/php/8.2/cli/php.ini"
+
+      - name: install composer
+        run: |
+          cd server/moodle
+          sudo apt-get update
+          sudo apt-get install curl
+          sudo apt-get install php php-curl
+          curl -sS https://getcomposer.org/installer -o composer-setup.php
+          sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+          sudo composer self-update
+          composer -v
+
+      - name: Check enabled PHP extensions
+        run: | 
+          php -m
+          php --ini
+      
+      - name: Install the curl certificate
+        run: curl https://curl.se/ca/cacert.pem >cacert.pem
+
+      - name: Set up the database and start mariadb
+        run: |
+          set -x
+          mariadb_data_dir="./mariadb_data"
+          mariadb_socket="/run/mysqld/mysqld.sock"
+          moodle_db_name="moodle"
+          moodle_sql_file="./MoodleSQL.sql"
+          root_username="root"
+          root_password="root"
+
+          # Function to check and kill existing processes
+          kill_existing() {
+            local process=$1
+            if pgrep -x "$process" > /dev/null; then
+              echo "Killing existing $process process..."
+              sudo pkill -x "$process"
+              sleep 2
+            fi
+          }
+          
+          # Function to kill process using a specific port
+          kill_port_user() {
+            local port=$1
+            local pid=$(lsof -ti:$port)
+            if [ ! -z "$pid" ]; then
+              echo "Killing process using port $port..."
+              sudo kill -9 $pid
+              sleep 2
+            fi
+          }
+          
+          # Ensure MariaDB data directory exists
+          mkdir -p ${mariadb_data_dir}
+          ls -l
+          
+          # Ensure MariaDB data directory exists
+          mkdir -p ${mariadb_data_dir}
+          ls -l
+          
+          # Initialize MariaDB if not already done
+          if [ ! -d "${mariadb_data_dir}/mysql" ]; then
+            mysql_install_db --datadir=${mariadb_data_dir}
+            # Start MariaDB temporarily to set up the database
+            # sudo touch ${mariadb_socket}
+            sudo chmod -R 2777 `dirname ${mariadb_socket}`
+            mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} --skip-grant-tables &
+            TEMP_MYSQL_PID=$!
+            sleep 15 # Increased wait time to ensure MariaDB is ready
+            
+            mysqld --verbose --help | grep "socket"
+            ps aux | grep mysqld
+            # Set root password and authentication method
+            echo "Setting root password..."
+            mysql -uroot -S${mariadb_socket} <<EOF
+            FLUSH PRIVILEGES;
+            ALTER USER 'root'@'localhost' IDENTIFIED BY '${root_password}';
+            FLUSH PRIVILEGES;
+          EOF
+          
+            # Verify root password
+            echo "Verifying root password..."
+            mysql -uroot -p${root_password} -S${mariadb_socket} -e "SELECT 1;" || {
+              echo "Error: Root password verification failed."
+              kill $TEMP_MYSQL_PID
+              wait $TEMP_MYSQL_PID
+              exit 1
+            }
+            
+            mysql -uroot -p${root_password} -S${mariadb_socket} -e "CREATE DATABASE IF NOT EXISTS ${moodle_db_name}" || {
+              echo "Error: Failed to create database ${moodle_db_name}."
+              kill $TEMP_MYSQL_PID
+              wait $TEMP_MYSQL_PID
+              exit 1
+            }
+            
+            if [ -f "${moodle_sql_file}" ]; then
+              mysql -uroot -p${root_password} -S${mariadb_socket} ${moodle_db_name} < ${moodle_sql_file} && {
+                echo "SQL file imported successfully."
+              } || {
+                echo "Error: Failed to import SQL file."
+              }
+            else
+              echo "Warning: ${moodle_sql_file} not found. Database created but not populated."
+            fi
+            
+            kill $TEMP_MYSQL_PID
+            wait $TEMP_MYSQL_PID
+          fi
+
+          # Kill existing MariaDB and PHP processes
+          kill_existing "mysqld"
+          kill_existing "php"
+
+          # Start MariaDB
+          start_mariadb() {
+            echo "Starting MariaDB..."
+            mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} &
+            MARIADB_PID=$!
+            sleep 10 # Increased wait time to ensure MariaDB is ready
+
+            # Check if MariaDB socket file is created
+            if [ ! -S ${mariadb_socket} ]; then
+              echo "Error: MariaDB socket file not found at ${mariadb_socket}. Exiting..."
+              exit 1
+            fi
+          }
+
+          # Adminer is not required for testing, so we skip the setup
+
+          # Start PHP built-in server for Moodle
+          start_php_server() {
+            echo "Starting PHP built-in server for Moodle..."
+            php -S 0.0.0.0:8000 -t ./server/moodle -c ./server/php/php.ini &
+            PHP_SERVER_PID=$!
+          }
+
+          # Function to stop services
+          stop_services() {
+            echo "Stopping services..."
+            kill $MARIADB_PID  $PHP_SERVER_PID 2>/dev/null
+            rm -f ${mariadb_socket}
+          }
+          
+          # Start services
+          start_mariadb
+          start_php_server
+
+          echo "MariaDB and PHP server are now running."
+          echo "Moodle is available at http://localhost:8000"
+          echo "To connect to MariaDB, use:"
+          echo " Host: 127.0.0.1 or localhost"
+          echo " Username: root"
+          echo " Password: ${root_password}"
+          echo " Database: ${moodle_db_name}"
+          echo "Press Ctrl+C to stop the services and exit."
+
+      - name: Install and initialise phpunit
+        run: |
+          echo en_AU.UTF-8 UTF-8 | sudo tee -a /etc/locale.gen
+          sudo locale-gen
+          
+          if [ "$(php -r "echo ini_get('max_input_vars');")" -lt 5000 ]; then
+            echo "max_input_vars = 5000" >> /etc/php/8.3/cli/php.ini
+          fi
+          export LANG="en_AU.UTF-8"
+          export LC_ALL="en_AU.UTF-8"
+          export PHPRC=`realpath /etc/php/8.3/cli/php.ini`
+          # server/php/php.ini`
+          
+          REPO_ROOT="`pwd`"
+          cd "$REPO_ROOT"/server/moodle
+          composer require --dev phpunit/phpunit
+
+          if [ ! -d "$REPO_ROOT/server/moodledata/phpunit" ]; then
+            mkdir "$REPO_ROOT/server/moodledata/phpunit"
+          fi
+
+          php admin/cli/install.php \
+              --lang=en \
+              --wwwroot="http://localhost:8000/" \
+              --dataroot="$REPO_ROOT/server/moodledata" \
+              --dbpass=root \
+              --dbport=3306 \
+              --dbsocket=/run/mysqld/mysqld.sock \
+              --skip-database \
+              --non-interactive \
+              --agree-license \
+              --allow-unstable \
+              --fullname="Moodle testing thing" \
+              --shortname="mtt" \
+              --adminpass="hunter2"
+
+          echo "This is the path: $(realpath config.php)"
+
+          if [ -f "$REPO_ROOT/server/moodle/config.php" ]; then
+            echo "File $("$REPO_ROOT/server/moodle/config.php") exist."
+          else
+            echo "Can not find $("$REPO_ROOT/server/moodle/config.php") file"
+          fi
+          
+          echo "\$CFG->phpunit_prefix = 'phpu_';" >>"$REPO_ROOT/server/moodle/config.php"
+          echo "\$CFG->phpunit_dataroot = '$(realpath "$REPO_ROOT/server/moodledata/phpunit")';">>"$REPO_ROOT/server/moodle/config.php"
+          
+          php admin/tool/phpunit/cli/init.php
+
+      - name: Run tests
+        run: |
+          cd server/moodle
+          for file in `find mod/livequiz/tests/phpunit -type f`
+          do
+            echo Running tests in $file
+            vendor/bin/phpunit $file
+          done
+              
+
+      
+
