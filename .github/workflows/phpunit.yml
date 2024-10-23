@@ -75,7 +75,20 @@ jobs:
             sudo chmod -R 2777 `dirname ${mariadb_socket}`
             mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} --skip-grant-tables &
             TEMP_MYSQL_PID=$!
-            sleep 15 # Increased wait time to ensure MariaDB is ready
+
+            UP=$(pgrep mysql | wc -l);
+            while [ "$UP" != 1];
+            do
+              echo "MariaDB is down.";
+              echo "Waiting 2 secs and trying again"
+              sleep 2
+              UP=$(pgrep mysql | wc -l);
+
+            done
+            
+            echo "MariaDB is up continuing.";
+            
+            
             
             mysqld --verbose --help | grep "socket"
             ps aux | grep mysqld
@@ -199,7 +212,7 @@ jobs:
           echo "\$CFG->phpunit_prefix = 'phpu_';" >>"$REPO_ROOT/server/moodle/config.php"
           echo "\$CFG->phpunit_dataroot = '$(realpath "$REPO_ROOT/server/moodledata/phpunit")';">>"$REPO_ROOT/server/moodle/config.php"
           
-          # php admin/tool/phpunit/cli/init.php
+          php admin/tool/phpunit/cli/init.php
 
       - name: Run tests
         run: |
