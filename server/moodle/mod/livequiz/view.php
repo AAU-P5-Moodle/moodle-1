@@ -21,6 +21,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_livequiz\livequiz\livequiz;
+use mod_livequiz\question\question;
+
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 
@@ -38,6 +41,27 @@ $PAGE->set_context($context); // Make sure to set the page context.
 $PAGE->set_url('/mod/livequiz/view.php', ['id' => $id]);
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
+
+
+
+try {
+    $test_question = new \stdClass();
+    $test_question->title = 'What is the capital of Denmark?';
+    $test_question->description = 'Copenhagen';
+    $test_question->timelimit = 1;
+    $test_question->explanation = 'Copenhagen is the capital of Denmark.';
+
+    $test_questions = [];
+
+    //construct 3 questions
+    $test_questions[] = clone $test_question;
+    $test_questions[] = clone $test_question;
+    $test_questions[] = clone $test_question;
+
+    livequiz::append_questions_to_quiz($test_questions, $instance->id);
+} catch (dml_exception $e) {
+    echo $e->getMessage();
+}
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading('This is the livequiz view page');

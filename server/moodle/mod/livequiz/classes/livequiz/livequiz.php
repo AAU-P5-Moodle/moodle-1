@@ -6,12 +6,16 @@ use DateTime;
 use dml_exception;
 use mod_livequiz\question\question;
 
+
+
 class livequiz
 {
     /**
      * @throws dml_exception
      */
-    public function __construct($name, $course_id, $intro, $introformat, $timecreated, $timeupdated, $questions)
+
+
+    public function __construct($name, $course_id, $intro, $introformat, $timecreated, $timeupdated)
     {
         global $DB;
         try {
@@ -23,16 +27,15 @@ class livequiz
             $this->$introformat = $introformat;
             $this->$timecreated = $timecreated;
             $this->$timeupdated = $timeupdated;
-            $this->$questions = $questions;
 
             $quiz_id = $DB->insert_record('livequiz', $this);
             //$question_ids = $DB->insert_records('livequiz_questions', $questions);
             //$DB->insert_records('livequiz_quiz_questions', ['quiz_id' => $quiz_id, 'question_id' => $question_ids]);
 
-            foreach ($questions as $question) {
-                $question_id = $DB->insert_record('livequiz_questions', $question);
-                $DB->insert_record('livequiz_quiz_questions', ['quiz_id' => $quiz_id, 'question_id' => $question_id]);
-            }
+            //foreach ($questions as $question) {
+            //    $question_id = $DB->insert_record('livequiz_questions', $question);
+            //    $DB->insert_record('livequiz_quiz_questions', ['quiz_id' => $quiz_id, 'question_id' => $question_id]);
+            //}
 
             $transaction->allow_commit();
         } catch (dml_exception $e) {
@@ -49,6 +52,23 @@ class livequiz
     {
         global $DB;
         return $DB->get_record('livequiz', ['course_id' => $course_id]);
+    }
+
+    public static function append_questions_to_quiz($questions, $quiz_id): void
+    {
+        global $DB;
+        try {
+            $transaction = $DB->start_delegated_transaction();
+
+            foreach ($questions as $question) {
+                $question_id = $DB->insert_record('livequiz_questions', $question);
+                $DB->insert_record('livequiz_quiz_questions', ['quiz_id' => $quiz_id, 'question_id' => $question_id]);
+            }
+
+            $transaction->allow_commit();
+        } catch (dml_exception $e) {
+            $transaction->rollback($e);
+        }
     }
 
     /**
