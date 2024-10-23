@@ -199,9 +199,9 @@ jobs:
           echo "my part"
           REPO_ROOT="`pwd`"
           export PATH="$REPO_ROOT/server/moodle/vendor/bin:$PATH"
+          cd "$REPO_ROOT"/server/moodle
           chmod +x vendor/bin/phpunit
           phpunit --version
-          cd "$REPO_ROOT"/server/moodle
           composer install --prefer-dist
           echo "done with my part"
           php admin/cli/install.php \
