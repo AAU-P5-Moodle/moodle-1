@@ -25,21 +25,21 @@ class livequiz
             $this->$timeupdated = $timeupdated;
             $this->$questions = $questions;
 
-            foreach ($questions as $question) {
-                $question = new question($question->name, $question->questiontext, $question->questiontextformat, $question->generalfeedback, $question->generalfeedbackformat, $question->rightanswer, $question->rightanswerformat, $question->wronganswer1, $question->wronganswer1format, $question->wronganswer2, $question->wronganswer2format, $question->wronganswer3, $question->wronganswer3format, $question->timecreated, $question->timeupdated);
-            }
+            $quiz_id = $DB->insert_record('livequiz', $this);
+            //$question_ids = $DB->insert_records('livequiz_questions', $questions);
+            //$DB->insert_records('livequiz_quiz_questions', ['quiz_id' => $quiz_id, 'question_id' => $question_ids]);
 
-            $DB->insert_record('livequiz', $this);
+            foreach ($questions as $question) {
+                $question_id = $DB->insert_record('livequiz_questions', $question);
+                $DB->insert_record('livequiz_quiz_questions', ['quiz_id' => $quiz_id, 'question_id' => $question_id]);
+            }
 
             $transaction->allow_commit();
         } catch (dml_exception $e) {
             $transaction->rollback($e);
         }
 
-
-
-
-        return $this;
+        return $quiz_id;
     }
 
     /**
