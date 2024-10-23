@@ -25,6 +25,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           extensions: phar, iconv, mbstring, gd, intl, sodium, zip
+          php-version: '8.3'
           tools: composer
 
 
@@ -198,8 +199,8 @@ jobs:
           echo "my part"
           REPO_ROOT="`pwd`"
           cd "$REPO_ROOT"/server/moodle
-          export PATH='"$REPO_ROOT"/vendor/bin'
-          echo "done with my path"
+          export PATH="$REPO_ROOT/vendor/bin"
+          echo "done with my part"
           php admin/cli/install.php \
               --lang=en \
               --wwwroot="http://localhost:8000/" \
