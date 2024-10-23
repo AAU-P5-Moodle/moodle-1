@@ -195,11 +195,11 @@ jobs:
           export LC_ALL="en_AU.UTF-8"
           export PHPRC=`realpath /etc/php/8.3/cli/php.ini`
           # server/php/php.ini`
-          
+          echo "my part"
           REPO_ROOT="`pwd`"
           cd "$REPO_ROOT"/server/moodle
-          export PATH="$PATH:./vendor/bin"
-
+          export PATH='"$REPO_ROOT"/vendor/bin'
+          echo "done with my path"
           php admin/cli/install.php \
               --lang=en \
               --wwwroot="http://localhost:8000/" \
@@ -214,12 +214,12 @@ jobs:
               --fullname="Moodle testing thing" \
               --shortname="mtt" \
               --adminpass="hunter2"
-          
+          echo "done with php install"
           echo "\$CFG->phpunit_prefix = 'phpu_';" >>"$REPO_ROOT/server/moodle/config.php"
           echo "\$CFG->phpunit_dataroot = '$(realpath "$REPO_ROOT/server/moodledata/phpunit")';">>"$REPO_ROOT/server/moodle/config.php"
-          
+          echo "done with whatever"
           php admin/tool/phpunit/cli/init.php
-
+          echo "fully done"
       - name: Run tests
         run: |
           cd server/moodle
