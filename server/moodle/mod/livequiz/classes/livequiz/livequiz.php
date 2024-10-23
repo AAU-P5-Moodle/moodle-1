@@ -45,15 +45,6 @@ class livequiz
         return $quiz_id;
     }
 
-    /**
-     * @throws dml_exception
-     */
-    public static function get_livequiz_by_course($course_id)
-    {
-        global $DB;
-        return $DB->get_record('livequiz', ['course_id' => $course_id]);
-    }
-
     public static function append_questions_to_quiz($questions, $quiz_id): void
     {
         global $DB;
@@ -74,41 +65,36 @@ class livequiz
     /**
      * @throws dml_exception
      */
-    public static function get_livequiz($id)
+    public static function get_livequiz_instance($id)
     {
         global $DB;
-        return $DB->get_record('livequiz', ['id' => $id]);
-    }
+        $new_quiz = new \stdClass();
+        $quiz_instace = $DB->get_record('livequiz', [$id]);
+        $new_quiz->id = $quiz_instace->id;
+        $new_quiz->name = $quiz_instace->name;
+        $new_quiz->course = $quiz_instace->course;
+        $new_quiz->intro = $quiz_instace->intro;
+        $new_quiz->introformat = $quiz_instace->introformat;
+        $new_quiz->timecreated = $quiz_instace->timecreated;
+        $new_quiz->timemodified = $quiz_instace->timemodified;
 
-    /**
-     * @throws dml_exception
-     */
-    public function get_livequizzes(): array
-    {
-        return $this->db->get_records('livequiz');
-    }
+//        $question_ids = $DB->get_records('livequiz_quiz_questions', ['quiz_id'=>$new_quiz->id], '', 'question_id');
+//        $questions = [];
+//        foreach ($question_ids as $question_id){
+//            $questions[] = $DB->get_record('livequiz_questions', $question_id);
+//        }
+//
+//        $new_quiz->questions = $questions;
 
-    /**
-     * @throws dml_exception
-     */
-    public function add_livequiz($livequiz): bool|int
-    {
-        return $this->db->insert_record('livequiz', $livequiz);
-    }
 
-    /**
-     * @throws dml_exception
-     */
-    public function update_livequiz($livequiz): bool
-    {
-        return $this->db->update_record('livequiz', $livequiz);
-    }
 
-    /**
-     * @throws dml_exception
-     */
-    public function delete_livequiz($id): bool
-    {
-        return $this->db->delete_records('livequiz', ['id' => $id]);
+
+//        $new_quiz = $DB->get_record_sql('
+//            SELECT lq.*
+//            FROM {livequiz} lq
+//            JOIN {livequiz_quiz_questions} lqi ON lq.id = lqi.quiz_id
+//            JOIN {livequiz_questions} lqz ON lqi.question_id = lqz.id
+//            WHERE lq.id = ?', array($id));
+        return $quiz_instace;
     }
 }

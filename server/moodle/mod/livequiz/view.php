@@ -21,14 +21,14 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+//TODO Delete
 use mod_livequiz\livequiz\livequiz;
 use mod_livequiz\question\question;
 
+global $OUTPUT, $PAGE, $DB, $CFG;
+
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
-
-global $OUTPUT, $PAGE, $DB;
-
 
 $id = required_param('id', PARAM_INT); // Course module ID.
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
@@ -43,26 +43,29 @@ $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 
-
+// TODO Delete
 try {
-    $test_question = new \stdClass();
-    $test_question->title = 'What is the capital of Denmark?';
-    $test_question->description = 'Copenhagen';
-    $test_question->timelimit = 1;
-    $test_question->explanation = 'Copenhagen is the capital of Denmark.';
-
-    $test_questions = [];
-
-    //construct 3 questions
-    $test_questions[] = clone $test_question;
-    $test_questions[] = clone $test_question;
-    $test_questions[] = clone $test_question;
-
-    livequiz::append_questions_to_quiz($test_questions, $instance->id);
+//    $test_question = new \stdClass();
+//    $test_question->title = 'What is the capital of Denmark?';
+//    $test_question->description = 'Copenhagen';
+//    $test_question->timelimit = 1;
+//    $test_question->explanation = 'Copenhagen is the capital of Denmark.';
+//
+//    $test_questions = [];
+//
+//    //construct 3 questions
+//    $test_questions[] = clone $test_question;
+//    $test_questions[] = clone $test_question;
+//    $test_questions[] = clone $test_question;
+//
+//    livequiz::append_questions_to_quiz($test_questions, $instance->id);
+    $test_quiz = livequiz::get_livequiz_instance($instance->id);
 } catch (dml_exception $e) {
     echo $e->getMessage();
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading('This is the livequiz view page');
+//TODO Delete
+echo "<h2>$test_quiz</h2>";
+echo $OUTPUT->heading(print_r('Test Quiz: '.$test_quiz));
 echo $OUTPUT->footer();
