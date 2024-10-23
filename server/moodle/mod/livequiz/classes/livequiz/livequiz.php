@@ -61,7 +61,7 @@ class livequiz
         $new_quiz->timecreated = $quiz_instance->timecreated;
         $new_quiz->timemodified = $quiz_instance->timemodified;
 
-        $questions = quiz_questions_relation::get_questions_from_quiz_id($new_quiz->$id);
+        $questions = quiz_questions_relation::get_questions_from_quiz_id($new_quiz->id);
 
         $new_quiz->questions = $questions;
 

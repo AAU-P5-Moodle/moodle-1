@@ -2,6 +2,8 @@
 
 namespace mod_livequiz\quiz_questions_relation;
 
+use mod_livequiz\question\question;
+
 class quiz_questions_relation
 {
     public static function append_questions_to_quiz($questions, $quizid)
@@ -21,7 +23,7 @@ class quiz_questions_relation
         }
     }
 
-    public static function get_questions_from_quiz_id($quizid)
+    public static function get_questions_from_quiz_id($quizid): array
     {
         global $DB;
 
@@ -29,9 +31,8 @@ class quiz_questions_relation
         $question_ids = array_column($question_records, 'question_id');
         $questions = [];
 
-        //TODO move to question class
         foreach ($question_ids as $question_id){
-            $questions[] = $DB->get_record('livequiz_questions', ['id'=>$question_id]);
+            $questions[] = question::get_question_from_id($question_id);
         }
 
         return $questions;

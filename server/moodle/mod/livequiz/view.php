@@ -30,6 +30,8 @@ global $OUTPUT, $PAGE, $DB, $CFG;
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 
+use mod_livequiz\answers\answers;
+
 $id = required_param('id', PARAM_INT); // Course module ID.
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
@@ -41,6 +43,9 @@ $PAGE->set_context($context); // Make sure to set the page context.
 $PAGE->set_url('/mod/livequiz/view.php', ['id' => $id]);
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
+
+
+
 
 
 echo $OUTPUT->header();
@@ -61,10 +66,7 @@ echo $OUTPUT->header();
 //    $test_questions[] = clone $test_question;
 //
 //    livequiz::append_questions_to_quiz($test_questions, $instance->id);
-    $test_quiz = livequiz::get_livequiz_instance($instance->id);
-//} catch (dml_exception $e) {
-//    echo $e->getMessage();
-//}
+$test_quiz = livequiz::get_livequiz_instance($instance->id);
 
 // Check if $test_quiz is an object and then display its properties
 echo "<h2>Instance ID: {$instance->id}</h2>";

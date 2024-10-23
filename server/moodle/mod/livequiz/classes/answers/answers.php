@@ -7,6 +7,15 @@ use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
 
 class answers
 {
+
+    // Usage: $answer = new answers(1, 'beskrivelse', 'forklaring', 9);
+
+    private $correct;
+
+    private $description;
+
+    private $explanation;
+
     /**
      * @throws dml_exception
      */
@@ -16,15 +25,23 @@ class answers
         try{
             $transaction = $DB->start_delegated_transaction();
 
-            $this->$correct = $correct;
-            $this->$description = $description;
-            $this->$explanation = $explanation;
+            $this->correct = $correct;
+            $this->description = $description;
+            $this->explanation = $explanation;
 
-            //Inserts the Answer
-            $answer_id = $DB->insert_record('livequiz_answers', $this);
+            $answerData = [
+                'correct' => $this->correct,
+                'description' => $this->description,
+                'explanation' => $this->explanation,
+            ];
 
-            //Appends answer to question
+            // Insert answer into database
+            $answer_id = $DB->insert_record('livequiz_answers', $answerData);
+
+            // Append answer to question
             questions_answers_relation::append_answer_to_question($question_id, $answer_id);
+
+            $transaction->allow_commit();
         } catch (dml_exception $e) {
             $transaction->rollback($e);
         }
@@ -36,6 +53,12 @@ class answers
         global $DB;
         return $DB->update_record('livequiz_answers', ['id' => $answer->id]);
     }
+
+    public static function get_answer_from_id($id){
+        global $DB;
+        return $DB->get_record('livequiz_answers', ['id'=>$id]);
+    }
+}
 
     // TODO Discuss deletion
 //    public static function delete_answer($answer)
