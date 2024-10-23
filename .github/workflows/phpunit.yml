@@ -199,6 +199,7 @@ jobs:
           echo "my part"
           REPO_ROOT="`pwd`"
           export PATH="$REPO_ROOT/server/moodle/vendor/bin:$PATH"
+          export PATH="$REPO_ROOT/server/moodle/vendor:$PATH"
           cd "$REPO_ROOT"/server/moodle
           chmod +x vendor/bin/phpunit
           phpunit --version
