@@ -202,7 +202,7 @@ jobs:
           cd "$REPO_ROOT"/server/moodle
           chmod +x vendor/bin/phpunit
           phpunit --version
-          composer install --no-autodiscover --prepend-autoloader '$REPO_ROOT/server/moodle/vendor/'
+          composer install --prepend-autoloader '$REPO_ROOT/server/moodle/vendor/'
           echo "done with my part"
           php admin/cli/install.php \
               --lang=en \
