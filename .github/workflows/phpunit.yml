@@ -215,7 +215,7 @@ jobs:
               --adminpass="hunter2"
           echo "done with php install"
           echo "\$CFG->phpunit_prefix = 'phpu_';" >>"$REPO_ROOT/server/moodle/config.php"
-          echo "\$CFG->phpunit_dataroot = '$(realpath "$REPO_ROOT/server/moodle/vendor/bin")';">>"$REPO_ROOT/server/moodle/config.php"
+          echo "\$CFG->phpunit_dataroot = '$(realpath "$REPO_ROOT/server/moodle/vendor/")';">>"$REPO_ROOT/server/moodle/config.php"
           echo "done with whatever"
           php admin/tool/phpunit/cli/init.php
           echo "fully done"
