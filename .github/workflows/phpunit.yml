@@ -175,8 +175,6 @@ jobs:
           echo " Password: ${root_password}"
           echo " Database: ${moodle_db_name}"
           echo "Press Ctrl+C to stop the services and exit."
-      - name: githubs actions php unit
-        uses: php-actions/phpunit@v3
         
       - name: Install and initialise phpunit
         run: |
@@ -190,7 +188,7 @@ jobs:
           export LC_ALL="en_AU.UTF-8"
           export PHPRC=`realpath /etc/php/8.3/cli/php.ini`
           # server/php/php.ini`
-          # composer require --dev phpunit/phpunit
+          composer require --dev phpunit/phpunit
           REPO_ROOT="`pwd`"
           cd "$REPO_ROOT"/server/moodle
           php admin/cli/install.php \
