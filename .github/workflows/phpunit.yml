@@ -79,8 +79,7 @@ jobs:
 
             while [ ! -S ${mariadb_socket} ];
             do
-              echo "no socket file.";
-              echo "Waiting 2 secs and trying again"
+              echo "no socket file. Waiting 2 secs and trying again";
               sleep 2
 
             done
@@ -140,19 +139,12 @@ jobs:
             MARIADB_PID=$!
             while [ ! -S ${mariadb_socket} ];
             do
-              echo "no socket file.";
-              echo "Waiting 2 secs and trying again"
+              echo "no socket file. Waiting 2 secs and trying again";
               sleep 2
 
             done
 
             echo "socket is here continuing.";
-
-            # Check if MariaDB socket file is created
-            if [ ! -S ${mariadb_socket} ]; then
-              echo "Error: MariaDB socket file not found at ${mariadb_socket}. Exiting..."
-              exit 1
-            fi
           }
 
           # Adminer is not required for testing, so we skip the setup
