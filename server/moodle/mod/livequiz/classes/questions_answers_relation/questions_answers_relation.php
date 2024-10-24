@@ -6,6 +6,10 @@ use dml_exception;
 use dml_transaction_exception;
 use mod_livequiz\answers\answers;
 
+/**
+ * 'Static' class, do not instantiate.
+ * Handles the logic related to the questions_answers relation.
+ */
 class questions_answers_relation
 {
     /**
@@ -16,17 +20,18 @@ class questions_answers_relation
      * @return void
      * @throws dml_transaction_exception
      */
-    public static function append_answer_to_question(int $question_id, int $answer_id): void
+    public static function append_answer_to_question(int $questionid, int $answerid): void
     {
         global $DB;
         try {
             $transaction = $DB->start_delegated_transaction();
 
-            $DB->insert_record('livequiz_questions_answers', ['question_id' => $question_id, 'answer_id' => $answer_id]);
+            $DB->insert_record('livequiz_questions_answers', ['question_id' => $questionid, 'answer_id' => $answerid]);
 
             $transaction->allow_commit();
         } catch (dml_exception $e) {
             $transaction->rollback($e);
+            throw $e;
         }
 
     }
@@ -54,7 +59,7 @@ class questions_answers_relation
     }
 
     //TODO discuss deletion
-//    public static function remove_answer_from_question ($) {
-//
-//    }
+    //    public static function remove_answer_from_question ($) {
+    //
+    //    }
 }

@@ -9,60 +9,60 @@ use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
 
 class answers
 {
-
-    // Usage: $answer = new answers(1, 'beskrivelse', 'forklaring', 9);
-
     private $correct;
-
     private $description;
-
     private $explanation;
 
     /**
-     * Constructor for the answers class. Inserts a new answer into the database.
-     * Appends the answer to a question, given the question id.
+     * Constructor for the answers class. Returns the object
      *
      * @param $correct
      * @param $description
      * @param $explanation
-     * @param $question_id
+     */
+    public function __construct($correct, $description, $explanation)
+    {
+        $this->correct = $correct;
+        $this->description = $description;
+        $this->explanation = $explanation;
+
+        return $this;
+    }
+
+    /**
+     * Given an answer object, this method will insert the answer to the database
+     *
+     * @param $answer
+     * @return bool|int
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public function __construct($correct, $description, $explanation, $question_id)
-    {
+    public static function submit_answer($answer) {
         global $DB;
-        try{
+        try {
             $transaction = $DB->start_delegated_transaction();
-
-            $this->correct = $correct;
-            $this->description = $description;
-            $this->explanation = $explanation;
-
-            $answerData = [
-                'correct' => $this->correct,
-                'description' => $this->description,
-                'explanation' => $this->explanation,
+            $answerdata = [
+                'correct' => $answer->correct,
+                'description' => $answer->description,
+                'explanation' => $answer->explanation,
             ];
 
-            // Insert answer into database
-            $answer_id = $DB->insert_record('livequiz_answers', $answerData);
-
-            // Append answer to question
-            questions_answers_relation::append_answer_to_question($question_id, $answer_id);
-
+            $answerid = $DB->insert_record('livequiz_answers', $answerdata);
             $transaction->allow_commit();
+            return $answerid;
         } catch (dml_exception $e) {
             $transaction->rollback($e);
+            throw $e;
         }
-        return $answer_id;
     }
 
     /**
      * TODO: Implement this method
+     * Given an edited answer object, this method updates the given object in the database
      *
-     * @param $id
-     * @return mixed
+     * @param $answer
+     * @return bool
+     * @throws dml_exception
      */
     public static function update_answer($answer)
     {
@@ -71,7 +71,7 @@ class answers
     }
 
     /**
-     * Get an answer from its id
+     * Get an answer, given its id
      *
      * @param $id
      * @return mixed
@@ -82,13 +82,15 @@ class answers
         global $DB;
         return $DB->get_record('livequiz_answers', ['id'=>$id]);
     }
-}
 
     // TODO Discuss deletion
-//    public static function delete_answer($answer)
-//    {
-//        global $DB;
-//        $id = $answer->id;
-//        $DB->delete_records('livequiz_answers', ['id'=>$id]);
-//    }
-//}
+    //    public static function delete_answer($answer)
+    //    {
+    //        global $DB;
+    //        $id = $answer->id;
+    //        $DB->delete_records('livequiz_answers', ['id'=>$id]);
+    //    }
+    //}
+
+}
+

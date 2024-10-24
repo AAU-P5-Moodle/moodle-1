@@ -11,7 +11,7 @@ class quiz_questions_relation
     /**
      * Append a list of questions to a quiz, given its id
      *
-     * @param $questions array of question objects
+     * @param $questions array //of question objects
      * @param $quizid int
      * @return void
      * @throws dml_exception
@@ -30,30 +30,31 @@ class quiz_questions_relation
             $transaction->allow_commit();
         } catch (dml_exception $e) {
             $transaction->rollback($e);
+            throw $e;
         }
     }
 
     /**
      *  Append a question object to a quiz, given its id
      *
-     * @param $question
+     * @param $questionid
      * @param $quizid
      * @return void
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function append_question_to_quiz($question, $quizid)
+    public static function append_question_to_quiz($questionid, $quizid)
     {
         global $DB;
         try {
             $transaction = $DB->start_delegated_transaction();
 
-            $questionid = $DB->insert_record('livequiz_questions', $question);
             $DB->insert_record('livequiz_quiz_questions', ['quiz_id' => $quizid, 'question_id' => $questionid]);
 
             $transaction->allow_commit();
         } catch (dml_exception $e) {
             $transaction->rollback($e);
+            throw $e;
         }
     }
 
@@ -61,7 +62,7 @@ class quiz_questions_relation
      * Get all questions from a quiz, given its id
      *
      * @param $quizid int
-     * @return array of question objects
+     * @return array // An array of question objects
      * @throws dml_exception
      */
     public static function get_questions_from_quiz_id($quizid): array

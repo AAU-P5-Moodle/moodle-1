@@ -4,79 +4,58 @@ namespace mod_livequiz\livequiz;
 
 use DateTime;
 use dml_exception;
+use mod_livequiz\answers\answers;
 use mod_livequiz\question\question;
+use mod_livequiz\questions_answers_relation\questions_answers_relation;
 use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
 use stdClass;
 
-
+/**
+ * This class is essentially supposed to be static.
+ * Please do not bother instantiating it.
+ */
 class livequiz
 {
-    /**
-     * TODO: delete?
-     *
-     * @throws dml_exception
-     */
-    public function __construct($name, $course_id, $intro, $introformat, $timecreated, $timeupdated)
-    {
-        global $DB;
-        try {
-            $transaction = $DB->start_delegated_transaction();
-
-            $this->$name = $name;
-            $this->$course_id = $course_id;
-            $this->$intro = $intro;
-            $this->$introformat = $introformat;
-            $this->$timecreated = $timecreated;
-            $this->$timeupdated = $timeupdated;
-
-            $quiz_id = $DB->insert_record('livequiz', $this);
-            //$question_ids = $DB->insert_records('livequiz_questions', $questions);
-            //$DB->insert_records('livequiz_quiz_questions', ['quiz_id' => $quiz_id, 'question_id' => $question_ids]);
-
-            //foreach ($questions as $question) {
-            //    $question_id = $DB->insert_record('livequiz_questions', $question);
-            //    $DB->insert_record('livequiz_quiz_questions', ['quiz_id' => $quiz_id, 'question_id' => $question_id]);
-            //}
-
-            $transaction->allow_commit();
-        } catch (dml_exception $e) {
-            $transaction->rollback($e);
-        }
-
-        return $quiz_id;
-    }
 
     /**
+     * This method stores quiz data in the database.
+     * Before calling this method, none of the quiz data is safe.
+     * Please make sure that the quiz object is properly populated before using.
+     * TODO:
+     * Handle lecturer id such that the intermediate table can be updated accordingly.
+     * @param $livequizid // ID of the quiz to be submitted.
+     * @param $questions // An array of question objects.
      * @throws dml_exception
      */
-    public static function create_quiz ($quiz)
+    public static function submit_quiz_to_database ($livequizid, $questions)
     {
-    global $DB;
-        try {
-            $transaction = $DB->start_delegated_transaction();
+        foreach ($questions as $question) {
 
-            $questions = $quiz->question;
-            foreach ($questions as $question) {
-                new question($question->title, $question->description, $question->timelimit, $question->explanation, $quiz->id);
+            $questionid = question::submit_question($question);
+
+            // Inserting into the quiz_questions relation table
+            quiz_questions_relation::append_question_to_quiz($questionid, $livequizid);
+
+            foreach ($question->get_answers() as $answer) {
+
+                $answerid = answers::submit_answer($answer);
+
+                // Inserting into the questions_answers relation table
+                questions_answers_relation::append_answer_to_question($questionid, $answerid);
             }
-
-            $transaction->allow_commit();
-        } catch (dml_exception $e) {
-            $transaction->rollback($e);
         }
-
     }
-
 
 
     /**
      * Gets a livequiz instance, with all relevant attributes
      *
      * @param $id
+     * @param $lecturers
      * @return stdClass
      * @throws dml_exception
      */
-    public static function get_livequiz_instance($id)
+    public static function get_livequiz_instance($id)//, $lecturers)
     {
         global $DB;
         $new_quiz = new stdClass();
