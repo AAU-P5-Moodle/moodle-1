@@ -7,7 +7,6 @@ let
   moodle_db_name = "moodle";
   moodle_sql_file = "./MoodleSQL.sql";
   root_password = "root";
-  php_custom_config = "./custom_php.ini";
 
 in
 
@@ -18,9 +17,17 @@ pkgs.mkShell {
     wget
     procps
     lsof
+    php82Packages.composer
+    glibcLocales
   ];
 
   shellHook = ''
+    MOODLE_ROOT="$(realpath server/moodle)"
+    export LANG="en_AU.UTF-8" #Why does it need to be Australian? Nobody knows...
+    export LC_ALL="en_AU.UTF-8"
+    export PHPRC=`realpath server/php/php.ini`
+
+
     # Function to check and kill existing processes
     kill_existing() {
       local process=$1
@@ -51,7 +58,12 @@ pkgs.mkShell {
       # Start MariaDB temporarily to set up the database
       mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} --skip-grant-tables &
       TEMP_MYSQL_PID=$!
-      sleep 15 # Increased wait time to ensure MariaDB is ready
+      while [ ! -S ${mariadb_socket} ];
+      do
+        echo "no socket file. Waiting 1 secs and trying again";
+        sleep 1
+      done
+      echo "MariaDB is up continuing.";
 
       # Set root password and authentication method
       echo "Setting root password..."
@@ -94,20 +106,19 @@ EOF
     # Kill existing MariaDB and PHP processes
     kill_existing "mysqld"
     kill_existing "php"
-    kill_port_user ${toString adminer_port}
+    # kill_port_user ${toString adminer_port}
 
     # Start MariaDB
     start_mariadb() {
       echo "Starting MariaDB..."
       mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} &
       MARIADB_PID=$!
-      sleep 10 # Increased wait time to ensure MariaDB is ready
-
-      # Check if MariaDB socket file is created
-      if [ ! -S ${mariadb_socket} ]; then
-        echo "Error: MariaDB socket file not found at ${mariadb_socket}. Exiting..."
-        exit 1
-      fi
+      while [ ! -S ${mariadb_socket} ];
+      do
+        echo "no socket file. Waiting 1 secs and trying again";
+        sleep 1
+      done
+      echo "MariaDB is up continuing.";
     }
 
     # Start Adminer
@@ -138,22 +149,10 @@ EOF
       fi
     }
 
-    # Create custom PHP configuration
-    create_php_config() {
-      echo "Creating custom PHP configuration..."
-      cat << EOF > ${php_custom_config}
-max_input_vars = 5000
-memory_limit = 256M
-post_max_size = 50M
-upload_max_filesize = 50M
-EOF
-    }
-
     # Start PHP built-in server for Moodle
     start_php_server() {
       echo "Starting PHP built-in server for Moodle..."
-      create_php_config
-      php -S 0.0.0.0:8000 -t ./server/moodle -c ${php_custom_config} &
+      php -S 0.0.0.0:8000 -t ./server/moodle -c server/php/php.ini &
       PHP_SERVER_PID=$!
     }
 
@@ -164,7 +163,55 @@ EOF
       rm -f ${mariadb_socket}
       rm -f ./adminer_router.php
     }
+    
+    check_phpunit() {
+      if [ ! -d "$MOODLE_ROOT"/server/moodle/vendor" ]; then
+      echo "no phpunit installed installing it now"
+      install_phpunit
+      fi
+      if [ ! -d "$MOODLE_ROOT"/server/moodle/vendor" ]; then
+      echo "installing failed exiting"
+      exit 1
+      fi
+      echo "phpunit found"
+    }
+    install_phpunit() {
+      CURRENT_PATH="$(pwd)"
+      cd "$MOODLE_ROOT"
+      composer require --dev phpunit/phpunit
+      echo "success installing phpunit"
+      cd "$CURRENT_PATH"
+    }
+    runit(){
+      check_phpunit
 
+      php server/moodle/admin/cli/install.php \
+              --lang=en \
+              --wwwroot="http://localhost:8000/" \
+              --dataroot="server/moodledata" \
+              --dbpass=root \
+              --dbport=3306 \
+              --dbsocket="$mariadb_socket" \
+              --skip-database \
+              --non-interactive \
+              --agree-license \
+              --allow-unstable \
+              --fullname="Moodle testing thing" \
+              --shortname="mtt" \
+              --adminpass="hunter2"
+          echo "\$CFG->phpunit_prefix = 'phpu_';" >>"server/moodle/config.php"
+          echo "\$CFG->phpunit_dataroot = '$(realpath "server/moodledata/phpunit")';">>"server/moodle/config.php"
+      php server/moodle/admin/tool/phpunit/cli/init.php
+      CURRENT_PATH="$(pwd)"
+      cd "$MOODLE_ROOT"
+      for file in `find mod/livequiz/tests/phpunit -type f`
+      do
+        echo Running tests in $file
+        vendor/bin/phpunit --verbose $file
+      done
+      cd "$CURRENT_PATH"
+    }
+    
     # Trap to ensure services are stopped when exiting the shell
     trap stop_services EXIT
 
@@ -172,6 +219,10 @@ EOF
     start_mariadb
     start_adminer
     start_php_server
+
+
+
+
 
     echo "MariaDB, Adminer, and PHP server are now running."
     echo "Adminer is available at http://localhost:${toString adminer_port}"
