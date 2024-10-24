@@ -61,6 +61,27 @@
                 "explanation": "This is the third answer feedback"
             }
         ]
+      },
+      {
+        "id": "3",
+        "title": "Quiz 3 Questions",
+        "description": "This is the third quiz questions",
+        "explanation": "This is the third quiz questions explanation",
+        "timelimit": "60",
+        "answers": [
+          {
+            "id": "7",
+            "description": "True",
+            "correct": "0",
+            "explanation": "This is the first answer feedback"
+          },
+          {
+            "id": "8",
+            "description": "False",
+            "correct": "1",
+            "explanation": "This is the second answer feedback"
+          }
+        ]
       }
     ]
   }
