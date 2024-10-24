@@ -214,7 +214,7 @@ jobs:
           for file in `find mod/livequiz/tests/phpunit -type f`
           do
             echo Running tests in $file
-            phpunit $file
+            ./vendor/bin/phpunit $file
           done
               
 
