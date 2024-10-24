@@ -165,11 +165,11 @@ EOF
     }
     
     check_phpunit() {
-      if [ ! -d "$MOODLE_ROOT"/server/moodle/vendor" ]; then
+      if [ ! -d "$MOODLE_ROOT/vendor" ]; then
       echo "no phpunit installed installing it now"
       install_phpunit
       fi
-      if [ ! -d "$MOODLE_ROOT"/server/moodle/vendor" ]; then
+      if [ ! -d "$MOODLE_ROOT/vendor" ]; then
       echo "installing failed exiting"
       exit 1
       fi
