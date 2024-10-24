@@ -32,12 +32,11 @@ use stdClass;
  * This class represents a livequiz in the LiveQuiz module.
  * It handles creation, retrieval, and updates of livequizzes and their associated questions.
  *
- * @package mod_livequiz\livequiz
+ * @package livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class livequiz {
-
     /**
      * @var int $id
      */
@@ -78,7 +77,18 @@ class livequiz {
      */
     private array $questions;
 
-    public function __construct($name, $course, $intro, $introformat, $timecreated, $timemodified) {
+
+    /**
+     * Constructor for the livequiz class. Returns the object.
+     *
+     * @param string $name
+     * @param int $course
+     * @param string $intro
+     * @param int $introformat
+     * @param int $timecreated
+     * @param int $timemodified
+     */
+    public function __construct(string $name, int $course, string $intro, int $introformat, int $timecreated, int $timemodified) {
         $this->name = $name;
         $this->course = $course;
         $this->intro = $intro;

@@ -30,12 +30,11 @@ use stdClass;
  * This class represents a question in the LiveQuiz module.
  * It handles creation, retrieval, and updates of quiz questions and their associated answers.
  *
- * @package mod_livequiz\question
+ * @package question
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class question {
-
     /**
      * @var int $id The id of the question.
      */
@@ -91,7 +90,7 @@ class question {
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function submit_question($question) : int {
+    public static function submit_question($question): int {
         global $DB;
         try {
             $transaction = $DB->start_delegated_transaction();
@@ -118,7 +117,7 @@ class question {
      * @return stdClass
      * @throws dml_exception
      */
-    public static function get_question_from_id($id) : stdClass {
+    public static function get_question_from_id($id): stdClass {
         global $DB;
         $question = $DB->get_record('livequiz_questions', ['id' => $id]);
         $answers = questions_answers_relation::get_answers_from_question($question->id);
@@ -127,7 +126,7 @@ class question {
     }
 
     /**
-     * When a question is being made in the front-end,
+     * When a question is being constructed,
      * this function should be called to create an answer
      * associated with the specific question.
      *
@@ -136,7 +135,7 @@ class question {
      * @param $explanation
      * @return void
      */
-    public function new_answer_option($correct, $description, $explanation) : void {
+    public function new_answer_option($correct, $description, $explanation): void {
         $this->answers[] = new answers($correct, $description, $explanation);
     }
 
@@ -148,7 +147,7 @@ class question {
      * @return bool
      * @throws dml_exception
      */
-    public static function update_question($questiondata) : bool {
+    public static function update_question($questiondata): bool {
         global $DB;
         return $DB->update_record('livequiz_questions', $questiondata);
     }
@@ -168,7 +167,7 @@ class question {
      *
      * @return string The title of the question.
      */
-    public function get_title() : string {
+    public function get_title(): string {
         return $this->title;
     }
 
@@ -177,7 +176,7 @@ class question {
      *
      * @return string The description of the question.
      */
-    public function get_description(): string{
+    public function get_description(): string {
         return $this->description;
     }
 
@@ -186,7 +185,7 @@ class question {
      *
      * @return int The time limit of the question.
      */
-    public function get_timelimit() : int {
+    public function get_timelimit(): int {
         return $this->timelimit;
     }
 
@@ -195,7 +194,7 @@ class question {
      *
      * @return string The explanation of the question.
      */
-    public function get_explanation() : string {
+    public function get_explanation(): string {
         return $this->explanation;
     }
 
@@ -204,7 +203,7 @@ class question {
      *
      * @return array The list of answers.
      */
-    public function get_answers() : array {
+    public function get_answers(): array {
         return $this->answers;
     }
 }
