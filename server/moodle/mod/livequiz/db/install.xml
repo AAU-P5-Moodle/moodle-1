@@ -19,7 +19,7 @@
         <KEY NAME="fk_course" TYPE="foreign" FIELDS="course" REFTABLE="mdl_course" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="questions" COMMENT="Questions which quizzes consist of.">
+    <TABLE NAME="livequiz_questions" COMMENT="Questions which quizzes consist of.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="title" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Title of the question"/>
@@ -31,7 +31,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="answers" COMMENT="Answers for questions.">
+    <TABLE NAME="livequiz_answers" COMMENT="Answers for questions.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="correct" TYPE="binary" NOTNULL="true" SEQUENCE="false" COMMENT="Whether or not this answer option is correct."/>
@@ -42,7 +42,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="quiz_student" COMMENT="Relationship table between Students and Quiz">
+    <TABLE NAME="livequiz_quiz_student" COMMENT="Relationship table between Students and Quiz">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="livequiz_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
@@ -54,7 +54,7 @@
         <KEY NAME="fk_student" TYPE="foreign" FIELDS="student_id" REFTABLE="mdl_user" REFFIELDS="id" COMMENT="Key to student who is participating in a course"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="quiz_lecturer" COMMENT="Keeps track the creator(s) of a quiz.">
+    <TABLE NAME="livequiz_quiz_lecturer" COMMENT="Keeps track the creator(s) of a quiz.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="lecturer_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Id to the lecturer that created this quiz"/>
@@ -66,7 +66,7 @@
         <KEY NAME="fk_quiz" TYPE="foreign" FIELDS="quiz_id" REFTABLE="livequiz" REFFIELDS="id" COMMENT="Id to the quiz."/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="quiz_questions" COMMENT="Relationship table between quizzes and questions.">
+    <TABLE NAME="livequiz_quiz_questions" COMMENT="Relationship table between quizzes and questions.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="quiz_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Foreign key of the question."/>
@@ -75,10 +75,10 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_quiz" TYPE="foreign" FIELDS="quiz_id" REFTABLE="livequiz" REFFIELDS="id" COMMENT="Foreign key to quiz."/>
-        <KEY NAME="fk_question" TYPE="foreign" FIELDS="question_id" REFTABLE="questions" REFFIELDS="id" COMMENT="Key to question."/>
+        <KEY NAME="fk_question" TYPE="foreign" FIELDS="question_id" REFTABLE="livequiz_questions" REFFIELDS="id" COMMENT="Key to question."/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="questions_answers" COMMENT="Relationship table between questions and answers!">
+    <TABLE NAME="livequiz_questions_answers" COMMENT="Relationship table between questions and answers!">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="question_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID to the relevant question."/>
@@ -86,11 +86,11 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        <KEY NAME="fk_question" TYPE="foreign" FIELDS="question_id" REFTABLE="questions" REFFIELDS="id" COMMENT="Foreign key to question."/>
-        <KEY NAME="fk_answer" TYPE="foreign" FIELDS="answer_id" REFTABLE="answers" REFFIELDS="id" COMMENT="Foreign key to answer."/>
+        <KEY NAME="fk_question" TYPE="foreign" FIELDS="question_id" REFTABLE="livequiz_questions" REFFIELDS="id" COMMENT="Foreign key to question."/>
+        <KEY NAME="fk_answer" TYPE="foreign" FIELDS="answer_id" REFTABLE="livequiz_answers" REFFIELDS="id" COMMENT="Foreign key to answer."/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="questions_lecturer" COMMENT="Relationship table between questions and lecturers(users).">
+    <TABLE NAME="livequiz_questions_lecturer" COMMENT="Relationship table between questions and lecturers(users).">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="question_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID to the question."/>
@@ -98,11 +98,11 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        <KEY NAME="fk_question" TYPE="foreign" FIELDS="question_id" REFTABLE="questions" REFFIELDS="id" COMMENT="Foreign key to question."/>
+        <KEY NAME="fk_question" TYPE="foreign" FIELDS="question_id" REFTABLE="livequiz_questions" REFFIELDS="id" COMMENT="Foreign key to question."/>
         <KEY NAME="fk_lecturer" TYPE="foreign" FIELDS="lecturer_id" REFTABLE="mdl_user" REFFIELDS="id" COMMENT="Foreign key to the lecturer(user)."/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="students_answers" COMMENT="Relationship table between students and answers.">
+    <TABLE NAME="livequiz_students_answers" COMMENT="Relationship table between students and answers.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="student_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of the student."/>
@@ -111,10 +111,10 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_student" TYPE="foreign" FIELDS="student_id" REFTABLE="mdl_user" REFFIELDS="id" COMMENT="Foreign key to student(user)."/>
-        <KEY NAME="fk_answer" TYPE="foreign" FIELDS="answer_id" REFTABLE="answers" REFFIELDS="id" COMMENT="Foreign key to an answer."/>
+        <KEY NAME="fk_answer" TYPE="foreign" FIELDS="answer_id" REFTABLE="livequiz_answers" REFFIELDS="id" COMMENT="Foreign key to an answer."/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="course_quiz" COMMENT="Relationship table between live quiz and course.">
+    <TABLE NAME="livequiz_course_quiz" COMMENT="Relationship table between live quiz and course.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of the course."/>
