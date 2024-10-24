@@ -1,4 +1,25 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Displays the livequiz view page.
+ * @package   mod_livequiz
+ * @copyright 2024 Software AAU
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace mod_livequiz\quiz_questions_relation;
 
@@ -6,8 +27,11 @@ use dml_exception;
 use dml_transaction_exception;
 use mod_livequiz\question\question;
 
-class quiz_questions_relation
-{
+/**
+ * Class quiz_questions_relation
+ * @package mod_livequiz\quiz_questions_relation
+ */
+class quiz_questions_relation {
     /**
      * Append a list of questions to a quiz, given its id
      *
@@ -16,8 +40,7 @@ class quiz_questions_relation
      * @return void
      * @throws dml_exception
      */
-    public static function append_questions_to_quiz($questions, $quizid)
-    {
+    public static function append_questions_to_quiz(array $questions, int $quizid) : void {
         global $DB;
         try {
             $transaction = $DB->start_delegated_transaction();
@@ -35,7 +58,7 @@ class quiz_questions_relation
     }
 
     /**
-     *  Append a question object to a quiz, given its id
+     *  Append a question object to a quiz, given its id.
      *
      * @param $questionid
      * @param $quizid
@@ -43,8 +66,7 @@ class quiz_questions_relation
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function append_question_to_quiz($questionid, $quizid)
-    {
+    public static function append_question_to_quiz(int $questionid, int $quizid) : void {
         global $DB;
         try {
             $transaction = $DB->start_delegated_transaction();
@@ -59,22 +81,21 @@ class quiz_questions_relation
     }
 
     /**
-     * Get all questions from a quiz, given its id
+     * Get all questions from a quiz, given its id.
      *
      * @param $quizid int
-     * @return array // An array of question objects
+     * @return array // An array of question objects.
      * @throws dml_exception
      */
-    public static function get_questions_from_quiz_id($quizid): array
-    {
+    public static function get_questions_from_quiz_id(int $quizid) : array {
         global $DB;
 
-        $question_records = $DB->get_records('livequiz_quiz_questions', ['quiz_id'=>$quizid], '', 'question_id');
-        $question_ids = array_column($question_records, 'question_id');
+        $questionrecords = $DB->get_records('livequiz_quiz_questions', ['quiz_id' => $quizid], '', 'question_id');
+        $questionids = array_column($questionrecords, 'question_id');
         $questions = [];
 
-        foreach ($question_ids as $question_id){
-            $questions[] = question::get_question_from_id($question_id);
+        foreach ($questionids as $questionid) {
+            $questions[] = question::get_question_from_id($questionid);
         }
 
         return $questions;
