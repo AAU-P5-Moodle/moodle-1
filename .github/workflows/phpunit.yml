@@ -26,7 +26,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           extensions: phar, iconv, mbstring, gd, intl, sodium, zip
-          tools: composer
+          tools: composer, phpunit
 
 
       - name: Set up the database and start mariadb
@@ -214,7 +214,7 @@ jobs:
           for file in `find mod/livequiz/tests/phpunit -type f`
           do
             echo Running tests in $file
-            ./vendor/bin/phpunit $file
+            phpunit $file
           done
               
 
