@@ -6,15 +6,16 @@ use DateTime;
 use dml_exception;
 use mod_livequiz\question\question;
 use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
+use stdClass;
 
 
 class livequiz
 {
     /**
+     * TODO: delete?
+     *
      * @throws dml_exception
      */
-
-
     public function __construct($name, $course_id, $intro, $introformat, $timecreated, $timeupdated)
     {
         global $DB;
@@ -46,12 +47,16 @@ class livequiz
     }
 
     /**
+     * Gets a livequiz instance, with all relevant attributes
+     *
+     * @param $id
+     * @return stdClass
      * @throws dml_exception
      */
     public static function get_livequiz_instance($id)
     {
         global $DB;
-        $new_quiz = new \stdClass();
+        $new_quiz = new stdClass();
         $quiz_instance = $DB->get_record('livequiz', ['id'=>$id]);
         $new_quiz->id = $quiz_instance->id;
         $new_quiz->name = $quiz_instance->name;

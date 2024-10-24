@@ -2,14 +2,23 @@
 
 namespace mod_livequiz\questions_answers_relation;
 
+use dml_exception;
+use dml_transaction_exception;
 use mod_livequiz\answers\answers;
 
 class questions_answers_relation
 {
-    public static function append_answer_to_question($question_id, $answer_id) {
-
+    /**
+     * Append an answer to a question, given their ids
+     *
+     * @param $question_id int
+     * @param $answer_id int
+     * @return void
+     * @throws dml_transaction_exception
+     */
+    public static function append_answer_to_question(int $question_id, int $answer_id): void
+    {
         global $DB;
-
         try {
             $transaction = $DB->start_delegated_transaction();
 
@@ -22,7 +31,15 @@ class questions_answers_relation
 
     }
 
-    public static function get_answers_from_question($questionid){
+    /**
+     * Get all answers from a question, given its id
+     *
+     * @param $questionid int
+     * @return array
+     * @throws dml_exception
+     */
+    public static function get_answers_from_question(int $questionid): array
+    {
         global $DB;
 
         $answerrecords = $DB->get_records('livequiz_questions_answers', ['question_id'=>$questionid], '', 'question_id');

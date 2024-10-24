@@ -2,6 +2,8 @@
 
 namespace mod_livequiz\answers;
 
+use dml_exception;
+use dml_transaction_exception;
 use mod_livequiz\questions_answers_relation\questions_answers_relation;
 use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
 
@@ -17,7 +19,15 @@ class answers
     private $explanation;
 
     /**
+     * Constructor for the answers class. Inserts a new answer into the database.
+     * Appends the answer to a question, given the question id.
+     *
+     * @param $correct
+     * @param $description
+     * @param $explanation
+     * @param $question_id
      * @throws dml_exception
+     * @throws dml_transaction_exception
      */
     public function __construct($correct, $description, $explanation, $question_id)
     {
@@ -48,13 +58,27 @@ class answers
         return $answer_id;
     }
 
+    /**
+     * TODO: Implement this method
+     *
+     * @param $id
+     * @return mixed
+     */
     public static function update_answer($answer)
     {
         global $DB;
         return $DB->update_record('livequiz_answers', ['id' => $answer->id]);
     }
 
-    public static function get_answer_from_id($id){
+    /**
+     * Get an answer from its id
+     *
+     * @param $id
+     * @return mixed
+     * @throws dml_exception
+     */
+    public static function get_answer_from_id($id): mixed
+    {
         global $DB;
         return $DB->get_record('livequiz_answers', ['id'=>$id]);
     }
