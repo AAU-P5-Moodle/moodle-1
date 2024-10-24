@@ -30,7 +30,7 @@ use stdClass;
  * This class represents a question in the LiveQuiz module.
  * It handles creation, retrieval, and updates of quiz questions and their associated answers.
  *
- * @package question
+ * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

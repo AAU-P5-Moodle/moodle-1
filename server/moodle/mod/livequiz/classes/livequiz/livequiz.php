@@ -32,7 +32,7 @@ use stdClass;
  * This class represents a livequiz in the LiveQuiz module.
  * It handles creation, retrieval, and updates of livequizzes and their associated questions.
  *
- * @package livequiz
+ * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -137,8 +137,15 @@ class livequiz {
     public static function get_livequiz_instance(int $id): livequiz {
         global $DB;
         $quizinstance = $DB->get_record('livequiz', ['id' => $id]);
-        $livequiz = new livequiz($quizinstance->name, $quizinstance->course, $quizinstance->intro, $quizinstance->introformat, $quizinstance->timecreated, $quizinstance->timemodified);
 
+        $livequiz = new livequiz(
+            $quizinstance->name,
+            $quizinstance->course,
+            $quizinstance->intro,
+            $quizinstance->introformat,
+            $quizinstance->timecreated,
+            $quizinstance->timemodified
+        );
 
         $questions = quiz_questions_relation::get_questions_from_quiz_id($livequiz->id);
 
