@@ -48,7 +48,7 @@ echo $OUTPUT->header();
 
 if (class_exists('createNavbar')) {
     // Create an instance of the Navbar class, passing the active tab
-    $Navbar = new createNavbar($activeTab);
+    $Navbar = new createNavbar();
     $Navbar->display(); // Call the display method
 } else {
     echo "Navbar class does not exist.";

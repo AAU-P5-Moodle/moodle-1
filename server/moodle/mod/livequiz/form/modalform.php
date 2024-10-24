@@ -13,14 +13,6 @@ $PAGE->set_heading("Create a quiz");
  
 echo $OUTPUT->header();
  
-if (class_exists('createNavbar')) {
-    $navbar = new createNavbar(); // Create an instance of the Navbar class
-    $navbar->display($activeTab); // Call the display method with the active tab
-} else {
-    echo "Navbar class does not exist.";
-}
- 
- 
 // Opret formular
 $mform = new createquizform();
  

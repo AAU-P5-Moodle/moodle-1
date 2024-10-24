@@ -12,9 +12,20 @@ class createquizform extends moodleform {
         $mform->addElement('text', 'name', "Quiz Name");
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', get_string('missingname'), 'required', null, 'client');
-
+        
         $mform->addElement('textarea', "quiz_Description", "Description");
         $mform->setType('description', PARAM_TEXT);
+
+        $mform->addElement(
+            'filepicker',
+            'imageUpload',
+            get_string('file'),
+            null,
+            [
+                'maxbytes' => $maxbytes,
+                'accepted_types' => ['.png', '.jpg', '.jpeg', '.gif'],
+            ]
+        );
 
         $mform->addElement('html', '</div>');
 

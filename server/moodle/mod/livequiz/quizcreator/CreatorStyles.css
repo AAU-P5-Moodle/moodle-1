@@ -197,27 +197,27 @@
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+.button_container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
 .discard_question_button {
-    position: absolute;
-    bottom: 10px;
-    right: 20px;
+    float: right;
     background-color: red;
     color: white;
-    padding: 5px 10px;
+    padding: 10px 20px;
+    font-size: large;
     border-radius: 5px;
     cursor: pointer;
-    font-size: larger;
 }
 .save_button {
-    position: fixed;  /* Fixed position to ensure it's always at the bottom-left */
-    bottom: 10px;     /* Position it 10px from the bottom of the page */
-    left: 170px;       /* Position it 10px from the left of the page */
-    background-color: green; /* Optional: Customize the background color */
-    color: white;     /* Optional: Customize the text color */
-    padding: 10px 20px; /* Optional: Add padding to make it larger */
-    font-size: large;   /* Optional: Increase font size */
-    border-radius: 5px; /* Optional: Add rounded corners */
-    cursor: pointer;    /* Optional: Change cursor to pointer */
+    background-color: green;
+    color: white;
+    padding: 10px 20px;
+    font-size: large;
+    border-radius: 5px;
+    cursor: pointer;
 }
 /* Styling the cancel button to always appear at the bottom-right of the window */
 .cancel_button {
@@ -269,23 +269,25 @@
     z-index: 100;
 }
 
+.div_for_question {
+    margin-top: 25px;
+    display: flex;           /* Enable Flexbox */
+    flex-direction: column;  /* Stack items vertically */
+    gap: 10px;              /* Optional: space between buttons */
+} 
+
 .question_for_main_page {
-    position: fixed;      /* Fix the button in place, relative to the viewport */
-    bottom: 70px;         /* Position it 70px from the bottom (adjust based on your design) */
-    left: 10px;           /* Align it to the left of the page */
     background-color: grey; /* Optional: Adjust background color */
     color: white;         /* Optional: Adjust text color */
     padding: 10px;        /* Optional: Add padding */
     font-size: large;     /* Optional: Adjust font size */
     border-radius: 5px;   /* Optional: Add rounded corners */
-    z-index: 10;          /* Ensure it appears above other elements */
 }
 
 .quiz_form_container {
     display: flex;
     flex-direction: column;  /* Align items vertically */
-    width: 50%;              /* Take up the right half of the screen */
-    margin-left: 50%;        /* Push the form to the right half of the screen */
+    width: 50%;              /* Take up the right half of the screen */      
     padding: 20px;           /* Add some padding for spacing */
     box-sizing: border-box;   /* Ensure padding does not overflow the container */
 }

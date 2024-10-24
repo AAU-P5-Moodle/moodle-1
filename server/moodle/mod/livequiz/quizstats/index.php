@@ -9,7 +9,8 @@ $PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
 //$quizid = required_param('quizid', PARAM_INT);
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
-$PAGE->requires->css(new moodle_url('/mod/livequiz/styles.css'));
+$PAGE->requires->css(new moodle_url('/mod/livequiz/hub/navbar_style.css'));
+
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title("View quiz statistics");
@@ -19,7 +20,7 @@ echo $OUTPUT->header();
 
 if (class_exists('createNavbar')) {
     $Navbar = new createNavbar(); // Create an instance of the Navbar class
-    $Navbar->display($activeTab); // Call the display method with the active tab
+    $Navbar->display(); // Call the display method with the active tab
 } else {
     // Handle the error if the class does not exist
     echo "Navbar class does not exist.";
