@@ -188,7 +188,7 @@ jobs:
           export LC_ALL="en_AU.UTF-8"
           export PHPRC=`realpath /etc/php/8.3/cli/php.ini`
           # server/php/php.ini`
-          # composer require --dev phpunit/phpunit
+          composer require --dev phpunit/phpunit
           REPO_ROOT="`pwd`"
           cd "$REPO_ROOT"/server/moodle
           php admin/cli/install.php \
@@ -214,7 +214,7 @@ jobs:
           for file in `find mod/livequiz/tests/phpunit -type f`
           do
             echo Running tests in $file
-            phpunit $file
+            ./vendor/bin/phpunit $file
           done
               
 
