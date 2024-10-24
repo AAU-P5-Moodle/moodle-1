@@ -40,7 +40,7 @@ class quiz_questions_relation {
      * @return void
      * @throws dml_exception
      */
-    public static function append_questions_to_quiz(array $questions, int $quizid) : void {
+    public static function append_questions_to_quiz(array $questions, int $quizid): void {
         global $DB;
         try {
             $transaction = $DB->start_delegated_transaction();
@@ -66,7 +66,7 @@ class quiz_questions_relation {
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function append_question_to_quiz(int $questionid, int $quizid) : void {
+    public static function append_question_to_quiz(int $questionid, int $quizid): void {
         global $DB;
         try {
             $transaction = $DB->start_delegated_transaction();
@@ -87,7 +87,7 @@ class quiz_questions_relation {
      * @return array // An array of question objects.
      * @throws dml_exception
      */
-    public static function get_questions_from_quiz_id(int $quizid) : array {
+    public static function get_questions_from_quiz_id(int $quizid): array {
         global $DB;
 
         $questionrecords = $DB->get_records('livequiz_quiz_questions', ['quiz_id' => $quizid], '', 'question_id');

@@ -42,8 +42,11 @@ class answers {
     /**
      * @var int $id
      */
+    private int $id;
+    /**
+     * @var int $correct
+     */
     private int $correct;
-
     /**
      * @var string $description
      */
@@ -77,7 +80,7 @@ class answers {
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function submit_answer(object $answer) : int {
+    public static function submit_answer(object $answer): int {
         global $DB;
         try {
             $transaction = $DB->start_delegated_transaction();
@@ -104,7 +107,7 @@ class answers {
      * @return bool
      * @throws dml_exception
      */
-    public static function update_answer(object $answer) : bool {
+    public static function update_answer(object $answer): bool {
         global $DB;
         return $DB->update_record('livequiz_answers', ['id' => $answer->id]);
     }
@@ -116,17 +119,8 @@ class answers {
      * @return mixed
      * @throws dml_exception
      */
-    public static function get_answer_from_id(int $id) : mixed {
+    public static function get_answer_from_id(int $id): mixed {
         global $DB;
         return $DB->get_record('livequiz_answers', ['id' => $id]);
     }
-
-    /* TODO Discuss deletion
-        public static function delete_answer($answer)
-        {
-            global $DB;
-            $id = $answer->id;
-            $DB->delete_records('livequiz_answers', ['id'=>$id]);
-        }
-    }*/
 }

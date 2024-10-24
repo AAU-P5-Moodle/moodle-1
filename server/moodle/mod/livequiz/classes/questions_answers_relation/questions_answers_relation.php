@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
 namespace mod_livequiz\questions_answers_relation;
 
 use dml_exception;
@@ -29,8 +27,7 @@ use mod_livequiz\answers\answers;
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class questions_answers_relation
-{
+class questions_answers_relation {
     /**
      * Append an answer to a question, given their ids
      *
@@ -40,7 +37,7 @@ class questions_answers_relation
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function append_answer_to_question(int $questionid, int $answerid) : void {
+    public static function append_answer_to_question(int $questionid, int $answerid): void {
         global $DB;
         try {
             $transaction = $DB->start_delegated_transaction();
@@ -52,7 +49,6 @@ class questions_answers_relation
             $transaction->rollback($e);
             throw $e;
         }
-
     }
 
     /**
@@ -62,7 +58,7 @@ class questions_answers_relation
      * @return array
      * @throws dml_exception
      */
-    public static function get_answers_from_question(int $questionid) : array {
+    public static function get_answers_from_question(int $questionid): array {
         global $DB;
 
         $answerrecords = $DB->get_records('livequiz_questions_answers', ['question_id' => $questionid], '', 'question_id');

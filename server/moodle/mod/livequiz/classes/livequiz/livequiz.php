@@ -27,10 +27,67 @@ use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
 use stdClass;
 
 /**
- * This class is essentially supposed to be static.
- * Please do not bother instantiating it.
+ * Class livequiz
+ *
+ * This class represents a livequiz in the LiveQuiz module.
+ * It handles creation, retrieval, and updates of livequizzes and their associated questions.
+ *
+ * @package mod_livequiz\livequiz
+ * @copyright 2024 Software AAU
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class livequiz {
+
+    /**
+     * @var int $id
+     */
+    private $id;
+
+    /**
+     * @var string $name
+     */
+    private string $name;
+
+    /**
+     * @var int $course
+     */
+    private int $course;
+
+    /**
+     * @var string $intro
+     */
+    private string $intro;
+
+    /**
+     * @var int $introformat
+     */
+    private int $introformat;
+
+    /**
+     * @var int $timecreated
+     */
+    private int $timecreated;
+
+    /**
+     * @var int $timemodified
+     */
+    private int $timemodified;
+
+    /**
+     * @var array $questions
+     */
+    private array $questions;
+
+    public function __construct($name, $course, $intro, $introformat, $timecreated, $timemodified) {
+        $this->name = $name;
+        $this->course = $course;
+        $this->intro = $intro;
+        $this->introformat = $introformat;
+        $this->timecreated = $timecreated;
+        $this->timemodified = $timemodified;
+
+        return $this;
+    }
     /**
      * This method stores quiz data in the database.
      * Before calling this method, none of the quiz data is safe.
@@ -41,16 +98,14 @@ class livequiz {
      * @param array $questions // An array of question objects.
      * @throws dml_exception
      */
-    public static function submit_quiz_to_database(int $livequizid,  array $questions) : void {
+    public static function submit_quiz_to_database(int $livequizid, array $questions): void {
         foreach ($questions as $question) {
-
             $questionid = question::submit_question($question);
 
             // Inserting into the quiz_questions relation table.
             quiz_questions_relation::append_question_to_quiz($questionid, $livequizid);
 
             foreach ($question->get_answers() as $answer) {
-
                 $answerid = answers::submit_answer($answer);
 
                 // Inserting into the questions_answers relation table.
@@ -66,25 +121,19 @@ class livequiz {
      * TODO implement associated lecturer.
      *
      * @param int $id
-     * @return stdClass
+     * @return livequiz
      * @throws dml_exception
      */
-    public static function get_livequiz_instance(int $id) : stdClass {
+    public static function get_livequiz_instance(int $id): livequiz {
         global $DB;
-        $newquiz = new stdClass();
         $quizinstance = $DB->get_record('livequiz', ['id' => $id]);
-        $newquiz->id = $quizinstance->id;
-        $newquiz->name = $quizinstance->name;
-        $newquiz->course = $quizinstance->course;
-        $newquiz->intro = $quizinstance->intro;
-        $newquiz->introformat = $quizinstance->introformat;
-        $newquiz->timecreated = $quizinstance->timecreated;
-        $newquiz->timemodified = $quizinstance->timemodified;
+        $livequiz = new livequiz($quizinstance->name, $quizinstance->course, $quizinstance->intro, $quizinstance->introformat, $quizinstance->timecreated, $quizinstance->timemodified);
 
-        $questions = quiz_questions_relation::get_questions_from_quiz_id($newquiz->id);
 
-        $newquiz->questions = $questions;
+        $questions = quiz_questions_relation::get_questions_from_quiz_id($livequiz->id);
 
-        return $newquiz;
+        $livequiz->questions = $questions;
+
+        return $livequiz;
     }
 }

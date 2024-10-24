@@ -37,6 +37,11 @@ use stdClass;
 class question {
 
     /**
+     * @var int $id The id of the question.
+     */
+    private int $id;
+
+    /**
      * @var string $title The title of the question.
      */
     private string $title;
