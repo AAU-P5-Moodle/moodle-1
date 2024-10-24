@@ -15,6 +15,7 @@ pkgs.mkShell {
     mariadb
     php
     wget
+    curl
     procps
     lsof
     php82Packages.composer
