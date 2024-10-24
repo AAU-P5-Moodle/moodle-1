@@ -23,7 +23,7 @@ jobs:
         
       - name: Setup PHP
         id: setup-php
-        uses: shivammathur/setup-php@v2, php-actions/phpunit
+        uses: shivammathur/setup-php@v2
         with:
           extensions: phar, iconv, mbstring, gd, intl, sodium, zip
           tools: composer
@@ -175,7 +175,9 @@ jobs:
           echo " Password: ${root_password}"
           echo " Database: ${moodle_db_name}"
           echo "Press Ctrl+C to stop the services and exit."
-
+      - name: githubs actions php unit
+        uses: php-actions/phpunit@v3
+        
       - name: Install and initialise phpunit
         run: |
           echo en_AU.UTF-8 UTF-8 | sudo tee -a /etc/locale.gen
@@ -214,7 +216,7 @@ jobs:
           for file in `find mod/livequiz/tests/phpunit -type f`
           do
             echo Running tests in $file
-            ./vendor/bin/phpunit $file
+            phpunit $file
           done
               
 
