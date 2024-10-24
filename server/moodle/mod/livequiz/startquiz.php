@@ -50,15 +50,14 @@ echo 'console.log(1: ' . $jsondata['name'] . ');';
 echo 'console.log(2: ' . $jsonobject . ');';
 echo '</script>';
 
-$hejbesked = 'det skulle gerne stå over dette';
-
 echo $OUTPUT->header();
 echo $OUTPUT->heading('This is the livequiz startquiz page');
+
+//TODO: change if else chain
 if ($jsondata === null) {
     echo $OUTPUT->heading('den er helt gal');
 }
 else {
     echo $OUTPUT->heading($jsondata);
-    echo $OUTPUT->heading($hejbesked);
 }
 echo $OUTPUT->footer();
