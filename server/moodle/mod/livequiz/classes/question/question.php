@@ -4,12 +4,18 @@ namespace mod_livequiz\question;
 
 use dml_exception;
 use dml_transaction_exception;
+use mod_livequiz\answers\answers;
 use mod_livequiz\questions_answers_relation\questions_answers_relation;
 use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
 use stdClass;
 
 class question
 {
+    private $id;
+    private $correct;
+    private $description;
+    private $explanation;
+
     /**
      * Constructor for the question class. Inserts a new question into the database.
      * Appends the question to a quiz, given the quiz id.
@@ -17,22 +23,31 @@ class question
      * @param $correct
      * @param $description
      * @param $explanation
+     * @param $answers
      * @param $quizid
-     * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public function __construct($correct, $description, $explanation, $quizid)
+    public function __construct($title, $description, $timelimit, $explanation, $answers, $quizid)
     {
         global $DB;
         try {
             $transaction = $DB->start_delegated_transaction();
 
-            $this->$correct = $correct;
-            $this->$description = $description;
-            $this->$explanation = $explanation;
+            $questiondata = [
+                'title' => $title,
+                'description' => $description,
+                'timelimit' => $timelimit,
+                'explanation' => $explanation,
+            ];
 
+            $question_id = $DB->insert_record('livequiz_questions', $questiondata);
 
-            $question_id = $DB->insert_record('livequiz_questions', $this);
+            if (isset($answers)) {
+                $this->$answers = $answers;
+                foreach ($answers as $answer) {
+                    new answers($answer->correct, $answer->description, $answer->explanation, $question_id);
+                }
+            }
 
             quiz_questions_relation::append_question_to_quiz($this, $quizid);
 

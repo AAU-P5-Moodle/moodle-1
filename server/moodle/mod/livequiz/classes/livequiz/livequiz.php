@@ -47,6 +47,29 @@ class livequiz
     }
 
     /**
+     * @throws dml_exception
+     */
+    public static function create_quiz ($quiz)
+    {
+    global $DB;
+        try {
+            $transaction = $DB->start_delegated_transaction();
+
+            $questions = $quiz->question;
+            foreach ($questions as $question) {
+                new question($question->title, $question->description, $question->timelimit, $question->explanation, $quiz->id);
+            }
+
+            $transaction->allow_commit();
+        } catch (dml_exception $e) {
+            $transaction->rollback($e);
+        }
+
+    }
+
+
+
+    /**
      * Gets a livequiz instance, with all relevant attributes
      *
      * @param $id
