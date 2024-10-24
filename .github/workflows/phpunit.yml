@@ -25,7 +25,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           extensions: phar, iconv, mbstring, gd, intl, sodium, zip
-          php-version: '8.3.12'
+          uses: php-actions/phpunit
           tools: composer
 
 
@@ -188,7 +188,7 @@ jobs:
           export LC_ALL="en_AU.UTF-8"
           export PHPRC=`realpath /etc/php/8.3/cli/php.ini`
           # server/php/php.ini`
-          composer require --dev phpunit/phpunit
+          # composer require --dev phpunit/phpunit
           REPO_ROOT="`pwd`"
           cd "$REPO_ROOT"/server/moodle
           php admin/cli/install.php \
