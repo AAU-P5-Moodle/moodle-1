@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - http://moodle.org/.
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,40 +14,45 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Unit tests for the livequiz module.
+ *
+ * @package    mod_livequiz
+ * @category   test
+ * @copyright  2023 Software AAU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+namespace mod_livequiz;
+
+use advanced_testcase;
 
 /**
- * This is the test file
- * @package mod_livequiz
- * @copyright 2023
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Unit tests for the livequiz module functions.
+ *
+ * @package    mod_livequiz
+ * @category   test
  */
-namespace mod_livequiz;
-/**
- * Testing examples!
- */
-final class lib_test extends \advanced_testcase {
+final class lib_test extends advanced_testcase {
+    /**
+     * Setup before each test.
+     */
     protected function setUp(): void {
         parent::setUp();
-
         $this->resetAfterTest(true);
     }
 
     /**
-     * Tests the addition of a new live quiz instance.
+     * Tests the addition of a new livequiz instance.
      *
      * @covers \mod_livequiz\lib::livequiz_add_instance
-
-     * Test the livequiz_add_instance function.
-     * This function should add a new livequiz instance to the database.
-     * It should return the ID of the new instance.
-     * It should set the name and intro fields of the new instance.
-     * It should return false if the instance cannot be added.
+     * @return void
+     * @throws \dml_exception When a database error occurs.
      */
-
     public function test_livequiz_add_instance(): void {
         global $DB;
 
-        $quizdata = new \stdClass(); // Create a new stdClass object (empty object).
+        $quizdata = new \stdClass();
         $quizdata->name = 'Test Quiz';
         $quizdata->intro = 'This is a test quiz.';
 
@@ -59,17 +64,12 @@ final class lib_test extends \advanced_testcase {
     }
 
     /**
-
-     * This test updates instance.
+     * Tests the updating of a livequiz instance.
      *
      * @covers \mod_livequiz\lib::livequiz_update_instance
-
-     * Test the livequiz_update_instance function.
-     * This function should update an existing livequiz instance in the database.
-     * It should return true if the instance is updated successfully.
-     * It should return false if the instance cannot be updated.
+     * @return void
+     * @throws \dml_exception When a database error occurs.
      */
-
     public function test_livequiz_update_instance(): void {
         global $DB;
 
@@ -88,16 +88,12 @@ final class lib_test extends \advanced_testcase {
     }
 
     /**
-     * This test the delete instance.
+     * Tests the deletion of a livequiz instance.
      *
      * @covers \mod_livequiz\lib::livequiz_delete_instance
-
-     * Test the livequiz_delete_instance function.
-     * This function should delete an existing livequiz instance from the database.
-     * It should return true if the instance is deleted successfully.
-     * It should return false if the instance cannot be deleted.
+     * @return void
+     * @throws \dml_exception When a database error occurs.
      */
-
     public function test_livequiz_delete_instance(): void {
         global $DB;
 
@@ -110,5 +106,4 @@ final class lib_test extends \advanced_testcase {
         $this->assertTrue($result);
         $this->assertFalse($DB->record_exists('livequiz', ['id' => $id]));
     }
-
 }
