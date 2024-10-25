@@ -1,30 +1,25 @@
 <?php
+// This file is part of Moodle - http://moodle.org/.
+//
+// Moodle is free software: you can redistribute it and/or modify.
+// it under the terms of the GNU General Public License as published by.
+// the Free Software Foundation, either version 3 of the License, or.
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * EXPLANATION STUFF FOR HOW ALL THIS IS SET UP
- * ============================================
- *
- * We've made a object-oriented representation of the quiz runner.
- * 
- * At the top is an interface `answer` (`answer/answer.php`), which
- * only has the method `html()`, which makes the answer form. We
- * expect it to contain a submit button that goes to `wait.php`. 
- *
- * We're not quite sure how we want to structure the overall flow of
- * the program, so that's something we need to figure out.
- *
- * Then we have the more specific classes, so `slider` 
- * (`answer/slider.php`), and `multichoice` (`answer/multichoice.php`),
- * whose file also contains the `multichoice_choice` class. For an 
- * example on how to initialise there, see the code in this file.
- *
- * A couldhave to-do is to make an image labelling answer class.
- *
- * Best regards,
- * Team Lennart.
- *
+ * Displays the livequiz quizrunner page.
+ * @package   mod_livequiz
+ * @copyright 2024 Software AAU
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 
 require_once('../../../config.php');
 
@@ -42,10 +37,10 @@ $PAGE->requires->css(new moodle_url('/mod/livequiz/quizrunner/RunnerStyles.css')
 echo $OUTPUT->header();
 
 if (class_exists('createNavbar')) {
-    $Navbar = new createNavbar(); // Create an instance of the Navbar class
-    $Navbar->display($activeTab); // Call the display method with the active tab
+    $navbar = new createNavbar(); // Create an instance of the Navbar class.
+    $navbar->display($activetab); // Call the display method with the active tab.
 } else {
-    // Handle the error if the class does not exist
+    // Handle the error if the class does not exist.
     echo "Navbar class does not exist.";
 }
 
@@ -54,15 +49,15 @@ $question = new question();
 $question->image = 'fish.png';
 $question->prompt = 'Is fish fishing????';
 $question->answer = new multichoice(
-	array(
-		new multichoice_choice("Yes!!!!", "yes"),
-		new multichoice_choice("No!!!!!", "no"),
-		new multichoice_choice("Mayhaps...", "maybe")
-	)
+    [
+        new multichoice_choice("Yes!!!!", "yes"),
+        new multichoice_choice("No!!!!!", "no"),
+        new multichoice_choice("Mayhaps...", "maybe"),
+    ]
 );
-//$question->answer = new slider(0, 10);
+
 
 $question->display();
 
-// Din indholdskode her (HTML eller noget andet indhold).
+// Your contents here (html etc.).
 echo $OUTPUT->footer();
