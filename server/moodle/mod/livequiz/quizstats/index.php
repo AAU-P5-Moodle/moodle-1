@@ -1,12 +1,33 @@
 <?php
+// This file is part of Moodle - http://moodle.org/.
+//
+// Moodle is free software: you can redistribute it and/or modify.
+// it under the terms of the GNU General Public License as published by.
+// the Free Software Foundation, either version 3 of the License, or.
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Displays the livequiz view page.
+ * @package   mod_livequiz
+ * @copyright 2024 Software AAU
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once('../../../config.php');
 require_once('../hub/NavBar.php');
 
 require_login();
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
-// Getting the quiz id form the url parameter (assuming this is how we'll do it)
-//$quizid = required_param('quizid', PARAM_INT);
+
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
 $PAGE->requires->css(new moodle_url('/mod/livequiz/styles.css'));
@@ -18,72 +39,42 @@ $PAGE->set_heading("Statistics");
 echo $OUTPUT->header();
 
 if (class_exists('createNavbar')) {
-    $Navbar = new createNavbar(); // Create an instance of the Navbar class
-    $Navbar->display($activeTab); // Call the display method with the active tab
+    $navbar = new createNavbar(); // Create an instance of the Navbar class.
+    $navbar->display($activetab); // Call the display method with the active tab.
 } else {
-    // Handle the error if the class does not exist
+    // Handle the error if the class does not exist.
     echo "Navbar class does not exist.";
 }
-/*
-
-//query to get the questions for the given quiz.
-$sql_questions = " "; // insert sql query for geting the questions for the given quiz inside " ".
-$params = ['quizid' => $quizid];
-$questins = $DB->get_records_sql($spl_questions, $params);
 
 
-$questionData = [];
-$questionLabels = [];
-$currentQuestionId = 0;
-
-foreach ($questions as $question) {
-    $questionId = $question->questionid;
-    $questionLabels[$questionId] = $question->questionname;
-
-    //query to get the answers for the current question.
-    $sql_answers = ""; // insert sql query for geting the answer option for the given quiz inside " ".
-    $answerParams = ['questionid' => $questionId];
-    $answers = $DB->get_records_sql($sql_answers, $answerParams);
-
-    $questionData[$questionId] = [];
-    foreach ($answer as $answer) {
-        // quary to count how many students selected this answer.
-        $sql_count = ""; // insert sql query for geting the student asnwers for the given question inside " ".
-        $countParams = ['answerid' => $answer->answerid];
-        $responseCount = $DB->get_field_sql($sql_count, $countParams);
-
-        $questionData[$questionId][] = $responseCount;
-    }
-}*/
-
-$questionData = [
+$questiondata = [
     [10, 20, 30, 40],
     [15, 5, 25],
     [22, 13],
-    [18, 12, 20, 10, 5]
+    [18, 12, 20, 10, 5],
 ];
 
 
-// imports moodles own charting liberay.
+// Imports moodles own charting liberay.
 use core\chart_bar;
 use core\chart_series;
 
-foreach ($questionData as $index => $questionAnswers) {
+foreach ($questiondata as $index => $questionanswers) {
     // Create a new bar chart for each question.
     $chart = new chart_bar();
     $chart->set_title('Question ' . ($index + 1) . ' Performance');
 
     // Generate labels for the number of options (need to be changed to include answer and not just option x).
     $labels = [];
-    for ($i = 1; $i <= count($questionAnswers); $i++) {
+    for ($i = 1; $i <= count($questionanswers); $i++) {
         $labels[] = "Option " . $i;
     }
 
     $chart->set_labels($labels);
 
     // Add the data series for the number of users who chose each option.
-    $answerSeries = new chart_series('Responses', $questionAnswers);
-    $chart->add_series($answerSeries);
+    $answerseries = new chart_series('Responses', $questionanswers);
+    $chart->add_series($answerseries);
 
     // Display each chart.
     echo '<div style="width:100%;">';
@@ -95,6 +86,6 @@ foreach ($questionData as $index => $questionAnswers) {
 
 
 
-// Vis formularen
+// Shows formula.
 
 echo $OUTPUT->footer();
