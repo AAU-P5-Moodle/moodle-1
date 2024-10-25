@@ -7,6 +7,7 @@ let
   moodle_db_name = "moodle";
   moodle_sql_file = "./MoodleSQL.sql";
   root_password = "root";
+  php_custom_config = "./custom_php.ini";
 
 in
 
@@ -26,7 +27,7 @@ pkgs.mkShell {
     MOODLE_ROOT="$(realpath server/moodle)"
     export LANG="en_AU.UTF-8" #Why does it need to be Australian? Nobody knows...
     export LC_ALL="en_AU.UTF-8"
-    export PHPRC=`realpath server/php/php.ini`
+    # export PHPRC=`realpath server/php/php.ini`
 
 
     # Function to check and kill existing processes
@@ -149,11 +150,31 @@ EOF
         ADMINER_PID=$!
       fi
     }
+    create_php_config() {
+      get_certificate
+      echo "Creating custom PHP configuration..."
+      cat << EOF > ${php_custom_config}
+extension=zip
+extension=gd
+extension=intl
+extension=fileinfo
+extension=sodium
+extension=mysqli
+max_input_vars = 5000
+memory_limit = 256M
+post_max_size = 50M
+upload_max_filesize = 50M
 
+EOF
+    }
+    get_certificate(){
+      curl --etag-compare etag.txt --etag-save etag.txt --remote-name https://curl.se/ca/cacert.pem -o "cacert.pem"
+    }
     # Start PHP built-in server for Moodle
     start_php_server() {
+      create_php_config
       echo "Starting PHP built-in server for Moodle..."
-      php -S 0.0.0.0:8000 -t ./server/moodle -c server/php/php.ini &
+      php -S 0.0.0.0:8000 -t ./server/moodle -c ${php_custom_config} &
       PHP_SERVER_PID=$!
     }
 
