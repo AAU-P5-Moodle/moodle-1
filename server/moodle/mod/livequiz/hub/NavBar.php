@@ -1,39 +1,81 @@
 <?php
+// This file is part of Moodle - http://moodle.org/.
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-$activeTab = optional_param('tab', 'quizcreator', PARAM_ALPHA); 
+/**
+ * Navbar for the livequiz module.
+ *
+ * @package    mod_livequiz
+ * @copyright  2024 Software AAU
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-class createNavbar{
-    private $activeTab;
+/**
+ * Class to create and display a navbar for the livequiz module.
+ *
+ * @package    mod_livequiz
+ */
+class createNavbar {
+    /**
+     * @var string The active tab name.
+     */
+    private $activetab;
 
-    public function __construct($activeTab = 'normal') {
-        $this->activeTab = $activeTab; // Store the active tab in a property
+    /**
+     * Constructor for the createNavbar class.
+     *
+     * @param string $activeTab The currently active tab.
+     */
+    public function __construct(string $activetab = 'quizcreator') {
+        $this->activetab = $activetab;
     }
 
-    public function definition() {
-        $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/mod/livequiz';
+    /**
+     * Generate the HTML for the navbar.
+     *
+     * @return string The HTML output for the navbar.
+     */
+    public function definition(): string {
+        global $CFG;
 
-        //Active tab does not currently work
-        return"
-                <!-- Navigation Tabs as Links -->
-                <div class='nav-tabs'>
-                    <a href='{$base_url}/quizcreator/?tab=quizcreator' class='tab-button" . ($this->activeTab === 'quizcreator' ? ' active' : '') . "'>Quiz Creator</a>
-                    <a href='{$base_url}/quizrunner/?tab=quizrunner' class='tab-button" . ($this->activeTab === 'quizrunner' ? ' active' : '') . "'>Quiz Runner</a>
-                    <a href='{$base_url}/quizstats/?tab=quizstats' class='tab-button" . ($this->activeTab === 'quizstats' ? ' active' : '') . "'>Quiz Stats</a>
-                    <a href='{$base_url}/questionbank/?tab=questionbank' class='tab-button" . ($this->activeTab === 'questionbank' ? ' active' : '') . "'>Question Bank</a>
-                </div>
-        ";
+        $tabs = [
+            'quizcreator' => get_string('quizcreator', 'mod_livequiz'),
+            'quizrunner' => get_string('quizrunner', 'mod_livequiz'),
+            'quizstats' => get_string('quizstats', 'mod_livequiz'),
+            'questionbank' => get_string('questionbank', 'mod_livequiz'),
+        ];
+
+        $output = html_writer::start_div('nav-tabs');
+
+        foreach ($tabs as $tab => $label) {
+            $url = new moodle_url('/mod/livequiz/' . $tab, ['tab' => $tab]);
+            $activeclass = ($this->activetab === $tab) ? ' active' : '';
+            $output .= html_writer::link($url, $label, ['class' => 'tab-button' . $activeclass]);
+        }
+
+        $output .= html_writer::end_div();
+
+        return $output;
     }
-    public function display() {
-        echo $this->definition(); // Call the definition method and output the content
+
+    /**
+     * Display the navbar.
+     *
+     * Outputs the generated HTML for the navbar.
+     */
+    public function display(): void {
+        echo $this->definition();
     }
 }
-
-//echo $OUTPUT->header();
-
-//echo $OUTPUT->heading($strquizzes, 2);
-
-//echo $Body_content;
-
-//echo $OUTPUT->footer();
-
-?>
