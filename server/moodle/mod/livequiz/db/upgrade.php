@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 /**
  * 'Livequiz upgrade file'
  *
@@ -29,7 +28,6 @@
  * @param int   $oldversion is the old installed version
  * @return bool returns true
  */
-
 function xmldb_livequiz_upgrade($oldversion) {
     global $DB;
 
