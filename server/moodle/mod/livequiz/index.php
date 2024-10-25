@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 /**
  * Livequiz activity version information.
  *
@@ -42,7 +41,7 @@ require_course_login($course);
 $modinfo = get_fast_modinfo($course);
 
 
-foreach ($modinfo->get_instances_of('livequiz') as $instanceid => $cm) {
+/*foreach ($modinfo->get_instances_of('livequiz') as $instanceid => $cm) {
     // Display information about your activity.
 }
-
+*/
