@@ -45,15 +45,16 @@ if (class_exists('createNavbar')) {
 }
 
 
-$question = new question();
-$question->image = 'fish.png';
-$question->prompt = 'Is fish fishing????';
-$question->answer = new multichoice(
-    [
-        new multichoice_choice("Yes!!!!", "yes"),
-        new multichoice_choice("No!!!!!", "no"),
-        new multichoice_choice("Mayhaps...", "maybe"),
-    ]
+$question = new question(
+    'fish.png', 
+    'Is fish fishing????', 
+    new multichoice(
+        [
+            new multichoice_choice("Yes!!!!", "yes"),
+            new multichoice_choice("No!!!!!", "no"),
+            new multichoice_choice("Mayhaps...", "maybe"),
+        ]
+    )
 );
 
 
