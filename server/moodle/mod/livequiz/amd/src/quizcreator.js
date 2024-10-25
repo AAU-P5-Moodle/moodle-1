@@ -46,7 +46,7 @@ let savedQuestions = [];
     
         discard_question_button.addEventListener('click', () => {
             let toast_promise_deletion_div = create_element("toast_promise_deletion_div", 'div', "toast_promise_deletion_div", "Are you sure you want to delete this question?");
-            let cancel_question_deletion_button = create_element("cancel_question_deletion_button", 'button', "cancel_question_deletion_button", "Hell naw");
+            let cancel_question_deletion_button = create_element("cancel_question_deletion_button", 'button', "cancel_question_deletion_button", "No");
             let continue_question_deletion_button = create_element("continue_question_deletion_button", 'button', "continue_question_deletion_button", "Yes");
     
             toast_promise_deletion_div.appendChild(cancel_question_deletion_button);
@@ -168,7 +168,6 @@ let savedQuestions = [];
  
     function save_question(page, question_input, modal_div, answers_div, file_picker) {
         let save_question_button = create_element("save_question_button", 'button', "save_button", "Save question");
- 
         save_question_button.addEventListener('click', () => {
             let question_for_main_page = create_element("question_for_main_page",
                 'button', 'question_for_main_page', question_input.value);
@@ -184,7 +183,13 @@ let savedQuestions = [];
             if (question_input.value.trim() === "" || answers_count < 2 || !answers_is_filled) {
                 console.log("Could not save if no question is added or not all answers are filled.")
             } else {
-                page.appendChild(question_for_main_page);
+                let divForQuestion = document.getElementById("questionDiv");
+                if (divForQuestion) {
+                    divForQuestion.appendChild(question_for_main_page);
+                } else {
+                    console.error("questionDiv not found.");
+                }
+                //page.appendChild(question_for_main_page);
                 modal_div.remove();
             }
         })
@@ -271,7 +276,7 @@ let savedQuestions = [];
         });
         return add_new_answer_to_question;
     }
- 
+    
     document.addEventListener('DOMContentLoaded', ()=>{
         console.log("quizcreator JS loaded");
  
