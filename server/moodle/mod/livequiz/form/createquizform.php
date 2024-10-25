@@ -50,7 +50,7 @@ class createquizform extends moodleform {
         $mform->addElement('text', 'name', get_string('quizname', 'mod_livequiz'));
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', get_string('missingname', 'mod_livequiz'), 'required', null, 'client');
-        
+
         // Quiz description field.
         $mform->addElement('textarea', 'quiz_description', get_string('description', 'mod_livequiz'));
         $mform->setType('quiz_description', PARAM_TEXT);
