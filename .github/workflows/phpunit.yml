@@ -216,8 +216,3 @@ jobs:
             echo Running tests in $file
             ./vendor/bin/phpunit $file
           done
-      - name: CAT PHP.ini
-        run: cat /etc/php/8.3/cli/php.ini
-              
-
-      
