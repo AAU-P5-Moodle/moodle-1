@@ -1,9 +1,9 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - http://moodle.org/.
 //
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
+// Moodle is free software: you can redistribute it and/or modify.
+// it under the terms of the GNU General Public License as published by.
+// the Free Software Foundation, either version 3 of the License, or.
 // (at your option) any later version.
 //
 // Moodle is distributed in the hope that it will be useful,
@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 
 /**
  * Displays the livequiz view page.
@@ -42,14 +41,14 @@ $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 $PAGE->requires->css(new moodle_url('/mod/livequiz/hub/navbar_style.css'));
 
-$activeTab = optional_param('tab', 'normal', PARAM_ALPHA);
+$activetab = optional_param('tab', 'normal', PARAM_ALPHA);
 
 echo $OUTPUT->header();
 
 if (class_exists('createNavbar')) {
-    // Create an instance of the Navbar class, passing the active tab
-    $Navbar = new createNavbar($activeTab);
-    $Navbar->display(); // Call the display method
+    // Create an instance of the Navbar class, passing the active tab.
+    $navbar = new createNavbar($activetab);
+    $navbar->display(); // Call the display method.
 } else {
     echo "Navbar class does not exist.";
 }
