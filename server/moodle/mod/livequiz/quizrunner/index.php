@@ -46,8 +46,8 @@ if (class_exists('createNavbar')) {
 
 
 $question = new question(
-    'fish.png', 
-    'Is fish fishing????', 
+    'fish.png',
+    'Is fish fishing????',
     new multichoice(
         [
             new multichoice_choice("Yes!!!!", "yes"),
