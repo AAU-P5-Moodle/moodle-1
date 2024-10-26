@@ -223,9 +223,9 @@ EOF
       echo "success installing phpunit"
       cd "$CURRENT_PATH"
     }
-    runit(){
-      check_phpunit
-      if [ ! -f "$MOODLE_ROOT/config.php" ]; then
+    create_config(){
+     if [ ! -f "$MOODLE_ROOT/config.php" ]; then
+      echo "no config found creating a new one";
       php server/moodle/admin/cli/install.php \
               --lang=en \
               --wwwroot="http://localhost:8000/" \
@@ -245,11 +245,20 @@ EOF
               --fullname="Moodle testing thing" \
               --shortname="mtt" \
               --adminpass="hunter2"
+      else
+        echo "config found skipping creating a new";
       fi
       if ! grep -Fxq "\$CFG->phpunit_dataroot = '$(realpath "server/moodledata/phpunit")';" "server/moodle/config.php"; then
+          echo "adding phpunit to config";
           echo "\$CFG->phpunit_prefix = 'phpu_';" >>"server/moodle/config.php"
           echo "\$CFG->phpunit_dataroot = '$(realpath "server/moodledata/phpunit")';">>"server/moodle/config.php"
+      else 
+        echo "phpunit found in config skipping modifying it";
       fi
+    }
+    runit(){
+      check_phpunit
+      create_config
       php server/moodle/admin/tool/phpunit/cli/init.php 
       CURRENT_PATH="$(pwd)"
       cd "$MOODLE_ROOT"
