@@ -207,11 +207,11 @@ EOF
     }
     
     check_phpunit() {
-      if [ ! -d "$MOODLE_ROOT/vendor" ]; then
+      if [ ! -f "$MOODLE_ROOT/vendor/bin/phpunit" ]; then
       echo "no phpunit installed installing it now"
       install_phpunit
       fi
-      if [ ! -d "$MOODLE_ROOT/vendor" ]; then
+      if [ ! -f "$MOODLE_ROOT/vendor/bin/phpunit" ]; then
       echo "installing failed exiting"
       exit 1
       fi
@@ -271,7 +271,7 @@ EOF
       cd "$CURRENT_PATH"
     }
     sniffit(){
-      if [ ! -d $MOODLE_ROOT/vendor ]; then
+      if [ ! -d "$MOODLE_ROOT/vendor/moodlehq" ]; then
         echo "no codesniffer installed installing it now"
         CURRENT_PATH="$(pwd)"
         cd $MOODLE_ROOT
@@ -279,11 +279,11 @@ EOF
         composer require moodlehq/moodle-cs
         cd "$CURRENT_PATH"
       fi
-      if [ ! -d "$MOODLE_ROOT/vendor" ]; then
+      if [ ! -d "$MOODLE_ROOT/vendor/moodlehq" ]; then
         echo  "codesniffer installed failed exiting"
         exit 1
       fi
-      if [[ ":$PATH:" != *":$MOODLE_ROOT/vendor/bin:"* ]]; then
+      if [[ ":$PATH:" != *"$MOODLE_ROOT/vendor/bin"* ]]; then
         export PATH="$MOODLE_ROOT/vendor/bin:$PATH"
       fi
       phpcs  $MOODLE_ROOT/mod/livequiz/
