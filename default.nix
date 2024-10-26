@@ -7,14 +7,51 @@ let
   moodle_db_name = "moodle";
   moodle_sql_file = "./MoodleSQL.sql";
   root_password = "root";
-  php_custom_config = "./custom_php.ini";
+  myphp = pkgs.php.buildEnv {extensions = (phpExtensions: with phpExtensions; [
+    pkgs.php.extensions.dom
+    pkgs.php.extensions.mbstring
+    pkgs.php.extensions.tokenizer
+    pkgs.php.extensions.xmlwriter
+    pkgs.php.extensions.simplexml
+    pkgs.php.extensions.opcache
+    pkgs.php.extensions.iconv
+    pkgs.php.extensions.mysqli
+    pkgs.php.extensions.zip
+    pkgs.php.extensions.gd
+    pkgs.php.extensions.intl
+    pkgs.php.extensions.fileinfo
+    pkgs.php.extensions.sodium
+    pkgs.php.extensions.ctype
+    pkgs.php.extensions.bcmath
+    pkgs.php.extensions.calendar
+    pkgs.php.extensions.curl
+    pkgs.php.extensions.exif
+    pkgs.php.extensions.filter
+    pkgs.php.extensions.ftp
+    pkgs.php.extensions.gettext
+    pkgs.php.extensions.gmp
+    pkgs.php.extensions.imap
+    pkgs.php.extensions.ldap
+    pkgs.php.extensions.openssl
+    pkgs.php.extensions.posix
+    pkgs.php.extensions.session
+    pkgs.php.extensions.soap
+    pkgs.php.extensions.sockets
+    pkgs.php.extensions.sysvsem
+    pkgs.php.extensions.xmlreader
+    pkgs.php.extensions.zlib
+  ]);
+   extraConfig = "max_input_vars = 5000
+memory_limit = 256M
+post_max_size = 50M
+upload_max_filesize = 50M";
+ };
 
 in
-
 pkgs.mkShell {
   buildInputs = with pkgs; [
+    myphp
     mariadb
-    php
     wget
     curl
     procps
@@ -73,6 +110,7 @@ pkgs.mkShell {
       FLUSH PRIVILEGES;
       ALTER USER 'root'@'localhost' IDENTIFIED BY '${root_password}';
       FLUSH PRIVILEGES;
+      SET GLOBAL max_connections = 200;
 EOF
 
       # Verify root password
@@ -90,7 +128,6 @@ EOF
         wait $TEMP_MYSQL_PID
         exit 1
       }
-
       if [ -f "${moodle_sql_file}" ]; then
         mysql -uroot -p${root_password} -S${mariadb_socket} ${moodle_db_name} < ${moodle_sql_file} && {
           echo "SQL file imported successfully."
@@ -150,31 +187,13 @@ EOF
         ADMINER_PID=$!
       fi
     }
-    create_php_config() {
-      get_certificate
-      echo "Creating custom PHP configuration..."
-      cat << EOF > ${php_custom_config}
-extension=zip
-extension=gd
-extension=intl
-extension=fileinfo
-extension=sodium
-extension=mysqli
-max_input_vars = 5000
-memory_limit = 256M
-post_max_size = 50M
-upload_max_filesize = 50M
-
-EOF
-    }
     get_certificate(){
       curl --etag-compare etag.txt --etag-save etag.txt --remote-name https://curl.se/ca/cacert.pem -o "cacert.pem"
     }
     # Start PHP built-in server for Moodle
     start_php_server() {
-      create_php_config
       echo "Starting PHP built-in server for Moodle..."
-      php -S 0.0.0.0:8000 -t ./server/moodle -c ${php_custom_config} &
+      php -S 0.0.0.0:8000 -t ./server/moodle &
       PHP_SERVER_PID=$!
     }
 
@@ -206,24 +225,32 @@ EOF
     }
     runit(){
       check_phpunit
-
+      if [ ! -f "$MOODLE_ROOT/config.php" ]; then
       php server/moodle/admin/cli/install.php \
               --lang=en \
               --wwwroot="http://localhost:8000/" \
-              --dataroot="server/moodledata" \
-              --dbpass=root \
+              --dataroot="$REPO_ROOT/server/moodledata" \
+              --dbtype="mariadb" \
+              --dbhost="127.0.0.1" \
+              --dbuser="root" \
+              --dbpass="root" \
               --dbport=3306 \
-              --dbsocket="$mariadb_socket" \
-              --skip-database \
+              --dbsocket="${mariadb_socket}" \
+              --dbname="moodle" \
+              --prefix="mdl_" \
               --non-interactive \
               --agree-license \
+              --skip-database \
               --allow-unstable \
               --fullname="Moodle testing thing" \
               --shortname="mtt" \
               --adminpass="hunter2"
+      fi
+      if ! grep -Fxq "\$CFG->phpunit_dataroot = '$(realpath "server/moodledata/phpunit")';" "server/moodle/config.php"; then
           echo "\$CFG->phpunit_prefix = 'phpu_';" >>"server/moodle/config.php"
           echo "\$CFG->phpunit_dataroot = '$(realpath "server/moodledata/phpunit")';">>"server/moodle/config.php"
-      php server/moodle/admin/tool/phpunit/cli/init.php
+      fi
+      php server/moodle/admin/tool/phpunit/cli/init.php 
       CURRENT_PATH="$(pwd)"
       cd "$MOODLE_ROOT"
       for file in `find mod/livequiz/tests/phpunit -type f`
