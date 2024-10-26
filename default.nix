@@ -230,7 +230,7 @@ EOF
       php server/moodle/admin/cli/install.php \
               --lang=en \
               --wwwroot="http://localhost:8000/" \
-              --dataroot="$REPO_ROOT/server/moodledata" \
+              --dataroot="$(pwd)/server/moodledata" \
               --dbtype="mariadb" \
               --dbhost="127.0.0.1" \
               --dbuser="root" \
@@ -245,16 +245,18 @@ EOF
               --allow-unstable \
               --fullname="Moodle testing thing" \
               --shortname="mtt" \
-              --adminpass="hunter2"
+              --adminpass="hunter2" 
       else
         echo "config found skipping creating a new";
       fi
-      if ! grep -Fxq "\$CFG->phpunit_dataroot = '$(realpath "server/moodledata/phpunit")';" "server/moodle/config.php"; then
+      if [ -f "$MOODLE_ROOT/config.php" ]; then
+        if ! grep -Fxq "\$CFG->phpunit_dataroot = '$(realpath "server/moodledata/phpunit")';" "server/moodle/config.php"; then
           echo "adding phpunit to config";
           echo "\$CFG->phpunit_prefix = 'phpu_';" >>"server/moodle/config.php"
           echo "\$CFG->phpunit_dataroot = '$(realpath "server/moodledata/phpunit")';">>"server/moodle/config.php"
-      else 
-        echo "phpunit found in config skipping modifying it";
+        else 
+          echo "phpunit found in config skipping modifying it";
+        fi
       fi
     }
     runit(){
