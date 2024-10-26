@@ -56,7 +56,8 @@ pkgs.mkShell {
     curl
     procps
     lsof
-    php82Packages.composer
+    php.packages.composer
+    # php.packages.php-codesniffer
     glibcLocales
   ];
 
@@ -269,7 +270,27 @@ EOF
       done
       cd "$CURRENT_PATH"
     }
-    
+    sniffit(){
+      if [ ! -d $MOODLE_ROOT/vendor ]; then
+        echo "no codesniffer installed installing it now"
+        CURRENT_PATH="$(pwd)"
+        cd $MOODLE_ROOT
+        composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+        composer require moodlehq/moodle-cs
+        cd "$CURRENT_PATH"
+      fi
+      if [ ! -d "$MOODLE_ROOT/vendor" ]; then
+        echo  "codesniffer installed failed exiting"
+        exit 1
+      fi
+      if [[ ":$PATH:" != *":$MOODLE_ROOT/vendor/bin:"* ]]; then
+        export PATH="$MOODLE_ROOT/vendor/bin:$PATH"
+      fi
+      phpcs  $MOODLE_ROOT/mod/livequiz/
+    }
+    fixit(){
+      phpcbf  $MOODLE_ROOT/mod/livequiz/
+    }
     # Trap to ensure services are stopped when exiting the shell
     trap stop_services EXIT
 
