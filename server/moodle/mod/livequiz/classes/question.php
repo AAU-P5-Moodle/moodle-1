@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_livequiz\classes;
-require_once 'answer.php';
+defined('MOODLE_INTERNAL') || die();
+require_once('answer.php');
 
 /**
  * Class question
@@ -62,7 +63,7 @@ class question {
         $this->timelimit = $timelimit;
 
         foreach ($answers as $answer) {
-            $answerobject = new answer($answer['id'],$answer['description'],$answer['correct'],$answer['explanation']);
+            $answerobject = new answer($answer['id'], $answer['description'], $answer['correct'], $answer['explanation']);
             $this->answers[] = $answerobject;
         }
     }
