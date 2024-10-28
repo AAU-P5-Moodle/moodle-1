@@ -153,8 +153,9 @@ class livequiz {
      */
     public function get_questions(): array {
         return $this->questions;
-
-    public function get_question($id){
-        return $this->questions[$id];
+    }
+    
+    public function get_question_by_index($index){
+        return $this->questions[$index];
     }
 }

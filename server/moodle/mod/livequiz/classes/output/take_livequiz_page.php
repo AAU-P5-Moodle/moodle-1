@@ -29,7 +29,7 @@ class take_livequiz_page implements renderable, templatable {
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
         $data->quiztitle = $this->livequiz->get_quiz_title();
-        $data->description = $this->livequiz->get_question($questionid)->description;
+        $data->description = $this->livequiz->get_question_by_index($questionid)->description;
         return $data;
     }
 }
