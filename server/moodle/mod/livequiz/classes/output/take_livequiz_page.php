@@ -13,9 +13,10 @@ require_once(__DIR__ . '/../classes/livequiz.php');
 
 class take_livequiz_page implements renderable, templatable {
     /** @var string $sometext Some text to show how to pass data to a template. */
-    private livequiz $livequiz = null;
+    private string $livequiz; //should be changed to livequiz object
 
-    public function __construct(livequiz $livequiz) {
+
+    public function __construct(string $livequiz) {
         $this->livequiz = $livequiz;
     }
 
@@ -24,9 +25,11 @@ class take_livequiz_page implements renderable, templatable {
      *
      * @return stdClass
      */
-    public function export_for_template(renderer_base $output): stdClass {
-        $data = new stdClass();
-        $data->sometext = $this->sometext;
+    public function export_for_template(renderer_base $output): array {        
+        $data = [];
+        $data['livequiz'] = $this->livequiz;
         return $data;
     }
+
 }
+

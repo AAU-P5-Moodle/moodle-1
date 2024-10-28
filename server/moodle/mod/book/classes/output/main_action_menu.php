@@ -130,7 +130,7 @@ class main_action_menu implements templatable, renderable {
         $next = $this->get_next_chapter();
         $previous = $this->get_previous_chapter();
 
-        $context = \context_module::instance($this->cmid);
+        $context = \context_module::instance($this->cmid); //This is 
         $data = [];
 
         if ($next) {

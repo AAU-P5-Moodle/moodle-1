@@ -15,45 +15,45 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Displays the livequiz view page.
+ * This displays when attempting a quiz.
  * @package   mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once('../../config.php');
-require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
+require_once($CFG->libdir.'/accesslib.php');
 
-global $OUTPUT, $PAGE, $DB;
+global $PAGE, $OUTPUT;
 
-
-$id = required_param('id', PARAM_INT); // Course module ID.
+// Get submitted parameters.
+$id = required_param('id', PARAM_INT); // Course module id.
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
-$instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
-require_login($course, true, $cm); // Ensure the user is logged in and can access this module.
-$context = context_module::instance($cm->id); // Set the context for the course module.
+if (!$cm) {
+    throw new moodle_exception('invalidcoursemodule', 'error');
+}
+if ($cm->course !== $course->id) {
+    throw new moodle_exception('coursemismatch', 'error', '', null, 'The course module does not match the course');
+}
+
+//$instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
+require_login($course, false, $cm);
+//$page = optional_param('page', -1, PARAM_INT); // Page to jump to in the attempt.
+
+$context = context_module::instance($cm->id); // $cm->id 
+
 $PAGE->set_context($context); // Make sure to set the page context.
 
-$PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['id' => $id]));
+$PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['id'=> $id]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE WHERE YOU CAN JOIN A QUIZ OR TAKE IT INDIVIDUALLY', $id);
+$renderable = new \mod_livequiz\output\take_livequiz_page('This is the page where the quiz is conducted');
 
 
-
-
-/*
-if (has_capability('mod/livequiz:manage', $context)) {
-    // Redirect teachers to the management page.
-    redirect(new moodle_url('/mod/livequiz/manage.php', ['id' => $id]));
-} else {
-   // Redirect students to the quiz page.
-    redirect(new moodle_url('/mod/livequiz/startquiz.php', ['cmid' => $id]));
-}
-*/
+//$forcenew = optional_param('forcenew', false, PARAM_BOOL); // Used to force a new preview.
 
 echo $OUTPUT->header();
 echo $output->render($renderable);
