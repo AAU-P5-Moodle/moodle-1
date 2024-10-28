@@ -51,16 +51,25 @@ class livequiz {
 
     /**
      * LiveQuiz constructor.
-     * @param $id
-     * @param $name
-     * @param $courseid
-     * @param $intro
-     * @param $introformat
-     * @param $timecreated
-     * @param $timemodified
-     * @param $questions
+     * @param int $id
+     * @param string $name
+     * @param int $courseid
+     * @param string $intro
+     * @param int $introformat
+     * @param int $timecreated
+     * @param int $timemodified
+     * @param array $questions
      */
-    public function __construct($id, $name, $courseid, $intro, $introformat, $timecreated, $timemodified, $questions) {
+    public function __construct(
+        int $id,
+        string $name,
+        int $courseid,
+        string $intro,
+        int $introformat,
+        int $timecreated,
+        int $timemodified,
+        array $questions
+    ) {
         $this->id = $id;
         $this->name = $name;
         $this->courseid = $courseid;
@@ -81,6 +90,69 @@ class livequiz {
             $this->questions[] = $questionobject;
         }
     }
+
+    /**
+     * Getter for livequiz id
+     * @return int
+     */
+    public function get_id(): int {
+        return $this->id;
+    }
+
+    /**
+     * Getter for livequiz name
+     * @return string
+     */
+    public function get_name(): string {
+        return $this->name;
+    }
+
+    /**
+     * Getter for livequiz courseid
+     * @return int
+     */
+    public function get_courseid(): int {
+        return $this->courseid;
+    }
+
+    /**
+     * Getter for livequiz intro
+     * @return string
+     */
+    public function get_intro(): string {
+        return $this->intro;
+    }
+
+    /**
+     * Getter for livequiz introformat
+     * @return int
+     */
+    public function get_introformat(): int {
+        return $this->introformat;
+    }
+
+    /**
+     * Getter for livequiz timecreated
+     * @return int
+     */
+    public function get_timecreated(): int {
+        return $this->timecreated;
+    }
+
+    /**
+     * Getter for livequiz timemodified
+     * @return int
+     */
+    public function get_timemodified(): int {
+        return $this->timemodified;
+    }
+
+    /**
+     * Getter for livequiz array of question objects
+     * @return array
+     */
+    public function get_questions(): array {
+        return $this->questions;
 
     public function get_question($id){
         return $this->questions[$id];

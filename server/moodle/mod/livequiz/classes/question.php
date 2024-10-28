@@ -48,14 +48,14 @@ class question {
 
     /**
      * question constructor.
-     * @param $id
-     * @param $title
-     * @param $description
-     * @param $explanation
-     * @param $timelimit
-     * @param $answers
+     * @param int $id
+     * @param string $title
+     * @param string $description
+     * @param string $explanation
+     * @param int $timelimit
+     * @param array $answers
      */
-    public function __construct($id, $title, $description, $explanation, $timelimit, $answers) {
+    public function __construct(int $id, string $title, string $description, string $explanation, int $timelimit, array $answers) {
         $this->id = $id;
         $this->title = $title;
         $this->description = $description;
@@ -66,5 +66,45 @@ class question {
             $answerobject = new answer($answer['id'], $answer['description'], $answer['correct'], $answer['explanation']);
             $this->answers[] = $answerobject;
         }
+    }
+
+    /**
+     * Getter for question id
+     * @return int
+     */
+    public function get_id(): int {
+        return $this->id;
+    }
+
+    /**
+     * Getter for question title
+     * @return string
+     */
+    public function get_title(): string {
+        return $this->title;
+    }
+
+    /**
+     * Getter for question description
+     * @return string
+     */
+    public function get_description(): string {
+        return $this->description;
+    }
+
+    /**
+     * Getter for question explanation
+     * @return string
+     */
+    public function get_explanation(): string {
+        return $this->explanation;
+    }
+
+    /**
+     * Getter for question timelimit
+     * @return int
+     */
+    public function get_timelimit(): int {
+        return $this->timelimit;
     }
 }
