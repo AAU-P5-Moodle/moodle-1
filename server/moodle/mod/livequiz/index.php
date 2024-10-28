@@ -41,7 +41,4 @@ require_course_login($course);
 $modinfo = get_fast_modinfo($course);
 
 
-/*foreach ($modinfo->get_instances_of('livequiz') as $instanceid => $cm) {
-    // Display information about your activity.
-}
-*/
+// Make funtion for displaying activity information here (empty function removed cus it caused errors).

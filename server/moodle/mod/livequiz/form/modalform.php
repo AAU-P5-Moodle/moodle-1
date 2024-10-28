@@ -56,16 +56,63 @@ $mform = new createquizform();
 $mform->display();
 
 // Additional buttons and image upload section.
+// Start the container div for quiz modal buttons.
 echo html_writer::start_div('quiz_modal_buttons');
 
+// Start the container div for image upload.
 echo html_writer::start_div('image_upload_container');
-echo html_writer::div('<img id="imagePreview" src="#" alt="' . get_string('imagepreview', 'mod_livequiz') . '" />', 'imagePreviewContainer');
-echo html_writer::tag('label', get_string('addimage', 'mod_livequiz'), ['for' => 'imageUpload', 'class' => 'custom-file-upload']);
-echo html_writer::empty_tag('input', ['type' => 'file', 'id' => 'imageUpload', 'name' => 'quizImage', 'accept' => 'image/png']);
+
+// Image preview element.
+echo html_writer::div(
+    '<img id="imagePreview" src="#" alt="' . get_string('imagepreview', 'mod_livequiz') . '" />',
+    'imagePreviewContainer'
+);
+
+// Label for the image upload.
+echo html_writer::tag(
+    'label',
+    get_string('addimage', 'mod_livequiz'),
+    [
+        'for' => 'imageUpload',
+        'class' => 'custom-file-upload',
+    ]
+);
+
+// File input for image upload.
+echo html_writer::empty_tag(
+    'input',
+    [
+        'type' => 'file',
+        'id' => 'imageUpload',
+        'name' => 'quizImage',
+        'accept' => 'image/png',
+    ]
+);
+
+// End the image upload container div.
 echo html_writer::end_div();
 
-echo html_writer::tag('button', get_string('savequiz', 'mod_livequiz'), ['id' => 'saveQuiz', 'class' => 'save_button']);
-echo html_writer::tag('button', get_string('cancelquiz', 'mod_livequiz'), ['id' => 'cancelQuiz', 'class' => 'discard_question_button']);
+// Button for saving the quiz.
+echo html_writer::tag(
+    'button',
+    get_string('savequiz', 'mod_livequiz'),
+    [
+        'id' => 'saveQuiz',
+        'class' => 'save_button',
+    ]
+);
+
+// Button for canceling the quiz.
+echo html_writer::tag(
+    'button',
+    get_string('cancelquiz', 'mod_livequiz'),
+    [
+        'id' => 'cancelQuiz',
+        'class' => 'discard_question_button',
+    ]
+);
+
+// End the main container div for quiz modal buttons.
 echo html_writer::end_div();
 
 // Include custom JavaScript for the page.
