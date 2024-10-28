@@ -9,14 +9,16 @@ use templatable;
 use stdClass;
 use mod_livequiz\classes\livequiz;
 
-require_once(__DIR__ . '/../classes/livequiz.php');
+require_once(dirname(__DIR__) . '/livequiz.php');
 
 class take_livequiz_page implements renderable, templatable {
     /** @var string $sometext Some text to show how to pass data to a template. */
-    private livequiz $livequiz = null;
+    private livequiz $livequiz;
+    private $sometext = null; 
 
     public function __construct(livequiz $livequiz) {
         $this->livequiz = $livequiz;
+        $this->sometext="Testsing take livequiz page";
     }
 
     /**

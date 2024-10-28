@@ -41,6 +41,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 $output = $PAGE->get_renderer('mod_livequiz');
 $renderable = new \mod_livequiz\output\index_page('VI TESTER VORES PLUGIN HEJ!!!');
+$takelivequiz= new \mod_livequiz\output\take_livequiz_page('VI TESTER TAKE LIVE QUIZ PAGE!!!');
 
 
 
@@ -56,5 +57,5 @@ if (has_capability('mod/livequiz:manage', $context)) {
 */
 
 echo $OUTPUT->header();
-echo $output->render($renderable);
+echo $output->render($takelivequiz);
 echo $OUTPUT->footer();

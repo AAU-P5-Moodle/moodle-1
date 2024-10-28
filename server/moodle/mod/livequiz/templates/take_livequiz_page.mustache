@@ -30,6 +30,26 @@
 
 }}
 <div class="main-container">
-  <h1>Heading</h1>
-  <p>{{sometext}}</p>
-</div>
+  <div class="title-container">
+    <h1 class="quiz-title">BIOLOGY 1</h1>
+  </div>
+  <div class="media-container">
+    <img src="">
+  </div>
+  <div class="question-container">
+    <p class="question-title">HOW MUCH CAN YOU BENCH PRESS?</p>
+  </div>
+  <div class="answer-container">
+  <fieldset>
+  {{#answer}}
+      <input type="{{answertype}}" id="{{id}}" name="{{name}}"/>
+      <label for="{{id}}">{{answername}}</label>
+  {{/answer}}
+  </fieldset>
+  </div>
+  <button class="check-answer">Check answer</button>
+  <div class="question-navigation">
+    <button class="nextquestion">Next Question</button>
+    <button class="previousquestion">Previous Question</button>
+  </div>
+
