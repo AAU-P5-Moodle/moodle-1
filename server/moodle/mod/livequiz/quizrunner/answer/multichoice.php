@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Multichoice and MultichoiceChoice classes for quiz answers.
+ * Multichoice class for quiz answers.
  *
- * These classes implement the answer interface for multiple choice answers.
+ * This class together with the multichoice_choice class implement the answer interface for multiple choice answers.
  *
  * @package   mod_livequiz
  * @copyright 2024 Software AAU
@@ -27,36 +27,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once('answer.php');
-
-/**
- * Class multichoice_choice.
- *
- * Represents an individual choice in a multiple choice question.
- *
- * @package   mod_livequiz
- */
-class multichoice_choice {
-    /**
-     * @var string $display The text displayed for this choice.
-     */
-    public string $display;
-
-    /**
-     * @var string $value The value submitted for this choice.
-     */
-    public string $value;
-
-    /**
-     * Constructor for the multichoice_choice class.
-     *
-     * @param string $display The text displayed for this choice.
-     * @param string $value The value submitted for this choice.
-     */
-    public function __construct(string $display, string $value) {
-        $this->display = $display;
-        $this->value = $value;
-    }
-}
+require_once('multichoiceoption.php');
 
 /**
  * Class multichoice.
