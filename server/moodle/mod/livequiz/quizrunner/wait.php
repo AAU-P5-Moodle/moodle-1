@@ -22,6 +22,7 @@
  */
 
 require_once('../../../config.php');
+require_login(); // Require user login.
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizrunner'));
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title("Play quiz");

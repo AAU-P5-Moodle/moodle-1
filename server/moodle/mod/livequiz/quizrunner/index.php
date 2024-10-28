@@ -22,7 +22,7 @@
  */
 
 require_once('../../../config.php');
-
+require_login(); // Require user login.
 require_once('question.php');
 require_once('answer/slider.php');
 require_once('answer/multichoice.php');
