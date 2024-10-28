@@ -24,16 +24,16 @@ namespace mod_livequiz\classes;
  */
 class answer {
     /** @var int $id the id of the answer*/
-    public int $id;
+    private int $id;
 
     /** @var string $description the text of the answer*/
-    public string $description;
+    private string $description;
 
     /** @var bool $correct if the answer is correct*/
-    public bool $correct;
+    private bool $correct;
 
     /** @var string $explanation */
-    public string $explanation;
+    private string $explanation;
 
     /**
      * answer constructor.
@@ -47,5 +47,37 @@ class answer {
         $this->description = $description;
         $this->correct = $correct;
         $this->explanation = $explanation;
+    }
+
+    /**
+     * Getter for answer id
+     * @return int
+     */
+    public function get_id(): int {
+        return $this->id;
+    }
+
+    /**
+     * Getter for answer description
+     * @return string
+     */
+    public function get_description(): string {
+        return $this->description;
+    }
+
+    /**
+     * Getter for answer correct
+     * @return bool
+     */
+    public function get_correct(): bool {
+        return $this->correct;
+    }
+
+    /**
+     * Getter for answer explanation
+     * @return string
+     */
+    public function get_explanation(): string {
+        return $this->explanation;
     }
 }
