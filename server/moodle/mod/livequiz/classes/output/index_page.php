@@ -1,11 +1,11 @@
 <?php
 // Standard GPL and phpdocs
 
-namespace tool_demo\output;
+namespace mod_livequiz\output;
 
-use renderable
-use renderer_base
-use templatable
+use renderable;
+use renderer_base;
+use templatable;
 use stdClass;
 
 class index_page implements renderable, templatable {
