@@ -20,8 +20,6 @@ use dml_exception;
 use dml_transaction_exception;
 use mod_livequiz\answer\answer;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * 'Static' class, do not instantiate.
  * Displays the livequiz view page.

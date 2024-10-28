@@ -16,6 +16,8 @@
 
 namespace mod_livequiz\services;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../models/livequiz.php');
 require_once(__DIR__ . '/../models/question.php');
 require_once(__DIR__ . '/../models/answer.php');
