@@ -48,7 +48,7 @@ class createNavbar {
      * @return string The HTML output for the navbar.
      */
     public function definition(): string {
-        global $CFG;
+        global $id;
 
         $tabs = [
             'quizcreator' => get_string('quizcreator', 'mod_livequiz'),
@@ -60,7 +60,7 @@ class createNavbar {
         $output = html_writer::start_div('nav-tabs');
 
         foreach ($tabs as $tab => $label) {
-            $url = new moodle_url('/mod/livequiz/' . $tab, ['tab' => $tab]);
+            $url = new moodle_url('/mod/livequiz/' . $tab, ['id' => $id]);
             $activeclass = ($this->activetab === $tab) ? ' active' : '';
             $output .= html_writer::link($url, $label, ['class' => 'tab-button' . $activeclass]);
         }

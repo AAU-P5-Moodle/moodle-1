@@ -27,6 +27,8 @@
 require_once('../../../config.php');
 require_once('../form/createquizform.php');
 require_once('../hub/NavBar.php');
+$id = required_param('id', PARAM_INT); // Course module ID.
+[$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 
 // Require user to be logged in.
 require_login();
@@ -44,7 +46,7 @@ echo $OUTPUT->header();
 // Display the navigation bar if the class exists.
 if (class_exists('createNavbar')) {
     $activetab = 'quizcreator'; // Define the active tab.
-    $navbar = new createNavbar($activetab);
+    $navbar = new createNavbar();
     $navbar->display();
 } else {
     echo $OUTPUT->notification(get_string('navbarclassmissing', 'mod_livequiz'), 'notifyproblem');
@@ -52,23 +54,26 @@ if (class_exists('createNavbar')) {
 
 // Initialize the form.
 $mform = new createquizform();
+global $DB;
 
+try {
+    $quizdata = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
+    $mform->set_data(['existingquizzes' => $quizdata]);
+} catch (Exception $e) {
+    echo $OUTPUT->notification('Failed to retrieve quiz data: ' . $e->getMessage(), 'notifyproblem');
+}
 // Display the form.
 $mform->display();
 
 // Additional buttons and image upload section.
 echo html_writer::start_div('quiz_modal_buttons');
 
-echo html_writer::start_div('image_upload_container');
-echo html_writer::div('<img id="imagePreview" src="#" alt="' . get_string('imagepreview', 'mod_livequiz') . '" />', 'imagePreviewContainer');
-echo html_writer::tag('label', get_string('addimage', 'mod_livequiz'), ['for' => 'imageUpload', 'class' => 'custom-file-upload']);
-echo html_writer::empty_tag('input', ['type' => 'file', 'id' => 'imageUpload', 'name' => 'quizImage', 'accept' => 'image/png']);
-echo html_writer::end_div();
-
 // Add the Save and Cancel buttons.
 echo html_writer::tag('button', get_string('savequiz', 'mod_livequiz'), ['id' => 'saveQuiz', 'class' => 'save_button']);
 echo html_writer::tag('button', get_string('cancelquiz', 'mod_livequiz'), ['id' => 'cancelQuiz', 'class' => 'cancel_button']);
 echo html_writer::end_div();
+
+echo '<div class="div_for_question" id="questionDiv"></div>';
 
 // Include custom JavaScript for the page.
 $PAGE->requires->js(new moodle_url('/mod/livequiz/amd/src/quizcreator.js'));

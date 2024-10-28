@@ -294,4 +294,72 @@ let savedQuestions = [];
             }
         });
     }
+
+    const saveQuizButton = document.getElementById('saveQuiz');
+    if (saveQuizButton) {
+        saveQuizButton.addEventListener('click', () => {
+            event.preventDefault();
+
+            const data = {
+                id: document.getElementById('id').value;
+                name: document.getElementById('name').value,
+                intro: document.getElementById('intro').value,
+                introformat: document.getElementById('introformat').value,
+                timemodified: Date.now(),
+                timecreated: Date.now(),
+                questions: []
+            }
+
+            let questionCounter = 0;
+
+            const questionElements = document.querySelectorAll('.question');
+            questionElements.forEach(questionElement => {
+                const questionData = {
+                    id: questionCounter,
+                    title: questionElement.querySelector('.question-title').value,
+                    timelimit: parseInt(questionElement.querySelector('querySelector').value),
+                    explanation: questionElement.querySelector('.question'),
+                }
+                questionCounter += 1;
+
+                const answerElements = questionElement.querySelectorAll('.answer');
+
+                let answerCounter = 0;
+
+                answerElements.forEach(answerElement => {
+                    const answer = {
+                    id: answerCounter,
+                    correct: answerElement.querySelector('.answer-correct').checked,
+                    description: answerElement.querySelector('.answer-description').value,
+                    explanation: answerElement.querySelector('.answer-explanation').vlaue,
+                    file: answerElement.querySelector('.answer-file').value || null
+                    };
+                    answerCounter += 1;
+
+                    question.answers.push(answer);
+                });
+                data.questions.push(question);
+            });
+            fetch('/mod/livequiz/quizcreator/save_quiz.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(result => {
+                console.log('Success:', result);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+        })
+    }
 });
+
