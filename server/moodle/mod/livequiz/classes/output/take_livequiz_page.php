@@ -15,7 +15,7 @@ class take_livequiz_page implements renderable, templatable {
     /** @var string $sometext Some text to show how to pass data to a template. */
     private livequiz $livequiz;
     private $sometext = null; 
-    private int $questionid =0;
+    private int $questionid = 0;
 
     public function __construct(livequiz $livequiz) {
         $this->livequiz = $livequiz;
@@ -28,8 +28,9 @@ class take_livequiz_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
-        $data->quiztitle = $this->livequiz->get_quiz_title();
-        $data->description = $this->livequiz->get_question_by_index($questionid)->description;
+        $data->quiztitle = $this->livequiz->get_name();
+        $data->questiontitle = $this->livequiz->get_question_by_index($this->questionid )->get_title();
+        $data->description = $this->livequiz->get_question_by_index($this->questionid)->get_description();
         return $data;
     }
 }
