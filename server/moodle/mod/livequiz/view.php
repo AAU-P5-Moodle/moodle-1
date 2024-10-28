@@ -39,7 +39,13 @@ $PAGE->set_url('/mod/livequiz/view.php', ['id' => $id]);
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
-// Example routing logic based on user role.
+$output = $PAGE->get_renderer('mod_livequiz');
+$renderable = new \mod_livequiz\output\index_page('VI TESTER VORES PLUGIN HEJ!!!');
+
+
+
+
+/*
 if (has_capability('mod/livequiz:manage', $context)) {
     // Redirect teachers to the management page.
     redirect(new moodle_url('/mod/livequiz/manage.php', ['id' => $id]));
@@ -47,7 +53,8 @@ if (has_capability('mod/livequiz:manage', $context)) {
    // Redirect students to the quiz page.
     redirect(new moodle_url('/mod/livequiz/startquiz.php', ['cmid' => $id]));
 }
+*/
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading('This is the livequiz view page');
+echo $output->render($renderable);
 echo $OUTPUT->footer();
