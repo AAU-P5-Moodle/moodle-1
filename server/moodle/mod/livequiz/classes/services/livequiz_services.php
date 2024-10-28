@@ -18,11 +18,11 @@ namespace mod_livequiz\services;
 
 use dml_exception;
 use dml_transaction_exception;
-use mod_livequiz\answers\answers;
-use mod_livequiz\livequiz\livequiz;
-use mod_livequiz\question\question;
-use mod_livequiz\questions_answers_relation\questions_answers_relation;
-use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
+use mod_livequiz\models\answer;
+use mod_livequiz\models\livequiz;
+use mod_livequiz\models\question;
+use mod_livequiz\models\questions_answers_relation;
+use mod_livequiz\models\quiz_questions_relation;
 
 /**
  * Class livequiz_services
@@ -67,7 +67,7 @@ class livequiz_services {
 
         $questions = $this->get_questions_with_answers($id);
 
-        $livequiz->set_questions($questions);
+        $livequiz->add_questions($questions);
 
         return $livequiz;
     }
@@ -91,7 +91,7 @@ class livequiz_services {
     ): question {
         $questiondata = new question($title, $description, $timelimit, $explanation);
 
-        $livequiz->set_questions([$questiondata]);
+        $livequiz->add_questions([$questiondata]);
         return new question($title, $description, $timelimit, $explanation);
     }
 
@@ -105,7 +105,7 @@ class livequiz_services {
      * @return answers
      */
     public function new_answer(question $question, int $correct, string $description, string $explanation): answers {
-        $question->set_answer(new answers($correct, $description, $explanation));
+        $question->add_answer(new answers($correct, $description, $explanation));
         return new answers($correct, $description, $explanation);
     }
 
@@ -177,7 +177,7 @@ class livequiz_services {
 
         foreach ($questions as $question) {
             $answers = questions_answers_relation::get_answers_from_question($question->get_id());
-            $question->set_answers($answers);
+            $question->add_answers($answers);
         }
         return $questions;
     }

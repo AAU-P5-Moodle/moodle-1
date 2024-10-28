@@ -25,7 +25,7 @@ namespace mod_livequiz\quiz_questions_relation;
 
 use dml_exception;
 use dml_transaction_exception;
-use mod_livequiz\question\question;
+use mod_livequiz\models\question;
 
 /**
  * Class quiz_questions_relation

@@ -18,7 +18,7 @@ namespace mod_livequiz\questions_answers_relation;
 
 use dml_exception;
 use dml_transaction_exception;
-use mod_livequiz\answers\answers;
+use mod_livequiz\models\answer;
 
 /**
  * 'Static' class, do not instantiate.
@@ -57,7 +57,7 @@ class questions_answers_relation {
         $answers = [];
 
         foreach ($answerids as $answerid) {
-            $answers[] = answers::get_answer_from_id($answerid);
+            $answers[] = answer::get_answer_from_id($answerid);
         }
 
         return $answers;

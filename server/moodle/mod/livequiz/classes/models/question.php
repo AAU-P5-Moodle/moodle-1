@@ -18,9 +18,9 @@ namespace mod_livequiz\question;
 
 use dml_exception;
 use dml_transaction_exception;
-use mod_livequiz\answers\answers;
-use mod_livequiz\questions_answers_relation\questions_answers_relation;
-use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
+use mod_livequiz\models\answer;
+use mod_livequiz\models\questions_answers_relation;
+use mod_livequiz\models\quiz_questions_relation;
 use stdClass;
 
 
@@ -181,18 +181,18 @@ class question {
      *
      * @param array $answers The title of the question.
      */
-    public function set_answers(array $answers): void {
+    public function add_answers(array $answers): void {
         foreach ($answers as $answer) {
-            $this->set_answer($answer);
+            $this->add_answer($answer);
         }
     }
 
-    /**
+    /*
      * Appends an answer to the question object.
      *
      * @param answers $answer The title of the question.
      */
-    public function set_answer(answers $answer): void {
+    public function add_answer(answers $answer): void {
         $this->answers[] = $answer;
     }
 
