@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_livequiz\classes;
+require_once 'answer.php';
 
 /**
  * Class question
@@ -49,12 +50,20 @@ class question {
      * @param $id
      * @param $title
      * @param $description
+     * @param $explanation
      * @param $timelimit
+     * @param $answers
      */
-    public function __construct($id, $title, $description, $timelimit) {
+    public function __construct($id, $title, $description, $explanation, $timelimit, $answers) {
         $this->id = $id;
         $this->title = $title;
         $this->description = $description;
+        $this->explanation = $explanation;
         $this->timelimit = $timelimit;
+
+        foreach ($answers as $answer) {
+            $answerobject = new answer($answer['id'],$answer['description'],$answer['correct'],$answer['explanation']);
+            $this->answers[] = $answerobject;
+        }
     }
 }

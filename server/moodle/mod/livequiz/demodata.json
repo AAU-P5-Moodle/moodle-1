@@ -3,8 +3,8 @@
     "id": "1",
     "name": "Quiz 1",
     "course": "2",
-    "introformat": "1",
     "intro": "This is the first quiz",
+    "introformat": "1",
     "timecreated": "1234567890",
     "timemodified": "1234567890",
     "questions": [

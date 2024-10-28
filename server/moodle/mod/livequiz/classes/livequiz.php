@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_livequiz\classes;
+require_once 'question.php';
 
 /**
  * Class LiveQuiz
@@ -31,9 +32,6 @@ class livequiz {
 
     /** @var int $courseid id of the course the quiz is in */
     private int $courseid;
-
-    /** @var string $course name of the course the quiz is in */
-    private string $course;
 
     /** @var string $intro introduction to the quiz */
     private string $intro;
@@ -52,22 +50,29 @@ class livequiz {
 
     /**
      * LiveQuiz constructor.
+     * @param $id
      * @param $name
      * @param $courseid
-     * @param $course
      * @param $intro
      * @param $introformat
      * @param $timecreated
      * @param $timemodified
+     * @param $questions
      */
-    public function __construct($id, $name, $courseid, $course, $intro, $introformat, $timecreated, $timemodified) {
+    public function __construct($id, $name, $courseid, $intro, $introformat, $timecreated, $timemodified, $questions) {
         $this->id = $id;
         $this->name = $name;
         $this->courseid = $courseid;
-        $this->course = $course;
         $this->intro = $intro;
         $this->introformat = $introformat;
         $this->timecreated = $timecreated;
         $this->timemodified = $timemodified;
+
+        foreach ($questions as $question) {
+            $questionobject = new question($question['id'], $question['title'], $question['description'], $question['explanation'], $question['timelimit'], $question['answers']);
+            $this->questions[] = $questionobject;
+        }
+
+
     }
 }
