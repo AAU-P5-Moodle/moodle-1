@@ -92,75 +92,44 @@ class question {
      */
     public static function submit_question($question): int {
         global $DB;
-        try {
-            $transaction = $DB->start_delegated_transaction();
-            $questiondata = [
-                    'title' => $question->title,
-                    'description' => $question->description,
-                    'timelimit' => $question->timelimit,
-                    'explanation' => $question->explanation,
-                ];
+        $questiondata = [
+                'title' => $question->title,
+                'description' => $question->description,
+                'timelimit' => $question->timelimit,
+                'explanation' => $question->explanation,
+            ];
 
-            $questionid = $DB->insert_record('livequiz_questions', $questiondata);
-            $transaction->allow_commit();
-            return $questionid;
-        } catch (dml_exception $e) {
-            $transaction->rollback($e);
-            throw $e;
-        }
+        return $DB->insert_record('livequiz_questions', $questiondata);
     }
 
     /**
-     * Gets a question instance, with all relevant attributes
+     * Gets a question instance
      *
      * @param $id
-     * @return stdClass
+     * @return question
      * @throws dml_exception
      */
-    public static function get_question_from_id($id): stdClass {
+    public static function get_question_from_id($id): question {
         global $DB;
-        $question = $DB->get_record('livequiz_questions', ['id' => $id]);
-        $answers = questions_answers_relation::get_answers_from_question($question->id);
-        $question->answers = $answers;
+        $questioninstance = $DB->get_record('livequiz_questions', ['id' => $id]);
+        $question = new question(
+            $questioninstance->title,
+            $questioninstance->description,
+            $questioninstance->timelimit,
+            $questioninstance->explanation
+        );
+        $question->set_id($questioninstance->id);
         return $question;
     }
 
     /**
-     * When a question is being constructed,
-     * this function should be called to create an answer
-     * associated with the specific question.
+     * Gets the ID of the question.
      *
-     * @param $correct
-     * @param $description
-     * @param $explanation
-     * @return void
+     * @return int
      */
-    public function append_answers_to_question($correct, $description, $explanation): void {
-        $this->answers[] = new answers($correct, $description, $explanation);
+    public function get_id(): int {
+        return $this->id;
     }
-
-    /**
-     * TODO: Implement this method
-     * Update a question
-     *
-     * @param $questiondata
-     * @return bool
-     * @throws dml_exception
-     */
-    public static function update_question($questiondata): bool {
-        global $DB;
-        return $DB->update_record('livequiz_questions', $questiondata);
-    }
-
-    /**
-     * TODO: Implement this method
-     * Delete a question
-     *
-     * @param $questiondata
-     * @throws dml_exception
-     */
-
-    // Getters for private fields.
 
     /**
      * Gets the title of the question.
@@ -205,5 +174,35 @@ class question {
      */
     public function get_answers(): array {
         return $this->answers;
+    }
+
+    /**
+     * Appends an answer to the question object.
+     *
+     * @param array $answers The title of the question.
+     */
+    public function set_answers(array $answers): void {
+        foreach ($answers as $answer) {
+            $this->set_answer($answer);
+        }
+    }
+
+    /**
+     * Appends an answer to the question object.
+     *
+     * @param answers $answer The title of the question.
+     */
+    public function set_answer(answers $answer): void {
+        $this->answers[] = $answer;
+    }
+
+    /**
+     * Sets the ID of the question.
+     *
+     * @param $id
+     * @return void The ID of the question.
+     */
+    private function set_id($id): void {
+        $this->id = $id;
     }
 }

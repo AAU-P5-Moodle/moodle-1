@@ -29,7 +29,7 @@ use mod_livequiz\answers\answers;
  */
 class questions_answers_relation {
     /**
-     * Append an answer to a question, given their ids
+     * Append an answer to a question, given its id
      *
      * @param int $questionid
      * @param int $answerid
@@ -39,16 +39,7 @@ class questions_answers_relation {
      */
     public static function append_answer_to_question(int $questionid, int $answerid): void {
         global $DB;
-        try {
-            $transaction = $DB->start_delegated_transaction();
-
-            $DB->insert_record('livequiz_questions_answers', ['question_id' => $questionid, 'answer_id' => $answerid]);
-
-            $transaction->allow_commit();
-        } catch (dml_exception $e) {
-            $transaction->rollback($e);
-            throw $e;
-        }
+        $DB->insert_record('livequiz_questions_answers', ['question_id' => $questionid, 'answer_id' => $answerid]);
     }
 
     /**
@@ -71,10 +62,4 @@ class questions_answers_relation {
 
         return $answers;
     }
-
-    /* TODO discuss deletion.
-     public static function remove_answer_from_question ($) {
-
-     }
-    */
 }

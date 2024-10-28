@@ -76,8 +76,7 @@ class livequiz {
     /**
      * @var array $questions
      */
-    private array $questions;
-
+    private array $questions = [];
 
     /**
      * Constructor for the livequiz class. Returns the object.
@@ -90,7 +89,7 @@ class livequiz {
      * @param int $timecreated
      * @param int $timemodified
      */
-    public function __construct(
+    private function __construct(
         int $id,
         string $name,
         int $course,
@@ -111,39 +110,7 @@ class livequiz {
     }
 
     /**
-     * This method stores quiz data in the database.
-     * Before calling this method, none of the quiz data is safe.
-     * Please make sure that the quiz object is properly populated before using.
-     * TODO:
-     * Handle lecturer id such that the intermediate table can be updated accordingly.
-     * @param livequiz $livequiz
-     * @param array $questions // An array of question objects.
-     * @return livequiz
-     * @throws dml_exception
-     * @throws dml_transaction_exception
-     */
-    public static function submit_quiz_to_database(livequiz $livequiz, array $questions): livequiz {
-        $livequiz->set_questions($questions);
-        foreach ($questions as $question) {
-            $questionid = question::submit_question($question);
-
-            // Inserting into the quiz_questions relation table.
-            quiz_questions_relation::append_question_to_quiz($questionid, $livequiz->get_id());
-
-            foreach ($question->get_answers() as $answer) {
-                $answerid = answers::submit_answer($answer);
-
-                // Inserting into the questions_answers relation table.
-                questions_answers_relation::append_answer_to_question($questionid, $answerid);
-            }
-        }
-        self::update_quiz($livequiz);
-        return $livequiz;
-    }
-
-
-    /**
-     * Gets a livequiz instance, with all relevant attributes.
+     * Gets a livequiz instance from the DB, with all relevant attributes.
      *
      * TODO implement associated lecturer.
      *
@@ -155,7 +122,7 @@ class livequiz {
         global $DB;
         $quizinstance = $DB->get_record('livequiz', ['id' => $id]);
 
-        $livequiz = new livequiz(
+        return new livequiz(
             $quizinstance->id,
             $quizinstance->name,
             $quizinstance->course,
@@ -164,12 +131,25 @@ class livequiz {
             $quizinstance->timecreated,
             $quizinstance->timemodified
         );
+    }
 
-        $questions = quiz_questions_relation::get_questions_from_quiz_id($id);
+    /**
+     * Updates the livequiz in the database, and updates the timemodified field.
+     *
+     * @param livequiz $livequiz
+     * @return bool
+     * @throws dml_exception
+     */
+    public function update_quiz(): bool {
+        global $DB;
 
-        $livequiz->questions = $questions;
+        $this->set_timemodified();
 
-        return $livequiz;
+        $record = new stdClass();
+        $record->id = $this->get_id();
+        $record->timemodified = $this->get_timemodified();
+
+        return $DB->update_record('livequiz', $record);
     }
 
     /**
@@ -206,15 +186,6 @@ class livequiz {
      */
     public function get_intro(): string {
         return $this->intro;
-    }
-
-    /**
-     * Gets the format for the introduction.
-     *
-     * @return int
-     */
-    public function get_introformat(): int {
-        return $this->introformat;
     }
 
     /**
@@ -259,30 +230,18 @@ class livequiz {
      *
      * @param array $questions
      */
-    public function set_questions($questions): void {
-        $this->questions = $questions;
+    public function set_questions(array $questions): void {
+        foreach ($questions as $question) {
+            $this->set_question($question);
+        }
     }
 
     /**
-     * Updates the livequiz in the database, and updates the timemodified field.
+     * Appends a question
      *
-     * @param livequiz $livequiz
-     * @return bool
-     * @throws dml_exception
+     * @param question $question
      */
-    private static function update_quiz(livequiz $livequiz): bool {
-        global $DB;
-
-        // Update the timemodified field.
-        $livequiz->set_timemodified();
-
-        // Create an object with the necessary fields for updating.
-        $record = new stdClass();
-        $record->id = $livequiz->get_id();
-        $record->timemodified = $livequiz->get_timemodified();
-        // Add other fields here if necessary.
-
-        // Update the record in the database.
-        return $DB->update_record('livequiz', $record);
+    public function set_question(question $question): void {
+        $this->questions[] = $question;
     }
 }

@@ -75,41 +75,20 @@ class answers {
     /**
      * Given an answer object, this method will insert the answer to the database
      *
-     * @param object $answer
+     * @param answers $answer
      * @return int
      * @throws dml_exception
-     * @throws dml_transaction_exception
      */
-    public static function submit_answer(object $answer): int {
+    public static function submit_answer(answers $answer): int {
         global $DB;
-        try {
-            $transaction = $DB->start_delegated_transaction();
-            $answerdata = [
-                'correct' => $answer->correct,
-                'description' => $answer->description,
-                'explanation' => $answer->explanation,
-            ];
 
-            $answerid = $DB->insert_record('livequiz_answers', $answerdata);
-            $transaction->allow_commit();
-            return $answerid;
-        } catch (dml_exception $e) {
-            $transaction->rollback($e);
-            throw $e;
-        }
-    }
+        $answerdata = [
+            'correct' => $answer->correct,
+            'description' => $answer->description,
+            'explanation' => $answer->explanation,
+        ];
 
-    /**
-     * TODO: Implement this method
-     * Given an edited answer object, this method updates the given object in the database
-     *
-     * @param object $answer
-     * @return bool
-     * @throws dml_exception
-     */
-    public static function update_answer(object $answer): bool {
-        global $DB;
-        return $DB->update_record('livequiz_answers', ['id' => $answer->id]);
+        return $DB->insert_record('livequiz_answers', $answerdata);
     }
 
     /**
@@ -119,9 +98,12 @@ class answers {
      * @return mixed
      * @throws dml_exception
      */
-    public static function get_answer_from_id(int $id): mixed {
+    public static function get_answer_from_id(int $id): answers {
         global $DB;
-        return $DB->get_record('livequiz_answers', ['id' => $id]);
+        $answerdata = $DB->get_record('livequiz_answers', ['id' => $id]);
+        $answer = new answers($answerdata->correct, $answerdata->description, $answerdata->explanation);
+        $answer->set_id($answerdata->id);
+        return $answer;
     }
 
     /**
@@ -158,5 +140,14 @@ class answers {
      */
     public function get_explanation(): string {
         return $this->explanation;
+    }
+
+    /**
+     * Sets the ID of the answer.
+     *
+     * @param int $id
+     */
+    private function set_id(int $id): void {
+        $this->id = $id;
     }
 }

@@ -33,31 +33,6 @@ use mod_livequiz\question\question;
  */
 class quiz_questions_relation {
     /**
-     * Append a list of questions to a quiz, given its id
-     *
-     * @param $questions array //of question objects
-     * @param $quizid int
-     * @return void
-     * @throws dml_exception
-     */
-    public static function append_questions_to_quiz(array $questions, int $quizid): void {
-        global $DB;
-        try {
-            $transaction = $DB->start_delegated_transaction();
-
-            foreach ($questions as $question) {
-                $questionid = $DB->insert_record('livequiz_questions', $question);
-                $DB->insert_record('livequiz_quiz_questions', ['quiz_id' => $quizid, 'question_id' => $questionid]);
-            }
-
-            $transaction->allow_commit();
-        } catch (dml_exception $e) {
-            $transaction->rollback($e);
-            throw $e;
-        }
-    }
-
-    /**
      *  Append a question object to a quiz, given its id.
      *
      * @param $questionid
@@ -68,16 +43,7 @@ class quiz_questions_relation {
      */
     public static function append_question_to_quiz(int $questionid, int $quizid): void {
         global $DB;
-        try {
-            $transaction = $DB->start_delegated_transaction();
-
-            $DB->insert_record('livequiz_quiz_questions', ['quiz_id' => $quizid, 'question_id' => $questionid]);
-
-            $transaction->allow_commit();
-        } catch (dml_exception $e) {
-            $transaction->rollback($e);
-            throw $e;
-        }
+        $DB->insert_record('livequiz_quiz_questions', ['quiz_id' => $quizid, 'question_id' => $questionid]);
     }
 
     /**
