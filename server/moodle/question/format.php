@@ -331,6 +331,9 @@ class qformat_default {
     /**
      * Process the file
      * This method should not normally be overidden
+     * @re/**
+     * Process the file
+     * This method should not normally be overidden
      * @return bool success
      */
     public function importprocess() {
