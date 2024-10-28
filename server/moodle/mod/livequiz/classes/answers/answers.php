@@ -123,4 +123,40 @@ class answers {
         global $DB;
         return $DB->get_record('livequiz_answers', ['id' => $id]);
     }
+
+    /**
+     * Gets the ID of the answer.
+     *
+     * @return int
+     */
+    public function get_id(): int {
+        return $this->id;
+    }
+
+    /**
+     * Gets the correct status of the answer.
+     *
+     * @return int
+     */
+    public function get_correct(): int {
+        return $this->correct;
+    }
+
+    /**
+     * Gets the description of the answer.
+     *
+     * @return string
+     */
+    public function get_description(): string {
+        return $this->description;
+    }
+
+    /**
+     * Gets the explanation of the answer.
+     *
+     * @return string
+     */
+    public function get_explanation(): string {
+        return $this->explanation;
+    }
 }

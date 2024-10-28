@@ -135,7 +135,7 @@ class question {
      * @param $explanation
      * @return void
      */
-    public function new_answer_option($correct, $description, $explanation): void {
+    public function append_answers_to_question($correct, $description, $explanation): void {
         $this->answers[] = new answers($correct, $description, $explanation);
     }
 
