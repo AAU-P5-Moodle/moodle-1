@@ -56,6 +56,5 @@ if (has_capability('mod/livequiz:manage', $context)) {
 */
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading('This is the livequiz view page');
 echo $output->render($renderable);
 echo $OUTPUT->footer();
