@@ -187,7 +187,7 @@ class question {
         }
     }
 
-    /** */
+    /**
      * Appends an answer to the question object.
      *
      * @param answers $answer The title of the question.
