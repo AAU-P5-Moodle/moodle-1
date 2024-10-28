@@ -12,7 +12,7 @@ class index_page implements renderable, templatable {
     /** @var string $sometext Some text to show how to pass data to a template. */
     private $sometext = null;
 
-    public function __construct($sometext): void {
+    public function __construct($sometext) {
         $this->sometext = $sometext;
     }
 
