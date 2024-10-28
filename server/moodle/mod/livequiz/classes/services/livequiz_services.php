@@ -82,7 +82,13 @@ class livequiz_services {
      * @param string $explanation
      * @return question
      */
-    public function new_question(livequiz $livequiz, string $title, string $description, int $timelimit,  string $explanation): question {
+    public function new_question(
+        livequiz $livequiz,
+        string $title,
+        string $description,
+        int $timelimit,
+        string $explanation
+    ): question {
         $questiondata = new question($title, $description, $timelimit, $explanation);
 
         $livequiz->set_questions([$questiondata]);
