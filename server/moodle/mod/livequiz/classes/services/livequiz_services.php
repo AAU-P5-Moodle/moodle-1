@@ -16,13 +16,21 @@
 
 namespace mod_livequiz\services;
 
+require_once(__DIR__ . '/../models/livequiz.php');
+require_once(__DIR__ . '/../models/question.php');
+require_once(__DIR__ . '/../models/answer.php');
+require_once(__DIR__ . '/../models/questions_answers_relation.php');
+require_once(__DIR__ . '/../models/quiz_questions_relation.php');
+
 use dml_exception;
 use dml_transaction_exception;
-use mod_livequiz\models\answer;
-use mod_livequiz\models\livequiz;
-use mod_livequiz\models\question;
-use mod_livequiz\models\questions_answers_relation;
-use mod_livequiz\models\quiz_questions_relation;
+
+use mod_livequiz\answer\answer;
+use mod_livequiz\livequiz\livequiz;
+use mod_livequiz\question\question;
+use mod_livequiz\questions_answers_relation\questions_answers_relation;
+use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
+
 
 /**
  * Class livequiz_services
@@ -102,11 +110,11 @@ class livequiz_services {
      * @param int $correct
      * @param string $description
      * @param string $explanation
-     * @return answers
+     * @return answer
      */
-    public function new_answer(question $question, int $correct, string $description, string $explanation): answers {
-        $question->add_answer(new answers($correct, $description, $explanation));
-        return new answers($correct, $description, $explanation);
+    public function new_answer(question $question, int $correct, string $description, string $explanation): answer {
+        $question->add_answer(new answer($correct, $description, $explanation));
+        return new answer($correct, $description, $explanation);
     }
 
     /**
@@ -160,7 +168,7 @@ class livequiz_services {
      */
     private function submit_answers(int $questionid, array $answers): void {
         foreach ($answers as $answer) {
-            $answerid = answers::submit_answer($answer);
+            $answerid = answer::submit_answer($answer);
             questions_answers_relation::append_answer_to_question($questionid, $answerid);
         }
     }

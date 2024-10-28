@@ -18,7 +18,7 @@ namespace mod_livequiz\questions_answers_relation;
 
 use dml_exception;
 use dml_transaction_exception;
-use mod_livequiz\models\answer;
+use mod_livequiz\answer\answer;
 
 /**
  * 'Static' class, do not instantiate.

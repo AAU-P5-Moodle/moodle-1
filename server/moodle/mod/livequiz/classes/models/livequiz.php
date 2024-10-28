@@ -16,15 +16,8 @@
 
 namespace mod_livequiz\livequiz;
 
-
-
-use DateTime;
 use dml_exception;
-use dml_transaction_exception;
-use mod_livequiz\models\answer;
-use mod_livequiz\models\question;
-use mod_livequiz\models\questions_answers_relation;
-use mod_livequiz\models\quiz_questions_relation;
+use mod_livequiz\question\question;
 use stdClass;
 
 /**
@@ -136,7 +129,6 @@ class livequiz {
     /**
      * Updates the livequiz in the database, and updates the timemodified field.
      *
-     * @param livequiz $livequiz
      * @return bool
      * @throws dml_exception
      */
