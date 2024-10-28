@@ -81,4 +81,8 @@ class livequiz {
             $this->questions[] = $questionobject;
         }
     }
+
+    public function get_question($id){
+        return $this->questions[$id];
+    }
 }
