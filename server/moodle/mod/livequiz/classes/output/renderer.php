@@ -38,4 +38,15 @@ class renderer extends plugin_renderer_base
         $data = $page->export_for_template($this);
         return parent::render_from_template('mod_livequiz/index_page', $data);
     }
+
+    /**
+     *
+     * @param take_livequiz_page $page
+     *
+     * @return string html for the page
+     */
+    public function render_take_livequiz_page($page): string {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('mod_livequiz/take_livequiz_page', $data);
+    }
 }
