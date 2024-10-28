@@ -16,7 +16,7 @@
 
 namespace mod_livequiz\classes;
 defined('MOODLE_INTERNAL') || die();
-require_once('./answer.php');
+require_once('answer.php');
 
 /**
  * Class question
