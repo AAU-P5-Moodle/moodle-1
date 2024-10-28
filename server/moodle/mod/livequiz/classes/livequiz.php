@@ -90,6 +90,7 @@ class livequiz {
             $this->questions[] = $questionobject;
         }
     }
+
     /**
      * Getter for livequiz id
      * @return int
@@ -152,5 +153,8 @@ class livequiz {
      */
     public function get_questions(): array {
         return $this->questions;
+
+    public function get_question($id){
+        return $this->questions[$id];
     }
 }
