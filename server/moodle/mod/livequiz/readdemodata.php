@@ -16,8 +16,9 @@
 
 namespace mod_livequiz;
 defined('MOODLE_INTERNAL') || die();
+
 use mod_livequiz\classes\livequiz;
-require_once('classes\livequiz.php');
+require_once('./classes/livequiz.php');
 
 /**
  * Temporary read demo data class
