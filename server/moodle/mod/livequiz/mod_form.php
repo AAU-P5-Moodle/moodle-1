@@ -39,14 +39,23 @@ class mod_livequiz_mod_form extends moodleform_mod {
      * including the standard course module elements and action buttons.
      *
      * @return void
+     * @throws coding_exception
      */
     public function definition(): void {
-        $mform = $this->_form; // Reference to the form.
+        $mform = $this->_form;
 
-        // Add standard course module elements.
+        // Add a header to the form.
+        $mform->addElement('header', 'general', get_string('general', 'form'));
+        // Add a text input for the name of the livequiz.
+        $mform->addElement('text', 'name', get_string('name'), ['size' => 64]);
+        $mform->setType('name', PARAM_TEXT);
+        $mform->addRule('name', null, 'required', null, 'client');
+
+        // Add a textarea for the introduction.
+        $this->standard_intro_elements(get_string('introduction', 'quiz'));
+
         $this->standard_coursemodule_elements();
 
-        // Add standard Moodle form action buttons.
         $this->add_action_buttons();
     }
 
