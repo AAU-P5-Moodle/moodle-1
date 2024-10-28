@@ -90,7 +90,15 @@ class livequiz {
      * @param int $timecreated
      * @param int $timemodified
      */
-    public function __construct(int $id, string $name, int $course, string $intro, int $introformat, int $timecreated, int $timemodified) {
+    public function __construct(
+        int $id,
+        string $name,
+        int $course,
+        string $intro,
+        int $introformat,
+        int $timecreated,
+        int $timemodified
+    ) {
         $this->id = $id;
         $this->name = $name;
         $this->course = $course;
