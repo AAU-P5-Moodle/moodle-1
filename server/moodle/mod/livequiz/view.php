@@ -40,19 +40,9 @@ $PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['id' => $id]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
-
-// Read demo data.
-$demodatareader = new \mod_livequiz\readdemodata();
-$demoquiz = $demodatareader->getdemodata();
-
-
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
 $renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE', $id);
-$takelivequiz= new \mod_livequiz\output\take_livequiz_page($demoquiz);
-
-
-
 
 /*
 if (has_capability('mod/livequiz:manage', $context)) {

@@ -23,6 +23,7 @@
 
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php');
+require_once('readdemodata.php');
 
 global $PAGE, $OUTPUT;
 
@@ -49,12 +50,17 @@ $PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['id' => $id]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
-$output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\classes\output\take_livequiz_page('This is the page where the quiz is conducted');
+// Read demo data.
+$demodatareader = new \mod_livequiz\readdemodata();
+$demoquiz = $demodatareader->getdemodata();
 
+// Rendering.
+$output = $PAGE->get_renderer('mod_livequiz');
+//$renderable = new \mod_livequiz\output\take_livequiz_page('This is the page where the quiz is conducted');
+$takelivequiz= new \mod_livequiz\output\take_livequiz_page($demoquiz);
 
 // $forcenew = optional_param('forcenew', false, PARAM_BOOL); // Used to force a new preview.
 
 echo $OUTPUT->header();
-echo $output->render($renderable);
+echo $output->render($takelivequiz);
 echo $OUTPUT->footer();
