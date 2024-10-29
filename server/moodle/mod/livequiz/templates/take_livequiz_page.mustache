@@ -44,7 +44,7 @@
   <fieldset>
   {{#answers}}
       <label for="{{id}}">{{answer_description}}</label>
-      <input type="radio" id="{{id}}" name="{{questiontitle}}" /> <!--radiobutton for now but should be replaced dynamically based on the number of correct answers -->
+      <input type="{{answertype}}" id="{{id}}" name="{{questiontitle}}" /> <!--radiobutton for now but should be replaced dynamically based on the number of correct answers -->
   {{/answers}}
   </fieldset>
   </div>

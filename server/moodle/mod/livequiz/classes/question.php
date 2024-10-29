@@ -115,4 +115,23 @@ class question {
     public function get_answers(): array {
         return $this->answers;
     }
+
+    /**
+     * Getter for question hasmultipleanswers
+     * @return bool
+     */
+    public function get_hasmultipleanswers(): bool {
+        // This is a simple check to see if the question has multiple correct answers.
+        $numcorrect = 0;
+        $hasmultipleanswers = false;
+        foreach ($this->answers as $answer) {
+            if ($answer->get_correct()) {
+                $numcorrect++;
+            }
+        }
+        if ($numcorrect > 1) {
+            $hasmultipleanswers = true;
+        }
+        return $hasmultipleanswers;
+    }
 }
