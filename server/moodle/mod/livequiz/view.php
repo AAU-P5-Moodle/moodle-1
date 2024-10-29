@@ -22,7 +22,6 @@
  */
 
 
-
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 require_once('readdemodata.php');
@@ -43,15 +42,15 @@ $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 
-//Read demo data
+// Read demo data.
 $demodatareader = new \mod_livequiz\readdemodata();
-$demoquiz= $demodatareader->getdemodata();
+$demoquiz = $demodatareader->getdemodata();
 
 
-//rendring
+// Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
 $renderable = new \mod_livequiz\output\index_page('VI TESTER VORES PLUGIN HEJ!!!');
-$takelivequiz= new \mod_livequiz\output\take_livequiz_page($demoquiz);
+$takelivequiz = new \mod_livequiz\output\take_livequiz_page($demoquiz);
 
 
 
