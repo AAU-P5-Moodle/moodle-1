@@ -41,8 +41,8 @@ $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE WHERE YOU CAN JOIN A QUIZ OR TAKE IT INDIVIDUALLY', $id);
-$takelivequiz= new \mod_livequiz\output\take_livequiz_page($demoquiz);
+$renderable = new \mod_livequiz\classes\output\index_page('THIS IS THE INDEXPAGE', $id);
+// ... $takelivequiz= new \mod_livequiz\output\take_livequiz_page($demoquiz);
 
 
 

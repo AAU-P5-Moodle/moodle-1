@@ -22,7 +22,7 @@
  */
 
 require_once('../../config.php');
-require_once($CFG->libdir.'/accesslib.php');
+require_once($CFG->libdir . '/accesslib.php');
 
 global $PAGE, $OUTPUT;
 
@@ -37,23 +37,23 @@ if ($cm->course !== $course->id) {
     throw new moodle_exception('coursemismatch', 'error', '', null, 'The course module does not match the course');
 }
 
-//$instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
+// $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 require_login($course, false, $cm);
-//$page = optional_param('page', -1, PARAM_INT); // Page to jump to in the attempt.
+// $page = optional_param('page', -1, PARAM_INT); // Page to jump to in the attempt.
 
-$context = context_module::instance($cm->id); // $cm->id 
+$context = context_module::instance($cm->id);
 
 $PAGE->set_context($context); // Make sure to set the page context.
 
-$PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['id'=> $id]));
+$PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['id' => $id]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\take_livequiz_page('This is the page where the quiz is conducted');
+$renderable = new \mod_livequiz\classes\output\take_livequiz_page('This is the page where the quiz is conducted');
 
 
-//$forcenew = optional_param('forcenew', false, PARAM_BOOL); // Used to force a new preview.
+// $forcenew = optional_param('forcenew', false, PARAM_BOOL); // Used to force a new preview.
 
 echo $OUTPUT->header();
 echo $output->render($renderable);

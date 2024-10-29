@@ -14,27 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_livequiz\output;
+namespace mod_livequiz\classes\output;
 
+use core\exception\moodle_exception;
 use plugin_renderer_base;
-
 
 /**
  * The main renderer for the livequiz module.
  *
  * @package   mod_livequiz
  * @category  output
+ * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class renderer extends plugin_renderer_base
-{
+class renderer extends plugin_renderer_base {
     /**
      *
      * @param index_page $page
      *
      * @return string html for the page
+     * @throws moodle_exception
      */
-    public function render_index_page($page): string {
+    public function render_index_page(index_page $page): string {
         $data = $page->export_for_template($this);
         return parent::render_from_template('mod_livequiz/index_page', $data);
     }
@@ -44,8 +45,9 @@ class renderer extends plugin_renderer_base
      * @param take_livequiz_page $page
      *
      * @return string html for the page
+     * @throws moodle_exception
      */
-    public function render_take_livequiz_page($page): string {
+    public function render_take_livequiz_page(take_livequiz_page $page): string {
         $data = $page->export_for_template($this);
         return parent::render_from_template('mod_livequiz/take_livequiz_page', $data);
     }
