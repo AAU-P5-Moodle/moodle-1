@@ -30,7 +30,7 @@ $quizid = required_param('quizid', PARAM_INT);
 $questionid = required_param('questionid', PARAM_INT);
 $numberofquestions = required_param('numberofquestions', PARAM_INT);
 $questiontitle = required_param('questiontitle', PARAM_TEXT);
-$answers = required_param_array($questiontitle, PARAM_INT);
+$answers = required_param_array('answers_for_question_' . $questionid , PARAM_INT);
 
 if (!isset($_SESSION['quiz_answers'])) {
     $_SESSION['quiz_answers'] = [];
@@ -40,6 +40,10 @@ $_SESSION['quiz_answers'][$questionid] = [
     'question_id' => $questionid,
     'answers' => $answers,
 ];
+echo "<pre>";
+print_r($_SESSION['quiz_answers']);
+echo "</pre>";
+exit;
 
 // Redirect to the next question or the completion page.
 $nextquestionindex = $questionid + 1;

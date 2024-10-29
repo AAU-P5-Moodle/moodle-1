@@ -47,7 +47,7 @@
   {{#answers}}
     <div class="answer">
       <label for="{{id}}">{{answer_description}}</label>
-      <input type="{{answertype}}" id="{{id}}" name="{{questiontitle}}" />
+      <input type="{{answertype}}" id="{{id}}" name="answers_for_question_{{questionid}}[]" value="{{id}}"/>
     </div>
   {{/answers}}
   </fieldset>
@@ -56,11 +56,14 @@
         <input type="hidden" name="questionid" value="{{questionid}}" />
         <input type="hidden" name="questiontitle" value="{{questiontitle}}" />
         <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit question">
 </form>
   <button class="check-answer">Check answer</button>
   <div class="question-navigation">
-      <button class="previousquestion" onclick="location.href='{{previousurl}}'">Previous Question</button>
-      <button class="nextquestion" onclick="location.href='{{nexturl}}'">Next Question</button>
+      <button class="previous-question" onclick="location.href='{{previousurl}}'">Previous Question</button>
+      <button class="next-question" onclick="location.href='{{nexturl}}'">Next Question</button>
   </div>
+    <div class="navbar">
+        <button class="submit-quiz" >Submit Quiz</button>
+    </div>
 </div>
