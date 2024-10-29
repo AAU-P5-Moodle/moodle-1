@@ -126,6 +126,7 @@ class take_livequiz_page implements renderable, templatable {
             '/mod/livequiz/attempt.php',
             ['id' => $this->cmid, 'questionid' => $this->get_previous_question_id()]
         ))->out(false);
+        $data->resultsurl = (new moodle_url('/mod/livequiz/results.php',['id' => $this->cmid]));
         return $data;
     }
 }
