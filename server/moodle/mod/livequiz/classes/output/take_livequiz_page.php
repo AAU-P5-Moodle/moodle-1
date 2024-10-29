@@ -16,6 +16,8 @@
 
 namespace mod_livequiz\output;
 
+use core\exception\moodle_exception;
+use moodle_url;
 use renderable;
 use renderer_base;
 use templatable;
@@ -32,22 +34,52 @@ require_once(dirname(__DIR__) . '/livequiz.php');
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class take_livequiz_page implements renderable, templatable {
+    /** @var int $cmid the course module id */
+    private int $cmid;
+
     /** @var livequiz $livequiz The quiz that are currently being attempted. */
     private livequiz $livequiz;
 
-    /** @var string $sometext Some text to show how to pass data to a template. */
-    private string $sometext;
-
     /** @var int $questionid . The id of the question to be rendered*/
-    private int $questionid = 0;
+    private int $questionid;
+
+    /** @var int $numberofquestions The number of questions in the quiz */
+    private int $numberofquestions;
 
     /**
      * Constructor for take_livequiz_page, which sets the livequiz field.
      *
+     * @param int $cmid
      * @param livequiz $livequiz
+     * @param int $questionid
      */
-    public function __construct(livequiz $livequiz) {
+    public function __construct(int $cmid, livequiz $livequiz, int $questionid) {
+        $this->cmid = $cmid;
         $this->livequiz = $livequiz;
+        $this->questionid = $questionid;
+        $this->numberofquestions = count($this->livequiz->get_questions());
+    }
+
+    /**
+     * Get the next question id.
+     * @return int
+     */
+    private function get_next_question_id(): int {
+        if ($this->questionid < $this->numberofquestions - 1) {
+            return $this->questionid + 1;
+        }
+        return $this->questionid;
+    }
+
+    /**
+     * Get the previous question id.
+     * @return int
+     */
+    private function get_previous_question_id(): int {
+        if ($this->questionid > 0) {
+            return $this->questionid - 1;
+        }
+        return $this->questionid;
     }
 
     /**
@@ -55,12 +87,21 @@ class take_livequiz_page implements renderable, templatable {
      *
      * @param renderer_base $output
      * @return stdClass
+     * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
         $data->quiztitle = $this->livequiz->get_name();
         $data->questiontitle = $this->livequiz->get_question_by_index($this->questionid)->get_title();
         $data->description = $this->livequiz->get_question_by_index($this->questionid)->get_description();
+        $data->nexturl = (new moodle_url(
+            '/mod/livequiz/attempt.php',
+            ['id' => $this->cmid, 'questionid' => $this->get_next_question_id()]
+        ))->out(false);
+        $data->previousurl = (new moodle_url(
+            '/mod/livequiz/attempt.php',
+            ['id' => $this->cmid, 'questionid' => $this->get_previous_question_id()]
+        ))->out(false);
         return $data;
     }
 }

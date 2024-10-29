@@ -29,7 +29,9 @@ global $PAGE, $OUTPUT;
 
 // Get submitted parameters.
 $id = required_param('id', PARAM_INT); // Course module id.
+$questionid = optional_param('questionid', 0, PARAM_INT); // Question id, default to 0 if not provided.
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
+
 
 if (!$cm) {
     throw new moodle_exception('invalidcoursemodule', 'error');
@@ -46,7 +48,7 @@ $context = context_module::instance($cm->id);
 
 $PAGE->set_context($context); // Make sure to set the page context.
 
-$PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['id' => $id]));
+$PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['id' => $id, 'questionid' => $questionid]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
@@ -56,8 +58,7 @@ $demoquiz = $demodatareader->getdemodata();
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-//$renderable = new \mod_livequiz\output\take_livequiz_page('This is the page where the quiz is conducted');
-$takelivequiz= new \mod_livequiz\output\take_livequiz_page($demoquiz);
+$takelivequiz = new \mod_livequiz\output\take_livequiz_page($id, $demoquiz, $questionid);
 
 // $forcenew = optional_param('forcenew', false, PARAM_BOOL); // Used to force a new preview.
 
