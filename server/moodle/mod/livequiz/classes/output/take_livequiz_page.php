@@ -9,11 +9,13 @@ use templatable;
 use stdClass;
 use mod_livequiz\classes\livequiz;
 
-require_once(__DIR__ . '/../classes/livequiz.php');
+require_once(dirname(__DIR__) . '/livequiz.php');
 
 class take_livequiz_page implements renderable, templatable {
     /** @var string $sometext Some text to show how to pass data to a template. */
-    private string $livequiz; //should be changed to livequiz object
+    private livequiz $livequiz;
+    private $sometext = null;
+    private int $questionid = 0;
 
 
     public function __construct(string $livequiz) {
@@ -25,11 +27,11 @@ class take_livequiz_page implements renderable, templatable {
      *
      * @return stdClass
      */
-    public function export_for_template(renderer_base $output): array {        
-        $data = [];
-        $data['livequiz'] = $this->livequiz;
+    public function export_for_template(renderer_base $output): stdClass {
+        $data = new stdClass();
+        $data->quiztitle = $this->livequiz->get_name();
+        $data->questiontitle = $this->livequiz->get_question_by_index($this->questionid )->get_title();
+        $data->description = $this->livequiz->get_question_by_index($this->questionid)->get_description();
         return $data;
     }
-
 }
-

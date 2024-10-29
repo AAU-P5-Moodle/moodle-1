@@ -23,6 +23,7 @@
 
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
+require_once('readdemodata.php');
 
 global $OUTPUT, $PAGE, $DB;
 
@@ -41,6 +42,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 $output = $PAGE->get_renderer('mod_livequiz');
 $renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE WHERE YOU CAN JOIN A QUIZ OR TAKE IT INDIVIDUALLY', $id);
+$takelivequiz= new \mod_livequiz\output\take_livequiz_page($demoquiz);
 
 
 
