@@ -42,10 +42,10 @@
   </div>
   <div class="answer-container">
   <fieldset>
-  {{#answer}}
-      <label for="{{id}}">{{answername}}</label>
-      <input type="{{answertype}}" id="{{id}}" name="{{name}}"/>
-  {{/answer}}
+  {{#answers}}
+      <label for="{{id}}">{{answer_description}}</label>
+      <input type="radio" id="{{id}}" name="{{questiontitle}}" /> <!--radiobutton for now but should be replaced dynamically based on the number of correct answers -->
+  {{/answers}}
   </fieldset>
   </div>
   <button class="check-answer">Check answer</button>

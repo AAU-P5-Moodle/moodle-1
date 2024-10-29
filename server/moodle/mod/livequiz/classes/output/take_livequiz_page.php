@@ -94,6 +94,17 @@ class take_livequiz_page implements renderable, templatable {
         $data->quiztitle = $this->livequiz->get_name();
         $data->questiontitle = $this->livequiz->get_question_by_index($this->questionid)->get_title();
         $data->description = $this->livequiz->get_question_by_index($this->questionid)->get_description();
+        $rawanswers = $this->livequiz->get_question_by_index($this->questionid)->get_answers();
+        $answers = [];
+        foreach ($rawanswers as $rawanswer) {
+            $answers[] = [
+                'id' => $rawanswer->get_id(),
+                'answer_description' => $rawanswer->get_description(),
+            ];
+        }
+        $data->answers = $answers;
+
+
         $data->nexturl = (new moodle_url(
             '/mod/livequiz/attempt.php',
             ['id' => $this->cmid, 'questionid' => $this->get_next_question_id()]

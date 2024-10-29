@@ -107,4 +107,12 @@ class question {
     public function get_timelimit(): int {
         return $this->timelimit;
     }
+
+    /**
+     * Getter for question answers
+     * @return array
+     */
+    public function get_answers(): array {
+        return $this->answers;
+    }
 }

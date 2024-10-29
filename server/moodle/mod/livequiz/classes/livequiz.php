@@ -155,7 +155,7 @@ class livequiz {
         return $this->questions;
     }
     
-    public function get_question_by_index($index){
+    public function get_question_by_index($index) {
         return $this->questions[$index];
     }
 }
