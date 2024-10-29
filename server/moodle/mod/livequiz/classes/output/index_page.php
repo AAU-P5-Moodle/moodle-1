@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_livequiz\classes\output;
+namespace mod_livequiz\output;
 
 use core\exception\moodle_exception;
 use renderable;
@@ -24,12 +24,10 @@ use stdClass;
 use moodle_url;
 
 /**
- * The main index for the livequiz module.
- *
- * @package   mod_livequiz
- * @category  output
+ * Class index_page
+ * @package mod_livequiz
  * @copyright 2024 Software AAU
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class index_page implements renderable, templatable {
     /** @var string $sometext Some text to show how to pass data to a template. */

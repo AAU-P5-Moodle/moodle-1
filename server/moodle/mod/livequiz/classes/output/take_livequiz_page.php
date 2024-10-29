@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_livequiz\classes\output;
+namespace mod_livequiz\output;
 
 use renderable;
 use renderer_base;
@@ -26,24 +26,27 @@ defined('MOODLE_INTERNAL') || die();
 require_once(dirname(__DIR__) . '/livequiz.php');
 
 /**
- * The main renderer for the livequiz module.
- *
- * @package   mod_livequiz
- * @category  output
+ * Class take_livequiz_page
+ * @package mod_livequiz
  * @copyright 2024 Software AAU
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class take_livequiz_page implements renderable, templatable {
+    /** @var livequiz $livequiz The quiz that are currently being attempted. */
+    private livequiz $livequiz;
+
     /** @var string $sometext Some text to show how to pass data to a template. */
-    private string $livequiz; // This should be changed to livequiz object.
-    /** @var int $questionid the id of the question */
+    private string $sometext;
+
+    /** @var int $questionid . The id of the question to be rendered*/
     private int $questionid = 0;
 
     /**
-     * take_livequiz_page constructor.
-     * @param string $livequiz
+     * Constructor for take_livequiz_page, which sets the livequiz field.
+     *
+     * @param livequiz $livequiz
      */
-    public function __construct(string $livequiz) {
+    public function __construct(livequiz $livequiz) {
         $this->livequiz = $livequiz;
     }
 
@@ -55,10 +58,9 @@ class take_livequiz_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
-        // ... $data->quiztitle = $this->livequiz->get_name();
-        // ... $data->questiontitle = $this->livequiz->get_question_by_index($this->questionid )->get_title();
-        // ... $data->description = $this->livequiz->get_question_by_index($this->questionid)->get_description();
-        $data->livequiz = $this->livequiz;
+        $data->quiztitle = $this->livequiz->get_name();
+        $data->questiontitle = $this->livequiz->get_question_by_index($this->questionid)->get_title();
+        $data->description = $this->livequiz->get_question_by_index($this->questionid)->get_description();
         return $data;
     }
 }

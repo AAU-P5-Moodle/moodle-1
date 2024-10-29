@@ -30,6 +30,28 @@
 
 }}
 <div class="main-container">
-  <h1>take_livequiz_page</h1>
-  <p>{{livequiz}}</p>
+  <div class="title-container">
+    <h1 class="quiz-title">{{quiztitle}}</h1>
+  </div>
+  <div class="question-container">
+    <p class="question-title">{{questiontitle}}</p>
+      <div class="media-container">
+          <img src="" alt="">
+      </div>
+    <p class="question-description">{{description}}</p>
+  </div>
+  <div class="answer-container">
+  <fieldset>
+  {{#answer}}
+      <input type="{{answertype}}" id="{{id}}" name="{{name}}"/>
+      <label for="{{id}}">{{answername}}</label>
+  {{/answer}}
+  </fieldset>
+  </div>
+  <button class="check-answer">Check answer</button>
+  <div class="question-navigation">
+      <button class="previousquestion">Previous Question</button>
+      <button class="nextquestion">Next Question</button>
+  </div>
 </div>
+    
