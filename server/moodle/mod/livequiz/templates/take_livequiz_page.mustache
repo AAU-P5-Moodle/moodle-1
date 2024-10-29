@@ -29,7 +29,9 @@
     * fill in later
 
 }}
+
 <div class="main-container">
+    <form method="post" action="submit_answers.php">
   <div class="title-container">
     <h1 class="quiz-title">{{quiztitle}}</h1>
   </div>
@@ -43,11 +45,19 @@
   <div class="answer-container">
   <fieldset>
   {{#answers}}
+    <div class="answer">
       <label for="{{id}}">{{answer_description}}</label>
-      <input type="{{answertype}}" id="{{id}}" name="{{questiontitle}}" /> <!--radiobutton for now but should be replaced dynamically based on the number of correct answers -->
+      <input type="{{answertype}}" id="{{id}}" name="{{questiontitle}}" />
+    </div>
   {{/answers}}
   </fieldset>
   </div>
+        <input type="hidden" name="quizid" value="{{quizid}}" />
+        <input type="hidden" name="questionid" value="{{questionid}}" />
+        <input type="hidden" name="questiontitle" value="{{questiontitle}}" />
+        <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
+        <input type="submit" value="Submit">
+</form>
   <button class="check-answer">Check answer</button>
   <div class="question-navigation">
       <button class="previousquestion">Previous Question</button>

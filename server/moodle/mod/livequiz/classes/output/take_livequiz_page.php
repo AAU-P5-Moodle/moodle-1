@@ -93,6 +93,12 @@ class take_livequiz_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
+        // These are used when submitting the answers.
+        $data->quizid = $this->livequiz->get_id();
+        $data->questionid = $this->questionid;
+        $data->numberofquestions = $this->numberofquestions;
+
+        // These are used for rendering the question.
         $data->quiztitle = $this->livequiz->get_name();
         $data->questiontitle = $this->livequiz->get_question_by_index($this->questionid)->get_title();
         $data->description = $this->livequiz->get_question_by_index($this->questionid)->get_description();
@@ -111,7 +117,7 @@ class take_livequiz_page implements renderable, templatable {
             $data->answertype = string('radio');
         }
 
-
+        // These are used for navigation.
         $data->nexturl = (new moodle_url(
             '/mod/livequiz/attempt.php',
             ['id' => $this->cmid, 'questionid' => $this->get_next_question_id()]
