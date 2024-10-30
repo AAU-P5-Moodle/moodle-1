@@ -26,7 +26,6 @@ require_login();
 
 session_start();
 
-$answerid = required_param('answerid', PARAM_INT);
 $questionid = required_param('questionid', PARAM_INT);
 $answervalue = required_param('answervalue', PARAM_TEXT);
 
@@ -45,6 +44,7 @@ $_SESSION['quiz_answers'][$questionid] = [
     'question_id' => $questionid,
     'answers' => $answers,
 ];
+// KEPT TEMPORARILY FOR DEVELOPMENT PURPOSES
 //echo "<pre>";
 //print_r($_SESSION['quiz_answers']);
 //echo "</pre>";

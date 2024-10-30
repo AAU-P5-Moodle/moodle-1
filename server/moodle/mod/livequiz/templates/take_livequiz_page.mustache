@@ -70,9 +70,6 @@
                 // Add a 'change' event listener to each option
                 answerOptions.forEach(option => {
                     option.addEventListener("change", function(event) {
-                        const changedElement = event.target;
-                        console.log(`Changed answer on ${changedElement.name} to value: ${changedElement.value}`);
-
                         // Get all selected answers
                         const selectedAnswers = [];
                         Array.from(answerOptions).forEach(input => {
@@ -80,19 +77,21 @@
                                 selectedAnswers.push(input.value);
                             }
                         });
-                        console.log(selectedAnswers);
+                        //KEPT FOR DEVELOPMENT
+                        //console.log(selectedAnswers);
 
                         // Update session
                         const xhr = new XMLHttpRequest();
                         xhr.open("POST", "update_session.php", true);
                         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        //KEPT FOR DEVELOPMENT
                         xhr.onreadystatechange = function () {
                             if (xhr.readyState === 4 && xhr.status === 200) {
                                 console.log("Session updated successfully");
                             }
                         };
-                        console.log("json string" + JSON.stringify(selectedAnswers))
-                        xhr.send(`questionid={{questionid}}&answerid={{answerid}}&answervalue=${JSON.stringify(selectedAnswers)}`);
+                        // JSON stringify is decoded in update_session.php
+                        xhr.send(`questionid={{questionid}}&answervalue=${JSON.stringify(selectedAnswers)}`);
 
                     });
                 });
