@@ -48,9 +48,8 @@ $PAGE->set_cacheable(false);
 session_start();
 
 if ($_SESSION['completed']) {
-    $text = 'Hej med dig';
+    $text = 'You are not allowed to go back after submitting the quiz';
     echo $text;
-    echo $_SESSION['completed'];
     die();
 }
 
