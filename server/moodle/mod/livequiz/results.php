@@ -29,7 +29,7 @@ global $PAGE, $OUTPUT;
 
 // Get submitted parameters.
 $id = required_param('id', PARAM_INT); // Course module id.
-$quizid = required_param('$livequizid', 0, PARAM_INT); // Quiz id, default to 0 if not provided.
+$quizid = required_param('livequizid', PARAM_INT);
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 
 
