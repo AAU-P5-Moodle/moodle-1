@@ -139,14 +139,22 @@ class question {
      * Prepares the template data for mustache.
      * @return stdClass
      */
-    public function prepare_for_template(stdClass $data): stdClass {
+    public function prepare_for_template(\stdClass $data): \stdClass {
         // Add to data object.
         $data->question_id = $this->id;
         $data->question_title = $this->title;
         $data->question_description = $this->description;
         $data->question_time_limit = $this->timelimit;
         $data->question_explanation = $this->explanation;
-
+        $data->answers = [];
+        foreach ($this->answers as $answer) {
+            $data->answers[] = [
+                'answer_id' => $answer->get_id(),
+                'answer_description' => $answer->get_description(),
+                'answer_explanation' => $answer->get_explanation(),
+                'answer_correct' => $answer->get_correct(),
+            ];
+        }
         return $data;
     }
 }

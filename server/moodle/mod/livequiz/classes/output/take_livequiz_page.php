@@ -91,9 +91,9 @@ class take_livequiz_page implements renderable, templatable {
      * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
-        $data = $this->livequiz->prepare_for_template();
+        $data = $this->livequiz->prepare_question_for_template($this->questionid);
         $this->numberofquestions = $data->numberofquestions;
-
+        error_log(print_r($data,true));
 
         if ($this->livequiz->get_question_by_index($this->questionid)->get_hasmultipleanswers()) {
             $data->answertype = string('checkbox');

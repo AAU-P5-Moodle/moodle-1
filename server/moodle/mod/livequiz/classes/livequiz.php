@@ -183,24 +183,24 @@ class livequiz {
 
         $data->questions = [];
         foreach ($rawquestions as $rawquestion) {
-            $answers = [];
-            foreach ($rawquestion->get_answers() as $rawanswer) {
-                $answers[] = [
-                    'answer_id' => $rawanswer->get_id(),
-                    'answer_description' => $rawanswer->get_description(),
-                    'answer_explanation' => $rawanswer->get_explanation(),
-                    'answer_correct' => $rawanswer->get_correct(),
-                ];
-            }
-            $data->questions[] = [
-                'question_id' => $rawquestion->get_id(),
-                'question_title' => $rawquestion->get_title(),
-                'question_description' => $rawquestion->get_description(),
-                'question_time_limit' => $rawquestion->get_timelimit(),
-                'question_explanation' => $rawquestion->get_explanation(),
-                'question_answers' => $answers,
-            ];
+            $data->questions[] = $rawquestion->prepare_for_template(new stdClass());
         }
+        return $data;
+    }
+
+    /**
+     * Prepares the template date for mustache.
+     * @return stdClass
+     */
+    public function prepare_question_for_template(int $questionindex): stdClass {
+        // Prepare data object.
+        $data = new stdClass();
+
+        $data->quizid = $this->id;
+        $data->quiz_title = $this->get_name();
+        $data->numberofquestions = count($this->get_questions());
+        $question = $this->get_question_by_index($questionindex);
+        $data = $question->prepare_for_template($data);
         return $data;
     }
 }
