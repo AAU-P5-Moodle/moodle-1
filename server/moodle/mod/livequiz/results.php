@@ -43,12 +43,12 @@ $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Read demo data. -replace with DB query when DB is connected.
-$demoDataReader = new \mod_livequiz\readdemodata();
-$demoQuiz = $demoDataReader->getdemodata();
+$demodatareader = new \mod_livequiz\readdemodata();
+$demoquiz = $demodatareader->getdemodata();
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$results = new \mod_livequiz\output\results_page($id, $demoQuiz);
+$results = new \mod_livequiz\output\results_page($id, $demoquiz);
 
 
 echo $OUTPUT->header();

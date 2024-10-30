@@ -57,25 +57,8 @@ class results_page implements renderable, templatable {
      * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
-        $data = new stdClass();
-        $data->quizid = $this->livequiz->get_id();
-        $data->numberofquestions = $this->numberofquestions;
-        $data->quiztitle = $this->livequiz->get_name();
-
-        $rawquestions = $this->livequiz->get_questions();
-        $questions = [];
-        foreach ($rawquestions as $rawquestion) {
-            $questions[] = [
-                'id' => $rawquestion->get_id(),
-                'question_title' => $rawquestion->get_title(),
-                'question_description' => $rawquestion->get_description(),
-                //TODO add the image.
-                'question_explanation' => $rawquestion->get_explanation(),
-
-            ];
-        }
-        $data->is_attempting = false;
-        $data->url = new moodle_url('/mod/livequiz/results.php', ['id' => $this->cmid]);
+        $data = $this->livequiz->prepare_for_template();
+        $data->isattempting = false;
         return $data;
     }
 }

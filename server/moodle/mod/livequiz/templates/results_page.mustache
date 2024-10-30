@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_livequiz/index_page
+    @template mod_livequiz/results_page
 
     Results Page for the livequiz plugin
 
@@ -31,15 +31,9 @@
 }}
 <div class="main-container">
     <h1>Results for attempt</h1>
-    <div>
-      <fieldset>
+    <div class="questions-container">
       {{#questions}}
-        <div class="question">
-        <h2> {{name}}</h2>
-          <label for="{{id}}">{{answer_description}}</label>
-          <input type="{{answertype}}" id="{{id}}" name="answers_for_question_{{questionid}}[]" value="{{id}}"/>
-        </div>
+        {{> mod_livequiz/question_section}}
       {{/questions}}
-      </fieldset>
     </div>
 </div>
