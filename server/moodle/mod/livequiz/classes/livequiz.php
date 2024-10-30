@@ -16,7 +16,6 @@
 
 namespace mod_livequiz\classes;
 use stdClass;
-use function DI\string;
 
 defined('MOODLE_INTERNAL') || die();
 require_once('question.php');

@@ -23,8 +23,6 @@ use renderer_base;
 use templatable;
 use stdClass;
 use mod_livequiz\classes\livequiz;
-use mod_livequiz\classes\answer;
-use function DI\string;
 
 defined('MOODLE_INTERNAL') || die();
 require_once(dirname(__DIR__) . '/answer.php');
@@ -94,12 +92,6 @@ class take_livequiz_page implements renderable, templatable {
         $data = $this->livequiz->prepare_question_for_template($this->questionid);
         $this->numberofquestions = $data->numberofquestions;
         error_log(print_r($data,true));
-
-        if ($this->livequiz->get_question_by_index($this->questionid)->get_hasmultipleanswers()) {
-            $data->answertype = string('checkbox');
-        } else {
-            $data->answertype = string('radio');
-        }
         // These are used for navigation.
         $data->nexturl = (new moodle_url(
             '/mod/livequiz/attempt.php',

@@ -15,6 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_livequiz\classes;
+
+use function DI\string;
+use stdClass;
+
 defined('MOODLE_INTERNAL') || die();
 require_once('answer.php');
 
@@ -139,7 +143,7 @@ class question {
      * Prepares the template data for mustache.
      * @return stdClass
      */
-    public function prepare_for_template(\stdClass $data): \stdClass {
+    public function prepare_for_template(stdClass $data): stdClass {
         // Add to data object.
         $data->question_id = $this->id;
         $data->question_title = $this->title;
@@ -154,6 +158,11 @@ class question {
                 'answer_explanation' => $answer->get_explanation(),
                 'answer_correct' => $answer->get_correct(),
             ];
+        }
+        if ($this->get_hasmultipleanswers()) {
+            $data->answertype = string('checkbox');
+        } else {
+            $data->answertype = string('radio');
         }
         return $data;
     }
