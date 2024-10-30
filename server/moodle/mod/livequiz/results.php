@@ -29,7 +29,7 @@ global $PAGE, $OUTPUT;
 
 // Get submitted parameters.
 $id = required_param('id', PARAM_INT); // Course module id.
-$quizid = optional_param('quizid', 0, PARAM_INT); // Quiz id, default to 0 if not provided.
+$quizid = required_param('$livequizid', 0, PARAM_INT); // Quiz id, default to 0 if not provided.
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 
 
@@ -46,13 +46,18 @@ $context = context_module::instance($cm->id);
 
 $PAGE->set_context($context); // Make sure to set the page context.
 
-$PAGE->set_url(new moodle_url('/mod/livequiz/results.php', ['id' => $id, 'quizid' => $quizid]));
+$PAGE->set_url(new moodle_url('/mod/livequiz/results.php', ['id' => $id, 'quizid' => $quizid ]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
+// Read demo data. -replace with DB query when DB is connected.
+$demoDataReader = new \mod_livequiz\readdemodata();
+$demoQuiz = $demoDataReader->getdemodata();
+
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$results= new \mod_livequiz\output\results_page($id, $quizid);
+$results = new \mod_livequiz\output\results_page($id, $demoQuiz);
+
 
 echo $OUTPUT->header();
 echo $output->render($results);

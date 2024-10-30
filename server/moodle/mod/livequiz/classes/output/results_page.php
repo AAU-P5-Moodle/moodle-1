@@ -22,6 +22,10 @@ use renderer_base;
 use templatable;
 use stdClass;
 use moodle_url;
+use mod_livequiz\classes\livequiz;
+
+defined('MOODLE_INTERNAL') || die();
+require_once(dirname(__DIR__) . '/livequiz.php');
 
 /**
  * Class results_page
@@ -32,14 +36,17 @@ use moodle_url;
 class results_page implements renderable, templatable {
     /** @var int $cmid the course module id */
     protected int $cmid;
+    private int $numberofquestions;
+
 
     /**
      * index_page constructor.
      * @param int $id
      */
-    public function __construct( int $id, int $quizid) {
+    public function __construct(int $id, livequiz $livequiz) {
         $this->cmid = $id;
-        $this->quizid = $quizid;
+        $this->livequiz = $livequiz;
+        $this->numberofquestions = count($this->livequiz->get_questions());
     }
 
     /**
@@ -51,6 +58,23 @@ class results_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
+        $data->quizid = $this->livequiz->get_id();
+        $data->numberofquestions = $this->numberofquestions;
+        $data->quiztitle = $this->livequiz->get_name();
+
+        $rawquestions = $this->livequiz->get_questions();
+        $questions = [];
+        foreach ($rawquestions as $rawquestion) {
+            $questions[] = [
+                'id' => $rawquestion->get_id(),
+                'question_title' => $rawquestion->get_title(),
+                'question_description' => $rawquestion->get_description(),
+                //TODO add the image.
+                'question_explanation' => $rawquestion->get_explanation(),
+
+            ];
+        }
+        $data->is_attempting = false;
         $data->url = new moodle_url('/mod/livequiz/results.php', ['id' => $this->cmid]);
         return $data;
     }

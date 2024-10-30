@@ -15,9 +15,9 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_livequiz/index_page
+    @template mod_livequiz/nav_bar
 
-    Results Page for the livequiz plugin
+    Navigation bar used to navigate in a quiz
 
     Classes required for JS:
     * none
@@ -29,17 +29,8 @@
     * fill in later
 
 }}
-<div class="main-container">
-    <h1>Results for attempt</h1>
-    <div>
-      <fieldset>
-      {{#questions}}
-        <div class="question">
-        <h2> {{name}}</h2>
-          <label for="{{id}}">{{answer_description}}</label>
-          <input type="{{answertype}}" id="{{id}}" name="answers_for_question_{{questionid}}[]" value="{{id}}"/>
-        </div>
-      {{/questions}}
-      </fieldset>
-    </div>
-</div>
+  <div class="question_navigation">
+      <a href="{{previousurl}}" type="button" id="previousButton"> Previous Question </a>
+      <a href="{{nexturl}}" type="button" id="nextButton"> Next Question </a>
+  </div>
+

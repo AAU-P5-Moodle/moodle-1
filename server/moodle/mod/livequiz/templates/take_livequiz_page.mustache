@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_livquiz/take_livequiz_page
+    @template mod_livequiz/take_livequiz_page
 
     Index Page for the livequiz plugin
 
@@ -31,39 +31,7 @@
 }}
 
 <div class="main-container">
-    <form method="post" action="submit_answers.php">
-  <div class="title-container">
-    <h1 class="quiz-title">{{quiztitle}}</h1>
-  </div>
-  <div class="question-container">
-      <p class="question-title">{{questiontitle}}</p>
-      <div class="media-container">
-          <img src="" alt="">
-      </div>
-    <p class="question-description">{{description}}</p>
-  </div>
-  <div class="answer-container">
-  <fieldset>
-  {{#answers}}
-    <div class="answer">
-      <label for="{{id}}">{{answer_description}}</label>
-      <input type="{{answertype}}" id="{{id}}" name="answers_for_question_{{questionid}}[]" value="{{id}}"/>
-    </div>
-  {{/answers}}
-  </fieldset>
-  </div>
-        <input type="hidden" name="quizid" value="{{quizid}}" />
-        <input type="hidden" name="questionid" value="{{questionid}}" />
-        <input type="hidden" name="questiontitle" value="{{questiontitle}}" />
-        <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
-        <input type="submit" value="Submit question">
-</form>
-  <button class="check-answer">Check answer</button>
-  <div class="question-navigation">
-      <a href="{{previousurl}}" type="button" id="previousButton"> Previous Question </a>
-      <a href="{{nexturl}}" type="button" id="nextButton"> Next Question </a>
-  </div>
-    <div class="navbar">
-        <button class="submit-quiz" onclick="location.href='{{resultsurl}}'">Submit Quiz</button>
-    </div>
+  {{> mod_livequiz/question_section}} {{! question_section import - Context remains the same}}
+  {{> mod_livequiz/nav_bar_section}} {{! nav_bar section import - Context remains the same}}
+  {{> mod_livequiz/side_bar_section}} {{! side_bar section import - Context remains the same}}
 </div>

@@ -24,6 +24,7 @@
 require_once('../../config.php');
 require_login();
 
+
 session_start();
 
 $quizid = required_param('quizid', PARAM_INT);
