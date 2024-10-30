@@ -43,12 +43,17 @@ if ($cm->course !== $course->id) {
 // $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 require_login($course, false, $cm);
 // $page = optional_param('page', -1, PARAM_INT); // Page to jump to in the attempt.
+$PAGE->set_cacheable(false);
 
 session_start();
 
-if ($_SESSION['completed'] == 'true') {
+if ($_SESSION['completed']) {
+    $text = 'Hej med dig';
+    echo $text;
+    echo $_SESSION['completed'];
     die();
 }
+
 
 
 $context = context_module::instance($cm->id);

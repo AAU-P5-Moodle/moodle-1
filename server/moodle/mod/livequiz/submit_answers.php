@@ -40,8 +40,9 @@ $_SESSION['quiz_answers'][$questionid] = [
     'question_id' => $questionid,
     'answers' => $answers,
 ];
+
 echo "<pre>";
-print_r($_SESSION['quiz_answers']);
+print_r($_SESSION);
 echo "</pre>";
 exit;
 

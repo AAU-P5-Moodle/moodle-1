@@ -44,6 +44,8 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 $output = $PAGE->get_renderer('mod_livequiz');
 $renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE', $id);
 
+session_start();
+unset($_SESSION['completed']);
 /*
 if (has_capability('mod/livequiz:manage', $context)) {
     // Redirect teachers to the management page.
