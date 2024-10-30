@@ -34,13 +34,13 @@ let savedQuestions = [];
  
         modal_div.appendChild(create_answer_button(all_answers_for_question_div));
         modal_div.appendChild(all_answers_for_question_div);
- 
-        modal_div.appendChild(save_question(page, question_input, modal_div, all_answers_for_question_div, file_picker));
+        let saveButton = save_question(page, question_input, modal_div, all_answers_for_question_div, file_picker)
+        modal_div.appendChild(saveButton);
         modal_div.appendChild(create_discard_button());
  
         page.appendChild(modal_div);
     }
- 
+    
     function create_discard_button() {
         let discard_question_button = create_element("discard_button", "div", "discard_question_button", "Discard");
     
@@ -70,6 +70,7 @@ let savedQuestions = [];
     function create_cancel_button() {
         let cancel_button = create_element("cancel_button", "button", "cancel_button", "Cancel");
     
+        
         cancel_button.addEventListener('click', () => {
             console.log('Cancel button clicked!');
             // Add cancel functionality here
@@ -165,6 +166,9 @@ let savedQuestions = [];
  
         return timer_div;
     }
+
+    let isEditing = false;
+    let editingIndex = null;
  
     function save_question(page, question_input, modal_div, answers_div, file_picker) {
         let save_question_button = create_element("save_question_button", 'button', "save_button", "Save question");
@@ -182,29 +186,42 @@ let savedQuestions = [];
     
             let file_input = file_picker.querySelector('input[type="file"]');
             let file = file_input.files[0];
-    
+            
             let savedQuestion = {
                 question: questionText,
                 answers: answers,
                 file: file
             };
-    
-            savedQuestions.push(savedQuestion);
+            
+            if (isEditing && editingIndex !== null){
+            savedQuestions[editingIndex] = savedQuestion;
     
             let saved_questions_list = document.getElementById("saved_questions_list");
-            let question_list_item = document.createElement('li');
+            let question_list_item = saved_questions_list.children[editingIndex];
+
             question_list_item.textContent = savedQuestion.question;
-            question_list_item.dataset.index = savedQuestions.length - 1;
-    
-    
-            question_list_item.addEventListener('click', () => {
-                open_saved_question_modal(savedQuestion);
-            });
-    
-    
-            saved_questions_list.appendChild(question_list_item);
-    
-    
+
+
+            isEditing = false;
+            editingIndex = null;
+            } else {
+                savedQuestions.push(savedQuestion);
+
+                let saved_questions_list = document.getElementById("saved_questions_list");
+                let question_list_item = document.createElement('li');
+                question_list_item.textContent = savedQuestion.question;
+                question_list_item.dataset.index = savedQuestions.length - 1;
+
+                const openModalHandler = () => {
+                    open_saved_question_modal(savedQuestions[question_list_item.dataset.index], question_list_item.dataset.index);
+                };
+
+                //adding and removing listener to ensure it does not get opened twice
+                question_list_item.removeEventListener('click', openModalHandler);
+                question_list_item.addEventListener('click',openModalHandler);
+                saved_questions_list.appendChild(question_list_item);
+            }
+            
             modal_div.remove();
         });
     
@@ -212,17 +229,24 @@ let savedQuestions = [];
         return save_question_button;
     }
  
-    function open_saved_question_modal(savedQuestion) {
+    function open_saved_question_modal(savedQuestion,index) {
+        isEditing = true;
+        editingIndex = index;
+        
+        console.log("Editing:", isEditing);
+        console.log("Editing Index:", editingIndex);
+        console.log("Saved Question:", savedQuestion);
+
         let modal_div = document.createElement("div");
         modal_div.className = "Modal_div";
- 
+
         let question_input = document.createElement('textarea');
         question_input.placeholder = "Enter question";
         question_input.className = "question_input";
         question_input.value = savedQuestion.question;
- 
+
         modal_div.appendChild(question_input);
- 
+
         let file_picker = create_file_picker();
         if (savedQuestion.file) {
             const image = file_picker.querySelector('img');
@@ -230,26 +254,27 @@ let savedQuestions = [];
             image.style.maxWidth = "300px";
         }
         modal_div.appendChild(file_picker);
- 
+
         let all_answers_for_question_div = document.createElement("div");
-        all_answers_for_question_div.className = "all_answers_for_question_div";
- 
+
         savedQuestion.answers.forEach(answer => {
             let answer_container = document.createElement('div');
             answer_container.className = "container_for_new_answer";
- 
+
             let answer_input = document.createElement('input');
             answer_input.className = "answer_input";
             answer_input.value = answer;
- 
+
             answer_container.appendChild(answer_input);
             all_answers_for_question_div.appendChild(answer_container);
         });
- 
+
         modal_div.appendChild(create_answer_button(all_answers_for_question_div));
         modal_div.appendChild(all_answers_for_question_div);
+
+        modal_div.appendChild(save_question(null,question_input,modal_div,all_answers_for_question_div,file_picker));
         modal_div.appendChild(create_discard_button());
- 
+
         let page = document.getElementById("page-mod-livequiz-quizcreator");
         page.appendChild(modal_div);
     }
@@ -321,48 +346,40 @@ let savedQuestions = [];
     if (saveQuizButton) {
         saveQuizButton.addEventListener('click', () => {
             event.preventDefault();
+            const urlParams = new URLSearchParams(window.location.search);
+            const quizId = urlParams.get('id');
 
             const data = {
-                id: document.getElementById('id').value;
-                name: document.getElementById('name').value,
-                intro: document.getElementById('intro').value,
-                introformat: document.getElementById('introformat').value,
+                id: quizId,
+                name: document.getElementById('id_name').value,
+                intro: document.getElementById('id_quiz_description').value,
+                //introformat: document.getElementById('').value, WHAT IS INTRO FORMAT
                 timemodified: Date.now(),
                 timecreated: Date.now(),
                 questions: []
             }
 
-            let questionCounter = 0;
-
-            const questionElements = document.querySelectorAll('.question');
-            questionElements.forEach(questionElement => {
+            savedQuestions.forEach((savedQuestion, questionCounter) => {
                 const questionData = {
                     id: questionCounter,
-                    title: questionElement.querySelector('.question-title').value,
-                    timelimit: parseInt(questionElement.querySelector('querySelector').value),
-                    explanation: questionElement.querySelector('.question'),
+                    title: savedQuestion.question,
+                    timelimit: savedQuestion.timelimit,
+                    explanation: savedQuestion.explanation,
+                    answers: []
                 }
-                questionCounter += 1;
 
-                const answerElements = questionElement.querySelectorAll('.answer');
-
-                let answerCounter = 0;
-
-                answerElements.forEach(answerElement => {
-                    const answer = {
+                savedQuestion.answers.forEach((answer, answerCounter) => {
+                    const answerData = {
                     id: answerCounter,
-                    correct: answerElement.querySelector('.answer-correct').checked,
-                    description: answerElement.querySelector('.answer-description').value,
-                    explanation: answerElement.querySelector('.answer-explanation').vlaue,
-                    file: answerElement.querySelector('.answer-file').value || null
+                    correct: answer.correct,
+                    description: answer.description,
+                    explanation: answer.explanation,
                     };
-                    answerCounter += 1;
-
-                    question.answers.push(answer);
+                    questionData.answers.push(answerData);
                 });
-                data.questions.push(question);
+                data.questions.push(questionData);
             });
-            fetch('/mod/livequiz/quizcreator/save_quiz.php', {
+            fetch('/mod/livequiz/quizcreator/save_quiz.php?id='+quizId, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -383,5 +400,5 @@ let savedQuestions = [];
             })
         })
     }
-});
+
 
