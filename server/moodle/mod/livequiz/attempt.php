@@ -44,6 +44,13 @@ if ($cm->course !== $course->id) {
 require_login($course, false, $cm);
 // $page = optional_param('page', -1, PARAM_INT); // Page to jump to in the attempt.
 
+session_start();
+
+if ($_SESSION['completed'] == 'true') {
+    die();
+}
+
+
 $context = context_module::instance($cm->id);
 
 $PAGE->set_context($context); // Make sure to set the page context.

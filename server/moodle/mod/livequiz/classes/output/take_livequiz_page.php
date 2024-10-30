@@ -29,6 +29,7 @@ use function DI\string;
 defined('MOODLE_INTERNAL') || die();
 require_once(dirname(__DIR__) . '/livequiz.php');
 
+
 /**
  * Class take_livequiz_page
  * @package mod_livequiz
@@ -126,7 +127,7 @@ class take_livequiz_page implements renderable, templatable {
             '/mod/livequiz/attempt.php',
             ['id' => $this->cmid, 'questionid' => $this->get_previous_question_id()]
         ))->out(false);
-        $data->resultsurl = (new moodle_url('/mod/livequiz/results.php',['id' => $this->cmid]));
+        $data->resultsurl = (new moodle_url('/mod/livequiz/results.php', ['id' => $this->cmid]));
         return $data;
     }
 }

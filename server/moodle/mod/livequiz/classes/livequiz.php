@@ -154,8 +154,13 @@ class livequiz {
     public function get_questions(): array {
         return $this->questions;
     }
-    
-    public function get_question_by_index($index) {
+
+    /**
+     * Getter that gets the question object in the parsed index
+     * @param int $index the index of the question
+     * @return question
+     */
+    public function get_question_by_index(int $index) {
         return $this->questions[$index];
     }
 }

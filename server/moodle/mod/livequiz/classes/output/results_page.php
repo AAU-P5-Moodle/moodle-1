@@ -32,12 +32,15 @@ use moodle_url;
 class results_page implements renderable, templatable {
     /** @var int $cmid the course module id */
     protected int $cmid;
+    /** @var int  $quizid the quiz id */
+    private int $quizid;
 
     /**
      * index_page constructor.
      * @param int $id
+     * @param int $quizid
      */
-    public function __construct( int $id, int $quizid) {
+    public function __construct(int $id, int $quizid) {
         $this->cmid = $id;
         $this->quizid = $quizid;
     }

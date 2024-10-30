@@ -26,7 +26,6 @@ require_once($CFG->libdir . '/accesslib.php');
 require_once('readdemodata.php');
 
 global $PAGE, $OUTPUT;
-
 // Get submitted parameters.
 $id = required_param('id', PARAM_INT); // Course module id.
 $quizid = optional_param('quizid', 0, PARAM_INT); // Quiz id, default to 0 if not provided.
@@ -42,6 +41,9 @@ if ($cm->course !== $course->id) {
 
 require_login($course, false, $cm);
 
+session_start();
+$_SESSION['completed'] = true;
+
 $context = context_module::instance($cm->id);
 
 $PAGE->set_context($context); // Make sure to set the page context.
@@ -52,7 +54,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$results= new \mod_livequiz\output\results_page($id, $quizid);
+$results = new \mod_livequiz\output\results_page($id, $quizid);
 
 echo $OUTPUT->header();
 echo $output->render($results);
