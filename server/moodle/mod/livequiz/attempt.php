@@ -39,14 +39,12 @@ $questiontitle = optional_param('questiontitle', 0, PARAM_TEXT);
 $answers = optional_param_array('answers_for_question_' . $questionid, [], PARAM_INT);
 
 session_start();
-if ($quizid !== 0) {
-    if (!isset($_SESSION['quiz_answers'])) {
-        $_SESSION['quiz_answers'] = [];
-    }
-    $_SESSION['quiz_answers'][$questionid] = [
-        'question_id' => $questionid,
-        'answers' => $answers,
-    ];
+
+
+if (isset($_SESSION['quiz_answers'])) {
+    echo "<pre>";
+    print_r($_SESSION['quiz_answers']);
+    echo "</pre>";
 }
 
 if (!$cm) {

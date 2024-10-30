@@ -31,7 +31,7 @@
 }}
 
 <div class="main-container">
-    <form method="post" action="attempt.php">
+    <form method="post" action="attempt.php" id="{{quizid}}">
   <div class="title-container">
     <h1 class="quiz-title">{{quiztitle}}</h1>
   </div>
@@ -47,7 +47,7 @@
   {{#answers}}
     <div class="answer">
       <label for="{{answerid}}">{{answer_description}}</label>
-      <input type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}"/>
+      <input class="{{quizid}}" type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}"/>
     </div>
   {{/answers}}
   </fieldset>
@@ -58,14 +58,55 @@
         <input type="hidden" name="questiontitle" value="{{questiontitle}}" />
         <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
         <input type="hidden" name="nextquestionid" value="{{nextquestionid}}" />
-        <input type="submit" value="Submit question">
+        <input type="submit" value="Submit question" id="submitQuestion">
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                console.log("loaded DOM content")
+                // Select all answer options (radio buttons, checkboxes, and dropdowns)
+                const answerOptions = document.getElementsByClassName("{{quizid}}");
+
+                console.log(answerOptions);
+                // Add a 'change' event listener to each option
+                answerOptions.forEach(option => {
+                    option.addEventListener("change", function(event) {
+                        const changedElement = event.target;
+                        console.log(`Changed answer on ${changedElement.name} to value: ${changedElement.value}`);
+
+                        // Get all selected answers
+                        const selectedAnswers = [];
+                        Array.from(answerOptions).forEach(input => {
+                            if (input.checked || input.type === 'radio' && input.checked || input.type === 'checkbox' && input.checked) {
+                                selectedAnswers.push(input.value);
+                            }
+                        });
+                        console.log(selectedAnswers);
+
+                        // Update session
+                        const xhr = new XMLHttpRequest();
+                        xhr.open("POST", "update_session.php", true);
+                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                console.log("Session updated successfully");
+                            }
+                        };
+                        console.log("json string" + JSON.stringify(selectedAnswers))
+                        xhr.send(`questionid={{questionid}}&answerid={{answerid}}&answervalue=${JSON.stringify(selectedAnswers)}`);
+
+                    });
+                });
+
+        })
+        </script>
+    </form>
   <button class="check-answer">Check answer</button>
   <div class="question-navigation">
       <a href="{{previousurl}}" type="button" id="previousButton"> Previous Question </a>
       <a href="{{nexturl}}" type="button" id="nextButton"> Next Question </a>
   </div>
-    </form>
     <div class="navbar">
         <button class="submit-quiz" onclick="location.href='{{resultsurl}}'">Submit Quiz</button>
     </div>
 </div>
+

@@ -26,11 +26,16 @@ require_login();
 
 session_start();
 
-$quizid = required_param('quizid', PARAM_INT);
+$answerid = required_param('answerid', PARAM_INT);
 $questionid = required_param('questionid', PARAM_INT);
-$numberofquestions = required_param('numberofquestions', PARAM_INT);
-$questiontitle = required_param('questiontitle', PARAM_TEXT);
-$answers = required_param_array('answers_for_question_' . $questionid , PARAM_INT);
+$answervalue = required_param('answervalue', PARAM_TEXT);
+
+$answers = [];
+$decodeanswer = json_decode($answervalue, true);
+foreach ($decodeanswer as $key => $value) {
+    $answers[] = $value;
+}
+
 
 if (!isset($_SESSION['quiz_answers'])) {
     $_SESSION['quiz_answers'] = [];
@@ -40,15 +45,7 @@ $_SESSION['quiz_answers'][$questionid] = [
     'question_id' => $questionid,
     'answers' => $answers,
 ];
-echo "<pre>";
-print_r($_SESSION['quiz_answers']);
-echo "</pre>";
-exit;
-
-// Redirect to the next question or the completion page.
-$nextquestionindex = $questionid + 1;
-if ($nextquestionindex < $numberofquestions) {
-    redirect(new moodle_url('/mod/livequiz/attempt.php', ['id' => $quizid, 'questionid' => $nextquestionindex]));
-} else {
-    redirect(new moodle_url('/mod/livequiz/complete.php', ['id' => $quizid]));
-}
+//echo "<pre>";
+//print_r($_SESSION['quiz_answers']);
+//echo "</pre>";
+//exit;
