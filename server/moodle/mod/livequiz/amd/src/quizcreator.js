@@ -169,32 +169,47 @@ let savedQuestions = [];
     function save_question(page, question_input, modal_div, answers_div, file_picker) {
         let save_question_button = create_element("save_question_button", 'button', "save_button", "Save question");
         save_question_button.addEventListener('click', () => {
-            let question_for_main_page = create_element("question_for_main_page",
-                'button', 'question_for_main_page', question_input.value);
- 
-            let answers_count = answers_div.children.length;
-            let answers_is_filled = true;
-            for (let i = 0; i < answers_count; i++) {
-                if(answers_div.children[i].querySelector(".answer_input").value.trim() === "") {
-                    answers_is_filled = false;
-                    break;
-                }
+            let questionText = question_input.value.trim();
+            if (!questionText) {
+                alert("Please enter a question.");
+                return;
             }
-            if (question_input.value.trim() === "" || answers_count < 2 || !answers_is_filled) {
-                console.log("Could not save if no question is added or not all answers are filled.")
-            } else {
-                let divForQuestion = document.getElementById("questionDiv");
-                if (divForQuestion) {
-                    divForQuestion.appendChild(question_for_main_page);
-                } else {
-                    console.error("questionDiv not found.");
-                }
-                //page.appendChild(question_for_main_page);
-                modal_div.remove();
+    
+            let answers = [];
+            for (let i = 0; i < answers_div.children.length; i++) {
+                answers.push(answers_div.children[i].querySelector(".answer_input").value.trim());
             }
-        })
- 
-        return save_question_button
+    
+            let file_input = file_picker.querySelector('input[type="file"]');
+            let file = file_input.files[0];
+    
+            let savedQuestion = {
+                question: questionText,
+                answers: answers,
+                file: file
+            };
+    
+            savedQuestions.push(savedQuestion);
+    
+            let saved_questions_list = document.getElementById("saved_questions_list");
+            let question_list_item = document.createElement('li');
+            question_list_item.textContent = savedQuestion.question;
+            question_list_item.dataset.index = savedQuestions.length - 1;
+    
+    
+            question_list_item.addEventListener('click', () => {
+                open_saved_question_modal(savedQuestion);
+            });
+    
+    
+            saved_questions_list.appendChild(question_list_item);
+    
+    
+            modal_div.remove();
+        });
+    
+    
+        return save_question_button;
     }
  
     function open_saved_question_modal(savedQuestion) {
@@ -233,8 +248,6 @@ let savedQuestions = [];
  
         modal_div.appendChild(create_answer_button(all_answers_for_question_div));
         modal_div.appendChild(all_answers_for_question_div);
- 
-        modal_div.appendChild(save_question(document.getElementById("page-mod-livequiz-quizcreator"), question_input, modal_div, all_answers_for_question_div, file_picker));
         modal_div.appendChild(create_discard_button());
  
         let page = document.getElementById("page-mod-livequiz-quizcreator");
@@ -277,23 +290,32 @@ let savedQuestions = [];
         return add_new_answer_to_question;
     }
     
-    document.addEventListener('DOMContentLoaded', ()=>{
+    document.addEventListener('DOMContentLoaded', () => {
         console.log("quizcreator JS loaded");
- 
+    
         open_question_creation_modal();
- 
+    
         const imageUploadInput = document.getElementById('imageUpload');
         const imagePreview = document.getElementById('imagePreview');
- 
-    if (imageUploadInput) {
-        imageUploadInput.addEventListener('change', () => {
-            const file = imageUploadInput.files[0];
-            if (file) {
-                imagePreview.src = URL.createObjectURL(file);
-                imagePreview.style.display = 'block';
+    
+        if (imageUploadInput) {
+            imageUploadInput.addEventListener('change', () => {
+                const file = imageUploadInput.files[0];
+                if (file) {
+                    imagePreview.src = URL.createObjectURL(file);
+                    imagePreview.style.display = 'block';
+                }
+            });
+        }
+    
+        // Event listener for saved questions
+        document.getElementById('saved_questions_list').addEventListener('click', (event) => {
+            if (event.target.tagName === 'LI') {
+                const savedQuestion = savedQuestions[event.target.dataset.index]; // Ensure savedQuestions is defined and populated
+                open_saved_question_modal(savedQuestion);
             }
         });
-    }
+    });
 
     const saveQuizButton = document.getElementById('saveQuiz');
     if (saveQuizButton) {

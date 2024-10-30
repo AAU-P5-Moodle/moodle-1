@@ -70,7 +70,7 @@ class createquizform extends moodleform {
         $mform->addElement('html', '</div>');
 
         // Button for adding a question.
-        $mform->addElement('button', 'button_add_question', get_string('addquestion', 'mod_livequiz'));
+        $mform->addElement('button', 'buttonaddquestion', get_string('addquestion', 'mod_livequiz'));
     }
 
     /**

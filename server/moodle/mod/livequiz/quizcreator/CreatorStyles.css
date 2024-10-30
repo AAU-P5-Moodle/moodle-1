@@ -277,7 +277,8 @@
 } 
 
 .question_for_main_page {
-    background-color: grey; /* Optional: Adjust background color */
+    cursor: pointer; 
+    background-color: #0000ff; /* Optional: Adjust background color */
     color: white;         /* Optional: Adjust text color */
     padding: 10px;        /* Optional: Add padding */
     font-size: large;     /* Optional: Adjust font size */
