@@ -50,11 +50,24 @@ final class activitysetup_test extends \advanced_testcase {
     public function test_mod_form_setup(): void {
         $this->resetAfterTest(true);
 
-        // Mock the mod_livequiz_mod_form class.
+        // Create a mock object for mod_livequiz_mod_form!
+        // GetMockBuilder() creates a mock object for the specified class!
+        // DisableOriginalConstructor() prevents the constructor from being called!
+        // OnlyMethods() specifies the methods that should be mocked!.
         $mock = $this->getMockBuilder(mod_livequiz_mod_form::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['standard_intro_elements', 'standard_coursemodule_elements', 'add_action_buttons'])
             ->getMock();
+
+        // Create an instance of MoodleQuickForm and inject it into the _form property using reflection.
+        $form = new \MoodleQuickForm('modform', 'POST', '', null, ['class' => 'mform'], true);
+
+        // Use reflection to set the protected _form property to public,
+        // such that there does not need to be an instantiation.
+        $reflection = new \ReflectionClass($mock);
+        $property = $reflection->getProperty('_form');
+        $property->setAccessible(true);
+        $property->setValue($mock, $form);
 
         // Set expectations for methods called in definition().
         $mock->expects($this->once())
