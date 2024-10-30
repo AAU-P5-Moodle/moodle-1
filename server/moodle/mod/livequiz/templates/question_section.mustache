@@ -47,12 +47,11 @@
   {{#answers}}
     <div class="answer">
       <label for="{{id}}">{{answer_description}}</label>
-      <input type="{{answertype}}" id="{{id}}" name="answers_for_question_{{questionid}}[]" value="{{id}}
-        {{^is_attempting}} disabled {{/is_attempting}}
-      />
+      <input type="{{answertype}}" id="{{id}}" name="answers_for_question_{{questionid}}[]" value="{{id}}" />
+        {{^is_attempting}} disabled="disabled" {{/is_attempting}}
     </div>
   {{/answers}}
-  </fieldset>a
+  </fieldset>
   </div>
         <input type="hidden" name="quizid" value="{{quizid}}" />
         <input type="hidden" name="questionid" value="{{questionid}}" />
@@ -63,7 +62,6 @@
   <button class="check-answer">Check answer</button>
   {{/is_attempting}}
   {{^is_attempting}}
-    
   {{/is_attempting}}
 </div>
 
