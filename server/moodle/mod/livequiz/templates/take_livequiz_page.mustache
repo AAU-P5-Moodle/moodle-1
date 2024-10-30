@@ -60,8 +60,8 @@
 </form>
   <button class="check-answer">Check answer</button>
   <div class="question-navigation">
-      <button class="previous-question" onclick="location.href='{{previousurl}}'">Previous Question</button>
-      <button class="next-question" onclick="location.href='{{nexturl}}'">Next Question</button>
+      <a href="{{previousurl}}" type="button" id="previousButton"> Previous Question </a>
+      <a href="{{nexturl}}" type="button" id="nextButton"> Next Question </a>
   </div>
     <div class="navbar">
         <button class="submit-quiz" onclick="location.href='{{resultsurl}}'">Submit Quiz</button>
