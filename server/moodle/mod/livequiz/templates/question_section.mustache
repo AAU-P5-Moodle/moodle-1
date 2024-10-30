@@ -32,7 +32,7 @@
 <div class="question-container">
     <form method="post" action="submit_answers.php">
   <div class="title-container">
-    <h1 class="quiz-title">{{quiz_title}}</h1>
+    {{#is_attempting}} <h1 class="quiz-title">{{quiz_title}}</h1> {{/is_attempting}}
   </div>
   <div class="question-container">
       <p class="question-title">{{question_title}}</p>
@@ -52,13 +52,15 @@
   {{/answers}}
   </fieldset>
   </div>
+  {{#is_attempting}}
         <input type="hidden" name="quizid" value="{{quizid}}" />
         <input type="hidden" name="questionid" value="{{question_id}}" />
         <input type="hidden" name="questiontitle" value="{{question_title}}" />
         <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
         <input type="submit" value="Submit question">
+  {{/is_attempting }}
 </form>
-  <button class="check-answer">Check answer</button>
+  {{#is_attempting}} <button class="check-answer">Check answer</button> {{/is_attempting}}
 </div>
 
 

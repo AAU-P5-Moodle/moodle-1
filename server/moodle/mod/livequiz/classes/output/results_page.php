@@ -58,7 +58,7 @@ class results_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = $this->livequiz->prepare_for_template();
-        $data->isattempting = false;
+        $data->is_attempting = false;
         return $data;
     }
 }
