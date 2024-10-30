@@ -134,4 +134,19 @@ class question {
         }
         return $hasmultipleanswers;
     }
+
+    /**
+     * Prepares the template data for mustache.
+     * @return stdClass
+     */
+    public function prepare_for_template(stdClass $data): stdClass {
+        // Add to data object.
+        $data->question_id = $this->id;
+        $data->question_title = $this->title;
+        $data->question_description = $this->description;
+        $data->question_time_limit = $this->timelimit;
+        $data->question_explanation = $this->explanation;
+
+        return $data;
+    }
 }

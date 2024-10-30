@@ -55,12 +55,10 @@ class take_livequiz_page implements renderable, templatable {
      * @param livequiz $livequiz
      * @param int $questionid
      */
-    public function __construct(int $cmid, livequiz $livequiz, int $questionid)
-    {
+    public function __construct(int $cmid, livequiz $livequiz, int $questionid) {
         $this->cmid = $cmid;
         $this->livequiz = $livequiz;
         $this->questionid = $questionid;
-        $this->numberofquestions = count($this->livequiz->get_questions());
     }
 
     /**
@@ -93,31 +91,15 @@ class take_livequiz_page implements renderable, templatable {
      * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
-        $data = new stdClass();
-        // These are used when submitting the answers.
-        $data->quizid = $this->livequiz->get_id();
-        $data->questionid = $this->questionid;
-        $data->numberofquestions = $this->numberofquestions;
+        $data = $this->livequiz->prepare_for_template();
+        $this->numberofquestions = $data->numberofquestions;
 
-        // These are used for rendering the question.
-        $data->quiztitle = $this->livequiz->get_name();
-        $data->questiontitle = $this->livequiz->get_question_by_index($this->questionid)->get_title();
-        $data->description = $this->livequiz->get_question_by_index($this->questionid)->get_description();
-        $rawanswers = $this->livequiz->get_question_by_index($this->questionid)->get_answers();
-        $answers = [];
-                 foreach ($rawanswers as $rawanswer) {
-                     $answers[] = [
-                         'id' => $rawanswer->get_id(),
-                         'answer_description' => $rawanswer->get_description(),
-                     ];
-                 }
-                 $data->answers = $answers;
-                 if ($this->livequiz->get_question_by_index($this->questionid)->get_hasmultipleanswers()) {
-                     $data->answertype = string('checkbox');
-                 } else {
-                     $data->answertype = string('radio');
-                 }
 
+        if ($this->livequiz->get_question_by_index($this->questionid)->get_hasmultipleanswers()) {
+            $data->answertype = string('checkbox');
+        } else {
+            $data->answertype = string('radio');
+        }
         // These are used for navigation.
         $data->nexturl = (new moodle_url(
             '/mod/livequiz/attempt.php',
@@ -127,24 +109,10 @@ class take_livequiz_page implements renderable, templatable {
             '/mod/livequiz/attempt.php',
             ['id' => $this->cmid, 'questionid' => $this->get_previous_question_id()]
         ))->out(false);
-        $data->resultsurl = (new moodle_url('/mod/livequiz/results.php',['id' => $this->cmid, 'livequizid' => $this->livequiz->get_id()]))->out(false);
+        $data->resultsurl = (new moodle_url('/mod/livequiz/results.php', ['id' => $this->cmid, 'livequizid' => $this->livequiz->get_id()]))->out(false);
         $data->is_attempting = true;
 
         return $data;
     }
-
-    /**
-     * @param answer[] $rawansers
-     * @return array
-     */
-//    public function answer_helper(answer[] $rawansers){
-//        $answers = [];
-//        foreach ($rawanswers as $rawanswer) {
-//            $answers[] = [
-//                'id' => $rawanswer->get_id(),
-//                'answer_description' => $rawanswer->get_description(),
-//            ];
-//        }
-//        return $answers ;
-//    }
 }
+

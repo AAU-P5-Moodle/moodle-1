@@ -36,8 +36,8 @@ require_once(dirname(__DIR__) . '/livequiz.php');
 class results_page implements renderable, templatable {
     /** @var int $cmid the course module id */
     protected int $cmid;
+    private livequiz $livequiz;
     private int $numberofquestions;
-
 
     /**
      * index_page constructor.

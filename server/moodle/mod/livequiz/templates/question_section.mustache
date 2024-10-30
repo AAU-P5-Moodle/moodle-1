@@ -36,26 +36,26 @@
     <h1 class="quiz-title">{{quiztitle}}</h1>
   </div>
   <div class="question-container">
-      <p class="question-title">{{questiontitle}}</p>
+      <p class="question-title">{{question_title}}</p>
       <div class="media-container">
           <img src="" alt="">
       </div>
-    <p class="question-description">{{description}}</p>
+    <p class="question-description">{{question_description}}</p>
   </div>
   <div class="answer-container">
   <fieldset>
   {{#answers}}
     <div class="answer">
-      <label for="{{id}}">{{answer_description}}</label>
-      <input type="{{answertype}}" id="{{id}}" name="answers_for_question_{{questionid}}[]" value="{{id}}"
+      <label for="{{answer_id}}">{{answer_description}}</label>
+      <input type="{{answertype}}" id="{{answer_id}}" name="answers_for_question_{{question_id}}[]" value="{{answer_id}}"
         {{^is_attempting}} disabled {{/is_attempting}} />
     </div>
   {{/answers}}
   </fieldset>
   </div>
         <input type="hidden" name="quizid" value="{{quizid}}" />
-        <input type="hidden" name="questionid" value="{{questionid}}" />
-        <input type="hidden" name="questiontitle" value="{{questiontitle}}" />
+        <input type="hidden" name="questionid" value="{{question_id}}" />
+        <input type="hidden" name="questiontitle" value="{{question_title}}" />
         <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
         <input type="submit" value="Submit question">
 </form>

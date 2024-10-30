@@ -32,14 +32,6 @@ $id = required_param('id', PARAM_INT); // Course module id.
 $quizid = required_param('livequizid', PARAM_INT);
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 
-
-if (!$cm) {
-    throw new moodle_exception('invalidcoursemodule', 'error');
-}
-if ($cm->course !== $course->id) {
-    throw new moodle_exception('coursemismatch', 'error', '', null, 'The course module does not match the course');
-}
-
 require_login($course, false, $cm);
 
 $context = context_module::instance($cm->id);
