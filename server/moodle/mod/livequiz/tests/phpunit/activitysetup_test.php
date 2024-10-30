@@ -32,7 +32,6 @@ global $CFG;
 require_once($CFG->dirroot . '/mod/livequiz/lib.php');
 require_once($CFG->dirroot . '/mod/livequiz/mod_form.php');
 
-
 /**
  * Unit test for the mod_livequiz activity setup.
  *
@@ -44,38 +43,31 @@ require_once($CFG->dirroot . '/mod/livequiz/mod_form.php');
 final class activitysetup_test extends \advanced_testcase {
     /**
      * Activity Setup Test function.
-     * This function should test the mod_form_setup function.
-     * It should call the definition function.
-     * It should call the standard_coursemodule_elements function.
-     * It should call the add_action_buttons function.
+     * This function tests the setup of mod_form without assuming _form as a field.
+     * It calls the definition function, standard_coursemodule_elements, and add_action_buttons.
      * @covers \mod_livequiz\activitysetup_test::test_mod_form_setup
      */
     public function test_mod_form_setup(): void {
         $this->resetAfterTest(true);
 
-        // Create a mock object for mod_livequiz_mod_form!
-        // GetMockBuilder() creates a mock object for the specified class!
-        // DisableOriginalConstructor() prevents the constructor from being called!
-        // OnlyMethods() specifies the methods that should be mocked!
+        // Mock the mod_livequiz_mod_form class.
         $mock = $this->getMockBuilder(mod_livequiz_mod_form::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['standard_coursemodule_elements', 'add_action_buttons'])
+            ->onlyMethods(['standard_intro_elements', 'standard_coursemodule_elements', 'add_action_buttons'])
             ->getMock();
-        $mockclass = $this->createMock(mod_livequiz_mod_form::class);
 
-        // Set expectations for the mockClass object!
-        $mockclass->expects($this->once())
-            ->method('definition');
+        // Set expectations for methods called in definition().
+        $mock->expects($this->once())
+            ->method('standard_intro_elements')
+            ->with($this->equalTo(get_string('introduction', 'quiz')));
 
-        // Set expectations for the mock object!
         $mock->expects($this->once())
             ->method('standard_coursemodule_elements');
 
         $mock->expects($this->once())
             ->method('add_action_buttons');
 
-        // Call the definition function!
+        // Call the definition function to execute the test.
         $mock->definition();
-        $mockclass->definition();
     }
 }
