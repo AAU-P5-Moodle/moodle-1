@@ -28,21 +28,21 @@ require_once('readdemodata.php');
 global $OUTPUT, $PAGE, $DB;
 
 
-$id = required_param('id', PARAM_INT); // Course module ID.
-[$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
+$cmid = required_param('id', PARAM_INT); // Course module ID.
+[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
 require_login($course, true, $cm); // Ensure the user is logged in and can access this module.
 $context = context_module::instance($cm->id); // Set the context for the course module.
 $PAGE->set_context($context); // Make sure to set the page context.
 
-$PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['id' => $id]));
+$PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE', $id);
+$renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE', $cmid);
 
 /*
 if (has_capability('mod/livequiz:manage', $context)) {

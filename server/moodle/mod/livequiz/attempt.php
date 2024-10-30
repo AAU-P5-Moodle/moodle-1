@@ -28,10 +28,26 @@ require_once('readdemodata.php');
 global $PAGE, $OUTPUT;
 
 // Get submitted parameters.
-$id = required_param('id', PARAM_INT); // Course module id.
+$cmid = required_param('cmid', PARAM_INT); // Course module id.
 $questionid = optional_param('questionid', 0, PARAM_INT); // Question id, default to 0 if not provided.
-[$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
+[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 
+$nextquestionid = optional_param('nextquestionid', 0, PARAM_INT);
+$quizid = optional_param('quizid', 0, PARAM_INT);
+$numberofquestions = optional_param('numberofquestions', 0, PARAM_INT);
+$questiontitle = optional_param('questiontitle', 0, PARAM_TEXT);
+$answers = optional_param_array('answers_for_question_' . $questionid, [], PARAM_INT);
+
+session_start();
+if ($quizid !== 0) {
+    if (!isset($_SESSION['quiz_answers'])) {
+        $_SESSION['quiz_answers'] = [];
+    }
+    $_SESSION['quiz_answers'][$questionid] = [
+        'question_id' => $questionid,
+        'answers' => $answers,
+    ];
+}
 
 if (!$cm) {
     throw new moodle_exception('invalidcoursemodule', 'error');
@@ -44,11 +60,16 @@ if ($cm->course !== $course->id) {
 require_login($course, false, $cm);
 // $page = optional_param('page', -1, PARAM_INT); // Page to jump to in the attempt.
 
-$context = context_module::instance($cm->id);
+$context = context_module::instance($cmid);
 
 $PAGE->set_context($context); // Make sure to set the page context.
 
-$PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['id' => $id, 'questionid' => $questionid]));
+if ($quizid){
+    $PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $nextquestionid]));
+}
+else {
+    $PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $questionid]));
+}
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
@@ -58,7 +79,8 @@ $demoquiz = $demodatareader->getdemodata();
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$takelivequiz = new \mod_livequiz\output\take_livequiz_page($id, $demoquiz, $questionid);
+$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionid);
+
 
 // $forcenew = optional_param('forcenew', false, PARAM_BOOL); // Used to force a new preview.
 

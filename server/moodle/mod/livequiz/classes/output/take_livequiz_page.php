@@ -97,6 +97,8 @@ class take_livequiz_page implements renderable, templatable {
         $data->quizid = $this->livequiz->get_id();
         $data->questionid = $this->questionid;
         $data->numberofquestions = $this->numberofquestions;
+        $data->cmid = $this->cmid;
+        $data->nextquestionid = $this->get_next_question_id();
 
         // These are used for rendering the question.
         $data->quiztitle = $this->livequiz->get_name();
@@ -106,7 +108,7 @@ class take_livequiz_page implements renderable, templatable {
         $answers = [];
         foreach ($rawanswers as $rawanswer) {
             $answers[] = [
-                'id' => $rawanswer->get_id(),
+                'answerid' => $rawanswer->get_id(),
                 'answer_description' => $rawanswer->get_description(),
             ];
         }
@@ -120,11 +122,11 @@ class take_livequiz_page implements renderable, templatable {
         // These are used for navigation.
         $data->nexturl = (new moodle_url(
             '/mod/livequiz/attempt.php',
-            ['id' => $this->cmid, 'questionid' => $this->get_next_question_id()]
+            ['cmid' => $this->cmid, 'questionid' => $data->nextquestionid]
         ))->out(false);
         $data->previousurl = (new moodle_url(
             '/mod/livequiz/attempt.php',
-            ['id' => $this->cmid, 'questionid' => $this->get_previous_question_id()]
+            ['cmid' => $this->cmid, 'questionid' => $this->get_previous_question_id()]
         ))->out(false);
         $data->resultsurl = (new moodle_url('/mod/livequiz/results.php',['id' => $this->cmid]));
         return $data;
