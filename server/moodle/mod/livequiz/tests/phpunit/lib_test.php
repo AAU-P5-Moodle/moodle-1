@@ -50,6 +50,7 @@ final class lib_test extends advanced_testcase {
      * @throws \dml_exception When a database error occurs.
      */
     public function test_livequiz_add_instance(): void {
+        require_once(__DIR__ . '/../../lib.php');
         global $DB;
 
         $quizdata = new \stdClass();
