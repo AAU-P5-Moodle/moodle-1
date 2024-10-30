@@ -14,11 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_livequiz\questions_answers_relation;
+namespace mod_livequiz\models;
 
 use dml_exception;
 use dml_transaction_exception;
-use mod_livequiz\answer\answer;
 
 /**
  * 'Static' class, do not instantiate.

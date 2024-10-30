@@ -21,10 +21,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_livequiz\quiz_questions_relation;
+namespace mod_livequiz\models;
 
 use dml_exception;
-use mod_livequiz\question\question;
 
 /**
  * Class quiz_questions_relation

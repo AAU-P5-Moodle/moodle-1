@@ -27,12 +27,11 @@ require_once(__DIR__ . '/../models/quiz_questions_relation.php');
 use dml_exception;
 use dml_transaction_exception;
 
-use mod_livequiz\answer\answer;
-use mod_livequiz\livequiz\livequiz;
-use mod_livequiz\question\question;
-use mod_livequiz\questions_answers_relation\questions_answers_relation;
-use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
-
+use mod_livequiz\models\answer;
+use mod_livequiz\models\livequiz;
+use mod_livequiz\models\question;
+use mod_livequiz\models\questions_answers_relation;
+use mod_livequiz\models\quiz_questions_relation;
 
 /**
  * Class livequiz_services
