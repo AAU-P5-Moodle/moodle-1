@@ -33,6 +33,7 @@ Scenario: Add a livequiz to a course
   #And I should see "Completion conditions"
   And I should see "Tags"
   And I should see "Competencies"
+  And I set the field "name" to "livequiz"
   And I press "Save and return to course"
   And I should see "livequiz"
   When I click on "livequiz" "link" in the "livequiz" activity
