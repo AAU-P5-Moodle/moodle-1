@@ -51,6 +51,17 @@ if ($cm->course !== $course->id) {
 // $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 require_login($course, false, $cm);
 // $page = optional_param('page', -1, PARAM_INT); // Page to jump to in the attempt.
+$PAGE->set_cacheable(false);
+
+session_start();
+
+if ($_SESSION['completed']) {
+    $text = 'You are not allowed to go back after submitting the quiz';
+    echo $text;
+    die();
+}
+
+
 
 $context = context_module::instance($cmid);
 

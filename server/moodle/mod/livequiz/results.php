@@ -26,13 +26,15 @@ require_once($CFG->libdir . '/accesslib.php');
 require_once('readdemodata.php');
 
 global $PAGE, $OUTPUT;
-
 // Get submitted parameters.
 $id = required_param('id', PARAM_INT); // Course module id.
 $quizid = required_param('livequizid', PARAM_INT);
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 
 require_login($course, false, $cm);
+
+session_start();
+$_SESSION['completed'] = true;
 
 $context = context_module::instance($cm->id);
 

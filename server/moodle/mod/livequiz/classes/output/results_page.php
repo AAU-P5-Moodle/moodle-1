@@ -42,6 +42,7 @@ class results_page implements renderable, templatable {
     /**
      * index_page constructor.
      * @param int $id
+     * @param livequiz $livequiz
      */
     public function __construct(int $id, livequiz $livequiz) {
         $this->cmid = $id;

@@ -34,6 +34,7 @@ $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST
 
 require_login($course, true, $cm); // Ensure the user is logged in and can access this module.
 $context = context_module::instance($cm->id); // Set the context for the course module.
+$PAGE->set_cacheable(false);
 $PAGE->set_context($context); // Make sure to set the page context.
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
@@ -44,6 +45,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 $output = $PAGE->get_renderer('mod_livequiz');
 $renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE', $cmid);
 
+unset($_SESSION['completed']);
 /*
 if (has_capability('mod/livequiz:manage', $context)) {
     // Redirect teachers to the management page.
