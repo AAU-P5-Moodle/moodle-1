@@ -26,7 +26,6 @@ require_once('../../config.php');
 global $OUTPUT, $PAGE, $COURSE, $DB;
 
 
-
 // The `id` parameter is the course id.
 $id = required_param('id', PARAM_INT);
 
