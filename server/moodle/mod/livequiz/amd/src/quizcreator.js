@@ -1,4 +1,6 @@
 let savedQuestions = [];
+let isEditing = false;
+let editingIndex = null;
  
     function open_question_creation_modal() {
         let add_question_button = document.getElementById("id_buttonaddquestion");
@@ -166,9 +168,6 @@ let savedQuestions = [];
  
         return timer_div;
     }
-
-    let isEditing = false;
-    let editingIndex = null;
  
     function save_question(page, question_input, modal_div, answers_div, file_picker) {
         let save_question_button = create_element("save_question_button", 'button', "save_button", "Save question");
@@ -193,7 +192,7 @@ let savedQuestions = [];
                 file: file
             };
             
-            if (isEditing && editingIndex !== null){
+            if (isEditing && editingIndex != null){
             savedQuestions[editingIndex] = savedQuestion;
     
             let saved_questions_list = document.getElementById("saved_questions_list");
@@ -216,8 +215,6 @@ let savedQuestions = [];
                     open_saved_question_modal(savedQuestions[question_list_item.dataset.index], question_list_item.dataset.index);
                 };
 
-                //adding and removing listener to ensure it does not get opened twice
-                question_list_item.removeEventListener('click', openModalHandler);
                 question_list_item.addEventListener('click',openModalHandler);
                 saved_questions_list.appendChild(question_list_item);
             }
@@ -232,10 +229,6 @@ let savedQuestions = [];
     function open_saved_question_modal(savedQuestion,index) {
         isEditing = true;
         editingIndex = index;
-        
-        console.log("Editing:", isEditing);
-        console.log("Editing Index:", editingIndex);
-        console.log("Saved Question:", savedQuestion);
 
         let modal_div = document.createElement("div");
         modal_div.className = "Modal_div";
@@ -334,12 +327,12 @@ let savedQuestions = [];
         }
     
         // Event listener for saved questions
-        document.getElementById('saved_questions_list').addEventListener('click', (event) => {
-            if (event.target.tagName === 'LI') {
-                const savedQuestion = savedQuestions[event.target.dataset.index]; // Ensure savedQuestions is defined and populated
-                open_saved_question_modal(savedQuestion);
-            }
-        });
+        //document.getElementById('saved_questions_list').addEventListener('click', (event) => {
+            //if (event.target.tagName === 'LI') {
+            //    const savedQuestion = savedQuestions[event.target.dataset.index]; // Ensure savedQuestions is defined and populated
+            //    open_saved_question_modal(savedQuestion);
+            //}
+        //});
     });
 
     const saveQuizButton = document.getElementById('saveQuiz');
