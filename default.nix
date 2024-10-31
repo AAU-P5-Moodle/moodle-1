@@ -313,7 +313,10 @@ EOF
     beit(){
       CURRENT_PATH="$(pwd)"
       cd $MOODLE_ROOT
-      if [ ! -d "$MOODLE_ROOT/moodle-browser-config" ]; then
+      if [ ! -f "$MOODLE_ROOT/moodle-browser-config/init.php" ]; then
+        if [ -d "$MOODLE_ROOT/moodle-browser-config" ]; then
+          rm "$MOODLE_ROOT/moodle-browser-config"
+        fi
         git clone https://github.com/andrewnicols/moodle-browser-config 
       fi
       cd ../moodledata
