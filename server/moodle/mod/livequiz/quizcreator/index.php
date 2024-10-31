@@ -79,7 +79,7 @@ echo html_writer::start_div(
     'saved_questions_container',
     [
         'style' => 'border-radius: 10px; padding: 15px; background-color: #f9f9f9; ' .
-                   'margin-top: 20px; margin-bottom: 20px;'
+                   'margin-top: 20px; margin-bottom: 20px;',
     ]
 );
 echo html_writer::tag('h3', get_string('savedquestions', 'mod_livequiz'));
@@ -96,7 +96,7 @@ echo html_writer::end_div();
 echo html_writer::end_div();
 
 // Include custom JavaScript for the page.
-$PAGE->requires->js(new moodle_url('/mod/livequiz/amd/src/quizcreator.js') );
+$PAGE->requires->js(new moodle_url('/mod/livequiz/amd/src/quizcreator.js'));
 
 // Output page footer.
 echo $OUTPUT->footer();

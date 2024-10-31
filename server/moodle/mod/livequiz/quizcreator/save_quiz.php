@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $quizdata->timecreated = $data->timecreated;
 
         try {
-            $quizid = $DB->insert_record('livequiz' , $quizdata);
+            $quizid = $DB->insert_record('livequiz', $quizdata);
 
             foreach ($data->questions as $question) {
                 $questiondata = new stdClass();
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $questiondata->timelimit = $question->timelimit ?? 0;
                 $questiondata->explanation = $question->explanation ?? null;
 
-                $questionid = $DB->insert_record('livequiz_questions' , $questiondata);
+                $questionid = $DB->insert_record('livequiz_questions', $questiondata);
 
                 foreach ($question->answers as $answer) {
                     $answerdata = new stdClass();
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $answerdata->description = $answer->description;
                     $answerdata->explanation = $answer->explanation ?? null;
 
-                    $DB->insert_record('livequiz_answers' , $answerdata);
+                    $DB->insert_record('livequiz_answers', $answerdata);
                 }
             }
             echo json_encode(['status' => 'success', 'message' => 'Quiz saved succesfully.']);
