@@ -22,7 +22,7 @@
         <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Description of the question."/>
         <FIELD NAME="timelimit" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Optional time limit for the question."/>
         <FIELD NAME="explanation" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Explanation of the right answer, after the students have answered."/>
-        <FIELD NAME="type" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Type of question, eg. multiple choice, one choice, etc."/>
+        <FIELD NAME="type" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Type of question, eg. multiple choice, one choice, etc."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -104,7 +104,7 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="student_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of the student."/>
         <FIELD NAME="answer_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID to the answer."/>
-        <FIELD NAME="participation_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="ID refers to the foreign key of a participation, meaning a field in the livequiz_student relationship table."/>
+        <FIELD NAME="participation_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID refers to the foreign key of a participation, meaning a field in the livequiz_student relationship table."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
