@@ -21,11 +21,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_livequiz\quiz_questions_relation;
+namespace mod_livequiz\models;
 
 use dml_exception;
-use dml_transaction_exception;
-use mod_livequiz\question\question;
 
 /**
  * Class quiz_questions_relation
@@ -35,11 +33,10 @@ class quiz_questions_relation {
     /**
      *  Append a question object to a quiz, given its id.
      *
-     * @param $questionid
-     * @param $quizid
+     * @param int $questionid
+     * @param int $quizid
      * @return void
      * @throws dml_exception
-     * @throws dml_transaction_exception
      */
     public static function append_question_to_quiz(int $questionid, int $quizid): void {
         global $DB;

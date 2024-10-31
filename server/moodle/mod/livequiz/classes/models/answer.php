@@ -21,24 +21,21 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_livequiz\answers;
+namespace mod_livequiz\models;
 
 use dml_exception;
-use dml_transaction_exception;
-use mod_livequiz\questions_answers_relation\questions_answers_relation;
-use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
 
 /**
- * Class answers.
+ * Class answer.
  *
  * This class represents an answer in the LiveQuiz module.
- * It handles the creation, retrieval, and updates of answers associated with quiz questions.
+ * It handles the creation, retrieval, and updates of answer associated with quiz questions.
  *
- * @package mod_livequiz\answers
+ * @package mod_livequiz\answer
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class answers {
+class answer {
     /**
      * @var int $id
      */
@@ -58,7 +55,7 @@ class answers {
     private string $explanation;
 
     /**
-     * Constructor for the answers class. Returns the object.
+     * Constructor for the answer class. Returns the object.
      *
      * @param int $correct // Expects 1 or 0.
      * @param string $description
@@ -75,11 +72,11 @@ class answers {
     /**
      * Given an answer object, this method will insert the answer to the database
      *
-     * @param answers $answer
+     * @param answer $answer
      * @return int
      * @throws dml_exception
      */
-    public static function submit_answer(answers $answer): int {
+    public static function submit_answer(answer $answer): int {
         global $DB;
 
         $answerdata = [
@@ -98,10 +95,10 @@ class answers {
      * @return mixed
      * @throws dml_exception
      */
-    public static function get_answer_from_id(int $id): answers {
+    public static function get_answer_from_id(int $id): answer {
         global $DB;
         $answerdata = $DB->get_record('livequiz_answers', ['id' => $id]);
-        $answer = new answers($answerdata->correct, $answerdata->description, $answerdata->explanation);
+        $answer = new answer($answerdata->correct, $answerdata->description, $answerdata->explanation);
         $answer->set_id($answerdata->id);
         return $answer;
     }

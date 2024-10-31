@@ -14,17 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_livequiz\livequiz;
+namespace mod_livequiz\models;
 
-
-
-use DateTime;
 use dml_exception;
-use dml_transaction_exception;
-use mod_livequiz\answers\answers;
-use mod_livequiz\question\question;
-use mod_livequiz\questions_answers_relation\questions_answers_relation;
-use mod_livequiz\quiz_questions_relation\quiz_questions_relation;
 use stdClass;
 
 /**
@@ -136,7 +128,6 @@ class livequiz {
     /**
      * Updates the livequiz in the database, and updates the timemodified field.
      *
-     * @param livequiz $livequiz
      * @return bool
      * @throws dml_exception
      */
@@ -226,13 +217,13 @@ class livequiz {
     }
 
     /**
-     * Sets the questions associated with the livequiz.
+     * Append the questions associated with the livequiz.
      *
      * @param array $questions
      */
-    public function set_questions(array $questions): void {
+    public function add_questions(array $questions): void {
         foreach ($questions as $question) {
-            $this->set_question($question);
+            $this->add_question($question);
         }
     }
 
@@ -241,7 +232,7 @@ class livequiz {
      *
      * @param question $question
      */
-    public function set_question(question $question): void {
+    private function add_question(question $question): void {
         $this->questions[] = $question;
     }
 }
