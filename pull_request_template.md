@@ -16,6 +16,7 @@
 
 # Checks
 - [ ] Updated / added tests for these changes
-- [ ] PHPunit pass
-- [ ] Codesniffer pass
-- [ ] Local Behat test pass 
+- [ ] PHPunit locally passed
+- [ ] Codesniffer locally passed
+- [ ] Behat locally passed
+
