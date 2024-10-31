@@ -55,7 +55,9 @@ let editingIndex = null;
             toast_promise_deletion_div.appendChild(continue_question_deletion_button);
     
             let modal_div = document.querySelector('.Modal_div');
-            modal_div.appendChild(toast_promise_deletion_div);
+    if (!document.querySelector('.toast_promise_deletion_div')) {
+    modal_div.appendChild(toast_promise_deletion_div);
+}
     
             continue_question_deletion_button.addEventListener('click', () => {
                 modal_div.remove();
