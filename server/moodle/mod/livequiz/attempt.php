@@ -32,6 +32,7 @@ $cmid = required_param('cmid', PARAM_INT); // Course module id.
 $questionid = optional_param('questionid', 0, PARAM_INT); // Question id, default to 0 if not provided.
 [$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 
+// Params for storage in session.
 $nextquestionid = optional_param('nextquestionid', 0, PARAM_INT);
 $quizid = optional_param('quizid', 0, PARAM_INT);
 $numberofquestions = optional_param('numberofquestions', 0, PARAM_INT);
@@ -39,15 +40,6 @@ $questiontitle = optional_param('questiontitle', 0, PARAM_TEXT);
 $answers = optional_param_array('answers_for_question_' . $questionid, [], PARAM_INT);
 
 session_start();
-if ($quizid !== 0) {
-    if (!isset($_SESSION['quiz_answers'])) {
-        $_SESSION['quiz_answers'] = [];
-    }
-    $_SESSION['quiz_answers'][$questionid] = [
-        'question_id' => $questionid,
-        'answers' => $answers,
-    ];
-}
 
 if (!$cm) {
     throw new moodle_exception('invalidcoursemodule', 'error');
