@@ -30,7 +30,6 @@ global $OUTPUT, $PAGE, $COURSE, $DB;
 $id = required_param('id', PARAM_INT);
 
 // Fetch the requested course.
-
 $course = $DB->get_record('course', ['id' => $id], '*', MUST_EXIST);
 
 
