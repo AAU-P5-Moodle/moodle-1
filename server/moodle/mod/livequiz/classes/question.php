@@ -15,6 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_livequiz\classes;
+
+use function DI\string;
+use stdClass;
+
 defined('MOODLE_INTERNAL') || die();
 require_once('answer.php');
 
@@ -133,5 +137,33 @@ class question {
             $hasmultipleanswers = true;
         }
         return $hasmultipleanswers;
+    }
+
+    /**
+     * Prepares the template data for mustache.
+     * @return stdClass
+     */
+    public function prepare_for_template(stdClass $data): stdClass {
+        // Add to data object.
+        $data->questionid = $this->id;
+        $data->questiontitle = $this->title;
+        $data->questiondescription = $this->description;
+        $data->questiontimelimit = $this->timelimit;
+        $data->questionexplanation = $this->explanation;
+        $data->answers = [];
+        foreach ($this->answers as $answer) {
+            $data->answers[] = [
+                'answerid' => $answer->get_id(),
+                'answerdescription' => $answer->get_description(),
+                'answerexplanation' => $answer->get_explanation(),
+                'answercorrect' => $answer->get_correct(),
+            ];
+        }
+        if ($this->get_hasmultipleanswers()) {
+            $data->answertype = string('checkbox');
+        } else {
+            $data->answertype = string('radio');
+        }
+        return $data;
     }
 }

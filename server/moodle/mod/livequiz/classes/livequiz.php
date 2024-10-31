@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_livequiz\classes;
+use stdClass;
+
 defined('MOODLE_INTERNAL') || die();
 require_once('question.php');
 
@@ -154,8 +156,50 @@ class livequiz {
     public function get_questions(): array {
         return $this->questions;
     }
-    
+
+    /**
+     * Getter for questions by index.
+     * @param $index
+     * @return mixed
+     */
     public function get_question_by_index($index) {
         return $this->questions[$index];
+    }
+
+    /**
+     * Prepares the template date for mustache.
+     * @return stdClass
+     */
+    public function prepare_for_template(): stdClass {
+        // Prepare data object.
+        $data = new stdClass();
+
+        $data->quizid = $this->id;
+        $data->quiztitle = $this->get_name();
+        $data->numberofquestions = count($this->get_questions());
+        // Prepare questions.
+        $rawquestions = $this->questions;
+
+        $data->questions = [];
+        foreach ($rawquestions as $rawquestion) {
+            $data->questions[] = $rawquestion->prepare_for_template(new stdClass());
+        }
+        return $data;
+    }
+
+    /**
+     * Prepares the template date for mustache.
+     * @return stdClass
+     */
+    public function prepare_question_for_template(int $questionindex): stdClass {
+        // Prepare data object.
+        $data = new stdClass();
+
+        $data->quizid = $this->id;
+        $data->quiztitle = $this->get_name();
+        $data->numberofquestions = count($this->get_questions());
+        $question = $this->get_question_by_index($questionindex);
+        $data = $question->prepare_for_template($data);
+        return $data;
     }
 }

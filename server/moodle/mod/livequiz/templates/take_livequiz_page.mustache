@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_livquiz/take_livequiz_page
+    @template mod_livequiz/take_livequiz_page
 
     Index Page for the livequiz plugin
 
@@ -29,83 +29,49 @@
     * fill in later
 
 }}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("loaded DOM content")
+        // Select all answer options (radio buttons, checkboxes, and dropdowns)
+        const answerOptions = document.getElementsByClassName("{{quizid}}");
 
-<div class="main-container">
-    <form method="post" action="attempt.php" id="{{quizid}}">
-  <div class="title-container">
-    <h1 class="quiz-title">{{quiztitle}}</h1>
-  </div>
-  <div class="question-container">
-      <p class="question-title">{{questiontitle}}</p>
-      <div class="media-container">
-          <img src="" alt="">
-      </div>
-    <p class="question-description">{{description}}</p>
-  </div>
-  <div class="answer-container">
-  <fieldset>
-  {{#answers}}
-    <div class="answer">
-      <label for="{{answerid}}">{{answer_description}}</label>
-      <input class="{{quizid}}" type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}"/>
-    </div>
-  {{/answers}}
-  </fieldset>
-  </div>
-        <input type="hidden" name="cmid" value="{{cmid}}" />
-        <input type="hidden" name="quizid" value="{{quizid}}" />
-        <input type="hidden" name="questionid" value="{{questionid}}" />
-        <input type="hidden" name="questiontitle" value="{{questiontitle}}" />
-        <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
-        <input type="hidden" name="nextquestionid" value="{{nextquestionid}}" />
-        <input type="submit" value="Submit question" id="submitQuestion">
+        //console.log(answerOptions);
+        // Add a 'change' event listener to each option
+        answerOptions.forEach(option => {
+            option.addEventListener("change", function(event) {
+                // Get all selected answers
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                console.log("loaded DOM content")
-                // Select all answer options (radio buttons, checkboxes, and dropdowns)
-                const answerOptions = document.getElementsByClassName("{{quizid}}");
-
-                //console.log(answerOptions);
-                // Add a 'change' event listener to each option
-                answerOptions.forEach(option => {
-                    option.addEventListener("change", function(event) {
-                        // Get all selected answers
-                        const selectedAnswers = [];
-                        Array.from(answerOptions).forEach(input => {
-                            if (input.checked || input.type === 'radio' && input.checked || input.type === 'checkbox' && input.checked) {
-                                selectedAnswers.push(input.value);
-                            }
-                        });
-                        //KEPT FOR DEVELOPMENT
-                        //console.log(selectedAnswers);
-
-                        // Update session
-                        const xhr = new XMLHttpRequest();
-                        xhr.open("POST", "update_session.php", true);
-                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                        //KEPT FOR DEVELOPMENT
-                        xhr.onreadystatechange = function () {
-                            if (xhr.readyState === 4 && xhr.status === 200) {
-                                console.log("Session updated successfully");
-                            }
-                        };
-                        // JSON stringify is decoded in update_session.php
-                        xhr.send(`questionid={{questionid}}&answervalue=${JSON.stringify(selectedAnswers)}`);
-
-                    });
+                const selectedAnswers = [];
+                Array.from(answerOptions).forEach(input => {
+                    if (input.checked || input.type === 'radio' && input.checked || input.type === 'checkbox' && input.checked) {
+                        selectedAnswers.push(input.value);
+                    }
                 });
+                //KEPT FOR DEVELOPMENT
+                //console.log(selectedAnswers);
 
-        })
-        </script>
-    </form>
-  <button class="check-answer">Check answer</button>
-  <div class="question-navigation">
-      <a href="{{previousurl}}" type="button" id="previousButton"> Previous Question </a>
-      <a href="{{nexturl}}" type="button" id="nextButton"> Next Question </a>
-  </div>
-    <div class="navbar">
-        <button class="submit-quiz" onclick="location.href='{{resultsurl}}'">Submit Quiz</button>
-    </div>
+                // Update session
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "update_session.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                //KEPT FOR DEVELOPMENT
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log("Session updated successfully");
+                    }
+                };
+                // JSON stringify is decoded in update_session.php
+                xhr.send(`questionid={{questionid}}&answervalue=${JSON.stringify(selectedAnswers)}`);
+
+            });
+        });
+
+    })
+</script>
+<div class="main-container">
+  {{> mod_livequiz/question_section}} {{! question_section import - Context remains the same}}
+  {{> mod_livequiz/nav_bar_section}} {{! nav_bar section import - Context remains the same}}
+  {{> mod_livequiz/side_bar_section}} {{! side_bar section import - Context remains the same}}
 </div>
+
 

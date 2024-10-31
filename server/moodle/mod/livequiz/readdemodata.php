@@ -15,9 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_livequiz;
+
 defined('MOODLE_INTERNAL') || die();
 
 use mod_livequiz\classes\livequiz;
+
 require_once('./classes/livequiz.php');
 
 /**

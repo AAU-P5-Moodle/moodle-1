@@ -1,0 +1,68 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_livequiz/question_section
+
+    Question section for the livequiz plugin
+
+    Classes required for JS:
+    * none
+
+    Context variables required for this template:
+    * fill in later
+
+    Example context (json):
+    * fill in later
+
+}}
+<div class="question-container">
+    <form method="post" action="attempt.php" id="{{quizid}}">
+  <div class="title-container">
+    {{#isattempting}} <h1 class="quiz-title">{{quiztitle}}</h1> {{/isattempting}}
+  </div>
+  <div class="question-container">
+      <p class="question-title">{{questiontitle}}</p>
+      <div class="media-container">
+          <img src="" alt="">
+      </div>
+    <p class="question-description">{{questiondescription}}</p>
+  </div>
+  <div class="answer-container">
+  <fieldset>
+  {{#answers}}
+    <div class="answer">
+      <label for="{{answerid}}">{{answerdescription}}</label>
+      <input type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
+        {{^isattempting}} disabled {{/isattempting}} />
+    </div>
+  {{/answers}}
+  </fieldset>
+  </div>
+  {{#isattempting}}
+      <input type="hidden" name="cmid" value="{{cmid}}" />
+      <input type="hidden" name="quizid" value="{{quizid}}" />
+      <input type="hidden" name="questionid" value="{{questionid}}" />
+      <input type="hidden" name="questiontitle" value="{{questiontitle}}" />
+      <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
+      <input type="hidden" name="nextquestionid" value="{{nextquestionid}}" />
+      <input type="submit" value="Submit question" id="submitQuestion">
+  {{/isattempting }}
+</form>
+  {{#isattempting}} <button class="check-answer">Check answer</button> {{/isattempting}}
+</div>
+
+
