@@ -3,7 +3,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
-
   <TABLES>
     <TABLE NAME="livequiz" COMMENT="The settings for each live quiz.">
       <FIELDS>
