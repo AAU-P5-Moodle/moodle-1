@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/.
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -45,7 +44,6 @@ final class lib_test extends \advanced_testcase {
     public function test_livequiz_add_instance(): void {
         require_once(__DIR__ . '/../../lib.php');
         global $DB;
-
 
         $quizdata = new \stdClass(); // Create a new stdClass object (empty object).
         $quizdata->name = 'Test Quiz';

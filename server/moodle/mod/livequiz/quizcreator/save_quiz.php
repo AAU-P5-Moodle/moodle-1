@@ -42,31 +42,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $quizdata->id = $data->id;
         $quizdata->name = $data->name;
         $quizdata->intro = $data->intro;
-        $quizdata->introformat = FORMAT_HTML; // Assuming its HTML, change if I am wrong
+        $quizdata->introformat = FORMAT_HTML; // Assuming its HTML, change if I am wrong.
         $quizdata->timemodified = $data->timemodified;
         $quizdata->timecreated = $data->timecreated;
 
         try {
-            $quizid = $DB->insert_record('livequiz',$quizdata);
+            $quizid = $DB->insert_record('livequiz' , $quizdata);
 
             foreach ($data->questions as $question) {
                 $questiondata = new stdClass();
-                $questiondata->id = $quizid; // Links question to the quiz
+                $questiondata->id = $quizid; // Links question to the quiz.
                 $questiondata->title = $question->title;
                 $questiondata->description = $question->description;
                 $questiondata->timelimit = $question->timelimit ?? 0;
                 $questiondata->explanation = $question->explanation ?? null;
 
-                $questionid = $DB->insert_record('livequiz_questions',$questiondata);
+                $questionid = $DB->insert_record('livequiz_questions' , $questiondata);
 
                 foreach ($question->answers as $answer) {
                     $answerdata = new stdClass();
-                    $answerdata->id = $questionid; // Links answer to question
+                    $answerdata->id = $questionid; // Links answer to question.
                     $answerdata->correct = $answer->correct;
                     $answerdata->description = $answer->description;
                     $answerdata->explanation = $answer->explanation ?? null;
 
-                    $DB->insert_record('livequiz_answers',$answerdata);
+                    $DB->insert_record('livequiz_answers' , $answerdata);
                 }
             }
             echo json_encode(['status' => 'success', 'message' => 'Quiz saved succesfully.']);
