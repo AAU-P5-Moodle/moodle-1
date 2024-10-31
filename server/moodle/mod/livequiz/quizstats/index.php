@@ -28,8 +28,8 @@ require_login();
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
 
-
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
+
 $PAGE->requires->css(new moodle_url('/mod/livequiz/hub/navbar_style.css'));
 
 
