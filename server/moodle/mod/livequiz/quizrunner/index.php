@@ -44,20 +44,6 @@ if (class_exists('createNavbar')) {
     echo "Navbar class does not exist.";
 }
 
-
-$question = new question(
-    'fish.png',
-    'Is fish fishing????',
-    new multichoice(
-        [
-            new multichoice_choice("Yes!!!!", "yes"),
-            new multichoice_choice("No!!!!!", "no"),
-            new multichoice_choice("Mayhaps...", "maybe"),
-        ]
-    )
-);
-
-
 $question->display();
 
 // Your contents here (html etc.).
