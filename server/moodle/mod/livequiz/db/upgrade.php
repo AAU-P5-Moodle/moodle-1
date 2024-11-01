@@ -319,7 +319,6 @@ function xmldb_livequiz_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2024072510, 'livequiz');
     }
     if ($oldversion < 2024072516) {
-
         // Define field type to be added to livequiz_questions.
         $table = new xmldb_table('livequiz_questions');
         $field = new xmldb_field('type', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'explanation');
