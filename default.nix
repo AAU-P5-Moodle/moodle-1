@@ -314,10 +314,12 @@ EOF
       CURRENT_PATH="$(pwd)"
       cd $MOODLE_ROOT
       if [ ! -f "$MOODLE_ROOT/moodle-browser-config/init.php" ]; then
-        if [ -d "$MOODLE_ROOT/moodle-browser-config" ]; then
-          rm "$MOODLE_ROOT/moodle-browser-config"
-        fi
         git clone https://github.com/andrewnicols/moodle-browser-config 
+        if [ -d "$MOODLE_ROOT/moodle-browser-config" ] && [ ! -f "$MOODLE_ROOT/moodle-browser-config/init.php" ]; then
+          cd "$MOODLE_ROOT/moodle-browser-config"
+          git stash
+          cd "$MOODLE_ROOT"
+        fi
       fi
       cd ../moodledata
       BEHAT_PATH="$(pwd)"
