@@ -273,9 +273,8 @@ class livequiz {
     public function prepare_question_for_template(int $questionindex): stdClass {
         // Prepare data object.
         $data = new stdClass();
-
         $data->quizid = $this->id;
-        $data->quiztitle = $this->get_name();
+        $data->quiztitle = $this->name;
         $data->numberofquestions = count($this->get_questions());
         $question = $this->get_question_by_index($questionindex);
         $data = $question->prepare_for_template($data);

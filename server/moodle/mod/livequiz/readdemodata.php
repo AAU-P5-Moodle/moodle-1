@@ -71,7 +71,6 @@ class readdemodata {
         }
         $livequiz->add_questions($questions);
         $livequiz = $livequizservice->submit_quiz($livequiz); // Insert into database.
-        
         return $livequiz;
     }
 }
