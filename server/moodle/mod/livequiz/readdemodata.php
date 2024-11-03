@@ -70,8 +70,8 @@ class readdemodata {
             $questions[] = $modelquestion;
         }
         $livequiz->add_questions($questions);
-        $livequizservice->submit_quiz($livequiz); // Insert into database.
-
+        $livequiz = $livequizservice->submit_quiz($livequiz); // Insert into database.
+        
         return $livequiz;
     }
 }

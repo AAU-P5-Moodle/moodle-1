@@ -42,6 +42,9 @@ class take_livequiz_page implements renderable, templatable {
 
     /** @var int $questionid . The id of the question to be rendered*/
     private int $questionid;
+
+    /** @var int $nubmerofquestions The number of questions in the quiz - Used for navigation */
+    private int $nubmerofquestions;
     /**
      * Constructor for take_livequiz_page, which sets the livequiz field.
      *
@@ -53,6 +56,7 @@ class take_livequiz_page implements renderable, templatable {
         $this->cmid = $cmid;
         $this->livequiz = $livequiz;
         $this->questionid = $questionid;
+        $this->nubmerofquestions = count($livequiz->get_questions());
     }
 
     /**
@@ -60,7 +64,7 @@ class take_livequiz_page implements renderable, templatable {
      * @return int
      */
     private function get_next_question_id(): int {
-        if ($this->questionid < $this->numberofquestions - 1) {
+        if ($this->questionid < $this->nubmerofquestions - 1) {
             return $this->questionid + 1;
         }
         return $this->questionid;
