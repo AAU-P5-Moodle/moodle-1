@@ -18,6 +18,7 @@ namespace mod_livequiz\models;
 
 use dml_exception;
 use dml_transaction_exception;
+use stdClass;
 
 /**
  * Class question
@@ -199,5 +200,52 @@ class question {
      */
     private function set_id($id): void {
         $this->id = $id;
+    }
+
+    /**
+     * Getter for question hasmultipleanswers
+     * @return bool
+     */
+    public function get_hasmultipleanswers(): bool {
+        // This is a simple check to see if the question has multiple correct answers.
+        $numcorrect = 0;
+        $hasmultipleanswers = false;
+        foreach ($this->answers as $answer) {
+            if ($answer->get_correct()) {
+                $numcorrect++;
+            }
+        }
+        if ($numcorrect > 1) {
+            $hasmultipleanswers = true;
+        }
+        return $hasmultipleanswers;
+    }
+
+    /**
+     * Prepares the template data for mustache.
+     * @return stdClass
+     */
+    public function prepare_for_template(stdClass $data): stdClass {
+        // Add to data object.
+        $data->questionid = $this->id;
+        $data->questiontitle = $this->title;
+        $data->questiondescription = $this->description;
+        $data->questiontimelimit = $this->timelimit;
+        $data->questionexplanation = $this->explanation;
+        $data->answers = [];
+        foreach ($this->answers as $answer) {
+            $data->answers[] = [
+                'answerid' => $answer->get_id(),
+                'answerdescription' => $answer->get_description(),
+                'answerexplanation' => $answer->get_explanation(),
+                'answercorrect' => $answer->get_correct(),
+            ];
+        }
+        if ($this->get_hasmultipleanswers()) {
+            $data->answertype = 'checkbox';
+        } else {
+            $data->answertype = 'radio';
+        }
+        return $data;
     }
 }

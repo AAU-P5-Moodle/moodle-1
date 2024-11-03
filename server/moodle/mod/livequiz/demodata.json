@@ -18,19 +18,19 @@
             {
                 "id": "1",
                 "description": "Answer 1",
-                "correct": "1",
+                "correct": 1,
                 "explanation": "This is the first answer feedback"
             },
             {
                 "id": "2",
                 "description": "Answer 2",
-                "correct": "0",
+                "correct": 1,
                 "explanation": "This is the second answer feedback"
             },
             {
                 "id": "3",
                 "description": "Answer 3",
-                "correct": "0",
+                "correct": 1,
                 "explanation": "This is the third answer feedback"
             }
         ]
@@ -45,19 +45,19 @@
             {
                 "id": "4",
                 "description": "Answer 1",
-                "correct": "1",
+                "correct": 1,
                 "explanation": "This is the first answer feedback"
             },
             {
                 "id": "5",
                 "description": "Answer 2",
-                "correct": "1",
+                "correct": 1,
                 "explanation": "This is the second answer feedback"
             },
             {
                 "id": "6",
                 "description": "Answer 3",
-                "correct": "0",
+                "correct": 1,
                 "explanation": "This is the third answer feedback"
             }
         ]
@@ -72,13 +72,13 @@
           {
             "id": "7",
             "description": "True",
-            "correct": "0",
+            "correct": 1,
             "explanation": "This is the first answer feedback"
           },
           {
             "id": "8",
             "description": "False",
-            "correct": "1",
+            "correct": 1,
             "explanation": "This is the second answer feedback"
           }
         ]

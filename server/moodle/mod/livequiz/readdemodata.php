@@ -16,11 +16,16 @@
 
 namespace mod_livequiz;
 
+
+
 defined('MOODLE_INTERNAL') || die();
 
-use mod_livequiz\classes\livequiz;
+use mod_livequiz\models\livequiz;
+use mod_livequiz\models\question;
+use mod_livequiz\models\answer;
+use mod_livequiz\services\livequiz_services;
 
-require_once('./classes/livequiz.php');
+require_once(dirname(__DIR__) . '/livequiz/classes/models/livequiz.php');
 
 /**
  * Temporary read demo data class
@@ -33,7 +38,9 @@ class readdemodata {
      * Reads the demo data and creates objects from it
      * @return livequiz object
      */
-    public static function getdemodata(): livequiz {
+    public static function insertdemodata(livequiz $livequiz): livequiz {
+        $livequizservice = livequiz_services::get_singleton_service_instance();
+
         // Read the JSON file.
         $json = file_get_contents('demodata.json');
 
@@ -51,16 +58,20 @@ class readdemodata {
         }
 
         $jsondata = $jsondata["quiz1"];
+        $questions = [];
 
-        return new livequiz(
-            $jsondata["id"],
-            $jsondata["name"],
-            $jsondata["course"],
-            $jsondata["intro"],
-            $jsondata["introformat"],
-            $jsondata["timecreated"],
-            $jsondata["timemodified"],
-            $jsondata["questions"]
-        );
+        // Prepare questions.
+        foreach ($jsondata["questions"] as $question) {
+            $modelquestion = new question($question["title"], $question["description"], $question["timelimit"], $question["explanation"]);
+            foreach ($question["answers"] as $answer) {
+                $modelanswer = new answer($answer["correct"],$answer["description"], $answer["explanation"]);
+                $modelquestion->add_answer($modelanswer);
+            }
+            $questions[] = $modelquestion;
+        }
+        $livequiz->add_questions($questions);
+        $livequizservice->submit_quiz($livequiz); // Insert into database.
+
+        return $livequiz;
     }
 }

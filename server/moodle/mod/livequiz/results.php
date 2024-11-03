@@ -44,10 +44,6 @@ $PAGE->set_url(new moodle_url('/mod/livequiz/results.php', ['id' => $id, 'quizid
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
-// Read demo data. -replace with DB query when DB is connected.
-$demodatareader = new \mod_livequiz\readdemodata();
-$demoquiz = $demodatareader->getdemodata();
-
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
 $results = new \mod_livequiz\output\results_page($id, $demoquiz);

@@ -22,10 +22,10 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
-use mod_livequiz\classes\livequiz;
+use mod_livequiz\models\livequiz;
 
 defined('MOODLE_INTERNAL') || die();
-require_once(dirname(__DIR__) . '/livequiz.php');
+require_once(dirname(__DIR__) . '/models/livequiz.php');
 
 /**
  * Class take_livequiz_page
@@ -42,10 +42,6 @@ class take_livequiz_page implements renderable, templatable {
 
     /** @var int $questionid . The id of the question to be rendered*/
     private int $questionid;
-
-    /** @var int $numberofquestions The number of questions in the quiz */
-    private int $numberofquestions;
-
     /**
      * Constructor for take_livequiz_page, which sets the livequiz field.
      *
@@ -90,7 +86,6 @@ class take_livequiz_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = $this->livequiz->prepare_question_for_template($this->questionid);
-        $this->numberofquestions = $data->numberofquestions;
         $data->cmid = $this->cmid;
         $data->isattempting = true;
         $data->nextquestionid = $this->get_next_question_id();
