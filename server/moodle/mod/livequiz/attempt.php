@@ -44,7 +44,6 @@ if (empty($currentquiz->get_questions())) {
 } else {
     $demoquiz = $currentquiz;
 }
-error_log('Demoquiz: ' . print_r($demoquiz, true));
 
 // Params for storage in session.
 $nextquestionid = optional_param('nextquestionid', 0, PARAM_INT);

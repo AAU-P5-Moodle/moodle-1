@@ -51,8 +51,8 @@ class questions_answers_relation {
     public static function get_answers_from_question(int $questionid): array {
         global $DB;
 
-        $answerrecords = $DB->get_records('livequiz_questions_answers', ['question_id' => $questionid], '', 'question_id');
-        $answerids = array_column($answerrecords, 'question_id');
+        $answerrecords = $DB->get_records('livequiz_questions_answers', ['question_id' => $questionid], '', 'answer_id');
+        $answerids = array_column($answerrecords, 'answer_id');
         $answers = [];
 
         foreach ($answerids as $answerid) {
