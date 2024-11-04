@@ -51,12 +51,11 @@ class questions_answers_relation {
     public static function get_answers_from_question(int $questionid): array {
         global $DB;
 
-        $answerrecords = $DB->get_records('livequiz_questions_answers', ['question_id' => $questionid], '', 'question_id');
-        $answerids = array_column($answerrecords, 'question_id');
+        $answerids = $DB->get_records('livequiz_questions_answers', ['question_id' => $questionid], '', 'answer_id');
         $answers = [];
 
         foreach ($answerids as $answerid) {
-            $answers[] = answer::get_answer_from_id($answerid);
+            $answers[] = answer::get_answer_from_id($answerid->answer_id);
         }
 
         return $answers;
