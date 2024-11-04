@@ -24,26 +24,26 @@
 
 // These strings are used in the livequiz module.
 // The strings in the brackets will be replaced by the actual values.
+$string['addquestion'] = 'Add Question';
+$string['cancelquiz'] = 'Cancel';
+$string['createquiz'] = 'Create Quiz';
+$string['failedretrievedata'] = 'Failed to retrieve quiz data.';
 $string['livequiz:addinstance'] = 'Add a new live quiz';
 $string['livequiz:submit'] = 'Submit live quiz';
 $string['livequiz:view'] = 'View live quiz';
 $string['modulename'] = 'Live Quiz';
 $string['modulename_help'] = 'Use the live quiz module to create interactive quizzes.';
 $string['modulenameplural'] = 'Live Quizzes';
+$string['navbarclassmissing'] = 'The navigation bar class is missing';
 $string['pluginadministration'] = 'Live quiz administration';
 $string['pluginname'] = 'Live Quiz';
-$string['somesetting'] = 'Some setting';
-$string['somesetting_desc'] = 'Description of some setting';
-$string['cancelquiz'] = 'Cancel';
-$string['createquiz'] = 'Create Quiz';
-$string['failedretrievedata'] = 'Failed to retrieve quiz data.';
-$string['navbarclassmissing'] = 'The navigation bar class is missing';
 $string['questionbank'] = 'Question Bank';
 $string['quizcreator'] = 'Quiz Creator';
 $string['quizdescription'] = 'Description';
 $string['quizname'] = 'Quiz Name';
 $string['quizrunner'] = 'Quiz Runner';
 $string['quizstats'] = 'Quiz Statistics';
-$string['savequiz'] = 'Save Quiz';
 $string['savedquestions'] = 'Saved Questions';
-$string['addquestion'] = 'Add Question';
+$string['savequiz'] = 'Save Quiz';
+$string['somesetting'] = 'Some setting';
+$string['somesetting_desc'] = 'Description of some setting';
