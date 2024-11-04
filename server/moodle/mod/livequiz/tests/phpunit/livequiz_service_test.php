@@ -15,45 +15,62 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This is the test file
+ * LiveQuiz Service Test Class
+ *
+ * This class contains unit tests for the LiveQuiz service functionality.
+ *
  * @package mod_livequiz
  * @copyright 2023
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_livequiz;
+
+use dml_exception;
 use mod_livequiz\models\livequiz;
 use mod_livequiz\services\livequiz_services;
 use mod_livequiz\models\question;
 use mod_livequiz\models\answer;
 
 /**
- * Testing examples!
+ * Testing examples for LiveQuiz service.
  */
 final class livequiz_service_test extends \advanced_testcase {
 
+    /**
+     * Create a LiveQuiz instance for testing.
+     *
+     * @return livequiz The created LiveQuiz instance.
+     * @throws dml_exception
+     */
     protected function create_livequiz_for_test(): livequiz {
         $livequizdata = [
-            'name' =>'Test LiveQuiz',
+            'name' => 'Test LiveQuiz',
             'course' => 1,
             'intro' => 'This is a test livequiz.',
             'introformat' => 1,
             'timecreated' => time(),
-            'timemodified' => time()
+            'timemodified' => time(),
         ];
 
         global $DB;
-        $livequizid = $DB -> insert_record('livequiz', $livequizdata);
+        $livequizid = $DB->insert_record('livequiz', $livequizdata);
 
         return livequiz::get_livequiz_instance($livequizid);
     }
 
+    /**
+     * Set up the test environment.
+     */
     protected function setUp(): void {
         parent::setUp();
         $this->resetAfterTest(true);
     }
 
-    /*
+    /**
+     * Test retrieving the singleton service instance.
      *
+     * @covers \mod_livequiz\services\livequiz_services::get_singleton_service_instance
+     * @return void
      */
     public function test_get_singleton_service_instance(): void {
         $singleton = livequiz_services::get_singleton_service_instance();
@@ -63,34 +80,44 @@ final class livequiz_service_test extends \advanced_testcase {
         self::assertSame($singleton, $singleton2);
     }
 
-
-
-
+    /**
+     * Test creating a new question instance.
+     *
+     * @covers \mod_livequiz\models\question::__construct
+     * @return void
+     * @throws dml_exception
+     */
     public function test_new_question(): void {
         $livequiz = $this->create_livequiz_for_test();
         $title = 'Test question';
         $description = 'This is a test question.';
-        $time_limit = 60;
+        $timelimit = 60;
         $explanation = "I don't know.";
 
-        $question = new question($title, $description, $time_limit, $explanation);
-
+        $question = new question($title, $description, $timelimit, $explanation);
 
         self::assertInstanceOf(question::class, $question);
         self::assertEqualsIgnoringCase($title, $question->get_title());
         self::assertEqualsIgnoringCase($description, $question->get_description());
-        self::assertEquals($time_limit, $question->get_timelimit());
+        self::assertEquals($timelimit, $question->get_timelimit());
         self::assertEqualsIgnoringCase($explanation, $question->get_explanation());
     }
 
+    /**
+     * Test creating a new answer instance.
+     *
+     * @covers \mod_livequiz\models\answer::__construct
+     * @return void
+     * @throws dml_exception
+     */
     public function test_new_answer(): void {
         $livequiz = $this->create_livequiz_for_test();
         $title = 'Test question';
         $description = 'This is a test question.';
-        $time_limit = 60;
+        $timelimit = 60;
         $explanation = "I don't know.";
 
-        $question = new question($title, $description, $time_limit, $explanation);
+        $question = new question($title, $description, $timelimit, $explanation);
 
         $correct = 1;
         $description = 'This is a test answer.';
@@ -104,6 +131,13 @@ final class livequiz_service_test extends \advanced_testcase {
         self::assertEqualsIgnoringCase($explanation, $answer->get_explanation());
     }
 
+    /**
+     * Test retrieving a LiveQuiz instance from the service.
+     *
+     * @covers \mod_livequiz\services\livequiz_services::get_livequiz_instance
+     * @return void
+     * @throws dml_exception
+     */
     public function test_get_livequiz_instance(): void {
         $livequiz = $this->create_livequiz_for_test();
         $service = livequiz_services::get_singleton_service_instance();
@@ -117,6 +151,13 @@ final class livequiz_service_test extends \advanced_testcase {
         self::assertEquals($livequiz->get_timemodified(), $livequiz2->get_timemodified());
     }
 
+    /**
+     * Test submitting a LiveQuiz with questions and answers.
+     *
+     * @covers \mod_livequiz\services\livequiz_services::submit_quiz
+     * @return void
+     * @throws dml_exception
+     */
     public function test_submit_questions_with_answers(): void {
         $livequiz = $this->create_livequiz_for_test();
         $service = livequiz_services::get_singleton_service_instance();
