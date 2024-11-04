@@ -95,13 +95,13 @@ class livequiz_services {
     public function submit_quiz(livequiz $livequiz): livequiz {
         $questions = $livequiz->get_questions();
 
-        if (!count($questions) ){
+        if (!count($questions)) {
             throw new Exception("A Livequiz Must have atleast 1 Question");
         }
 
         foreach ($questions as $question) {
             $answers = $question->get_answers();
-            if(!count($answers)){
+            if (!count($answers)) {
                 throw new Exception("A Livequiz Question must have at least 1 Answer");
             }
         }

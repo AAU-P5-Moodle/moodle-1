@@ -101,7 +101,7 @@ class answer {
     public static function get_answer_from_id(int $id): answer {
         global $DB;
         $answerdata = $DB->get_record('livequiz_answers', ['id' => $id]);
-        if(!$answerdata){
+        if (!$answerdata) {
             throw new Exception("No answer found in answers table with id: " . $id);
         }
         $answer = new answer($answerdata->correct, $answerdata->description, $answerdata->explanation);
