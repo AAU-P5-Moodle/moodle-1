@@ -53,6 +53,5 @@ if (class_exists('createNavbar')) {
     echo "Navbar class does not exist.";
 }
 
-echo $OUTPUT->header();
 echo $OUTPUT->heading('This is the livequiz view page');
 echo $OUTPUT->footer();
