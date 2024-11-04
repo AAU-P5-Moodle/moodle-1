@@ -35,7 +35,6 @@ use mod_livequiz\models\answer;
  * Testing examples for LiveQuiz service.
  */
 final class livequiz_service_test extends \advanced_testcase {
-
     /**
      * Create a LiveQuiz instance for testing.
      *
