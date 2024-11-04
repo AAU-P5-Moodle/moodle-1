@@ -45,3 +45,5 @@ $string['questionbank'] = 'Question Bank';
 $string['createquiz'] = 'Create Quiz';
 $string['failedretrievedata'] = 'Failed to retrieve quiz data.';
 $string['addquestion'] = 'Add Question';
+$string['quizname'] = 'Quiz Name';
+$string['quizdescription'] = 'Description';
