@@ -14,19 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-/**
- * Retrieves required parameters, validates user authentication,
- * and saves quiz questions to the database.
- * @package   mod_livequiz
- * @copyright 2024 Software AAU
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 require_once('../../../config.php');
+require_once($CFG->dirroot . '/mod/livequiz/classes/services/livequiz_services.php');
+require_once($CFG->dirroot . '/mod/livequiz/classes/models/livequiz.php');
+
+use mod_livequiz\services\livequiz_services;
+use mod_livequiz\models\livequiz;
 
 global $DB;
-
-
 
 // Get course ID from parameters.
 $id = required_param('id', PARAM_INT);
@@ -37,45 +32,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputdata = file_get_contents("php://input");
     $data = json_decode($inputdata);
 
-    if ($data && !empty($data->questions)) {
-        $quizdata = new stdClass();
-        $quizdata->id = $data->id;
-        $quizdata->name = $data->name;
-        $quizdata->intro = $data->intro;
-        $quizdata->introformat = FORMAT_HTML; // Assuming its HTML, change if I am wrong.
-        $quizdata->timemodified = $data->timemodified;
-        $quizdata->timecreated = $data->timecreated;
-
+    // Check if the data is valid and contains required properties.
+    if ($data && isset($data->name, $data->questions) && !empty($data->questions)) {
         try {
-            $quizid = $DB->insert_record('livequiz', $quizdata);
+            // Create a new livequiz instance.
+            $livequiz = new livequiz(
+                0,  // Placeholder for new quiz ID
+                $data->name ?? 'Untitled Quiz',  // Name of the quiz
+                $id,  // Course ID from the request parameter
+                $data->intro ?? '',  // Introduction text
+                FORMAT_HTML,  // Intro format (assuming HTML)
+                time(),  // Time created (current timestamp)
+                time()   // Time modified (current timestamp)
+            );
 
+            // Add questions and their answers to the livequiz object.
             foreach ($data->questions as $question) {
-                $questiondata = new stdClass();
-                $questiondata->id = $quizid; // Links question to the quiz.
-                $questiondata->title = $question->title;
-                $questiondata->description = $question->description;
-                $questiondata->timelimit = $question->timelimit ?? 0;
-                $questiondata->explanation = $question->explanation ?? null;
+                if (isset($question->title, $question->answers) && !empty($question->answers)) {
+                    $questionObj = livequiz_services::get_singleton_service_instance()->new_question(
+                        $livequiz,
+                        $question->title,
+                        $question->description ?? '',
+                        $question->timelimit ?? 0,
+                        $question->explanation ?? ''
+                    );
 
-                $questionid = $DB->insert_record('livequiz_questions', $questiondata);
-
-                foreach ($question->answers as $answer) {
-                    $answerdata = new stdClass();
-                    $answerdata->id = $questionid; // Links answer to question.
-                    $answerdata->correct = $answer->correct;
-                    $answerdata->description = $answer->description;
-                    $answerdata->explanation = $answer->explanation ?? null;
-
-                    $DB->insert_record('livequiz_answers', $answerdata);
+                    foreach ($question->answers as $answer) {
+                        if (isset($answer->description, $answer->correct)) {
+                            livequiz_services::get_singleton_service_instance()->new_answer(
+                                $questionObj,
+                                $answer->correct ? 1 : 0,
+                                $answer->description,
+                                $answer->explanation ?? ''
+                            );
+                        } else {
+                            throw new Exception('Invalid answer format: missing required fields.');
+                        }
+                    }
+                } else {
+                    throw new Exception('Invalid question format: missing title or answers.');
                 }
             }
-            echo json_encode(['status' => 'success', 'message' => 'Quiz saved succesfully.']);
-        } catch (exception $e) {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to save quiz: ' . $e->getMessage()]);
+
+            // Submit the quiz using the service.
+            $submittedQuiz = livequiz_services::get_singleton_service_instance()->submit_quiz($livequiz);
+
+            http_response_code(200);
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Quiz saved successfully.',
+                'quiz_id' => $submittedQuiz->get_id()
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to save quiz: ' . $e->getMessage()
+            ]);
         }
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Invalid data format or missing questions']);
+        http_response_code(400);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Invalid data format or missing questions'
+        ]);
     }
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
+    http_response_code(405); // Method Not Allowed
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Invalid request method'
+    ]);
 }
