@@ -90,7 +90,7 @@ class livequiz_services {
      *  TODO:
      *  Handle lecturer id such that the intermediate table can be updated accordingly.
      *
-     * @throws dml_exception
+     * @throws dml_exception|Exception
      */
     public function submit_quiz(livequiz $livequiz): livequiz {
         $questions = $livequiz->get_questions();
@@ -113,7 +113,7 @@ class livequiz_services {
 
             $quizid = $livequiz->get_id();
 
-            $this->submit_questions($quizid, $questions);
+            $this->submit_questions($livequiz);
 
             $transaction->allow_commit();
         } catch (dml_exception $e) {
@@ -129,13 +129,42 @@ class livequiz_services {
      * @throws dml_transaction_exception
      * @throws dml_exception
      */
-    private function submit_questions(int $quizid, array $questions): void {
-        foreach ($questions as $question) {
-            $answers = $question->get_answers();
-            $questionid = question::submit_question($question);
+    private function submit_questions(livequiz $livequiz): void {
+        $existingquestions = $this->get_questions_with_answers($livequiz->get_id());
+        $newquestions = $livequiz->get_questions();
 
-            quiz_questions_relation::append_question_to_quiz($questionid, $quizid);
-            $this::submit_answers($questionid, $answers);
+        $quizid = $livequiz->get_id();
+
+        $updatedquestionids = [];
+
+        // existing = [4,5,6]
+        // new = [16]
+
+        foreach ($newquestions as $newquestion){
+            foreach ($existingquestions as $existingquestion) {
+                if($newquestion->get_id() == null) {
+                    $answers = $newquestion->get_answers();
+                    $questionid = question::insert_question($newquestion);
+
+                    quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
+                    $this::submit_answers($questionid, $answers);
+                    $updatedquestionids[] = $questionid;
+
+                } elseif($newquestion->get_id() == $existingquestion->get_id()) {
+                    $newquestion->update_question();
+                    $updatedquestionids[] = $newquestion->id;
+                    //updatedquestionids = []
+                }
+            }
+        }
+
+        $deletedquestions = array_diff($existingquestions, $updatedquestionids);
+        //deletedquestions= [4,5,6]
+        if(count($deletedquestions) > 0){
+            foreach ($deletedquestions as $deletedquestion) {
+                //TODO delete
+//                question::delete_question($deletedquestion);
+            }
         }
     }
 
@@ -146,9 +175,33 @@ class livequiz_services {
      * @throws dml_exception
      */
     private function submit_answers(int $questionid, array $answers): void {
-        foreach ($answers as $answer) {
-            $answerid = answer::submit_answer($answer);
-            questions_answers_relation::append_answer_to_question($questionid, $answerid);
+        $newanswers = $answers;
+        $existinganswers = questions_answers_relation::get_answers_from_question($questionid);
+
+        $updatedanswerids = [];
+
+        foreach ($newanswers as $newanswer) {
+            foreach ($existinganswers as $existinganswer) {
+                if($newanswer->get_id() == $existinganswer->get_id()) {
+                    $newanswer->update_answer();
+                    $updatedanswerids[] = $newanswer->get_id();
+                }
+            }
+
+            if(!in_array($newanswer->get_id(), $updatedanswerids)) {
+                $answerid = answer::insert_answer($newanswer);
+                questions_answers_relation::insert_question_answer_relation($questionid, $answerid);
+                $updatedanswerids[] = $answerid;
+            }
+        }
+
+        $deletedanswers = array_diff($existinganswers, $updatedanswerids);
+
+        if(count($deletedanswers) > 0){
+            foreach ($deletedanswers as $deletedanswer) {
+                //TODO delete
+//                answer::delete_answer($deletedanswer);
+            }
         }
     }
 

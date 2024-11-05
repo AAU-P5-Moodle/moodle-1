@@ -36,7 +36,7 @@ class questions_answers_relation {
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function append_answer_to_question(int $questionid, int $answerid): void {
+    public static function insert_question_answer_relation(int $questionid, int $answerid): void {
         global $DB;
         $DB->insert_record('livequiz_questions_answers', ['question_id' => $questionid, 'answer_id' => $answerid]);
     }

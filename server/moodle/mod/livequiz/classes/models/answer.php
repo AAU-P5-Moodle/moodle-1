@@ -25,7 +25,6 @@ namespace mod_livequiz\models;
 
 use dml_exception;
 use Exception;
-use function PHPUnit\Framework\throwException;
 
 /**
  * Class answer.
@@ -78,7 +77,7 @@ class answer {
      * @return int
      * @throws dml_exception
      */
-    public static function submit_answer(answer $answer): int {
+    public static function insert_answer(answer $answer): int {
         global $DB;
 
         $answerdata = [

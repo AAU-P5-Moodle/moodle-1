@@ -85,7 +85,7 @@ class question {
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function submit_question($question): int {
+    public static function insert_question($question): int {
         global $DB;
         $questiondata = [
                 'title' => $question->title,
@@ -98,7 +98,7 @@ class question {
     }
 
     /**
-     * Gets a question instance
+     * Gets a question instance.
      *
      * @param $id
      * @return question
@@ -120,10 +120,10 @@ class question {
     /**
      * Gets the ID of the question.
      *
-     * @return int
+     * @return int|null // Returns the ID of the question, if it has one. Null if it does not.
      */
-    public function get_id(): int {
-        return $this->id;
+    public function get_id(): ?int {
+        return $this->id ?? null;
     }
 
     /**
@@ -199,5 +199,17 @@ class question {
      */
     private function set_id($id): void {
         $this->id = $id;
+    }
+
+    public function update_question()
+    {
+        global $DB;
+        $questiondata = [
+            'title' => $this->title,
+            'description' => $this->description,
+            'timelimit' => $this->timelimit,
+            'explanation' => $this->explanation,
+        ];
+        $DB->update_record('livequiz_questions', $questiondata);
     }
 }

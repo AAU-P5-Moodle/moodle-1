@@ -150,10 +150,64 @@ final class livequiz_service_test extends \advanced_testcase {
         self::assertEquals($livequiz->get_timemodified(), $livequiz2->get_timemodified());
     }
 
+    public function test_create_livequiz(): void {
+        $livequiz = $this->create_livequiz_for_test();
+        $service = livequiz_services::get_singleton_service_instance();
+        $questions = [
+            new question('Test question 1', 'How much does a Polar Bear weigh?.', 45,
+                "Come on a Polar bear has a weight."),
+            new question('Test question 2', 'Where is north on a compass.', 46,
+                "You need to answer where north is."),
+            new question('Test question 3', 'Why is compressed air important for driving a truck.',
+                100, "Compressed air is essential for driving a truck, but why?"),
+        ];
+
+        $answersquestion1 = [
+            new answer(1, '350-550 kg', "A male Polar Bear weighs this much."),
+            new answer(1, '150-350 kg', "A female Polar Bear weighs this much."),
+            new answer(0, '600-800 kg',
+                "Neither af female nor a male Polar Bear weighs this much"),
+        ];
+
+        $answersquestion2 = [
+            new answer(1, 'N', "The letter N"),
+            new answer(0, 'S', "The letter S"),
+            new answer(0, 'W', "The letter W"),
+        ];
+
+        $answersquestion3 = [
+            new answer(1, 'The compressed air ensures that the handbrake spring is not permanently on',
+                "This correct as the air realses the spring"),
+            new answer(0, 'The compressed air makes funny sounds.',
+                "It does not make it sound funny"),
+            new answer(1,
+                'The compressed air ensures that gear changes happen, when switching from 1-6 gears to 7-12 gears',
+                "This is correct as the air is needed for the force that is needed"),
+        ];
+
+        $questions[0]->add_answers($answersquestion1);
+        $questions[1]->add_answers($answersquestion2);
+        $questions[2]->add_answers($answersquestion3);
+
+        $livequiz->add_questions($questions);
+
+        $livequizresult = $service->submit_quiz($livequiz);
+
+        self::assertEquals($livequiz, $livequizresult);
+        self::assertEquals($livequiz->get_id(), $livequizresult->get_id());
+        self::assertEqualsIgnoringCase($livequiz->get_name(), $livequizresult->get_name());
+        self::assertEqualsIgnoringCase($livequiz->get_intro(), $livequizresult->get_intro());
+        self::assertEquals($livequiz->get_timecreated(), $livequizresult->get_timecreated());
+        self::assertEquals($livequiz->get_timemodified(), $livequizresult->get_timemodified());
+
+        $questionsresult = $livequizresult->get_questions();
+        self::assertCount(3, $questionsresult);
+    }
+
     /**
      * Test submitting a LiveQuiz with questions and answers.
      *
-     * @covers \mod_livequiz\services\livequiz_services::submit_quiz
+     * @covers \mod_livequiz\services\livequiz_services::save_quiz
      * @return void
      * @throws dml_exception
      */

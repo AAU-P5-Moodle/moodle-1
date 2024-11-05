@@ -21,6 +21,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_livequiz\services\livequiz_services;
+use mod_livequiz\models\livequiz;
+use mod_livequiz\models\question;
+use mod_livequiz\models\answer;
+
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 
@@ -39,6 +44,28 @@ $PAGE->set_url('/mod/livequiz/view.php', ['id' => $id]);
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
+$livequizservice = livequiz_services::get_singleton_service_instance();
+
+$testquiz = $livequizservice->get_livequiz_instance($instance->id);
+
+$q1 = new question("title", 'descr', 1, "fordi du er en bøv");
+$q1->add_answer(new answer(1, "svar1", "forklaring1"));
+$q1->add_answer(new answer(0, "svar2", "forklaring2"));
+
+$q2 = new question("title2", 'descr2', 31, "fordi du er en mega bøv");
+$q2->add_answer(new answer(1, "svar1", "forklaring1"));
+$q2->add_answer(new answer(0, "svar2", "forklaring2"));
+
+$testquiz->add_question($q1);
+$testquiz->add_question($q2);
+
+$livequizservice->submit_quiz($testquiz);
+
+$questions = $testquiz->get_questions();
+
+
 echo $OUTPUT->header();
-echo $OUTPUT->heading('This is the livequiz view page');
+echo $OUTPUT->heading('Fuck diiiig page2');
+echo "<p><strong>Number of questions:</strong> " . count($questions) . "</p>";
+
 echo $OUTPUT->footer();
