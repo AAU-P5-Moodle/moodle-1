@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/livequiz/db" VERSION="20241010" COMMENT="XMLDB file for Moodle mod/livequiz"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
->
+<XMLDB xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" PATH="mod/livequiz/db" VERSION="20241031" COMMENT="XMLDB file for Moodle mod/livequiz" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
   <TABLES>
     <TABLE NAME="livequiz" COMMENT="The settings for each live quiz.">
       <FIELDS>
@@ -26,6 +22,7 @@
         <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Description of the question."/>
         <FIELD NAME="timelimit" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Optional time limit for the question."/>
         <FIELD NAME="explanation" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Explanation of the right answer, after the students have answered."/>
+        <FIELD NAME="type" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Type of question, eg. multiple choice, one choice, etc."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -107,11 +104,13 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="student_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of the student."/>
         <FIELD NAME="answer_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID to the answer."/>
+        <FIELD NAME="participation_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID refers to the foreign key of a participation, meaning a field in the livequiz_student relationship table."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_student" TYPE="foreign" FIELDS="student_id" REFTABLE="mdl_user" REFFIELDS="id" COMMENT="Foreign key to student(user)."/>
         <KEY NAME="fk_answer" TYPE="foreign" FIELDS="answer_id" REFTABLE="livequiz_answers" REFFIELDS="id" COMMENT="Foreign key to an answer."/>
+        <KEY NAME="fk_participation" TYPE="foreign" FIELDS="participation_id" REFTABLE="livequiz_quiz_student" REFFIELDS="id" COMMENT="Key to a row in participates/livequiz_quiz_student"/>
       </KEYS>
     </TABLE>
     <TABLE NAME="livequiz_course_quiz" COMMENT="Relationship table between live quiz and course.">
