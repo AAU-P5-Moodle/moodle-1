@@ -24,6 +24,8 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
+use Exception;
+use function PHPUnit\Framework\throwException;
 
 /**
  * Class answer.
@@ -94,10 +96,14 @@ class answer {
      * @param int $id
      * @return mixed
      * @throws dml_exception
+     * @throws Exception
      */
     public static function get_answer_from_id(int $id): answer {
         global $DB;
         $answerdata = $DB->get_record('livequiz_answers', ['id' => $id]);
+        if (!$answerdata) {
+            throw new Exception("No answer found in answers table with id: " . $id);
+        }
         $answer = new answer($answerdata->correct, $answerdata->description, $answerdata->explanation);
         $answer->set_id($answerdata->id);
         return $answer;
