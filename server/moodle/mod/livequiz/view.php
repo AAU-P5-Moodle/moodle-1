@@ -60,20 +60,24 @@ $questions[1]->set_description("new descr2");
 $questions[1]->set_timelimit(31);
 $questions[1]->set_explanation("fordi du er en mega bøv");
 
-$questions[0]->get_answers()[0]->set_description("nyt svar1");
-$questions[0]->get_answers()[0]->set_explanation("ny forklaring1");
+$q0answers = $questions[0]->get_answers();
+$q1answers = $questions[1]->get_answers();
 
-$questions[0]->get_answers()[1]->set_description("nyt svar2");
-$questions[0]->get_answers()[1]->set_explanation("ny forklaring2");
+$q0answers[0]->set_description("nyt svar1");
+$q0answers[0]->set_explanation("ny forklaring1");
 
+$q0answers[1]->set_description("nyt svar2");
+$q0answers[1]->set_explanation("ny forklaring2");
 
-$livequizservice->submit_quiz($testquiz);
+$ret = $livequizservice->submit_quiz($testquiz);
 
 $questions = $testquiz->get_questions();
 
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading('View.php page');
+echo "<p><strong>Quiz title:</strong> " . print_r($testquiz->get_questions()[0]->get_answers()[0]) . "</p>";
+
 echo "<p><strong>Number of questions:</strong> " . count($questions) . "</p>";
 
 echo $OUTPUT->footer();

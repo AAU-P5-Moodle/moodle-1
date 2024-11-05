@@ -128,6 +128,7 @@ class livequiz_services {
      *
      * @throws dml_transaction_exception
      * @throws dml_exception
+     * @throws Exception
      */
     private function submit_questions(livequiz $livequiz): void {
         $existingquestions = $this->get_questions_with_answers($livequiz->get_id());
@@ -143,25 +144,20 @@ class livequiz_services {
         }
         /* @var question $newquestion */
         foreach ($newquestions as $newquestion) {
-            $questionId = $newquestion->get_id();
+            $questionid = $newquestion->get_id();
 
-            if ($questionId == 0) {
+            if ($questionid == 0) {
                 // Insert new question if ID is 0 (new question)
                 $questionid = question::insert_question($newquestion);
                 quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
-
-                $answers = $newquestion->get_answers();
-                $this::submit_answers($questionid, $answers);
-
                 $updatedquestionids[] = $questionid;
-            } elseif (isset($existingQuestionMap[$questionId])) {
+            } elseif (isset($existingQuestionMap[$questionid])) {
                 // Update existing question if found in the map
                 $newquestion->update_question();
-                $updatedquestionids[] = $questionId;
-            } else {
-                // Throw an exception if the question ID doesn't exist
-                throw new Exception("Question ID does not exist in the database");
+                $updatedquestionids[] = $questionid;
             }
+            $answers = $newquestion->get_answers();
+            $this::submit_answers($questionid, $answers);
         }
 
         // Find deleted questions by comparing existing question IDs with updated ones
@@ -170,7 +166,7 @@ class livequiz_services {
 
         if (count($deletedquestions) > 0) {
             foreach ($deletedquestions as $deletedQuestionId) {
-                // Perform deletion logic here
+                // TODO Perform deletion logic here
                 // question::delete_question($deletedQuestionId);
             }
         }
@@ -181,6 +177,7 @@ class livequiz_services {
      *
      * @throws dml_transaction_exception
      * @throws dml_exception
+     * @throws Exception
      */
     private function submit_answers(int $questionid, array $answers): void {
         $existinganswers = questions_answers_relation::get_answers_from_question($questionid);
@@ -204,8 +201,6 @@ class livequiz_services {
             } elseif(isset($existinganswersmap[$answerid])){
                 $newanswer->update_answer();
                 $updatedanswerids[] = $answerid;
-            } else {
-                throw new Exception("Answer ID does not exist in the database");
             }
         }
 
@@ -214,7 +209,7 @@ class livequiz_services {
 
         if(count($deletedanswers) > 0){
             foreach($deletedanswers as $deletedanswerid){
-                // Perform deletion logic here
+                // TODO Perform deletion logic here
                 // answer::delete_answer($deletedanswerid);
             }
         }

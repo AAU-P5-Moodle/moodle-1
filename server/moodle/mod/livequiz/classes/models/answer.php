@@ -111,17 +111,16 @@ class answer {
     /**
      * Update an answer, given its id.
      *
-     * @param answer $answer
      * @throws dml_exception
      */
-    public static function update_answer(answer $answer): void {
+    public function update_answer(): void {
         global $DB;
 
         $answerdata = [
-            'id' => $answer->id,
-            'correct' => $answer->correct,
-            'description' => $answer->description,
-            'explanation' => $answer->explanation,
+            'id' => $this->id,
+            'correct' => $this->correct,
+            'description' => $this->description,
+            'explanation' => $this->explanation,
         ];
 
         $DB->update_record('livequiz_answers', $answerdata);
