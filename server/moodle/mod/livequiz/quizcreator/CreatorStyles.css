@@ -211,6 +211,16 @@
     border-radius: 5px;
     cursor: pointer;
 }
+.delete_question_button {
+    float: right;
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    font-size: large;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
 .save_button {
     background-color: green;
     color: white;

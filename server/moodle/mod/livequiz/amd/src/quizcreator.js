@@ -47,7 +47,7 @@ let editingIndex = null;
         let discard_question_button = create_element("discard_button", "div", "discard_question_button", "Discard");
     
         discard_question_button.addEventListener('click', () => {
-            let toast_promise_deletion_div = create_element("toast_promise_deletion_div", 'div', "toast_promise_deletion_div", "Are you sure you want to delete this question?");
+            let toast_promise_deletion_div = create_element("toast_promise_deletion_div", 'div', "toast_promise_deletion_div", "Are you sure you want to discard changes?");
             let cancel_question_deletion_button = create_element("cancel_question_deletion_button", 'button', "cancel_question_deletion_button", "No");
             let continue_question_deletion_button = create_element("continue_question_deletion_button", 'button', "continue_question_deletion_button", "Yes");
     
@@ -55,11 +55,11 @@ let editingIndex = null;
             toast_promise_deletion_div.appendChild(continue_question_deletion_button);
     
             let modal_div = document.querySelector('.Modal_div');
-    if (!document.querySelector('.toast_promise_deletion_div')) {
-    modal_div.appendChild(toast_promise_deletion_div);
-}
+            modal_div.appendChild(toast_promise_deletion_div);
     
             continue_question_deletion_button.addEventListener('click', () => {
+                isEditing = false;
+                editingIndex = null
                 modal_div.remove();
             });
     
@@ -69,6 +69,44 @@ let editingIndex = null;
         });
     
         return discard_question_button;
+    }
+
+    function create_delete_button(index) {
+        let delete_question_button = create_element("delete_button", "button", "delete_question_button", "Delete Question");
+    
+        delete_question_button.addEventListener('click', () => {
+            let toast_promise_deletion_div = create_element("toast_promise_deletion_div", 'div', "toast_promise_deletion_div", "Are you sure you want to delete this question?");
+            let cancel_question_deletion_button = create_element("cancel_question_deletion_button", 'button', "cancel_question_deletion_button", "No");
+            let continue_question_deletion_button = create_element("continue_question_deletion_button", 'button', "continue_question_deletion_button", "Yes");
+
+            toast_promise_deletion_div.appendChild(cancel_question_deletion_button);
+            toast_promise_deletion_div.appendChild(continue_question_deletion_button);
+
+            let modal_div = document.querySelector('.Modal_div');
+            modal_div.appendChild(toast_promise_deletion_div);
+
+            continue_question_deletion_button.addEventListener('click', () => {
+                savedQuestions.splice(index,1);
+                
+                let saved_questions_list = document.getElementById("saved_questions_list");
+                let question_list_item = saved_questions_list.children[index]
+                if (question_list_item){
+                    saved_questions_list.removeChild(question_list_item);
+                }
+                for (let i = index; i < saved_questions_list.children.length; i++) {
+                    saved_questions_list.children[i].dataset.index = i;
+                }
+                isEditing = false;
+                editingIndex = null
+                modal_div.remove();
+            });
+
+            cancel_question_deletion_button.addEventListener('click', () => {
+                toast_promise_deletion_div.remove();
+            });
+        });
+    
+        return delete_question_button;
     }
 
     function create_cancel_button() {
@@ -182,7 +220,10 @@ let editingIndex = null;
     
             let answers = [];
             for (let i = 0; i < answers_div.children.length; i++) {
-                answers.push(answers_div.children[i].querySelector(".answer_input").value.trim());
+                let answertext = answers_div.children[i].querySelector(".answer_input").value.trim();
+                let iscorrect = answers_div.children[i].querySelector(".answer_checkbox").checked;
+
+                answers.push({ text: answertext, correct: iscorrect });
             }
     
             let file_input = file_picker.querySelector('input[type="file"]');
@@ -258,9 +299,25 @@ let editingIndex = null;
 
             let answer_input = document.createElement('input');
             answer_input.className = "answer_input";
-            answer_input.value = answer;
+            answer_input.value = answer.text;
+            answer_input.setAttribute("required", true);
 
+            let answer_checkbox = document.createElement('input');
+            answer_checkbox.setAttribute("type", "checkbox");
+            answer_checkbox.className = "answer_checkbox";
+            answer_checkbox.checked = answer.correct;
+
+            let delete_answer_button = create_element("delete_answer_button", "button", "delete_answer_button", "");
+
+            delete_answer_button.addEventListener('click', () => {
+                answer_container.remove();
+                answer_count--;
+            });
+
+            answer_container.appendChild(answer_checkbox);
             answer_container.appendChild(answer_input);
+            answer_container.appendChild(delete_answer_button);
+
             all_answers_for_question_div.appendChild(answer_container);
         });
 
@@ -269,6 +326,8 @@ let editingIndex = null;
 
         modal_div.appendChild(save_question(null,question_input,modal_div,all_answers_for_question_div,file_picker));
         modal_div.appendChild(create_discard_button());
+        modal_div.appendChild(create_delete_button(index));
+
 
         let page = document.getElementById("page-mod-livequiz-quizcreator");
         page.appendChild(modal_div);
@@ -297,14 +356,14 @@ let editingIndex = null;
                 answer_container.appendChild(answer_checkbox);
                 answer_container.appendChild(answer_input);
                 answer_container.appendChild(delete_answer_button);
- 
-                parent_element.appendChild(answer_container);
-                answer_count++;
- 
+
                 delete_answer_button.addEventListener('click', () => {
                     answer_container.remove();
                     answer_count--;
                 });
+ 
+                parent_element.appendChild(answer_container);
+                answer_count++;
             }
         });
         return add_new_answer_to_question;
