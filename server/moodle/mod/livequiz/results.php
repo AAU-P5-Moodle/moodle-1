@@ -49,7 +49,7 @@ require_login($course, false, $cm);
 session_start();
 $_SESSION['completed'] = true;
 
-$context = context_module::instance($cm->id);
+$context = context_module::instance($cm->id); // Set the context for the course module.
 
 $PAGE->set_context($context); // Make sure to set the page context.
 
@@ -60,7 +60,6 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
 $results = new \mod_livequiz\output\results_page($id, $demoquiz);
-
 
 echo $OUTPUT->header();
 echo $output->render($results);

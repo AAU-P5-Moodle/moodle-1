@@ -24,24 +24,26 @@
 require_once('../../config.php');
 require_login();
 
-
 session_start();
 
+// Get submitted parameters.
 $questionid = required_param('questionid', PARAM_INT);
+// The answer value is a JSON string.
 $answervalue = required_param('answervalue', PARAM_TEXT);
 
 $answers = [];
+// Decode the answer value from JSON.
 $decodeanswer = json_decode($answervalue, true);
 foreach ($decodeanswer as $key => $value) {
     $answers[] = $value;
 }
 
 
-if (!isset($_SESSION['quiz_answers'])) {
+if (!isset($_SESSION['quiz_answers'])) { // If the session variable is not set, set it to an empty array.
     $_SESSION['quiz_answers'] = [];
 }
 
-$_SESSION['quiz_answers'][$questionid] = [
+$_SESSION['quiz_answers'][$questionid] = [ // Set the session variable to the answers.
     'question_id' => $questionid,
     'answers' => $answers,
 ];

@@ -40,7 +40,6 @@
         answerOptions.forEach(option => {
             option.addEventListener("change", function(event) {
                 // Get all selected answers
-
                 const selectedAnswers = [];
                 Array.from(answerOptions).forEach(input => {
                     if (input.checked || input.type === 'radio' && input.checked || input.type === 'checkbox' && input.checked) {

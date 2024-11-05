@@ -27,7 +27,6 @@ require_once('readdemodata.php');
 
 global $OUTPUT, $PAGE, $DB;
 
-
 $cmid = required_param('id', PARAM_INT); // Course module ID.
 [$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
@@ -46,15 +45,6 @@ $output = $PAGE->get_renderer('mod_livequiz');
 $renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE', $cmid);
 
 unset($_SESSION['completed']);
-/*
-if (has_capability('mod/livequiz:manage', $context)) {
-    // Redirect teachers to the management page.
-    redirect(new moodle_url('/mod/livequiz/manage.php', ['id' => $id]));
-} else {
-   // Redirect students to the quiz page.
-    redirect(new moodle_url('/mod/livequiz/startquiz.php', ['cmid' => $id]));
-}
-*/
 
 echo $OUTPUT->header();
 echo $output->render($renderable);
