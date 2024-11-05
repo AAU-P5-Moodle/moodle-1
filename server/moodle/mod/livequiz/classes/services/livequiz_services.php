@@ -134,36 +134,44 @@ class livequiz_services {
         $newquestions = $livequiz->get_questions();
 
         $quizid = $livequiz->get_id();
-
         $updatedquestionids = [];
 
-        // existing = [4,5,6]
-        // new = [16]
+        // Create a map of existing questions for quick lookup by ID
+        $existingQuestionMap = [];
+        foreach ($existingquestions as $existingquestion) {
+            $existingQuestionMap[$existingquestion->get_id()] = $existingquestion;
+        }
+        /* @var question $newquestion */
+        foreach ($newquestions as $newquestion) {
+            $questionId = $newquestion->get_id();
 
-        foreach ($newquestions as $newquestion){
-            foreach ($existingquestions as $existingquestion) {
-                if($newquestion->get_id() == null) {
-                    $answers = $newquestion->get_answers();
-                    $questionid = question::insert_question($newquestion);
+            if ($questionId == 0) {
+                // Insert new question if ID is 0 (new question)
+                $questionid = question::insert_question($newquestion);
+                quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
 
-                    quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
-                    $this::submit_answers($questionid, $answers);
-                    $updatedquestionids[] = $questionid;
+                $answers = $newquestion->get_answers();
+                $this::submit_answers($questionid, $answers);
 
-                } elseif($newquestion->get_id() == $existingquestion->get_id()) {
-                    $newquestion->update_question();
-                    $updatedquestionids[] = $newquestion->id;
-                    //updatedquestionids = []
-                }
+                $updatedquestionids[] = $questionid;
+            } elseif (isset($existingQuestionMap[$questionId])) {
+                // Update existing question if found in the map
+                $newquestion->update_question();
+                $updatedquestionids[] = $questionId;
+            } else {
+                // Throw an exception if the question ID doesn't exist
+                throw new Exception("Question ID does not exist in the database");
             }
         }
 
-        $deletedquestions = array_diff($existingquestions, $updatedquestionids);
-        //deletedquestions= [4,5,6]
-        if(count($deletedquestions) > 0){
-            foreach ($deletedquestions as $deletedquestion) {
-                //TODO delete
-//                question::delete_question($deletedquestion);
+        // Find deleted questions by comparing existing question IDs with updated ones
+        $existingQuestionIds = array_keys($existingQuestionMap);
+        $deletedquestions = array_diff($existingQuestionIds, $updatedquestionids);
+
+        if (count($deletedquestions) > 0) {
+            foreach ($deletedquestions as $deletedQuestionId) {
+                // Perform deletion logic here
+                // question::delete_question($deletedQuestionId);
             }
         }
     }
@@ -175,32 +183,39 @@ class livequiz_services {
      * @throws dml_exception
      */
     private function submit_answers(int $questionid, array $answers): void {
-        $newanswers = $answers;
         $existinganswers = questions_answers_relation::get_answers_from_question($questionid);
+        $newanswers = $answers;
 
         $updatedanswerids = [];
 
-        foreach ($newanswers as $newanswer) {
-            foreach ($existinganswers as $existinganswer) {
-                if($newanswer->get_id() == $existinganswer->get_id()) {
-                    $newanswer->update_answer();
-                    $updatedanswerids[] = $newanswer->get_id();
-                }
-            }
 
-            if(!in_array($newanswer->get_id(), $updatedanswerids)) {
+        $existinganswersmap = [];
+        foreach ($existinganswers as $existinganswer) {
+            $existinganswersmap[$existinganswer->get_id()] = $existinganswer;
+        }
+
+        /* @var answer $newanswer */
+        foreach ($newanswers as $newanswer){
+            $answerid = $newanswer->get_id();
+            if($answerid == 0){
                 $answerid = answer::insert_answer($newanswer);
                 questions_answers_relation::insert_question_answer_relation($questionid, $answerid);
                 $updatedanswerids[] = $answerid;
+            } elseif(isset($existinganswersmap[$answerid])){
+                $newanswer->update_answer();
+                $updatedanswerids[] = $answerid;
+            } else {
+                throw new Exception("Answer ID does not exist in the database");
             }
         }
 
-        $deletedanswers = array_diff($existinganswers, $updatedanswerids);
+        $existinganswerids = array_keys($existinganswersmap);
+        $deletedanswers = array_diff($existinganswerids, $updatedanswerids);
 
         if(count($deletedanswers) > 0){
-            foreach ($deletedanswers as $deletedanswer) {
-                //TODO delete
-//                answer::delete_answer($deletedanswer);
+            foreach($deletedanswers as $deletedanswerid){
+                // Perform deletion logic here
+                // answer::delete_answer($deletedanswerid);
             }
         }
     }

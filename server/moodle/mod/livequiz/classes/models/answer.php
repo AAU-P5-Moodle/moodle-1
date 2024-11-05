@@ -109,12 +109,31 @@ class answer {
     }
 
     /**
+     * Update an answer, given its id.
+     *
+     * @param answer $answer
+     * @throws dml_exception
+     */
+    public static function update_answer(answer $answer): void {
+        global $DB;
+
+        $answerdata = [
+            'id' => $answer->id,
+            'correct' => $answer->correct,
+            'description' => $answer->description,
+            'explanation' => $answer->explanation,
+        ];
+
+        $DB->update_record('livequiz_answers', $answerdata);
+    }
+
+    /**
      * Gets the ID of the answer.
      *
      * @return int
      */
     public function get_id(): int {
-        return $this->id;
+        return $this->id ?? 0;
     }
 
     /**
@@ -151,5 +170,35 @@ class answer {
      */
     private function set_id(int $id): void {
         $this->id = $id;
+    }
+
+    /**
+     * Sets the correct status of the answer.
+     *
+     * @param int $correct
+     */
+    public function set_correct(int $correct): void
+    {
+        $this->correct = $correct;
+    }
+
+    /**
+     * Sets the description of the answer.
+     *
+     * @param string $description
+     */
+    public function set_description(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Sets the explanation of the answer.
+     *
+     * @param string $explanation
+     */
+    public function set_explanation(string $explanation): void
+    {
+        $this->explanation = $explanation;
     }
 }

@@ -177,7 +177,7 @@ final class livequiz_service_test extends \advanced_testcase {
 
         $answersquestion3 = [
             new answer(1, 'The compressed air ensures that the handbrake spring is not permanently on',
-                "This correct as the air realses the spring"),
+                "This correct as the air releases the spring"),
             new answer(0, 'The compressed air makes funny sounds.',
                 "It does not make it sound funny"),
             new answer(1,

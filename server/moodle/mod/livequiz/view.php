@@ -48,16 +48,24 @@ $livequizservice = livequiz_services::get_singleton_service_instance();
 
 $testquiz = $livequizservice->get_livequiz_instance($instance->id);
 
-$q1 = new question("title", 'descr', 1, "fordi du er en bøv");
-$q1->add_answer(new answer(1, "svar1", "forklaring1"));
-$q1->add_answer(new answer(0, "svar2", "forklaring2"));
+$questions = $testquiz->get_questions();
 
-$q2 = new question("title2", 'descr2', 31, "fordi du er en mega bøv");
-$q2->add_answer(new answer(1, "svar1", "forklaring1"));
-$q2->add_answer(new answer(0, "svar2", "forklaring2"));
+$questions[0]->set_title("new title");
+$questions[0]->set_description("new descr");
+$questions[0]->set_timelimit(1);
+$questions[0]->set_explanation("fordi du er en bøv");
 
-$testquiz->add_question($q1);
-$testquiz->add_question($q2);
+$questions[1]->set_title("new title2");
+$questions[1]->set_description("new descr2");
+$questions[1]->set_timelimit(31);
+$questions[1]->set_explanation("fordi du er en mega bøv");
+
+$questions[0]->get_answers()[0]->set_description("nyt svar1");
+$questions[0]->get_answers()[0]->set_explanation("ny forklaring1");
+
+$questions[0]->get_answers()[1]->set_description("nyt svar2");
+$questions[0]->get_answers()[1]->set_explanation("ny forklaring2");
+
 
 $livequizservice->submit_quiz($testquiz);
 
@@ -65,7 +73,7 @@ $questions = $testquiz->get_questions();
 
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading('Fuck diiiig page2');
+echo $OUTPUT->heading('View.php page');
 echo "<p><strong>Number of questions:</strong> " . count($questions) . "</p>";
 
 echo $OUTPUT->footer();
