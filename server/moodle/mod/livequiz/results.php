@@ -46,7 +46,6 @@ if (empty($currentquiz->get_questions())) {
 
 require_login($course, false, $cm);
 
-session_start();
 $_SESSION['completed'] = true;
 
 $context = context_module::instance($cm->id); // Set the context for the course module.

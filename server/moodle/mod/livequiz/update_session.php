@@ -24,8 +24,6 @@
 require_once('../../config.php');
 require_login();
 
-session_start();
-
 // Get submitted parameters.
 $questionid = required_param('questionid', PARAM_INT);
 // The answer value is a JSON string.
@@ -47,6 +45,7 @@ $_SESSION['quiz_answers'][$questionid] = [ // Set the session variable to the an
     'question_id' => $questionid,
     'answers' => $answers,
 ];
+
 // KEPT TEMPORARILY FOR DEVELOPMENT PURPOSES
 //echo "<pre>";
 //print_r($_SESSION['quiz_answers']);

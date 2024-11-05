@@ -51,8 +51,6 @@ $quizid = optional_param('quizid', 0, PARAM_INT);
 $numberofquestions = optional_param('numberofquestions', 0, PARAM_INT);
 $questiontitle = optional_param('questiontitle', 0, PARAM_TEXT);
 
-session_start();
-
 if (!$cm) { // If course module is not set, throw an exception.
     throw new moodle_exception('invalidcoursemodule', 'error');
 }
@@ -63,8 +61,9 @@ if ($cm->course !== $course->id) { // Check if the course module matches the cou
 require_login($course, false, $cm);
 $PAGE->set_cacheable(false);
 
-session_start();
-
+if (!isset($_SESSION['completed'])) { // If the session variable is not set, set it to false.
+    $_SESSION['completed'] = false;
+}
 if ($_SESSION['completed']) { // If the quiz has been submitted, the user is not allowed to go back.
     $text = 'You are not allowed to go back after submitting the quiz';
     echo $text;

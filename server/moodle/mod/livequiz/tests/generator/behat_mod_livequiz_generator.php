@@ -36,6 +36,27 @@ class behat_mod_livequiz_generator extends behat_generator_base {
             'livequizzes' => [
                 'datagenerator' => 'livequiz',
                 'required' => ['id'],
+                'questions' => [
+                    'id' => 1,
+                    'title' => 'Question_1',
+                    'description' => 'This is a question',
+                    'explanation' => 'This is an explanation',
+                    'timelimit' => 10,
+                    'answers' => [
+                        [
+                            'id' => 1,
+                            'description' => 'Answer 1',
+                            'correct' => 1,
+                            'explanation' => "This is the first answer feedback",
+                        ],
+                        [
+                            'id' => 2,
+                            'description' => 'Answer_2',
+                            'correct' => 0,
+                            'explanation' => "This is the second answer feedback",
+                        ],
+                    ],
+                ],
             ],
         ];
     }
