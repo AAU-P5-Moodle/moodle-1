@@ -211,7 +211,7 @@ class livequiz {
      * @param int $index the index of the question
      * @return question
      */
-    public function get_question_by_index(int $index) {
+    public function get_question_by_index(int $index): question {
         return $this->questions[$index];
     }
 
@@ -255,7 +255,7 @@ class livequiz {
         $data->quizid = $this->id;
         $data->quiztitle = $this->get_name();
         $data->numberofquestions = count($this->get_questions());
-        
+
         // Prepare questions.
         $rawquestions = $this->questions;
 
@@ -268,6 +268,7 @@ class livequiz {
 
     /**
      * Prepares the template date for mustache.
+     * @param int $questionindex
      * @return stdClass
      */
     public function prepare_question_for_template(int $questionindex): stdClass {

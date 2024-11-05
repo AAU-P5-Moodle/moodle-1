@@ -223,6 +223,7 @@ class question {
 
     /**
      * Prepares the template data for mustache.
+     * @param stdClass $data
      * @return stdClass
      */
     public function prepare_for_template(stdClass $data): stdClass {
