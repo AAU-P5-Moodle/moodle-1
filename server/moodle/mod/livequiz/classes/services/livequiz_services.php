@@ -23,6 +23,8 @@ require_once(__DIR__ . '/../models/question.php');
 require_once(__DIR__ . '/../models/answer.php');
 require_once(__DIR__ . '/../models/questions_answers_relation.php');
 require_once(__DIR__ . '/../models/quiz_questions_relation.php');
+require_once(__DIR__ . '/../models/livequiz_questions_lecturer_relation.php');
+require_once(__DIR__ . '/../models/livequiz_quiz_lecturer_relation.php');
 
 use dml_exception;
 use dml_transaction_exception;
@@ -32,6 +34,8 @@ use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
 use mod_livequiz\models\quiz_questions_relation;
+use mod_livequiz\models\livequiz_quiz_lecturer_relation;
+use mod_livequiz\models\livequiz_questions_lecturer_relation;
 use PhpXmlRpc\Exception;
 use function PHPUnit\Framework\throwException;
 
@@ -92,7 +96,7 @@ class livequiz_services {
      *
      * @throws dml_exception
      */
-    public function submit_quiz(livequiz $livequiz): livequiz {
+    public function submit_quiz(livequiz $livequiz, int $lecturerid): livequiz {
         $questions = $livequiz->get_questions();
 
         if (!count($questions)) {
@@ -112,8 +116,8 @@ class livequiz_services {
             $livequiz->update_quiz();
 
             $quizid = $livequiz->get_id();
-
-            $this->submit_questions($quizid, $questions);
+            livequiz_quiz_lecture_realtion::append_lecturer_quiz_relation($quizid, $lecturerid)
+            $this->submit_questions($quizid, $questions, $lecturerid);
 
             $transaction->allow_commit();
         } catch (dml_exception $e) {
@@ -129,12 +133,13 @@ class livequiz_services {
      * @throws dml_transaction_exception
      * @throws dml_exception
      */
-    private function submit_questions(int $quizid, array $questions): void {
+    private function submit_questions(int $quizid, array $questions, int $lecturerid): void {
         foreach ($questions as $question) {
             $answers = $question->get_answers();
             $questionid = question::submit_question($question);
 
             quiz_questions_relation::append_question_to_quiz($questionid, $quizid);
+            livequiz_question_lecturer_relation::append_lecturer_question_relation($questionid, $lecturerid)
             $this::submit_answers($questionid, $answers);
         }
     }
