@@ -31,11 +31,10 @@
 }}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        console.log("loaded DOM content")
         // Select all answer options (radio buttons, checkboxes, and dropdowns)
         const answerOptions = document.getElementsByClassName("{{quizid}}");
 
-        //console.log(answerOptions);
+        console.log(answerOptions);
         // Add a 'change' event listener to each option
         answerOptions.forEach(option => {
             option.addEventListener("change", function(event) {
@@ -47,7 +46,7 @@
                     }
                 });
                 //KEPT FOR DEVELOPMENT
-                //console.log(selectedAnswers);
+                console.log(selectedAnswers);
 
                 // Update session
                 const xhr = new XMLHttpRequest();

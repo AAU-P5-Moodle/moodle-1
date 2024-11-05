@@ -42,7 +42,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE', $cmid);
+$renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE OF ' . $instance->name, $cmid);
 
 unset($_SESSION['completed']);
 

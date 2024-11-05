@@ -45,12 +45,19 @@ if (empty($currentquiz->get_questions())) {
     $demoquiz = $currentquiz;
 }
 
+// Insert demo data if the site is running in behat mode.
+if (defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING) {
+    $demodatareader = new \mod_livequiz\readdemodata();
+    $demoquiz = $demodatareader->insertdemodata($currentquiz);
+}
+
+/*
 // Params for storage in session.
 $nextquestionid = optional_param('nextquestionid', 0, PARAM_INT);
 $quizid = optional_param('quizid', 0, PARAM_INT);
 $numberofquestions = optional_param('numberofquestions', 0, PARAM_INT);
 $questiontitle = optional_param('questiontitle', 0, PARAM_TEXT);
-
+*/
 if (!$cm) { // If course module is not set, throw an exception.
     throw new moodle_exception('invalidcoursemodule', 'error');
 }
@@ -70,16 +77,24 @@ if ($_SESSION['completed']) { // If the quiz has been submitted, the user is not
     die();
 }
 
+echo "<pre>";
+print_r($_SESSION['quiz_answers']);
+echo "</pre>";
+
 $context = context_module::instance($cmid); // Get the context.
 
 $PAGE->set_context($context); // Make sure to set the page context.
-
+/*
 if ($quizid){ // If quizid is set, answers have been stored for the question, thus next question is to be displayed.
     $PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $nextquestionid]));
 }
 else { // If quizid is not set, the current question is to be displayed.
     $PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $questionid]));
 }
+*/
+$PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $questionid]));
+
+
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 

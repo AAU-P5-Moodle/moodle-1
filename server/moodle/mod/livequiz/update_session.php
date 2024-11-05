@@ -47,7 +47,7 @@ $_SESSION['quiz_answers'][$questionid] = [ // Set the session variable to the an
 ];
 
 // KEPT TEMPORARILY FOR DEVELOPMENT PURPOSES
-//echo "<pre>";
-//print_r($_SESSION['quiz_answers']);
-//echo "</pre>";
-//exit;
+echo "<pre>";
+print_r($_SESSION['quiz_answers']);
+echo "</pre>";
+exit;

@@ -10,9 +10,9 @@
     "questions": [
       {
         "id": "1",
-        "title": "Quiz_1_Questions",
-        "description": "This is the first quiz questions",
-        "explanation": "This is the first quiz questions explanation",
+        "title": "Quiz 1 Question 1",
+        "description": "This is the first quiz question",
+        "explanation": "This is the first quiz question explanation",
         "timelimit": "60",
         "answers": [
             {
@@ -37,21 +37,21 @@
       },
       {
         "id": "2",
-        "title": "Quiz 2 Questions",
-        "description": "This is the second quiz questions",
+        "title": "Quiz 1 Question 2",
+        "description": "This is the second quiz question",
         "explanation": "This is the second quiz questions explanation",
         "timelimit": "60",
         "answers": [
             {
                 "id": "4",
                 "description": "Answer 1",
-                "correct": 1,
+                "correct": 0,
                 "explanation": "This is the first answer feedback"
             },
             {
                 "id": "5",
                 "description": "Answer 2",
-                "correct": 1,
+                "correct": 0,
                 "explanation": "This is the second answer feedback"
             },
             {
@@ -64,8 +64,8 @@
       },
       {
         "id": "3",
-        "title": "Quiz 3 Questions",
-        "description": "This is the third quiz questions",
+        "title": "Quiz 1 Question 3",
+        "description": "This is the third quiz question",
         "explanation": "This is the third quiz questions explanation",
         "timelimit": "60",
         "answers": [
@@ -78,7 +78,7 @@
           {
             "id": "8",
             "description": "False",
-            "correct": 1,
+            "correct": 0,
             "explanation": "This is the second answer feedback"
           }
         ]
