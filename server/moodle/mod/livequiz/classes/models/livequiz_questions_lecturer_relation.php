@@ -29,23 +29,23 @@ use dml_transaction_exception;
 class livequiz_questions_lecturer_relation {
     /**
      *
-     * Append a relation betweeen af lecturer_id and the quiz id. For easy access
+     * Append a relation betweeen af lecturer_id and the question_id. For easy access
      *
-     * @param int $quizid
+     * @param int $questionid
      * @param int $lecturerid
      * @return void
      * @throws dml_exception
      * @throws dml_transaction_exception
      *
      */
-    public static function append_lecturer_questions_relation(int $quizid, int $lecturerid): void {
+    public static function append_lecturer_questions_relation(int $questionid, int $lecturerid): void {
         global $DB;
-        $DB->insert_record('livequiz_questions_lecturer', ['lecturer_id' => $lecturerid, 'quiz_id' => $quizid]);
+        $DB->insert_record('livequiz_questions_lecturer', ['lecturer_id' => $lecturerid, 'question_id' => $questionid]);
     }
 
     /**
      *
-     * Gets lecturer relation by lecturer id. Will be used to get all the quizes that relates to that teacher
+     * Gets lecturer relations to questions by lecturer id. Will be used to get all the quistions that relates to that teacher
      *
      *
      * @param int $lecturerid
@@ -61,18 +61,18 @@ class livequiz_questions_lecturer_relation {
 
     /**
      *
-     * Gets lecturer relation by quiz id. Will be used to get all the teachers that have made that quiz.
+     * Gets lecturer relation by quistion id. Will be used to get all the teachers that have made that question.
      *
      *
-     * @param int $quizid
+     * @param int $questionid
      * @return array
      * @throws dml_exception
      * @throws dml_transaction_exception
      *
      */
-    public static function get_lecturer_questions_relation_by_questions_id(int $quizid): array {
+    public static function get_lecturer_questions_relation_by_questions_id(int $questionid): array {
         global $DB;
-        return $DB->get_record('livequiz_questions_lecturer', ['quiz_id' => $quizid]);
+        return $DB->get_record('livequiz_questions_lecturer', ['question_id' => $questionid]);
     }
     /**
      * returns array with data from livequiz_questions_lecturer based on relation id
@@ -87,7 +87,7 @@ class livequiz_questions_lecturer_relation {
 
     /**
      *
-     * Updates the overner of the quiz. in the relation. So the lecturerId will be updated.
+     * Updates the owner of the question. in the relation. So the lecturerId will be updated.
      *
      *
      * @param int $lecturerid
@@ -104,37 +104,38 @@ class livequiz_questions_lecturer_relation {
 
     /**
      *
-     * Updates the quiz_id using the relation id. Mabey used in the future.
+     * Updates the question_id using the relation id. Mabey used in the future.
      *
      *
-     * @param int $quizid
+     * @param int $questionid
      * @param int $id
      * @return array
      * @throws dml_exception
      * @throws dml_transaction_exception
      *
      */
-    public static function update_lecturer_questions_relation_questions_id(int $id, int $quizid): void {
+    public static function update_lecturer_questions_relation_questions_id(int $id, int $questionid): void {
         global $DB;
-        $DB->update_record('livequiz_questions_lecturer', ['id' => $id, 'quiz_id' => $quizid]);
+        $DB->update_record('livequiz_questions_lecturer', ['id' => $id, 'question_id' => $questionid]);
     }
 
     /**
      *
-     * Updates both quiz_id and lecturer_id given a lecturer_questions_relation_both id.
+     * Updates both question_id and lecturer_id given a lecturer_questions_relation_both id.
      *
      *
      * @param int $lecturerid
      * @param int $id
-     * @param int $quizid
+     * @param int $questionid
      * @return void
      * @throws dml_exception
      * @throws dml_transaction_exception
      *
      */
-    public static function update_lecturer_questions_relation_both(int $id, int $quizid, int $lecturerid): void {
+    public static function update_lecturer_questions_relation_both(int $id, int $questionid, int $lecturerid): void {
         global $DB;
-        $DB->update_record('livequiz_questions_lecturer', ['id' => $id, 'quiz_id' => $quizid, 'lecturer_id' => $lecturerid]);
+        $DB->update_record('livequiz_questions_lecturer', ['id' => $id, 'question_id' => $questionid,
+         'lecturer_id' => $lecturerid]);
     }
     /**
      *
