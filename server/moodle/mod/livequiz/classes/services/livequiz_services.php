@@ -116,7 +116,7 @@ class livequiz_services {
             $livequiz->update_quiz();
 
             $quizid = $livequiz->get_id();
-            livequiz_quiz_lecture_realtion::append_lecturer_quiz_relation($quizid, $lecturerid)
+            livequiz_quiz_lecture_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
             $this->submit_questions($quizid, $questions, $lecturerid);
 
             $transaction->allow_commit();
@@ -139,8 +139,8 @@ class livequiz_services {
             $questionid = question::submit_question($question);
 
             quiz_questions_relation::append_question_to_quiz($questionid, $quizid);
-            livequiz_question_lecturer_relation::append_lecturer_question_relation($questionid, $lecturerid)
-            $this::submit_answers($questionid, $answers);
+            livequiz_question_lecturer_relation::append_lecturer_question_relation($questionid, $lecturerid);
+            $this->submit_answers($questionid, $answers);
         }
     }
 
@@ -170,5 +170,25 @@ class livequiz_services {
             $question->add_answers($answers);
         }
         return $questions;
+    }
+    /**
+     * gets lecturer from quiz
+     * @param int $quizid
+     * @return array
+     */
+    private function get_livequiz_quiz_lecturer(int $quizid): array {
+        $lecturer = livequiz_quiz_lecture_relation::get_lecturer_quiz_relation_by_quiz_id($quizid);
+
+        return $lecturer->id;
+    }
+    /**
+     * gets lecturer from question
+     * @param int $questionid
+     * @return array
+     */
+    private function get_livequiz_question_lecturer(int $questionid): array {
+        $lecturer = livequiz_question_lecturer_relation::get_lecturer_questions_relation_by_questions_id($questionid);
+
+        return $lecturer->id;
     }
 }

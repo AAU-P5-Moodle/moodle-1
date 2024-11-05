@@ -173,8 +173,8 @@ final class livequiz_service_test extends \advanced_testcase {
         $answer = new answer($correct, $answerdescription, $answerexplanation);
         $question->add_answer($answer);
         $livequiz->add_question($question);
-
-        $livequiz = $service->submit_quiz($livequiz);
+        $lecturerid = "2";
+        $livequiz = $service->submit_quiz($livequiz, $lecturerid);
 
         $questions = $livequiz->get_questions();
 
