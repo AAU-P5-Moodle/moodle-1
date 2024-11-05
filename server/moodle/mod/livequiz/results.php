@@ -34,7 +34,7 @@ $quizid = required_param('livequizid', PARAM_INT);
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
-// Read demo data - REMOVE WHEN PUSHING TO STAGING
+// Read demo data - REMOVE WHEN PUSHING TO STAGING.
 $livequizservice = livequiz_services::get_singleton_service_instance();
 $currentquiz = $livequizservice->get_livequiz_instance($instance->id);
 if (empty($currentquiz->get_questions())) {
