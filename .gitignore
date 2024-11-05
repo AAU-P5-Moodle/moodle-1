@@ -66,7 +66,7 @@ phpunit.xml
 
 # Composer support
 composer.phar
-/vendor/
+#/vendor/
 /behat.yml
 
 # YUI coverage files
@@ -123,3 +123,5 @@ server/moodle/npm-shrinkwrap.json
 server/moodle/lib/editor/tiny/plugins/html/build/package.json
 phpcbf.bat
 adminer_router.php
+etag.txt
+cacert.pem
