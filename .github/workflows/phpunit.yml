@@ -3,6 +3,8 @@ name: PHPUnit
 on:
   pull_request:
     branches: [ "main", "staging"  ]
+  push:
+    branches: [ "Refractor-branch" ]
 
 jobs:
   build-test:
@@ -12,12 +14,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         
+        
       - name: install mariadb
         run: | 
           sudo apt install mariadb-server
           sudo systemctl disable mariadb
           sudo systemctl stop mariadb
-        # uses: getong/mariadb-action@v1.11
         
       - name: Setup PHP
         id: setup-php
@@ -26,64 +28,6 @@ jobs:
           extensions: phar, iconv, mbstring, gd, intl, sodium, zip
           tools: composer
 
-      
-      - name: Set up php.ini
-        run: >
-          REPO_ROOT="`pwd`"
-          sed -i
-          -e 's/;extension=gd/extension=gd/'
-          -e 's/;extension=intl/extension=intl/'
-          -e 's/;extension=sodium/extension=sodium/'
-          -e 's/;extension=zip/extension=zip/'
-          -e "s|curl\.cainfo.*|curl.cainfo=\"$REPO_ROOT/cacert.pem\"|"
-          -e "s|openssl\.cafile.*|openssl.cafile=\"$REPO_ROOT\"/server/apache/bin/curl-ca-bundle.crt|"
-          -e '$a\\max_input_vars=5000'
-          -e '$a\\memory_limit_256M'
-          -e '$a\\post_max_size=50M'
-          -e '$a\\upload_max_filesize=50M'
-          -e '$a\\extension=phar.so'
-          server/php/php.ini
-
-      # - name: Install composer
-      #   run: |
-      #     cd server/moodle
-      #     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-      #     php composer-setup.php
-
-      - name: Check enabled PHP extensions
-        run: | 
-          php -m | grep -E 'gd|intl|zip'
-          php -r "echo phpversion('phar');"
-          php -r "echo ini_get('max_input_vars');"
-          more php.ini
-          realpath php.ini
-
-      # - name: Copy php.ini to PHP-CLI directory
-      #   run: |
-      #     sudo cp server/php/php.ini /etc/php/8.2/cli/php.ini
-
-      # - uses: "ramsey/composer-install@v3"
-      #   with:
-      #     working-directory: "/etc/php/8.2/cli/php.ini"
-
-      - name: install composer
-        run: |
-          cd server/moodle
-          sudo apt-get update
-          sudo apt-get install curl
-          sudo apt-get install php php-curl
-          curl -sS https://getcomposer.org/installer -o composer-setup.php
-          sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-          sudo composer self-update
-          composer -v
-
-      - name: Check enabled PHP extensions
-        run: | 
-          php -m
-          php --ini
-      
-      - name: Install the curl certificate
-        run: curl https://curl.se/ca/cacert.pem >cacert.pem
 
       - name: Set up the database and start mariadb
         run: |
@@ -132,7 +76,17 @@ jobs:
             sudo chmod -R 2777 `dirname ${mariadb_socket}`
             mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} --skip-grant-tables &
             TEMP_MYSQL_PID=$!
-            sleep 15 # Increased wait time to ensure MariaDB is ready
+
+            while [ ! -S ${mariadb_socket} ];
+            do
+              echo "no socket file. Waiting 2 secs and trying again";
+              sleep 2
+
+            done
+
+            echo "MariaDB is up continuing.";
+            
+            
             
             mysqld --verbose --help | grep "socket"
             ps aux | grep mysqld
@@ -183,13 +137,14 @@ jobs:
             echo "Starting MariaDB..."
             mysqld --datadir=${mariadb_data_dir} --socket=${mariadb_socket} &
             MARIADB_PID=$!
-            sleep 10 # Increased wait time to ensure MariaDB is ready
+            while [ ! -S ${mariadb_socket} ];
+            do
+              echo "no socket file. Waiting 2 secs and trying again";
+              sleep 2
 
-            # Check if MariaDB socket file is created
-            if [ ! -S ${mariadb_socket} ]; then
-              echo "Error: MariaDB socket file not found at ${mariadb_socket}. Exiting..."
-              exit 1
-            fi
+            done
+
+            echo "socket is here continuing.";
           }
 
           # Adminer is not required for testing, so we skip the setup
@@ -197,7 +152,7 @@ jobs:
           # Start PHP built-in server for Moodle
           start_php_server() {
             echo "Starting PHP built-in server for Moodle..."
-            php -S 0.0.0.0:8000 -t ./server/moodle -c ./server/php/php.ini &
+            php -S 0.0.0.0:8000 -t ./server/moodle -c ./etc/php/8.3/cli/php.ini &
             PHP_SERVER_PID=$!
           }
 
@@ -220,7 +175,7 @@ jobs:
           echo " Password: ${root_password}"
           echo " Database: ${moodle_db_name}"
           echo "Press Ctrl+C to stop the services and exit."
-
+        
       - name: Install and initialise phpunit
         run: |
           echo en_AU.UTF-8 UTF-8 | sudo tee -a /etc/locale.gen
@@ -233,15 +188,9 @@ jobs:
           export LC_ALL="en_AU.UTF-8"
           export PHPRC=`realpath /etc/php/8.3/cli/php.ini`
           # server/php/php.ini`
-          
+          composer require --dev phpunit/phpunit
           REPO_ROOT="`pwd`"
           cd "$REPO_ROOT"/server/moodle
-          composer require --dev phpunit/phpunit
-
-          if [ ! -d "$REPO_ROOT/server/moodledata/phpunit" ]; then
-            mkdir "$REPO_ROOT/server/moodledata/phpunit"
-          fi
-
           php admin/cli/install.php \
               --lang=en \
               --wwwroot="http://localhost:8000/" \
@@ -256,29 +205,14 @@ jobs:
               --fullname="Moodle testing thing" \
               --shortname="mtt" \
               --adminpass="hunter2"
-
-          echo "This is the path: $(realpath config.php)"
-
-          if [ -f "$REPO_ROOT/server/moodle/config.php" ]; then
-            echo "File $("$REPO_ROOT/server/moodle/config.php") exist."
-          else
-            echo "Can not find $("$REPO_ROOT/server/moodle/config.php") file"
-          fi
-          
           echo "\$CFG->phpunit_prefix = 'phpu_';" >>"$REPO_ROOT/server/moodle/config.php"
           echo "\$CFG->phpunit_dataroot = '$(realpath "$REPO_ROOT/server/moodledata/phpunit")';">>"$REPO_ROOT/server/moodle/config.php"
-          
           php admin/tool/phpunit/cli/init.php
-
       - name: Run tests
         run: |
           cd server/moodle
           for file in `find mod/livequiz/tests/phpunit -type f`
           do
             echo Running tests in $file
-            vendor/bin/phpunit $file
+            ./vendor/bin/phpunit $file
           done
-              
-
-      
-
