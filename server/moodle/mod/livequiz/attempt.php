@@ -35,7 +35,7 @@ $questionid = optional_param('questionid', 0, PARAM_INT); // Question id, defaul
 [$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
-// Read demo data - REMOVE WHEN PUSHING TO STAGING
+// Read demo data - REMOVE WHEN PUSHING TO STAGING.
 $livequizservice = livequiz_services::get_singleton_service_instance();
 $currentquiz = $livequizservice->get_livequiz_instance($instance->id);
 if (empty($currentquiz->get_questions())) {
@@ -84,11 +84,11 @@ echo "</pre>";
 $context = context_module::instance($cmid); // Get the context.
 
 $PAGE->set_context($context); // Make sure to set the page context.
+
 /*
-if ($quizid){ // If quizid is set, answers have been stored for the question, thus next question is to be displayed.
+if ($quizid) { // If quizid is set, answers have been stored for the question, thus next question is to be displayed.
     $PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $nextquestionid]));
-}
-else { // If quizid is not set, the current question is to be displayed.
+} else { // If quizid is not set, the current question is to be displayed.
     $PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $questionid]));
 }
 */
