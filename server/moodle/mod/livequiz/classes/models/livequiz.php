@@ -81,7 +81,7 @@ class livequiz {
      * @param int $timecreated
      * @param int $timemodified
      */
-    private function __construct(
+    public function __construct(
         int $id,
         string $name,
         int $course,
@@ -232,7 +232,7 @@ class livequiz {
      *
      * @param question $question
      */
-    private function add_question(question $question): void {
+    public function add_question(question $question): void {
         $this->questions[] = $question;
     }
 }
