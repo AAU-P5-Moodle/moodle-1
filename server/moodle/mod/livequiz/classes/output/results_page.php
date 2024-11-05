@@ -21,11 +21,10 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
-use moodle_url;
-use mod_livequiz\classes\livequiz;
+use mod_livequiz\models\livequiz;
 
 defined('MOODLE_INTERNAL') || die();
-require_once(dirname(__DIR__) . '/livequiz.php');
+require_once(dirname(__DIR__) . '/models/livequiz.php');
 
 /**
  * Class results_page
@@ -36,8 +35,8 @@ require_once(dirname(__DIR__) . '/livequiz.php');
 class results_page implements renderable, templatable {
     /** @var int $cmid the course module id */
     protected int $cmid;
+    /** @var livequiz $livequiz The live quiz instance */
     private livequiz $livequiz;
-    private int $numberofquestions;
 
     /**
      * index_page constructor.
@@ -47,7 +46,6 @@ class results_page implements renderable, templatable {
     public function __construct(int $id, livequiz $livequiz) {
         $this->cmid = $id;
         $this->livequiz = $livequiz;
-        $this->numberofquestions = count($this->livequiz->get_questions());
     }
 
     /**
@@ -59,7 +57,7 @@ class results_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = $this->livequiz->prepare_for_template();
-        $data->isattempting = false;
+        $data->isattempting = false; // This is the results page, so the user is not attempting the quiz.
         return $data;
     }
 }

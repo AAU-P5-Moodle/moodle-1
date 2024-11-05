@@ -25,11 +25,24 @@ require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php');
 require_once('readdemodata.php');
 
+use mod_livequiz\services\livequiz_services;
+
 global $PAGE, $OUTPUT;
 // Get submitted parameters.
 $id = required_param('id', PARAM_INT); // Course module id.
 $quizid = required_param('livequizid', PARAM_INT);
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
+$instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
+
+// Read demo data - REMOVE WHEN PUSHING TO STAGING
+$livequizservice = livequiz_services::get_singleton_service_instance();
+$currentquiz = $livequizservice->get_livequiz_instance($instance->id);
+if (empty($currentquiz->get_questions())) {
+    $demodatareader = new \mod_livequiz\readdemodata();
+    $demoquiz = $demodatareader->insertdemodata($currentquiz);
+} else {
+    $demoquiz = $currentquiz;
+}
 
 require_login($course, false, $cm);
 
@@ -43,10 +56,6 @@ $PAGE->set_context($context); // Make sure to set the page context.
 $PAGE->set_url(new moodle_url('/mod/livequiz/results.php', ['id' => $id, 'quizid' => $quizid ]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
-
-// Read demo data. -replace with DB query when DB is connected.
-$demodatareader = new \mod_livequiz\readdemodata();
-$demoquiz = $demodatareader->getdemodata();
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');

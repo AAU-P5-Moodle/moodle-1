@@ -22,10 +22,10 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
-use mod_livequiz\classes\livequiz;
+use mod_livequiz\models\livequiz;
 
 defined('MOODLE_INTERNAL') || die();
-require_once(dirname(__DIR__) . '/livequiz.php');
+require_once(dirname(__DIR__) . '/models/livequiz.php');
 
 /**
  * Class take_livequiz_page
@@ -43,9 +43,8 @@ class take_livequiz_page implements renderable, templatable {
     /** @var int $questionid . The id of the question to be rendered*/
     private int $questionid;
 
-    /** @var int $numberofquestions The number of questions in the quiz */
-    private int $numberofquestions;
-
+    /** @var int $nubmerofquestions The number of questions in the quiz - Used for navigation */
+    private int $nubmerofquestions;
     /**
      * Constructor for take_livequiz_page, which sets the livequiz field.
      *
@@ -57,6 +56,7 @@ class take_livequiz_page implements renderable, templatable {
         $this->cmid = $cmid;
         $this->livequiz = $livequiz;
         $this->questionid = $questionid;
+        $this->nubmerofquestions = count($livequiz->get_questions());
     }
 
     /**
@@ -64,7 +64,7 @@ class take_livequiz_page implements renderable, templatable {
      * @return int
      */
     private function get_next_question_id(): int {
-        if ($this->questionid < $this->numberofquestions - 1) {
+        if ($this->questionid < $this->nubmerofquestions - 1) {
             return $this->questionid + 1;
         }
         return $this->questionid;
@@ -90,7 +90,6 @@ class take_livequiz_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = $this->livequiz->prepare_question_for_template($this->questionid);
-        $this->numberofquestions = $data->numberofquestions;
         $data->cmid = $this->cmid;
         $data->isattempting = true;
         $data->nextquestionid = $this->get_next_question_id();

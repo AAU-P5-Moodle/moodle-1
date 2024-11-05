@@ -14,87 +14,138 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_livequiz\classes;
+namespace mod_livequiz\models;
+
+use dml_exception;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-require_once('question.php');
-
 /**
- * Class LiveQuiz
+ * Class livequiz
+ *
+ * This class represents a livequiz in the LiveQuiz module.
+ * It handles creation, retrieval, and updates of livequizzes and their associated questions.
+ *
  * @package mod_livequiz
  * @copyright 2024 Software AAU
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class livequiz {
-    /** @var int $id id of the livequiz */
+    /**
+     * @var int $id
+     */
     private int $id;
 
-    /** @var string $name name of the livequiz */
+    /**
+     * @var string $name
+     */
     private string $name;
 
-    /** @var int $courseid id of the course the quiz is in */
-    private int $courseid;
+    /**
+     * @var int $course
+     */
+    private int $course;
 
-    /** @var string $intro introduction to the quiz */
+    /**
+     * @var string $intro
+     */
     private string $intro;
 
-    /** @var int $introformat format of the introduction text*/
+    /**
+     * @var int $introformat
+     */
     private int $introformat;
 
-    /** @var int $timecreated when the quiz was created*/
+    /**
+     * @var int $timecreated
+     */
     private int $timecreated;
 
-    /** @var int $timemodified last time the quiz was modified*/
+    /**
+     * @var int $timemodified
+     */
     private int $timemodified;
 
-    /** @var array $questions array of questions in the quiz */
+    /**
+     * @var array $questions
+     */
     private array $questions = [];
 
     /**
-     * LiveQuiz constructor.
+     * Constructor for the livequiz class. Returns the object.
+     *
      * @param int $id
      * @param string $name
-     * @param int $courseid
+     * @param int $course
      * @param string $intro
      * @param int $introformat
      * @param int $timecreated
      * @param int $timemodified
-     * @param array $questions
      */
-    public function __construct(
+    private function __construct(
         int $id,
         string $name,
-        int $courseid,
+        int $course,
         string $intro,
         int $introformat,
         int $timecreated,
-        int $timemodified,
-        array $questions
+        int $timemodified
     ) {
         $this->id = $id;
         $this->name = $name;
-        $this->courseid = $courseid;
+        $this->course = $course;
         $this->intro = $intro;
         $this->introformat = $introformat;
         $this->timecreated = $timecreated;
         $this->timemodified = $timemodified;
 
-        foreach ($questions as $question) {
-            $questionobject = new question(
-                $question['id'],
-                $question['title'],
-                $question['description'],
-                $question['explanation'],
-                $question['timelimit'],
-                $question['answers']
-            );
-            $this->questions[] = $questionobject;
-        }
+        return $this;
     }
 
     /**
-     * Getter for livequiz id
+     * Gets a livequiz instance from the DB, with all relevant attributes.
+     *
+     * TODO implement associated lecturer.
+     *
+     * @param int $id
+     * @return livequiz
+     * @throws dml_exception
+     */
+    public static function get_livequiz_instance(int $id): livequiz {
+        global $DB;
+        $quizinstance = $DB->get_record('livequiz', ['id' => $id]);
+
+        return new livequiz(
+            $quizinstance->id,
+            $quizinstance->name,
+            $quizinstance->course,
+            $quizinstance->intro,
+            $quizinstance->introformat,
+            $quizinstance->timecreated,
+            $quizinstance->timemodified
+        );
+    }
+
+    /**
+     * Updates the livequiz in the database, and updates the timemodified field.
+     *
+     * @return bool
+     * @throws dml_exception
+     */
+    public function update_quiz(): bool {
+        global $DB;
+
+        $this->set_timemodified();
+
+        $record = new stdClass();
+        $record->id = $this->get_id();
+        $record->timemodified = $this->get_timemodified();
+
+        return $DB->update_record('livequiz', $record);
+    }
+
+    /**
+     * Gets the associated ID for the livequiz.
+     *
      * @return int
      */
     public function get_id(): int {
@@ -102,7 +153,8 @@ class livequiz {
     }
 
     /**
-     * Getter for livequiz name
+     * Gets the name of the livequiz.
+     *
      * @return string
      */
     public function get_name(): string {
@@ -110,15 +162,17 @@ class livequiz {
     }
 
     /**
-     * Getter for livequiz courseid
+     * Gets the ID for the assicated course
+     *
      * @return int
      */
-    public function get_courseid(): int {
-        return $this->courseid;
+    public function get_course(): int {
+        return $this->course;
     }
 
     /**
-     * Getter for livequiz intro
+     * Gets the introduction for the livequiz.
+     *
      * @return string
      */
     public function get_intro(): string {
@@ -126,15 +180,8 @@ class livequiz {
     }
 
     /**
-     * Getter for livequiz introformat
-     * @return int
-     */
-    public function get_introformat(): int {
-        return $this->introformat;
-    }
-
-    /**
-     * Getter for livequiz timecreated
+     * Gets the time the livequiz was created.
+     *
      * @return int
      */
     public function get_timecreated(): int {
@@ -142,7 +189,8 @@ class livequiz {
     }
 
     /**
-     * Getter for livequiz timemodified
+     * Gets the time the livequiz was last modified.
+     *
      * @return int
      */
     public function get_timemodified(): int {
@@ -150,7 +198,8 @@ class livequiz {
     }
 
     /**
-     * Getter for livequiz array of question objects
+     * Gets the questions associated with the livequiz.
+     *
      * @return array
      */
     public function get_questions(): array {
@@ -166,6 +215,35 @@ class livequiz {
         return $this->questions[$index];
     }
 
+
+    /**
+     * Sets the timemodified field to the current time.
+     *
+     * @return int
+     */
+    public function set_timemodified(): int {
+        return $this->timemodified = time();
+    }
+
+    /**
+     * Append the questions associated with the livequiz.
+     *
+     * @param array $questions
+     */
+    public function add_questions(array $questions): void {
+        foreach ($questions as $question) {
+            $this->add_question($question);
+        }
+    }
+
+    /**
+     * Appends a question
+     *
+     * @param question $question
+     */
+    private function add_question(question $question): void {
+        $this->questions[] = $question;
+    }
     /**
      * Prepares the template date for mustache.
      * @return stdClass
@@ -177,6 +255,7 @@ class livequiz {
         $data->quizid = $this->id;
         $data->quiztitle = $this->get_name();
         $data->numberofquestions = count($this->get_questions());
+        
         // Prepare questions.
         $rawquestions = $this->questions;
 
@@ -194,9 +273,8 @@ class livequiz {
     public function prepare_question_for_template(int $questionindex): stdClass {
         // Prepare data object.
         $data = new stdClass();
-
         $data->quizid = $this->id;
-        $data->quiztitle = $this->get_name();
+        $data->quiztitle = $this->name;
         $data->numberofquestions = count($this->get_questions());
         $question = $this->get_question_by_index($questionindex);
         $data = $question->prepare_for_template($data);

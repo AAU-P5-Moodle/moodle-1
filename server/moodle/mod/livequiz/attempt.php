@@ -25,12 +25,25 @@ require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php');
 require_once('readdemodata.php');
 
-global $PAGE, $OUTPUT;
+use mod_livequiz\services\livequiz_services;
+
+global $PAGE, $OUTPUT, $testdataset;
 
 // Get submitted parameters.
 $cmid = required_param('cmid', PARAM_INT); // Course module id.
 $questionid = optional_param('questionid', 0, PARAM_INT); // Question id, default to 0 if not provided.
 [$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
+$instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
+
+// Read demo data - REMOVE WHEN PUSHING TO STAGING
+$livequizservice = livequiz_services::get_singleton_service_instance();
+$currentquiz = $livequizservice->get_livequiz_instance($instance->id);
+if (empty($currentquiz->get_questions())) {
+    $demodatareader = new \mod_livequiz\readdemodata();
+    $demoquiz = $demodatareader->insertdemodata($currentquiz);
+} else {
+    $demoquiz = $currentquiz;
+}
 
 // Params for storage in session.
 $nextquestionid = optional_param('nextquestionid', 0, PARAM_INT);
@@ -61,8 +74,6 @@ if ($_SESSION['completed']) {
     die();
 }
 
-
-
 $context = context_module::instance($cmid);
 
 $PAGE->set_context($context); // Make sure to set the page context.
@@ -76,9 +87,6 @@ else {
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
-// Read demo data.
-$demodatareader = new \mod_livequiz\readdemodata();
-$demoquiz = $demodatareader->getdemodata();
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
