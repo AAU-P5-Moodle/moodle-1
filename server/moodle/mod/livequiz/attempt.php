@@ -51,7 +51,7 @@ $quizid = optional_param('quizid', 0, PARAM_INT);
 $numberofquestions = optional_param('numberofquestions', 0, PARAM_INT);
 $questiontitle = optional_param('questiontitle', 0, PARAM_TEXT);
 
-session_start();
+//session_start();
 
 if (!$cm) { // If course module is not set, throw an exception.
     throw new moodle_exception('invalidcoursemodule', 'error');
@@ -63,14 +63,14 @@ if ($cm->course !== $course->id) { // Check if the course module matches the cou
 require_login($course, false, $cm);
 $PAGE->set_cacheable(false);
 
-session_start();
-
+//session_start();
+/*
 if ($_SESSION['completed']) { // If the quiz has been submitted, the user is not allowed to go back.
     $text = 'You are not allowed to go back after submitting the quiz';
     echo $text;
     die();
 }
-
+ */
 $context = context_module::instance($cmid); // Get the context.
 
 $PAGE->set_context($context); // Make sure to set the page context.
@@ -88,6 +88,9 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
 $takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionid);
+
+
+$PAGE->requires->js_call_amd('mod_livequiz/participation', 'init', [$quizid]);
 
 // Output.
 echo $OUTPUT->header();

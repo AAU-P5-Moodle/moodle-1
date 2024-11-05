@@ -32,6 +32,12 @@ use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
 use mod_livequiz\models\quiz_questions_relation;
+use mod_livequiz\models\participation;
+
+$servicedefinitions = \mod_livequiz\services\livequiz_services::get_service_definitions();
+
+$functions = $servicedefinitions['functions'];
+$services = $servicedefinitions['services'];
 
 /**
  * Class livequiz_services
@@ -190,4 +196,44 @@ class livequiz_services {
         }
         return $questions;
     }
+    /**
+     * Creates a new participation record in the database.
+     * @param int $studentid
+     * @param int $quizid
+     * @throws dml_exception
+     * @return participation
+     */
+    public function new_participation(int $studentid, int $quizid): participation {
+        // Todo: Validate input data.
+        // Add parcitipation using the model.
+        $participant = new participation($studentid, $quizid);
+        $participant->add_participation();
+
+        return $participant;
+
+    }
+    // Add the function and service definition here.
+    public static function get_service_definitions() {
+        return [
+            'functions' => [
+                'mod_livequiz_append_participation' => [
+                    'classname'   => 'mod_livequiz\external\append_participation',
+                    'methodname'  => 'execute',
+                    'description' => 'Record user participation in a live quiz.',
+                    'type'        => 'write',
+                    'ajax'        => true,
+                    'capabilities' => 'mod/livequiz:participate',
+                ],
+            ],
+            'services' => [
+                'Live Quiz Service' => [
+                    'functions' => ['mod_livequiz_append_participation'],
+                    'restrictedusers' => 0,
+                    'enabled' => 1,
+                ],
+            ],
+        ];
+    }
+}
+
 }
