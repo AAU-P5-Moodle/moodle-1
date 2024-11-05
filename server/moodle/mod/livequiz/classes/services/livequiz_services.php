@@ -116,7 +116,7 @@ class livequiz_services {
             $livequiz->update_quiz();
 
             $quizid = $livequiz->get_id();
-            livequiz_quiz_lecture_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
+            livequiz_quiz_lecturer_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
             $this->submit_questions($quizid, $questions, $lecturerid);
 
             $transaction->allow_commit();
@@ -139,7 +139,7 @@ class livequiz_services {
             $questionid = question::submit_question($question);
 
             quiz_questions_relation::append_question_to_quiz($questionid, $quizid);
-            livequiz_question_lecturer_relation::append_lecturer_question_relation($questionid, $lecturerid);
+            livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
             $this->submit_answers($questionid, $answers);
         }
     }
