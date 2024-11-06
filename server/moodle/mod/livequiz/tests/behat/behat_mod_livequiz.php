@@ -18,6 +18,9 @@ namespace mod_livequiz\tests\behat;
 
 use behat_base;
 
+// This is used because behat cannot find the class when the namespace is defined.
+class_alias('mod_livequiz\tests\behat\behat_mod_livequiz', 'behat_mod_livequiz');
+
 /**
  * Steps definitions related to mod_livequiz.
  *

@@ -30,7 +30,7 @@ Scenario: Open a livequiz on course
   #Testing we can open the livequiz activity
   When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
   And I should see "Live Quiz"
-  And I should see "Europe Cities Quiz"
+  And I should see "livequiz_europe_quiz"
   And I should see "Test description"
   And I should see "index_page"
 
@@ -48,7 +48,7 @@ Scenario: Open a livequiz on course
   #We should see the default action menu options
   And I click on "Delete" "link"
   And I should see "Delete activity?"
-  And I should see "This will delete livequiz_tester and any user data it contains."
+  And I should see "This will delete livequiz_europe_quiz and any user data it contains."
   And "Delete" "button" should exist
   And "Cancel" "button" should exist
   #We should see the delete confirmation page
