@@ -78,3 +78,14 @@ Feature: View livequiz activity
     And "No" "radio" should exist
     And I press the "back" button in the browser
     Then I should see "You are not allowed to go back after submitting the quiz"
+
+  Scenario: Choose an answer to question
+    #Testing we can choose an answer to a question, both checkboxes and radio buttons
+    When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    And I click on "Take Quiz" "link"
+    And "Submit Quiz" "button" should exist
+    And I click on "Paris" "checkbox"
+    Then the "Paris" answer should be checked
+    And I click on "Next Question" "link"
+    And I click on "Copenhagen" "radio"
+    Then the "Copenhagen" answer should be checked
