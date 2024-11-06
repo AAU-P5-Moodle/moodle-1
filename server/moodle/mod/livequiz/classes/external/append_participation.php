@@ -4,9 +4,7 @@ namespace mod_livequiz\external;
 
 use core_external\external_function_parameters;
 use core_external\external_value;
-use core_external\external_single_structure;
 
- 
 /**
  * Class append_participation
  *
