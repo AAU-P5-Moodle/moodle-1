@@ -27,6 +27,7 @@ namespace mod_livequiz;
 use advanced_testcase;
 use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
+use mod_quiz\plugininfo\quiz;
 use stdClass;
 use ReflectionClass;
 use ReflectionException;
@@ -34,7 +35,8 @@ use ReflectionException;
 /**
  * Test class for livequiz class
  */
-final class livequiz_test extends advanced_testcase {
+final class livequiz_test extends advanced_testcase
+{
     /**
      * Setup that runs before each test in the file
      */
@@ -54,14 +56,14 @@ final class livequiz_test extends advanced_testcase {
      * @throws ReflectionException
      */
     public function test_livequiz_prepare_for_template(
-        int $quizid,
+        int    $quizid,
         string $quiztitle,
-        int $courseid,
+        int    $courseid,
         string $intro,
-        int $introformat,
-        int $timecreated,
-        int $timemodified,
-        array $questions
+        int    $introformat,
+        int    $timecreated,
+        int    $timemodified,
+        array  $questions
     ): void {
         $livequiz = $this->constructlivequiz(
             $quizid,
@@ -86,11 +88,11 @@ final class livequiz_test extends advanced_testcase {
                     'get_explanation'])
                 ->getMock();
             $mockdata = new stdClass();
-            $mockdata->id = $question[0];
-            $mockdata->title = $question[1];
-            $mockdata->description = $question[2];
-            $mockdata->timelimit = $question[3];
-            $mockdata->explanation = $question[4];
+            $mockdata->questionid = $question["id"];
+            $mockdata->questiontitle = $question["title"];
+            $mockdata->questiondescription = $question["description"];
+            $mockdata->questiontimelimit = $question["timelimit"];
+            $mockdata->questionexplanation = $question["explanation"];
 
             // Define what the mock should return when the mocked functions are called.
             $mock->expects($this->any())// Prepare_for_template can be called any number of times.
@@ -99,22 +101,22 @@ final class livequiz_test extends advanced_testcase {
 
             $mock->expects($this->any())
                 ->method('get_id')
-                ->willReturn($mockdata->id);
+                ->willReturn($question["id"]);
 
             $mock->expects($this->any())
                 ->method('get_title')
-                ->willReturn($mockdata->title);
+                ->willReturn($question["title"]);
 
             $mock->expects($this->any())
                 ->method('get_description')
-                ->willReturn($mockdata->description);
+                ->willReturn($question["description"]);
 
             $mock->expects($this->any())
                 ->method('get_timelimit')
-                ->willReturn($mockdata->timelimit);
+                ->willReturn($question["timelimit"]);
             $mock->expects($this->any())
                 ->method('get_explanation')
-                ->willReturn($mockdata->explanation);
+                ->willReturn($question["explanation"]);
             $mockquestions[] = $mock;
         }
         $livequiz->add_questions($mockquestions);
@@ -124,8 +126,6 @@ final class livequiz_test extends advanced_testcase {
         // Verify correct quizid.
         $this->assertIsInt($data->quizid);
         $this->assertEquals($livequiz->get_id(), $data->quizid);
-
-
         // Verify correct quiztitle.
         $this->assertIsString($data->quiztitle);
         $this->assertEquals($livequiz->get_name(), $data->quiztitle);
@@ -137,20 +137,20 @@ final class livequiz_test extends advanced_testcase {
         // Verify correct questions.
         $counter = 0;
         foreach ($livequiz->get_questions() as $question) {
-            $this->assertIsInt($data->questions[$counter]->id);
-            $this->assertEquals($question->get_id(), $data->questions[$counter]->id);
+            $this->assertIsInt($data->questions[$counter]->questionid);
+            $this->assertEquals($question->get_id(), $data->questions[$counter]->questionid);
 
-            $this->assertIsString($data->questions[$counter]->title);
-            $this->assertEquals($question->get_title(), $data->questions[$counter]->title);
+            $this->assertIsString($data->questions[$counter]->questiontitle);
+            $this->assertEquals($question->get_title(), $data->questions[$counter]->questiontitle);
 
-            $this->assertIsString($data->questions[$counter]->description);
-            $this->assertEquals($question->get_description(), $data->questions[$counter]->description);
+            $this->assertIsString($data->questions[$counter]->questiondescription);
+            $this->assertEquals($question->get_description(), $data->questions[$counter]->questiondescription);
 
-            $this->assertIsInt($data->questions[$counter]->timelimit);
-            $this->assertEquals($question->get_timelimit(), $data->questions[$counter]->timelimit);
+            $this->assertIsInt($data->questions[$counter]->questiontimelimit);
+            $this->assertEquals($question->get_timelimit(), $data->questions[$counter]->questiontimelimit);
 
-            $this->assertIsString($data->questions[$counter]->explanation);
-            $this->assertEquals($question->get_explanation(), $data->questions[$counter]->explanation);
+            $this->assertIsString($data->questions[$counter]->questionexplanation);
+            $this->assertEquals($question->get_explanation(), $data->questions[$counter]->questionexplanation);
 
             $counter++;
         }
@@ -167,15 +167,15 @@ final class livequiz_test extends advanced_testcase {
      * @throws ReflectionException
      */
     public function test_livequiz_prepare_question_for_template(
-        int $quizid,
+        int    $quizid,
         string $quiztitle,
-        int $courseid,
+        int    $courseid,
         string $intro,
-        int $introformat,
-        int $timecreated,
-        int $timemodified,
-        array $questions,
-        int $questionindex
+        int    $introformat,
+        int    $timecreated,
+        int    $timemodified,
+        array  $questions,
+        int    $questionindex
     ): void {
         $livequiz = $this->constructlivequiz(
             $quizid,
@@ -200,40 +200,43 @@ final class livequiz_test extends advanced_testcase {
                     'get_explanation',
                     'get_answers'])
                 ->getMock();
-            $mockdata = new stdClass();
-            $mockdata->id = $question[0];
-            $mockdata->title = $question[1];
-            $mockdata->description = $question[2];
-            $mockdata->timelimit = $question[3];
-            $mockdata->explanation = $question[4];
-            $mockdata->answers = [];
 
             // Define what the mock should return when the mocked functions are called.
             $mock->expects($this->any())// Prepare_for_template can be called any number of times.
                 ->method('prepare_for_template')
-                ->willReturn($mockdata);
+                ->willReturnCallback(function ($data) use ($question) {
+                    // Append mockdata properties to the $data object.
+                    $data->questionid = $question["id"];
+                    $data->questiontitle = $question["title"];
+                    $data->questiondescription = $question["description"];
+                    $data->questiontimelimit = $question["timelimit"];
+                    $data->questionexplanation = $question["explanation"];
+                    $data->answers = [];
+                    $data->answertype = 'checkbox';
+                    return $data;
+                });
 
             $mock->expects($this->any())
                 ->method('get_id')
-                ->willReturn($mockdata->id);
+                ->willReturn($question["id"]);
 
             $mock->expects($this->any())
                 ->method('get_title')
-                ->willReturn($mockdata->title);
+                ->willReturn($question["title"]);
 
             $mock->expects($this->any())
                 ->method('get_description')
-                ->willReturn($mockdata->description);
+                ->willReturn($question["description"]);
 
             $mock->expects($this->any())
                 ->method('get_timelimit')
-                ->willReturn($mockdata->timelimit);
+                ->willReturn($question["timelimit"]);
             $mock->expects($this->any())
                 ->method('get_explanation')
-                ->willReturn($mockdata->explanation);
+                ->willReturn($question["explanation"]);
             $mock->expects($this->any())
                 ->method('get_answers')
-                ->willReturn($mockdata->answers);
+                ->willReturn([]);
             $mockquestions[] = $mock;
         }
         $livequiz->add_questions($mockquestions);
@@ -254,26 +257,25 @@ final class livequiz_test extends advanced_testcase {
         $this->assertEquals(count($livequiz->get_questions()), $data->numberofquestions);
 
         // Verify correct question.
-        if ( count($livequiz->get_questions()) > 0 ) {
+        if (count($livequiz->get_questions()) > 0) {
             $question = $livequiz->get_question_by_index($questionindex);
-            $this->assertIsInt($data->question->id);
-            $this->assertEquals($question->get_id(), $data->question->id);
+            $this->assertIsInt($data->questionid);
+            $this->assertEquals($question->get_id(), $data->questionid);
 
-            $this->assertIsString($data->question->title);
-            $this->assertEquals($question->get_title(), $data->question->title);
+            $this->assertIsString($data->questiontitle);
+            $this->assertEquals($question->get_title(), $data->questiontitle);
 
-            $this->assertIsString($data->question->description);
-            $this->assertEquals($question->get_description(), $data->question->description);
+            $this->assertIsString($data->questiondescription);
+            $this->assertEquals($question->get_description(), $data->questiondescription);
 
-            $this->assertIsInt($data->question->timelimit);
-            $this->assertEquals($question->get_timelimit(), $data->question->timelimit);
+            $this->assertIsInt($data->questiontimelimit);
+            $this->assertEquals($question->get_timelimit(), $data->questiontimelimit);
 
-            $this->assertIsString($data->question->explanation);
-            $this->assertEquals($question->get_explanation(), $data->question->explanation);
+            $this->assertIsString($data->questionexplanation);
+            $this->assertEquals($question->get_explanation(), $data->questionexplanation);
 
-            $this->assertIsArray($data->question->answers);
-            $this->assertEquals($question->get_explanation(), $data->question->explanation);
-        } else{
+            $this->assertIsArray($data->answers);
+        } else {
             $this->assertFalse(property_exists($data, 'question'), 'The $data object should not have a "question" field.');
         }
     }
@@ -292,13 +294,13 @@ final class livequiz_test extends advanced_testcase {
      * @throws ReflectionException
      */
     private function constructlivequiz(
-        int $testid,
+        int    $testid,
         string $quiztitle,
-        int $courseid,
+        int    $courseid,
         string $intro,
-        int $introformat,
-        int $timecreated,
-        int $timemodified
+        int    $introformat,
+        int    $timecreated,
+        int    $timemodified
     ): livequiz {
 
         $class = new ReflectionClass(livequiz::class);
@@ -313,26 +315,79 @@ final class livequiz_test extends advanced_testcase {
      * @return array
      */
     public static function dataprovider(): array {
-        $question1 = [1, 'question1', 'This is the description for question 1', 5, 'This is the explanation for question 1'];
-        $question2 = [2, 'question2', 'This is the description for question 2', 10, 'This is the explanation for question 2'];
+        $question1 = self::createquestionarray(1,
+            'question1',
+            'This is the description for question 1',
+            5,
+            'This is the explanation for question 1');
+        $question2 = self::createquestionarray(2,
+            'question2',
+            'This is the description for question 2',
+            10,
+            'This is the explanation for question 2');
 
         return [
-                [1, "TestQuiz 1", 2, "This is quiz intro", 1, 5000, 6000, [], 0],
-                [2, "TestQuiz 2", 2, "This is quiz intro", 2, 0, 0, [
-                    $question1,
-                    $question2, ],
-                    1,
-                ],
-                [3, "TestQuiz 3", 2, "æøå", 1, 5000, 6000, [
-                    $question1,
-                    $question2, ],
-                    2,
-                ],
-                [4, "TestQuiz 4", 2, "", 1, 5000, 6000, [
-                    $question1,
-                    $question2, ],
-                    0,
-                ],
-            ];
+            self::createquizarray(1,
+                "TestQuiz 1", 2,
+                "This is quiz intro",
+                1,
+                5000,
+                6000,
+                [],
+                0),
+            self::createquizarray(2, "TestQuiz 2", 2, "This is quiz intro", 2, 0, 0, [
+                $question1,
+                $question2],
+                0),
+            self::createquizarray(3, "TestQuiz 3", 2, "æøå", 1, 5000, 6000, [
+                $question1,
+                $question2],
+                1),
+          self::createquizarray(4, "TestQuiz 4", 2, "", 1, 5000, 6000, [
+                $question1,
+                $question2],
+                0,
+            ),
+        ];
+    }
+
+    /**
+     * Function that returns arrary of test data representing a question
+     * @return array
+     */
+    private static function createquestionarray(int $id, string $title, string $description, int $timelimit, string $explanation):array {
+        return [
+            "id" => $id,
+            "title" => $title,
+            "description" => $description,
+            "timelimit" => $timelimit,
+            "explanation" => $explanation,
+        ];
+    }
+
+    /**
+     * Function that returns arrary of test data representing a quiz
+     * @return array
+     */
+    private static function createquizarray(int $id,
+                                            string $title,
+                                            int $courseid,
+                                            string $intro,
+                                            int $introformat,
+                                            int $timecreated,
+                                            int $timemodified,
+                                            array $questions,
+                                            int $questionindex): array {
+        return [
+            "id" => $id,
+            "title" => $title,
+            "courseid" => $courseid,
+            "intro" => $intro,
+            "introformat" => $introformat,
+            "timecreated" => $timecreated,
+            "timemodified" => $timemodified,
+            "questions" => $questions,
+            "questionindex" => $questionindex,
+        ];
     }
 }
