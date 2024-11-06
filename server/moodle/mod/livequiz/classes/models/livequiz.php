@@ -180,6 +180,15 @@ class livequiz {
     }
 
     /**
+     * Gets the introduction format for the livequiz.
+     *
+     * @return int
+     */
+    public function get_introformat(): int {
+        return $this->introformat;
+    }
+
+    /**
      * Gets the time the livequiz was created.
      *
      * @return int
