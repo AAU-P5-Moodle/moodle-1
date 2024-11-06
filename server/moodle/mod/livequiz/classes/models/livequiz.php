@@ -254,7 +254,7 @@ class livequiz {
         $this->questions[] = $question;
     }
     /**
-     * Prepares the template date for mustache.
+     * Prepares the template data for mustache.
      * @return stdClass
      */
     public function prepare_for_template(): stdClass {
