@@ -286,8 +286,10 @@ class livequiz {
         $data->quizid = $this->id;
         $data->quiztitle = $this->name;
         $data->numberofquestions = count($this->get_questions());
-        $question = $this->get_question_by_index($questionindex);
-        $data = $question->prepare_for_template($data);
+        if ($data->numberofquestions > 0) {
+            $question = $this->get_question_by_index($questionindex);
+            $data = $question->prepare_for_template($data);
+        }
         return $data;
     }
 }
