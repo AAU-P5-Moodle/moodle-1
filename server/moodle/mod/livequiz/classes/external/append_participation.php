@@ -37,34 +37,11 @@ class append_participation extends \core_external\external_api {
         return $quizid;
     }
     /**
-     * Summary of execute_returns
+     * Part of the webservice processing flow. Not called directly here,
+     * but is in moodle's web service framework.
      * @return \external_function_parameters
      */
     public static function execute_returns(): external_value {
         return new external_value(PARAM_INT, 'Quiz ID');
     }
-
-
-    /**
-     * Executes the append participation process for the given quiz.
-     * @param int $quizid The ID of the quiz.
-     * @return void
-     */
-    /*
-    public static function execute($quizid) {
-        global $USER;
-
-        $params = self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid]);
-        $context = context_module::instance($params['quizid']);
-        self::validate_context($context);
-
-        require_capability('mod/livequiz:participate', $context);
-
-        // Implement logic here.
-        $userid = $USER->id;
-        // For example: livequiz_services::append_student_to_quiz($userid, $params['quizid']);
-
-
-        return ['status' => 'success'];
-    }*/
 }
