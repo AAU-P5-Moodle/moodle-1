@@ -14,20 +14,29 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace mod_livequiz\models;
+
+use dml_exception;
+use dml_transaction_exception;
+
 /**
- * Livequiz activity version information.
- *
+ * 'Static' class, do not instantiate.
+ * Displays the livequiz view page.
  * @package   mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
- defined('MOODLE_INTERNAL') || die();
-
-global $plugin;
-
-
-$plugin = new stdClass(); // Initialize $plugin as an object.
-$plugin->version = 2024072511;
-$plugin->requires = 2024041600;
-$plugin->component = 'mod_livequiz';
+class student_quiz_relation {
+    /**
+     * Append an answer to a question, given its id
+     *
+     * @param int $questionid
+     * @param int $answerid
+     * @return void
+     * @throws dml_exception
+     * @throws dml_transaction_exception
+     */
+    public static function test_function(): string {
+        return "Hello World!";
+    }
+}

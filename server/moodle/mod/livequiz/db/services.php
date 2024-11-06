@@ -15,19 +15,25 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Livequiz activity version information.
+ * Livequiz access information file
  *
  * @package   mod_livequiz
- * @copyright 2024 Software AAU
+ * @copyright Computer science Aalborg university  {@link http:/aau.dk}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- defined('MOODLE_INTERNAL') || die();
+namespace mod_livequiz\external;
 
-global $plugin;
+defined('MOODLE_INTERNAL') || die();
 
+$functions = [
+    'mod_livequiz_append_participation' => [
+        'classname'   => 'mod_livequiz\external\append_participation',
+        'description' => 'Record user participation in a livequiz.',
+        'type'        => 'write',
+        'ajax'        => true,
+        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
+];
 
-$plugin = new stdClass(); // Initialize $plugin as an object.
-$plugin->version = 2024072511;
-$plugin->requires = 2024041600;
-$plugin->component = 'mod_livequiz';
+$services = [];

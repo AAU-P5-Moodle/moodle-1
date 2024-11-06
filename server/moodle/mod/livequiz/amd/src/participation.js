@@ -1,5 +1,7 @@
 // File: mod/livequiz/amd/src/participation.js
 
+import { test_ajax } from "./repository";
+
 /**
  * Participation module for Live Quiz.
  *
@@ -7,7 +9,7 @@
  */
 
 export const init = (quizid) => {
-    console.log("Participation module for quiz ", quizid);
+    window.console.log("Participation module for quiz ", test_ajax(quizid));
 };
 
 /*

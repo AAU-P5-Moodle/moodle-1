@@ -1,15 +1,11 @@
 <?php
-// File: mod/livequiz/classes/external/append_participation.php
 
 namespace mod_livequiz\external;
-
-defined('MOODLE_INTERNAL') || die();
 
 use external_function_parameters;
 use external_value;
 use external_single_structure;
 use context_module;
-use external_api;
  
 /**
  * Class append_participation
@@ -25,17 +21,42 @@ class append_participation extends \core_external\external_api {
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
      */
-    public static function execute_parameters() {
+    public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-            'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
+            new external_single_structure([
+                'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
+            ]),
         ]);
     }
+    /**
+     * Summary of execute
+     * @param mixed $quizid
+     * @return void
+     */
+    public static function execute($quizid) {
+        global $DB;
+        $params = self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid]);
+        return $quizid;
+    }
+    /**
+     * Summary of execute_returns
+     * @return \external_function_parameters
+     */
+    public static function execute_returns(): external_function_parameters {
+        return new external_function_parameters([
+            new external_single_structure([
+                'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
+            ]),
+        ]);
+    }
+
 
     /**
      * Executes the append participation process for the given quiz.
      * @param int $quizid The ID of the quiz.
      * @return void
      */
+    /*
     public static function execute($quizid) {
         global $USER;
 
@@ -51,11 +72,5 @@ class append_participation extends \core_external\external_api {
 
 
         return ['status' => 'success'];
-    }
-
-    public static function execute_returns() {
-        return new external_single_structure([
-            'status' => new external_value(PARAM_TEXT, 'Status message'),
-        ]);
-    }
+    }*/
 }
