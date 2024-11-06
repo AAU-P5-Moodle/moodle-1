@@ -8,8 +8,8 @@ import { test_ajax } from "./repository";
  * @module     mod_livequiz/participation
  */
 
-export const init = (quizid) => {
-    window.console.log("Participation module for quiz ", test_ajax(5));
+export const init = async (quizid) => {
+    window.console.log("Participation module for quiz ", await test_ajax({ quizid: 5 }));
 };
 
 /*

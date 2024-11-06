@@ -23,9 +23,7 @@ class append_participation extends \core_external\external_api {
      */
     public static function execute_parameters()  {
         return new external_function_parameters([
-            new external_single_structure([
-                'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
-            ]),
+            'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
         ]);
     }
     /**
@@ -43,9 +41,7 @@ class append_participation extends \core_external\external_api {
      * @return \external_function_parameters
      */
     public static function execute_returns() {
-        return new external_single_structure([
-            'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
-        ]);
+        return new external_value(PARAM_INT, 'Quiz ID');
     }
 
 
