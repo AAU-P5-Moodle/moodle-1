@@ -9,7 +9,7 @@ import { test_ajax } from "./repository";
  */
 
 export const init = (quizid) => {
-    window.console.log("Participation module for quiz ", test_ajax(quizid));
+    window.console.log("Participation module for quiz ", test_ajax(5));
 };
 
 /*

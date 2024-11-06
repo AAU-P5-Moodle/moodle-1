@@ -2,10 +2,10 @@
 
 namespace mod_livequiz\external;
 
-use external_function_parameters;
-use external_value;
-use external_single_structure;
-use context_module;
+use core_external\external_function_parameters;
+use core_external\external_value;
+use core_external\external_single_structure;
+
  
 /**
  * Class append_participation
@@ -21,7 +21,7 @@ class append_participation extends \core_external\external_api {
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
      */
-    public static function execute_parameters(): external_function_parameters {
+    public static function execute_parameters()  {
         return new external_function_parameters([
             new external_single_structure([
                 'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
@@ -42,11 +42,9 @@ class append_participation extends \core_external\external_api {
      * Summary of execute_returns
      * @return \external_function_parameters
      */
-    public static function execute_returns(): external_function_parameters {
-        return new external_function_parameters([
-            new external_single_structure([
-                'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
-            ]),
+    public static function execute_returns() {
+        return new external_single_structure([
+            'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
         ]);
     }
 
