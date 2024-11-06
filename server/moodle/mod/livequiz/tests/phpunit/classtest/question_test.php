@@ -27,29 +27,32 @@ namespace mod_livequiz;
 use advanced_testcase;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\question;
+use stdClass;
 
 /**
  * Test class for livequiz class
  */
 final class question_test extends advanced_testcase {
+    private question $question;
     /**
      * Setup that runs before each test in the file
      */
     protected function setUp(): void {
         parent::setUp();
         $this->resetAfterTest();
+
+        $this->question = new question(
+            "Question 1",
+            "This is the description for the question",
+            55,
+            "This is the explanation for the question"
+        );
     }
 
     /**
      * Test of get_hasmultipleanswers returns true, when there are more than 1 correct answer.
      */
     public function test_question_get_hasmultipleanswers_true(): void {
-        $question = new question(
-            "Question 1",
-            "This is the description for the question",
-            55,
-            "This is the explanation for the question"
-        );
         $mockanswers = [];
         for ($x = 0; $x <= 3; $x++) {
             $mock = $this->getMockBuilder(answer::class)
@@ -67,20 +70,14 @@ final class question_test extends advanced_testcase {
             }
             $mockanswers[] = $mock;
         }
-        $question->add_answers($mockanswers);
-        $this->assertTrue($question->get_hasmultiplecorrectanswers());
+        $this->question->add_answers($mockanswers);
+        $this->assertTrue($this->question->get_hasmultiplecorrectanswers());
     }
 
     /**
      * Test of get_hasmultipleanswers returns false, when there is only 1 correct answer.
      */
     public function test_question_get_hasmultipleanswers_false(): void {
-        $question = new question(
-            "Question 1",
-            "This is the description for the question",
-            55,
-            "This is the explanation for the question"
-        );
         $mockanswers = [];
         for ($x = 0; $x <= 3; $x++) {
             $mock = $this->getMockBuilder(answer::class)
@@ -98,7 +95,21 @@ final class question_test extends advanced_testcase {
             }
             $mockanswers[] = $mock;
         }
-        $question->add_answers($mockanswers);
-        $this->assertnotTrue($question->get_hasmultiplecorrectanswers());
+        $this->question->add_answers($mockanswers);
+        $this->assertnotTrue($this->question->get_hasmultiplecorrectanswers());
     }
+
+    public function test_question_prepare_for_template(){
+
+        $data = new stdClass();
+        $data = $this->question->prepare_for_template($data);
+
+        // Verify correct question title.
+        $this->assertIsString($data->questiontitle);
+        $this->assertEquals($this->question->get_title(), $data->questiontitle);
+
+        // Verify correct answers.
+        $counter = 0;
+    }
+
 }
