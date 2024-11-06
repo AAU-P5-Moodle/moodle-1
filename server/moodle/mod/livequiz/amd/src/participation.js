@@ -6,6 +6,11 @@
  * @module     mod_livequiz/participation
  */
 
+export const init = (quizid) => {
+    console.log("Participation module for quiz ", quizid);
+};
+
+/*
 define(["jquery", "core/ajax", "core/str"], function (Ajax, Str) {
     return {
         init: function (quizid) {
@@ -45,3 +50,4 @@ define(["jquery", "core/ajax", "core/str"], function (Ajax, Str) {
         },
     };
 });
+*/

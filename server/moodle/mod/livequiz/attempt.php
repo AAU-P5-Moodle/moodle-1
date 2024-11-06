@@ -89,8 +89,8 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 $output = $PAGE->get_renderer('mod_livequiz');
 $takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionid);
 
-
-$PAGE->requires->js_call_amd('mod_livequiz/participation', 'init', [$quizid]);
+//Calling Javascript modules from .
+//$PAGE->requires->js_call_amd('mod_livequiz/participation', 'init', [$quizid]);
 
 // Output.
 echo $OUTPUT->header();

@@ -29,6 +29,10 @@
     * fill in later
 
 }}
+{{#js}}
+require(['mod_livequiz/participation'], (module) => module.init({{quizid}}));
+{{/js}}
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         console.log("loaded DOM content")

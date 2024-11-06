@@ -45,7 +45,7 @@ class append_participation extends \core_external\external_api {
 
         require_capability('mod/livequiz:participate', $context);
 
-        // Implement your logic here.
+        // Implement logic here.
         $userid = $USER->id;
         // For example: livequiz_services::append_student_to_quiz($userid, $params['quizid']);
 
