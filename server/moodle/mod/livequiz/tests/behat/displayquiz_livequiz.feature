@@ -25,13 +25,15 @@ Feature: View livequiz activity
     And I am on "Test Course" course homepage with editing mode off
 
   Scenario: Show a livequiz with questions
-    #Testing we can open the livequiz activity
+    #Testing we can open the livequiz activity and the questions are shown.
+    #The questions should be shown in different pages
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
     And I should see "THIS IS THE INDEXPAGE OF livequiz_europe_quiz"
     And I should see "Take Quiz"
     And I click on "Take Quiz" "link"
     And I should see "Which of the following cities is in France?"
     And I should see "This is about France"
+    #The answer options are shown as checkboxes
     And "Paris" "checkbox" should exist
     And "Champagne" "checkbox" should exist
     And "Nice" "checkbox" should exist
@@ -39,6 +41,7 @@ Feature: View livequiz activity
     And I click on "Next Question" "link"
     Then I should see "What is the Capital of Denmark?"
     And I should see "This is about Denmark"
+    #The answer options are shown as radio buttons
     And "Aarhus" "radio" should exist
     And "Aalborg" "radio" should exist
     And "Copenhagen" "radio" should exist
@@ -58,6 +61,7 @@ Feature: View livequiz activity
     And I press the "back" button in the browser
 
   Scenario: Submit a livequiz
+    #Testing we can submit the livequiz and see the results, but not go back after submitting
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
     And I click on "Take Quiz" "link"
     And "Submit Quiz" "button" should exist
