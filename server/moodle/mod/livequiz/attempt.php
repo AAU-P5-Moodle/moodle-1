@@ -45,12 +45,6 @@ if (empty($currentquiz->get_questions())) {
     $demoquiz = $currentquiz;
 }
 
-// Params for storage in session.
-$nextquestionid = optional_param('nextquestionid', 0, PARAM_INT);
-$quizid = optional_param('quizid', 0, PARAM_INT);
-$numberofquestions = optional_param('numberofquestions', 0, PARAM_INT);
-$questiontitle = optional_param('questiontitle', 0, PARAM_TEXT);
-
 session_start();
 
 if (!$cm) { // If course module is not set, throw an exception.
@@ -75,15 +69,10 @@ $context = context_module::instance($cmid); // Get the context.
 
 $PAGE->set_context($context); // Make sure to set the page context.
 
-if ($quizid){ // If quizid is set, answers have been stored for the question, thus next question is to be displayed.
-    $PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $nextquestionid]));
-}
-else { // If quizid is not set, the current question is to be displayed.
-    $PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $questionid]));
-}
+// Set up the page.
+$PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $questionid]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
-
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
