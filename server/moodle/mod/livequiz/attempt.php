@@ -77,10 +77,6 @@ if ($_SESSION['completed']) { // If the quiz has been submitted, the user is not
     die();
 }
 
-echo "<pre>";
-print_r($_SESSION['quiz_answers']);
-echo "</pre>";
-
 $context = context_module::instance($cmid); // Get the context.
 
 $PAGE->set_context($context); // Make sure to set the page context.

@@ -18,38 +18,59 @@ Feature: View livequiz activity
       | activity | livequiz         |
       | course   | TC               |
       | idnumber | 1                |
-      | name     | livequiz_tester  |
+      | name     | livequiz_europe_quiz    |
       | intro    | Test description |
       | section  | 0                |
     And I log in as "student1"
     And I am on "Test Course" course homepage with editing mode off
 
-    Scenario: Open a livequiz on course with questions
-        #Testing we can open the livequiz activity
-        When I click on "livequiz_tester" "link" in the "livequiz" activity
-        And I should see "THIS IS THE INDEXPAGE OF livequiz_tester"
-        And I should see "Take Quiz"
-        And I click on "Take Quiz" "link"
-        And I should see "Quiz 1 Question 1"
-        And I should see "This is the first quiz question"
-        And "Answer 1" "checkbox" should exist
-        And "Answer 2" "checkbox" should exist
-        And "Answer 3" "checkbox" should exist
-        And "Next Question" "link" should exist
-        And I click on "Next Question" "link"
-        Then I should see "Quiz 1 Question 2"
-        And I should see "This is the second quiz question"
-        And "Answer 1" "radio" should exist
-        And "Answer 2" "radio" should exist
-        And "Answer 3" "radio" should exist
-        And "Next Question" "link" should exist
-        And I click on "Next Question" "link"
-        Then I should see "Quiz 1 Question 3"
-        And I should see "This is the second quiz question"
-        And "True" "radio" should exist
-        And "False" "radio" should exist
-        And "Previous Question" "link" should exist
-        And I click on "Previous Question" "link"
-        And I wait "3" seconds
-        Then I should see "Quiz 1 Question 2"
-        And I should see "This is the second quiz question"
+  Scenario: Show a livequiz with questions
+    #Testing we can open the livequiz activity
+    When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    And I should see "THIS IS THE INDEXPAGE OF livequiz_europe_quiz"
+    And I should see "Take Quiz"
+    And I click on "Take Quiz" "link"
+    And I should see "Which of the following cities is in France?"
+    And I should see "This is about France"
+    And "Paris" "checkbox" should exist
+    And "Champagne" "checkbox" should exist
+    And "Nice" "checkbox" should exist
+    And "Next Question" "link" should exist
+    And I click on "Next Question" "link"
+    Then I should see "What is the Capital of Denmark?"
+    And I should see "This is about Denmark"
+    And "Aarhus" "radio" should exist
+    And "Aalborg" "radio" should exist
+    And "Copenhagen" "radio" should exist
+    And "Next Question" "link" should exist
+    And I click on "Next Question" "link"
+    Then I should see "Is Hamburg in Germany?"
+    And I should see "German cities"
+    And "Yes" "radio" should exist
+    And "No" "radio" should exist
+    And "Previous Question" "link" should exist
+    And I click on "Previous Question" "link"
+    Then I should see "What is the Capital of Denmark?"
+    And I should see "This is about Denmark"
+    And "Aarhus" "radio" should exist
+    And "Aalborg" "radio" should exist
+    And "Copenhagen" "radio" should exist
+    And I press the "back" button in the browser
+
+  Scenario: Submit a livequiz
+    When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    And I click on "Take Quiz" "link"
+    And "Submit Quiz" "button" should exist
+    And I click on "Paris" "checkbox"
+    And I click on "Submit Quiz" "button"
+    And I should see "Results for attempt"
+    And "Paris" "checkbox" should exist
+    And "Champagne" "checkbox" should exist
+    And "Nice" "checkbox" should exist
+    And "Aarhus" "radio" should exist
+    And "Aalborg" "radio" should exist
+    And "Copenhagen" "radio" should exist
+    And "Yes" "radio" should exist
+    And "No" "radio" should exist
+    And I press the "back" button in the browser
+    Then I should see "You are not allowed to go back after submitting the quiz"

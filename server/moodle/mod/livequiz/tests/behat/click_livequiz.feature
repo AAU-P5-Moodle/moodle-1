@@ -20,7 +20,7 @@ Feature: Open a LiveQuiz activity
       | activity | livequiz         |
       | course   | TC               |
       | idnumber | 1                |
-      | name     | livequiz_tester  |
+      | name     | livequiz_europe_quiz  |
       | intro    | Test description |
       | section  | 0                |
     And I log in as "teacher1"
@@ -28,12 +28,13 @@ Feature: Open a LiveQuiz activity
 
 Scenario: Open a livequiz on course
   #Testing we can open the livequiz activity
-  When I click on "livequiz_tester" "link" in the "livequiz" activity
+  When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
   And I should see "Live Quiz"
-  And I should see "THIS IS THE INDEX PAGE OF livequiz_tester"
+  And I should see "Europe Cities Quiz"
   And I should see "Test description"
+  And I should see "index_page"
 
-Scenario: Delete livequiz
+  Scenario: Delete livequiz
   #Testing we can delete the livequiz activity
   Given I am on "Test Course" course homepage with editing mode on
   When I click on "action-menu-toggle-2" "link" in the "livequiz" activity
