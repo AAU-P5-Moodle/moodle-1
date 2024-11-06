@@ -276,7 +276,7 @@ class livequiz {
     }
 
     /**
-     * Prepares the template date for mustache.
+     * Prepares the template data for mustache.
      * @param int $questionindex
      * @return stdClass
      */

@@ -206,7 +206,7 @@ class question {
      * Getter for question hasmultipleanswers
      * @return bool
      */
-    public function get_hasmultipleanswers(): bool {
+    public function get_hasmultiplecorrectanswers(): bool {
         // This is a simple check to see if the question has multiple correct answers.
         $numcorrect = 0;
         $hasmultipleanswers = false;
@@ -242,7 +242,7 @@ class question {
                 'answercorrect' => $answer->get_correct(),
             ];
         }
-        if ($this->get_hasmultipleanswers()) {
+        if ($this->get_hasmultiplecorrectanswers()) {
             $data->answertype = 'checkbox';
         } else {
             $data->answertype = 'radio';

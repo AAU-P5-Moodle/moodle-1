@@ -1,1 +1,44 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+/**
+ * Unit tests for class question.
+ *
+ * @package    mod_livequiz
+ * @category   test
+ * @copyright  2023
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+namespace mod_livequiz;
+
+use advanced_testcase;
+use mod_livequiz\models\livequiz;
+use ReflectionClass;
+use ReflectionException;
+
+/**
+ * Test class for livequiz class
+ */
+final class question_test extends advanced_testcase
+{
+    /**
+     * Setup that runs before each test in the file
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->resetAfterTest();
+    }
+}
