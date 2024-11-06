@@ -38,6 +38,7 @@ Feature: View livequiz activity
     And "Champagne" "checkbox" should exist
     And "Nice" "checkbox" should exist
     And "Next Question" "link" should exist
+    And I should not see "Previous Question"
     And I click on "Next Question" "link"
     Then I should see "What is the Capital of Denmark?"
     And I should see "This is about Denmark"
@@ -46,12 +47,15 @@ Feature: View livequiz activity
     And "Aalborg" "radio" should exist
     And "Copenhagen" "radio" should exist
     And "Next Question" "link" should exist
+    And "Previous Question" "link" should exist
     And I click on "Next Question" "link"
     Then I should see "Is Hamburg in Germany?"
     And I should see "German cities"
     And "Yes" "radio" should exist
     And "No" "radio" should exist
     And "Previous Question" "link" should exist
+    And I wait "10" seconds
+    And I should not see "Next Question"
     And I click on "Previous Question" "link"
     Then I should see "What is the Capital of Denmark?"
     And I should see "This is about Denmark"

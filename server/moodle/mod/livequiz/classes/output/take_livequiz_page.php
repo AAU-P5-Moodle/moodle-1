@@ -94,6 +94,7 @@ class take_livequiz_page implements renderable, templatable {
         $data->isattempting = true;
         $data->nextquestionid = $this->get_next_question_id();
         $data->previousquestionid = $this->get_previous_question_id();
+        $data->numberofquestions = $this->nubmerofquestions;
         // These are used for navigation.
         if ($data->nextquestionid !== $this->questionid) {
             // If the next question is the same as the current question, we don't want to show the next button.
