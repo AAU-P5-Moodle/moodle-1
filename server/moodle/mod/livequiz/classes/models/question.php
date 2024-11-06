@@ -203,7 +203,7 @@ class question {
     }
 
     /**
-     * Getter for question hasmultipleanswers
+     * Getter for question hasmultiplecorrectanswers
      * @return bool
      */
     public function get_hasmultiplecorrectanswers(): bool {

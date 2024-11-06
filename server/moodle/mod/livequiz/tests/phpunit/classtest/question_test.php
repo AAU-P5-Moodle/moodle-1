@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Unit tests for class question.
  *
@@ -24,21 +25,80 @@
 namespace mod_livequiz;
 
 use advanced_testcase;
-use mod_livequiz\models\livequiz;
-use ReflectionClass;
-use ReflectionException;
+use mod_livequiz\models\answer;
+use mod_livequiz\models\question;
 
 /**
  * Test class for livequiz class
  */
-final class question_test extends advanced_testcase
-{
+final class question_test extends advanced_testcase {
     /**
      * Setup that runs before each test in the file
      */
-    protected function setUp(): void
-    {
+    protected function setUp(): void {
         parent::setUp();
         $this->resetAfterTest();
+    }
+
+    /**
+     * Test of get_hasmultipleanswers returns true, when there are more than 1 correct answer.
+     */
+    public function test_question_get_hasmultipleanswers_true(): void {
+        $question = new question(
+            "Question 1",
+            "This is the description for the question",
+            55,
+            "This is the explanation for the question"
+        );
+        $mockanswers = [];
+        for ($x = 0; $x <= 3; $x++) {
+            $mock = $this->getMockBuilder(answer::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['get_correct'])
+                ->getMock();
+            if ($x < 2) {
+                $mock->expects($this->any())
+                    ->method('get_correct')
+                    ->willReturn(0);
+            } else {
+                $mock->expects($this->any())
+                    ->method('get_correct')
+                    ->willReturn(1);
+            }
+            $mockanswers[] = $mock;
+        }
+        $question->add_answers($mockanswers);
+        $this->assertTrue($question->get_hasmultiplecorrectanswers());
+    }
+
+    /**
+     * Test of get_hasmultipleanswers returns false, when there is only 1 correct answer.
+     */
+    public function test_question_get_hasmultipleanswers_false(): void {
+        $question = new question(
+            "Question 1",
+            "This is the description for the question",
+            55,
+            "This is the explanation for the question"
+        );
+        $mockanswers = [];
+        for ($x = 0; $x <= 3; $x++) {
+            $mock = $this->getMockBuilder(answer::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['get_correct'])
+                ->getMock();
+            if ($x < 3) {
+                $mock->expects($this->any())
+                    ->method('get_correct')
+                    ->willReturn(0);
+            } else {
+                $mock->expects($this->any())
+                    ->method('get_correct')
+                    ->willReturn(1);
+            }
+            $mockanswers[] = $mock;
+        }
+        $question->add_answers($mockanswers);
+        $this->assertnotTrue($question->get_hasmultiplecorrectanswers());
     }
 }
