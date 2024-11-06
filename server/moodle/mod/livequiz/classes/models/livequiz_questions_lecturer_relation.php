@@ -56,7 +56,7 @@ class livequiz_questions_lecturer_relation {
      */
     public static function get_lecturer_questions_relation_by_lecturer_id(int $lecturerid): array {
         global $DB;
-        return $DB->get_record('livequiz_questions_lecturer', ['lecturer_id' => $lecturerid]);
+        return (array) $DB->get_record('livequiz_questions_lecturer', ['lecturer_id' => $lecturerid]);
     }
 
     /**
@@ -72,7 +72,7 @@ class livequiz_questions_lecturer_relation {
      */
     public static function get_lecturer_questions_relation_by_questions_id(int $questionid): array {
         global $DB;
-        return $DB->get_record('livequiz_questions_lecturer', ['question_id' => $questionid]);
+        return (array) $DB->get_record('livequiz_questions_lecturer', ['question_id' => $questionid]);
     }
     /**
      * returns array with data from livequiz_questions_lecturer based on relation id

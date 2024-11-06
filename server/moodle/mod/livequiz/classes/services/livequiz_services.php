@@ -176,19 +176,18 @@ class livequiz_services {
      * @param int $quizid
      * @return array
      */
-    private function get_livequiz_quiz_lecturer(int $quizid): array {
-        $lecturer = livequiz_quiz_lecture_relation::get_lecturer_quiz_relation_by_quiz_id($quizid);
+    public function get_livequiz_quiz_lecturer(int $quizid): array {
+        $lecturer = livequiz_quiz_lecturer_relation::get_lecturer_quiz_relation_by_quiz_id($quizid);
 
-        return $lecturer->id;
+        return $lecturer;
     }
     /**
      * gets lecturer from question
      * @param int $questionid
      * @return array
      */
-    private function get_livequiz_question_lecturer(int $questionid): array {
-        $lecturer = livequiz_question_lecturer_relation::get_lecturer_questions_relation_by_questions_id($questionid);
-
-        return $lecturer->id;
+    public function get_livequiz_question_lecturer(int $questionid): array {
+        $lecturer = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_questions_id($questionid);
+        return $lecturer;
     }
 }

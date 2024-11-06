@@ -172,11 +172,17 @@ final class livequiz_service_test extends \advanced_testcase {
         $answerexplanation = "I don't know this answer.";
         $answer = new answer($correct, $answerdescription, $answerexplanation);
         $question->add_answer($answer);
+
         $livequiz->add_question($question);
         $lecturerid = "2";
         $livequiz = $service->submit_quiz($livequiz, $lecturerid);
-
         $questions = $livequiz->get_questions();
+
+        $getlecturer = $service->get_livequiz_question_lecturer($questions[0]->get_id());
+        self::assertEquals($getlecturer['lecturer_id'], $lecturerid);
+        
+        $getquiz = $service->get_livequiz_quiz_lecturer($livequiz->get_id());
+        self::assertEquals($getquiz['lecturer_id'], $lecturerid);
 
         self::assertCount(1, $questions);
         self::assertEqualsIgnoringCase($title, $questions[0]->get_title());
