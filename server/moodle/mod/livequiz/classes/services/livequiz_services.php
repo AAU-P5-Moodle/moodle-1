@@ -138,9 +138,9 @@ class livequiz_services {
         $updatedquestionids = [];
 
         // Create a map of existing questions for quick lookup by ID
-        $existingQuestionMap = [];
+        $existingquestionmap = [];
         foreach ($existingquestions as $existingquestion) {
-            $existingQuestionMap[$existingquestion->get_id()] = $existingquestion;
+            $existingquestionmap[$existingquestion->get_id()] = $existingquestion;
         }
         /* @var question $newquestion */
         foreach ($newquestions as $newquestion) {
@@ -151,7 +151,7 @@ class livequiz_services {
                 $questionid = question::insert_question($newquestion);
                 quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
                 $updatedquestionids[] = $questionid;
-            } elseif (isset($existingQuestionMap[$questionid])) {
+            } elseif (isset($existingquestionmap[$questionid])) {
                 // Update existing question if found in the map
                 $newquestion->update_question();
                 $updatedquestionids[] = $questionid;
@@ -161,7 +161,7 @@ class livequiz_services {
         }
 
         // Find deleted questions by comparing existing question IDs with updated ones
-        $existingQuestionIds = array_keys($existingQuestionMap);
+        $existingQuestionIds = array_keys($existingquestionmap);
         $deletedquestions = array_diff($existingQuestionIds, $updatedquestionids);
 
         if (count($deletedquestions) > 0) {

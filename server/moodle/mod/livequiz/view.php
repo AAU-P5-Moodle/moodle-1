@@ -21,11 +21,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_livequiz\services\livequiz_services;
-use mod_livequiz\models\livequiz;
-use mod_livequiz\models\question;
-use mod_livequiz\models\answer;
-
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 
@@ -44,40 +39,6 @@ $PAGE->set_url('/mod/livequiz/view.php', ['id' => $id]);
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
-$livequizservice = livequiz_services::get_singleton_service_instance();
-
-$testquiz = $livequizservice->get_livequiz_instance($instance->id);
-
-$questions = $testquiz->get_questions();
-
-$questions[0]->set_title("new title");
-$questions[0]->set_description("new descr");
-$questions[0]->set_timelimit(1);
-$questions[0]->set_explanation("fordi du er en bøv");
-
-$questions[1]->set_title("new title2");
-$questions[1]->set_description("new descr2");
-$questions[1]->set_timelimit(31);
-$questions[1]->set_explanation("fordi du er en mega bøv");
-
-$q0answers = $questions[0]->get_answers();
-$q1answers = $questions[1]->get_answers();
-
-$q0answers[0]->set_description("nyt svar1");
-$q0answers[0]->set_explanation("ny forklaring1");
-
-$q0answers[1]->set_description("nyt svar2");
-$q0answers[1]->set_explanation("ny forklaring2");
-
-$ret = $livequizservice->submit_quiz($testquiz);
-
-$questions = $testquiz->get_questions();
-
-
 echo $OUTPUT->header();
-echo $OUTPUT->heading('View.php page');
-echo "<p><strong>Quiz title:</strong> " . print_r($testquiz->get_questions()[0]->get_answers()[0]) . "</p>";
-
-echo "<p><strong>Number of questions:</strong> " . count($questions) . "</p>";
-
+echo $OUTPUT->heading('This is the livequiz view page');
 echo $OUTPUT->footer();
