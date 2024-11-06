@@ -40,7 +40,7 @@ class append_participation extends \core_external\external_api {
      * Summary of execute_returns
      * @return \external_function_parameters
      */
-    public static function execute_returns() {
+    public static function execute_returns(): external_value {
         return new external_value(PARAM_INT, 'Quiz ID');
     }
 
