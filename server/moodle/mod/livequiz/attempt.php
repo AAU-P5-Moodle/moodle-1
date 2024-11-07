@@ -31,7 +31,7 @@ global $PAGE, $OUTPUT, $testdataset;
 
 // Get submitted parameters.
 $cmid = required_param('cmid', PARAM_INT); // Course module id.
-$questionid = optional_param('questionid', 0, PARAM_INT); // Question id, default to 0 if not provided.
+$questionindex = optional_param('questionindex', 0, PARAM_INT); // Question id, default to 0 if not provided.
 [$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
@@ -77,13 +77,13 @@ $context = context_module::instance($cmid); // Get the context.
 $PAGE->set_context($context); // Make sure to set the page context.
 
 // Set up the page.
-$PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $questionid]));
+$PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questioniindex' => $questionindex]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionid);
+$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionindex);
 
 // Output.
 echo $OUTPUT->header();
