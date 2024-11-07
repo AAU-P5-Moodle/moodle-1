@@ -54,7 +54,6 @@ Feature: View livequiz activity
     And "Yes" "radio" should exist
     And "No" "radio" should exist
     And "Previous Question" "link" should exist
-    And I wait "10" seconds
     And I should not see "Next Question"
     And I click on "Previous Question" "link"
     Then I should see "What is the Capital of Denmark?"
@@ -62,7 +61,6 @@ Feature: View livequiz activity
     And "Aarhus" "radio" should exist
     And "Aalborg" "radio" should exist
     And "Copenhagen" "radio" should exist
-    And I press the "back" button in the browser
 
   Scenario: Submit a livequiz
     #Testing we can submit the livequiz and see the results, but not go back after submitting

@@ -38,7 +38,7 @@ $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST
 // Read demo data - REMOVE WHEN PUSHING TO STAGING.
 $livequizservice = livequiz_services::get_singleton_service_instance();
 $currentquiz = $livequizservice->get_livequiz_instance($instance->id);
-if (empty($currentquiz->get_questions())) {
+if (empty($currentquiz->get_questions())) { // If the quiz has no questions, insert demo data.
     $demodatareader = new \mod_livequiz\readdemodata();
     $demoquiz = $demodatareader->insertdemodata($currentquiz);
 } else {
@@ -47,8 +47,10 @@ if (empty($currentquiz->get_questions())) {
 
 // Insert demo data if the site is running in behat mode.
 if (defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING) {
-    $demodatareader = new \mod_livequiz\readdemodata();
-    $demoquiz = $demodatareader->insertdemodata($currentquiz);
+    if (empty($currentquiz->get_questions())) { // The quiz should only be empty the first time attemp.php is called.
+        $demodatareader = new \mod_livequiz\readdemodata();
+        $demoquiz = $demodatareader->insertdemodata($currentquiz);
+    }
 }
 
 if (!$cm) { // If course module is not set, throw an exception.
