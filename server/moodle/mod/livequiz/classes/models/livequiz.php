@@ -241,9 +241,7 @@ class livequiz {
      * Sets questions for the livequiz.
      * @param array $questions
      */
-    public function set_questions(array $questions): void
-    {
+    public function set_questions(array $questions): void {
         $this->questions = $questions;
     }
-
 }

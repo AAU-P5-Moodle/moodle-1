@@ -137,22 +137,22 @@ class livequiz_services {
         $quizid = $livequiz->get_id();
         $updatedquestionids = [];
 
-        // Create a map of existing questions for quick lookup by ID
+        // Create a map of existing questions for quick lookup by ID.
         $existingquestionmap = [];
         foreach ($existingquestions as $existingquestion) {
             $existingquestionmap[$existingquestion->get_id()] = $existingquestion;
         }
-        /* @var question $newquestion */
+        /* @var question $newquestion // Type specification for $newquestion, for PHPStorm IDE */
         foreach ($newquestions as $newquestion) {
             $questionid = $newquestion->get_id();
 
             if ($questionid == 0) {
-                // Insert new question if ID is 0 (new question)
+                // Insert new question if ID is 0 (new question).
                 $questionid = question::insert_question($newquestion);
                 quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
                 $updatedquestionids[] = $questionid;
-            } elseif (isset($existingquestionmap[$questionid])) {
-                // Update existing question if found in the map
+            } else if (isset($existingquestionmap[$questionid])) {
+                // Update existing question if found in the map.
                 $newquestion->update_question();
                 $updatedquestionids[] = $questionid;
             }
@@ -160,16 +160,9 @@ class livequiz_services {
             $this::submit_answers($questionid, $answers);
         }
 
-        // Find deleted questions by comparing existing question IDs with updated ones
-        $existingQuestionIds = array_keys($existingquestionmap);
-        $deletedquestions = array_diff($existingQuestionIds, $updatedquestionids);
-
-        if (count($deletedquestions) > 0) {
-            foreach ($deletedquestions as $deletedQuestionId) {
-                // TODO Perform deletion logic here
-                // question::delete_question($deletedQuestionId);
-            }
-        }
+        // Find deleted questions by comparing existing question IDs with updated ones.
+        $existingquestionids = array_keys($existingquestionmap);
+        $deletedquestions = array_diff($existingquestionids, $updatedquestionids);
     }
 
     /**
@@ -191,14 +184,14 @@ class livequiz_services {
             $existinganswersmap[$existinganswer->get_id()] = $existinganswer;
         }
 
-        /* @var answer $newanswer */
-        foreach ($newanswers as $newanswer){
+        /* @var answer $newanswer // Type specification for $newanswer, for PHPStorm IDE */
+        foreach ($newanswers as $newanswer) {
             $answerid = $newanswer->get_id();
-            if($answerid == 0){
+            if ($answerid == 0) {
                 $answerid = answer::insert_answer($newanswer);
                 questions_answers_relation::insert_question_answer_relation($questionid, $answerid);
                 $updatedanswerids[] = $answerid;
-            } elseif(isset($existinganswersmap[$answerid])){
+            } else if (isset($existinganswersmap[$answerid])) {
                 $newanswer->update_answer();
                 $updatedanswerids[] = $answerid;
             }
@@ -206,13 +199,6 @@ class livequiz_services {
 
         $existinganswerids = array_keys($existinganswersmap);
         $deletedanswers = array_diff($existinganswerids, $updatedanswerids);
-
-        if(count($deletedanswers) > 0){
-            foreach($deletedanswers as $deletedanswerid){
-                // TODO Perform deletion logic here
-                // answer::delete_answer($deletedanswerid);
-            }
-        }
     }
 
     /**

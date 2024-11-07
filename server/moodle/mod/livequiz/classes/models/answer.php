@@ -176,8 +176,7 @@ class answer {
      *
      * @param int $correct
      */
-    public function set_correct(int $correct): void
-    {
+    public function set_correct(int $correct): void {
         $this->correct = $correct;
     }
 
@@ -186,8 +185,7 @@ class answer {
      *
      * @param string $description
      */
-    public function set_description(string $description): void
-    {
+    public function set_description(string $description): void {
         $this->description = $description;
     }
 
@@ -196,8 +194,7 @@ class answer {
      *
      * @param string $explanation
      */
-    public function set_explanation(string $explanation): void
-    {
+    public function set_explanation(string $explanation): void {
         $this->explanation = $explanation;
     }
 }

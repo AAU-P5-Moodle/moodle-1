@@ -124,8 +124,7 @@ class question {
      * @throws dml_transaction_exception
      * @return void
      */
-    public function update_question(): void
-    {
+    public function update_question(): void {
         global $DB;
         $questiondata = [
             'id' => $this->id,
@@ -226,8 +225,7 @@ class question {
      *
      * @param string $title The title of the question.
      */
-    public function set_title(string $title): void
-    {
+    public function set_title(string $title): void {
         $this->title = $title;
     }
 
@@ -236,8 +234,7 @@ class question {
      *
      * @param string $description The description of the question.
      */
-    public function set_description(string $description): void
-    {
+    public function set_description(string $description): void {
         $this->description = $description;
     }
 
@@ -246,8 +243,7 @@ class question {
      *
      * @param int $timelimit The time limit of the question.
      */
-    public function set_timelimit(int $timelimit): void
-    {
+    public function set_timelimit(int $timelimit): void {
         $this->timelimit = $timelimit;
     }
 
@@ -256,8 +252,7 @@ class question {
      *
      * @param string $explanation The explanation of the question.
      */
-    public function set_explanation(string $explanation): void
-    {
+    public function set_explanation(string $explanation): void {
         $this->explanation = $explanation;
     }
 }
