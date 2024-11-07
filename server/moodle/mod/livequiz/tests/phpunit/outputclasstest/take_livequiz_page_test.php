@@ -210,21 +210,24 @@ final class take_livequiz_page_test extends advanced_testcase {
             'question1',
             'This is the description for question 1',
             5,
-            'This is the explanation for question 1'
+            'This is the explanation for question 1',
+            []
         );
         $question2 = test_utility::createquestionarray(
             2,
             'question2',
             'This is the description for question 2',
             10,
-            'This is the explanation for question 2'
+            'This is the explanation for question 2',
+            []
         );
         $question3 = test_utility::createquestionarray(
             3,
             'question3',
             'This is the description for question 3',
             12,
-            'This is the explanation for question 3'
+            'This is the explanation for question 3',
+            []
         );
 
         return [

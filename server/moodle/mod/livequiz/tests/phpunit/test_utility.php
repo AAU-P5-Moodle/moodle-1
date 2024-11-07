@@ -66,6 +66,7 @@ final class test_utility extends advanced_testcase {
      * @param string $description
      * @param int $timelimit
      * @param string $explanation
+     * @param array $answers
      * @return array
      */
     public static function createquestionarray(
@@ -73,7 +74,8 @@ final class test_utility extends advanced_testcase {
         string $title,
         string $description,
         int $timelimit,
-        string $explanation
+        string $explanation,
+        array $answers
     ): array {
         return [
             "id" => $id,
@@ -81,6 +83,7 @@ final class test_utility extends advanced_testcase {
             "description" => $description,
             "timelimit" => $timelimit,
             "explanation" => $explanation,
+            "answers" => $answers,
         ];
     }
 
@@ -118,6 +121,28 @@ final class test_utility extends advanced_testcase {
             "timemodified" => $timemodified,
             "questions" => $questions,
             "questionindex" => $questionindex,
+        ];
+    }
+
+    /**
+     * Function that returns array of test data representing a question
+     * @param int $id
+     * @param string $description
+     * @param string $explanation
+     * @param int $correct
+     * @return array
+     */
+    public static function createanswerarray(
+        int $id,
+        string $description,
+        string $explanation,
+        int $correct
+    ): array {
+        return [
+            "id" => $id,
+            "description" => $description,
+            "explanation" => $explanation,
+            "correct" => $correct,
         ];
     }
 }
