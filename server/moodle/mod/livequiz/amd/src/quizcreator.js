@@ -172,17 +172,28 @@ let editingIndex = null;
     }
  
     function save_question(page, question_input, modal_div, answers_div, file_picker) {
-        let save_question_button = create_element("save_question_button", 'button', "save_button", "Save question");
+        let save_question_button = create_element('save_question_button', 'button', 'save_button', 'Save question');
         save_question_button.addEventListener('click', () => {
             let questionText = question_input.value.trim();
             if (!questionText) {
-                alert("Please enter a question.");
+                alert('Please enter a question.');
                 return;
             }
     
             let answers = [];
             for (let i = 0; i < answers_div.children.length; i++) {
-                answers.push(answers_div.children[i].querySelector(".answer_input").value.trim());
+                let answer_container = answers_div.children[i];
+                let answerData = {
+                    description: answer_container.querySelector('.answer_input').value.trim(),
+                    correct: answer_container.querySelector('.answer_checkbox').checked
+                };
+    
+                // Ensure the answer has a valid description
+                if (answerData.description !== '') {
+                    answers.push(answerData);
+                } else {
+                    console.error('An answer is missing a description and will not be saved.');
+                }
             }
     
             let file_input = file_picker.querySelector('input[type="file"]');
@@ -193,37 +204,34 @@ let editingIndex = null;
                 answers: answers,
                 file: file
             };
-            
-            if (isEditing && editingIndex != null){
-            savedQuestions[editingIndex] = savedQuestion;
     
-            let saved_questions_list = document.getElementById("saved_questions_list");
-            let question_list_item = saved_questions_list.children[editingIndex];
-
-            question_list_item.textContent = savedQuestion.question;
-
-
-            isEditing = false;
-            editingIndex = null;
+            if (isEditing && editingIndex !== null) {
+                savedQuestions[editingIndex] = savedQuestion;
+    
+                let saved_questions_list = document.getElementById('saved_questions_list');
+                let question_list_item = saved_questions_list.children[editingIndex];
+                question_list_item.textContent = savedQuestion.question;
+    
+                isEditing = false;
+                editingIndex = null;
             } else {
                 savedQuestions.push(savedQuestion);
-
-                let saved_questions_list = document.getElementById("saved_questions_list");
+    
+                let saved_questions_list = document.getElementById('saved_questions_list');
                 let question_list_item = document.createElement('li');
                 question_list_item.textContent = savedQuestion.question;
                 question_list_item.dataset.index = savedQuestions.length - 1;
-
-                const openModalHandler = () => {
+    
+                question_list_item.addEventListener('click', () => {
                     open_saved_question_modal(savedQuestions[question_list_item.dataset.index], question_list_item.dataset.index);
-                };
-
-                question_list_item.addEventListener('click',openModalHandler);
+                });
+    
                 saved_questions_list.appendChild(question_list_item);
             }
-            
+    
+            // Close the modal after saving the question
             modal_div.remove();
         });
-    
     
         return save_question_button;
     }
@@ -275,32 +283,41 @@ let editingIndex = null;
     }
  
     function create_answer_button(parent_element) {
-        let add_new_answer_to_question = create_element("add_answer_button", 'button', 'add_new_answer_to_question', 'Add Answer');
+        let add_new_answer_to_question = create_element('add_answer_button', 'button', 'add_new_answer_to_question', 'Add Answer');
         let answer_count = 0;
- 
+    
         add_new_answer_to_question.addEventListener('click', () => {
             if (answer_count < 8) {
                 let answer_container = document.createElement('div');
-                answer_container.className = "container_for_new_answer";
- 
+                answer_container.className = 'container_for_new_answer';
+    
                 let answer_input = document.createElement('input');
-                answer_input.className = "answer_input";
-                answer_input.placeholder = "Enter answer";
-                answer_input.setAttribute("required", true);
- 
+                answer_input.className = 'answer_input';
+                answer_input.placeholder = 'Enter answer';
+                answer_input.setAttribute('required', true);
+    
                 let answer_checkbox = document.createElement('input');
-                answer_checkbox.setAttribute("type", "checkbox");
-                answer_checkbox.className = "answer_checkbox"; 
- 
-                let delete_answer_button = create_element("delete_answer_button", "button", "delete_answer_button", "");
- 
+                answer_checkbox.setAttribute('type', 'checkbox');
+                answer_checkbox.className = 'answer_checkbox';
+    
+                let delete_answer_button = create_element('delete_answer_button', 'button', 'delete_answer_button', 'Delete');
+    
+                // Create answer object and append to parent element
+                answer_input.addEventListener('input', () => {
+                    answer_container.dataset.description = answer_input.value.trim();
+                });
+    
+                answer_checkbox.addEventListener('change', () => {
+                    answer_container.dataset.correct = answer_checkbox.checked;
+                });
+    
                 answer_container.appendChild(answer_checkbox);
                 answer_container.appendChild(answer_input);
                 answer_container.appendChild(delete_answer_button);
- 
+    
                 parent_element.appendChild(answer_container);
                 answer_count++;
- 
+    
                 delete_answer_button.addEventListener('click', () => {
                     answer_container.remove();
                     answer_count--;
@@ -354,25 +371,32 @@ let editingIndex = null;
                 questions: []
             }
 
-            savedQuestions.forEach((savedQuestion, questionCounter) => {
-                const questionData = {
-                    id: questionCounter,
-                    title: savedQuestion.question,
-                    timelimit: savedQuestion.timelimit,
-                    explanation: savedQuestion.explanation,
-                    answers: []
-                }
-
-                savedQuestion.answers.forEach((answer, answerCounter) => {
-                    const answerData = {
-                    id: answerCounter,
-                    correct: answer.correct,
-                    description: answer.description,
-                    explanation: answer.explanation,
+            savedQuestions.forEach(function(saved_question, question_counter) {
+                let question_data = {
+                    id: question_counter,
+                    title: saved_question.question,
+                    timelimit: saved_question.timelimit,
+                    explanation: saved_question.explanation,
+                    answers: []  // Prepare the answers array
+                };
+            
+                saved_question.answers.forEach(function(answer, answer_counter) {
+                    let answer_data = {
+                        id: answer_counter,
+                        description: answer.description || '',  // Ensure this field is set
+                        correct: answer.correct !== undefined ? answer.correct : false,  // Ensure this field is set
+                        explanation: answer.explanation || ''   // Optional field
                     };
-                    questionData.answers.push(answerData);
+            
+                    // Validate that the required fields are present before adding
+                    if (answer_data.description !== '') {
+                        question_data.answers.push(answer_data);
+                    } else {
+                        console.error('Answer at index ' + answer_counter + ' for question ' + question_counter + ' is missing a description.');
+                    }
                 });
-                data.questions.push(questionData);
+            
+                data.questions.push(question_data);
             });
             fetch('/mod/livequiz/quizcreator/save_quiz.php?id='+quizId, {
                 method: 'POST',
@@ -383,7 +407,7 @@ let editingIndex = null;
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Network response was not ok: ${response.status} ${response.statusText}');
                 }
                 return response.json();
             })
