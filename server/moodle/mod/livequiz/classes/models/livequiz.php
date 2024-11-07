@@ -235,4 +235,26 @@ class livequiz {
     private function add_question(question $question): void {
         $this->questions[] = $question;
     }
+
+    /**
+    * Creates a new livequiz instance.
+    *
+    * @param string $name The name of the quiz.
+    * @param int $course The course ID to associate with the quiz.
+    * @param string $intro The introductory text for the quiz.
+    * @param int $introformat The format of the introductory text.
+    * @param int $timecreated Timestamp when the quiz is created.
+    * @param int $timemodified Timestamp when the quiz is modified.
+    * @return livequiz
+    */
+    public static function create_instance(
+        string $name,
+        int $course,
+        string $intro,
+        int $introformat,
+        int $timecreated,
+        int $timemodified
+    ): livequiz {
+        return new self(0, $name, $course, $intro, $introformat, $timecreated, $timemodified);
+    }
 }
