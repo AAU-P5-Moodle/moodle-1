@@ -16,6 +16,7 @@
 
 /**
  * Displays the livequiz view page.
+ *
  * @package   mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
