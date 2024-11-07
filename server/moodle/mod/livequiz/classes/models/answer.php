@@ -26,7 +26,7 @@ use function PHPUnit\Framework\throwException;
  * This class represents an answer in the LiveQuiz module.
  * It handles the creation, retrieval, and updates of answer associated with quiz questions.
  *
- * @package mod_livequiz\answer
+ * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
