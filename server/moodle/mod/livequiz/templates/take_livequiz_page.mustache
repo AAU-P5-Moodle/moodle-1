@@ -34,7 +34,6 @@
         // Select all answer options (radio buttons, checkboxes, and dropdowns)
         const answerOptions = document.getElementsByClassName("{{quizid}}");
 
-        //console.log(answerOptions);
         // Add a 'change' event listener to each option
         answerOptions.forEach(option => {
             option.addEventListener("change", function(event) {
@@ -45,19 +44,11 @@
                         selectedAnswers.push(input.value);
                     }
                 });
-                //KEPT FOR DEVELOPMENT
-                //console.log(selectedAnswers);
 
                 // Update session
                 const xhr = new XMLHttpRequest();
                 xhr.open("POST", "update_session.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                //KEPT FOR DEVELOPMENT
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        console.log("Session updated successfully");
-                    }
-                };
                 // JSON stringify is decoded in update_session.php
                 xhr.send(`questionid={{questionid}}&answervalue=${JSON.stringify(selectedAnswers)}`);
 

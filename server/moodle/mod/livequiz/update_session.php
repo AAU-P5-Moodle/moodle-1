@@ -45,9 +45,3 @@ $_SESSION['quiz_answers'][$questionid] = [ // Set the session variable to the an
     'question_id' => $questionid,
     'answers' => $answers,
 ];
-
-// KEPT TEMPORARILY FOR DEVELOPMENT PURPOSES
-echo "<pre>";
-print_r($_SESSION['quiz_answers']);
-echo "</pre>";
-exit;
