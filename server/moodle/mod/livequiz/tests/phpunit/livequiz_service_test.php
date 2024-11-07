@@ -107,7 +107,6 @@ final class livequiz_service_test extends \advanced_testcase {
         $explanation = "I don't know.";
 
         $question = new question($title, $description, $timelimit, $explanation);
-
         self::assertInstanceOf(question::class, $question);
         self::assertEqualsIgnoringCase($title, $question->get_title());
         self::assertEqualsIgnoringCase($description, $question->get_description());
