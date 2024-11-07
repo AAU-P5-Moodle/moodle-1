@@ -31,11 +31,6 @@ use stdClass;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */class Participation {
     /**
-     * Participation id
-     * @var $id
-     */
-    private $id;
-    /**
      * @var $studentid
      */
     private $studentid;
@@ -43,7 +38,6 @@ use stdClass;
      * @var $livequizid
      */
     private $livequizid;
-
 
     /**
      * Participation constructor.
@@ -56,48 +50,22 @@ use stdClass;
         $this->livequizid = $livequizid;
     }
     /**
-     * get_id
-     * @return int
-     */
-    public function get_id(): int {
-        return $this->id;
-    }
-    /**
-     * get_studentid
-     * @return int
-     */
-    public function get_studentid(): int {
-        return $this->studentid;
-    }
-    /**
-     * get_livequizid
-     * @return int
-     */
-    public function get_livequizid(): int {
-        return $this->livequizid;
-    }
-    /**
-     * set_id
-     * @param int $id
+     * Summary of add_participation
      * @return void
      */
-    public function set_id(int $id): void {
-        $this->id = $id;
+    public function add_participation() {
+        global $DB;
+        $record = new stdClass();
+        $record->studentid = $this->studentid;
+        $record->livequizid = $this->livequizid;
+        $DB->insert_record('participation', $record);
     }
     /**
-     * set_studentid
-     * @param int $studentid
-     * @return void
+     * Summary of get_participation_by_studentid
+     * @param  $studentid
      */
-    public function set_studentid(int $studentid): void {
-        $this->studentid = $studentid;
-    }
-    /**
-     * set_livequizid
-     * @param int $livequizid
-     * @return void
-     */
-    public function set_livequizid(int $livequizid): void {
-        $this->livequizid = $livequizid;
+    public static function get_participation_by_studentid($studentid) {
+        global $DB;
+        return $DB->get_record('participation', ['studentid' => $studentid]);
     }
 }

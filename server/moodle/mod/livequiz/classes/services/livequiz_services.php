@@ -23,7 +23,6 @@ require_once(__DIR__ . '/../models/question.php');
 require_once(__DIR__ . '/../models/answer.php');
 require_once(__DIR__ . '/../models/questions_answers_relation.php');
 require_once(__DIR__ . '/../models/quiz_questions_relation.php');
-require_once(__DIR__ . '/../models/student_quiz_relation.php');
 
 use dml_exception;
 use dml_transaction_exception;
@@ -34,7 +33,6 @@ use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
 use mod_livequiz\models\quiz_questions_relation;
 use mod_livequiz\models\participation;
-use mod_livequiz\models\student_quiz_relation;
 
 /**
  * Class livequiz_services
@@ -203,18 +201,11 @@ class livequiz_services {
     public function new_participation(int $studentid, int $quizid): participation {
         // Todo: Validate input data.
         // Add parcitipation using the model.
-        global $DB;
-        $transaction = $DB->start_delegated_transaction();
-        $participation = new participation($studentid, $quizid);
-        try {
-            $participation->set_id(student_quiz_relation::append_student_to_quiz($quizid, $studentid));
+        $participant = new participation($studentid, $quizid);
+        $participant->add_participation();
 
-            $transaction->allow_commit();
-        } catch (dml_exception $e) {
-            $transaction->rollback($e);
-            throw $e;
-        }
-        return $participation;
+        return $participant;
+
     }
 
 }
