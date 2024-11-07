@@ -81,7 +81,7 @@ class livequiz {
      * @param int $timecreated
      * @param int $timemodified
      */
-    public function __construct(
+    private function __construct(
         int $id,
         string $name,
         int $course,

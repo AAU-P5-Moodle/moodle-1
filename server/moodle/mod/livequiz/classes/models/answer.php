@@ -14,13 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Displays the livequiz view page.
- * @package   mod_livequiz
- * @copyright 2024 Software AAU
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace mod_livequiz\models;
 
 use dml_exception;
@@ -32,7 +25,7 @@ use Exception;
  * This class represents an answer in the LiveQuiz module.
  * It handles the creation, retrieval, and updates of answer associated with quiz questions.
  *
- * @package mod_livequiz\answer
+ * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
