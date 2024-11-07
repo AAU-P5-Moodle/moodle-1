@@ -24,9 +24,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// Include necessary files
 require_once('../../../config.php');
 require_once('../form/createquizform.php');
 require_once('../hub/NavBar.php');
+
 $id = required_param('id', PARAM_INT); // Course module ID.
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 
@@ -62,41 +64,15 @@ try {
 } catch (Exception $e) {
     echo $OUTPUT->notification('Failed to retrieve quiz data: ' . $e->getMessage(), 'notifyproblem');
 }
-// Display the form.
-$mform->display();
 
-// Additional buttons and image upload section.
-echo html_writer::start_div('quiz_modal_buttons');
+// Generate HTML for form and saved questions
+$form_html = $mform->render();  // Assuming you render the form here
+$saved_questions_html = '';    // Add logic to render saved questions if any
+$file_picker_html = '';        // You may generate the HTML for file picker here
 
-// Add the Save and Cancel buttons.
-echo html_writer::tag('button', get_string('savequiz', 'mod_livequiz'), ['id' => 'saveQuiz', 'class' => 'save_button']);
-echo html_writer::tag('button', get_string('cancelquiz', 'mod_livequiz'), ['id' => 'cancelQuiz', 'class' => 'cancel_button']);
-echo html_writer::end_div();
-
-
-// Saved questions container.
-echo html_writer::start_div(
-    'saved_questions_container',
-    [
-        'style' => 'border-radius: 10px; padding: 15px; background-color: #f9f9f9; ' .
-                   'margin-top: 20px; margin-bottom: 20px;',
-    ]
-);
-echo html_writer::tag('h3', get_string('savedquestions', 'mod_livequiz'));
-
-// Start the ordered list for saved questions.
-echo html_writer::start_tag('ol', ['id' => 'saved_questions_list', 'style' => 'padding-left: 20px; margin: 0;']);
-
-// Close the ordered list.
-echo html_writer::end_tag('ol');
-
-// Displaying individual questions.
-echo html_writer::start_div('div_for_question', ['id' => 'questionDiv']);
-echo html_writer::end_div();
-echo html_writer::end_div();
-
-// Include custom JavaScript for the page.
-$PAGE->requires->js(new moodle_url('/mod/livequiz/amd/src/quizcreator.js'));
+// Create and render the page
+$quizcreator = new \mod_livequiz\output\quizcreator_renderable($quizdata, $form_html, $saved_questions_html, $file_picker_html);
+echo $OUTPUT->render($quizcreator);
 
 // Output page footer.
 echo $OUTPUT->footer();
