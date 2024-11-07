@@ -318,5 +318,35 @@ function xmldb_livequiz_upgrade($oldversion) {
         // Livequiz savepoint reached.
         upgrade_mod_savepoint(true, 2024072510, 'livequiz');
     }
+    if ($oldversion < 2024072516) {
+        // Define field type to be added to livequiz_questions.
+        $table = new xmldb_table('livequiz_questions');
+        $field = new xmldb_field('type', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'explanation');
+
+        // Conditionally launch add field type.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field participation_id to be added to livequiz_students_answers.
+        $table = new xmldb_table('livequiz_students_answers');
+        $field = new xmldb_field('participation_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'answer_id');
+
+        // Conditionally launch add field participation_id.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define key fk_participation (foreign) to be added to livequiz_students_answers.
+        $table = new xmldb_table('livequiz_students_answers');
+        $key = new xmldb_key('fk_participation', XMLDB_KEY_FOREIGN, ['participation_id'], 'livequiz_quiz_student', ['id']);
+
+        // Launch add key fk_participation.
+        $dbman->add_key($table, $key);
+
+        // Livequiz savepoint reached.
+        upgrade_mod_savepoint(true, 2024072516, 'livequiz');
+    }
+
     return true;
 }
