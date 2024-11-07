@@ -27,7 +27,6 @@ namespace mod_livequiz;
 use advanced_testcase;
 use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
-use mod_quiz\plugininfo\quiz;
 use stdClass;
 use ReflectionClass;
 use ReflectionException;
@@ -35,8 +34,7 @@ use ReflectionException;
 /**
  * Test class for livequiz class
  */
-final class livequiz_test extends advanced_testcase
-{
+final class livequiz_test extends advanced_testcase {
     /**
      * Setup that runs before each test in the file
      */
@@ -56,14 +54,14 @@ final class livequiz_test extends advanced_testcase
      * @throws ReflectionException
      */
     public function test_livequiz_prepare_for_template(
-        int    $quizid,
+        int $quizid,
         string $quiztitle,
-        int    $courseid,
+        int $courseid,
         string $intro,
-        int    $introformat,
-        int    $timecreated,
-        int    $timemodified,
-        array  $questions
+        int $introformat,
+        int $timecreated,
+        int $timemodified,
+        array $questions
     ): void {
         $livequiz = $this->constructlivequiz(
             $quizid,
@@ -167,15 +165,15 @@ final class livequiz_test extends advanced_testcase
      * @throws ReflectionException
      */
     public function test_livequiz_prepare_question_for_template(
-        int    $quizid,
+        int $quizid,
         string $quiztitle,
-        int    $courseid,
+        int $courseid,
         string $intro,
-        int    $introformat,
-        int    $timecreated,
-        int    $timemodified,
-        array  $questions,
-        int    $questionindex
+        int $introformat,
+        int $timecreated,
+        int $timemodified,
+        array $questions,
+        int $questionindex
     ): void {
         $livequiz = $this->constructlivequiz(
             $quizid,
@@ -294,13 +292,13 @@ final class livequiz_test extends advanced_testcase
      * @throws ReflectionException
      */
     private function constructlivequiz(
-        int    $testid,
+        int $testid,
         string $quiztitle,
-        int    $courseid,
+        int $courseid,
         string $intro,
-        int    $introformat,
-        int    $timecreated,
-        int    $timemodified
+        int $introformat,
+        int $timecreated,
+        int $timemodified
     ): livequiz {
 
         $class = new ReflectionClass(livequiz::class);
@@ -315,47 +313,94 @@ final class livequiz_test extends advanced_testcase
      * @return array
      */
     public static function dataprovider(): array {
-        $question1 = self::createquestionarray(1,
+        $question1 = self::createquestionarray(
+            1,
             'question1',
             'This is the description for question 1',
             5,
-            'This is the explanation for question 1');
-        $question2 = self::createquestionarray(2,
+            'This is the explanation for question 1'
+        );
+        $question2 = self::createquestionarray(
+            2,
             'question2',
             'This is the description for question 2',
             10,
-            'This is the explanation for question 2');
+            'This is the explanation for question 2'
+        );
 
         return [
-            self::createquizarray(1,
-                "TestQuiz 1", 2,
+            self::createquizarray(
+                1,
+                "TestQuiz 1",
+                2,
                 "This is quiz intro",
                 1,
                 5000,
                 6000,
                 [],
-                0),
-            self::createquizarray(2, "TestQuiz 2", 2, "This is quiz intro", 2, 0, 0, [
-                $question1,
-                $question2],
-                0),
-            self::createquizarray(3, "TestQuiz 3", 2, "æøå", 1, 5000, 6000, [
-                $question1,
-                $question2],
-                1),
-          self::createquizarray(4, "TestQuiz 4", 2, "", 1, 5000, 6000, [
-                $question1,
-                $question2],
-                0,
+                0
             ),
+            self::createquizarray(
+                2,
+                "TestQuiz 2",
+                2,
+                "This is quiz intro",
+                2,
+                0,
+                0,
+                [
+                $question1,
+                $question2,
+                ],
+                0
+            ),
+            self::createquizarray(
+                3,
+                "TestQuiz 3",
+                2,
+                "æøå",
+                1,
+                5000,
+                6000,
+                [
+                $question1,
+                $question2,
+                ],
+                1
+            ),
+          self::createquizarray(
+              4,
+              "TestQuiz 4",
+              2,
+              "",
+              1,
+              5000,
+              6000,
+              [
+                $question1,
+                $question2,
+              ],
+              0,
+          ),
         ];
     }
 
     /**
-     * Function that returns arrary of test data representing a question
+     * Function that returns array of test data representing a question
+     * @param int $id
+     * @param string $title
+     * @param string $description
+     * @param int $timelimit
+     * @param string $explanation
      * @return array
      */
-    private static function createquestionarray(int $id, string $title, string $description, int $timelimit, string $explanation):array {
+    private static function createquestionarray(
+        int $id,
+        string $title,
+        string $description,
+        int $timelimit,
+        string $explanation
+    ): array {
         return [
             "id" => $id,
             "title" => $title,
@@ -366,18 +411,29 @@ final class livequiz_test extends advanced_testcase
     }
 
     /**
-     * Function that returns arrary of test data representing a quiz
+     * Function that returns array of test data representing a quiz
+     * @param int $id
+     * @param string $title
+     * @param int $courseid
+     * @param string $intro
+     * @param int $introformat
+     * @param int $timecreated
+     * @param int $timemodified
+     * @param array $questions
+     * @param int $questionindex
      * @return array
      */
-    private static function createquizarray(int $id,
-                                            string $title,
-                                            int $courseid,
-                                            string $intro,
-                                            int $introformat,
-                                            int $timecreated,
-                                            int $timemodified,
-                                            array $questions,
-                                            int $questionindex): array {
+    private static function createquizarray(
+        int $id,
+        string $title,
+        int $courseid,
+        string $intro,
+        int $introformat,
+        int $timecreated,
+        int $timemodified,
+        array $questions,
+        int $questionindex
+    ): array {
         return [
             "id" => $id,
             "title" => $title,
