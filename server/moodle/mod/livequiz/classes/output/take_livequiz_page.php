@@ -43,6 +43,9 @@ class take_livequiz_page implements renderable, templatable {
     /** @var int $questionid . The id of the question to be rendered*/
     private int $questionid;
 
+    /** @var int $questionindex The index of the question in the quiz - Used for navigation */
+    private int $questionindex;
+
     /** @var int $nubmerofquestions The number of questions in the quiz - Used for navigation */
     private int $nubmerofquestions;
     /**
@@ -52,10 +55,11 @@ class take_livequiz_page implements renderable, templatable {
      * @param livequiz $livequiz
      * @param int $questionid
      */
-    public function __construct(int $cmid, livequiz $livequiz, int $questionid) {
+    public function __construct(int $cmid, livequiz $livequiz, int $questionindex) {
         $this->cmid = $cmid;
         $this->livequiz = $livequiz;
-        $this->questionid = $questionid;
+        $this->questionindex = $questionindex;
+        $this->questionid = $livequiz->get_questions()[$questionindex]->get_id();
         $this->nubmerofquestions = count($livequiz->get_questions());
     }
 
@@ -63,22 +67,22 @@ class take_livequiz_page implements renderable, templatable {
      * Get the next question id.
      * @return int
      */
-    private function get_next_question_id(): int {
-        if ($this->questionid < $this->nubmerofquestions - 1) {
-            return $this->questionid + 1;
+    private function get_next_question_index(): int {
+        if ($this->questionindex < $this->nubmerofquestions - 1) {
+            return $this->questionindex + 1;
         }
-        return $this->questionid;
+        return $this->questionindex;
     }
 
     /**
      * Get the previous question id.
      * @return int
      */
-    private function get_previous_question_id(): int {
-        if ($this->questionid > 0) {
-            return $this->questionid - 1;
+    private function get_previous_question_index(): int {
+        if ($this->questionindex > 0) {
+            return $this->questionindex - 1;
         }
-        return $this->questionid;
+        return $this->questionindex;
     }
 
     /**
@@ -89,20 +93,33 @@ class take_livequiz_page implements renderable, templatable {
      * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
-        $data = $this->livequiz->prepare_question_for_template($this->questionid);
+        $data = $this->livequiz->prepare_question_for_template($this->questionindex);
         $data->cmid = $this->cmid;
         $data->isattempting = true;
-        $data->nextquestionid = $this->get_next_question_id();
+        $data->questionid = $this->questionid;
+        $data->questionindex = $this->questionindex;
+        $data->nextquestionindex = $this->get_next_question_index();
+        $data->previousquestionindex = $this->get_previous_question_index();
+        $data->numberofquestions = $this->nubmerofquestions;
         // These are used for navigation.
-        $data->nexturl = (new moodle_url(
-            '/mod/livequiz/attempt.php',
-            ['cmid' => $this->cmid, 'questionid' => $data->nextquestionid]
+        if ($data->nextquestionindex !== $this->questionindex) {
+            // If the next question is the same as the current question, we don't want to show the next button.
+            $data->nexturl = (new moodle_url(
+                '/mod/livequiz/attempt.php',
+                ['cmid' => $this->cmid, 'questionindex' => $data->nextquestionindex]
+            ))->out(false);
+        }
+        if ($data->previousquestionindex !== $this->questionindex) {
+            // If the previous question is the same as the current question, we don't want to show the previous button.
+            $data->previousurl = (new moodle_url(
+                '/mod/livequiz/attempt.php',
+                ['cmid' => $this->cmid, 'questionindex' => $data->previousquestionindex]
+            ))->out(false);
+        }
+        $data->resultsurl = (new moodle_url(
+            '/mod/livequiz/results.php',
+            ['id' => $this->cmid, 'livequizid' => $this->livequiz->get_id()]
         ))->out(false);
-        $data->previousurl = (new moodle_url(
-            '/mod/livequiz/attempt.php',
-            ['cmid' => $this->cmid, 'questionid' => $this->get_previous_question_id()]
-        ))->out(false);
-        $data->resultsurl = (new moodle_url('/mod/livequiz/results.php', ['id' => $this->cmid, 'livequizid' => $this->livequiz->get_id()]))->out(false);
 
         return $data;
     }
