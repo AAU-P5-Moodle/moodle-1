@@ -65,7 +65,7 @@ final class livequiz_test extends advanced_testcase {
         int $timemodified,
         array $questions
     ): void {
-        $livequiz = $this->constructlivequiz(
+        $livequiz = test_utility::constructlivequiz(
             $quizid,
             $quiztitle,
             $courseid,
@@ -177,7 +177,7 @@ final class livequiz_test extends advanced_testcase {
         array $questions,
         int $questionindex
     ): void {
-        $livequiz = $this->constructlivequiz(
+        $livequiz = test_utility::constructlivequiz(
             $quizid,
             $quiztitle,
             $courseid,
@@ -278,36 +278,6 @@ final class livequiz_test extends advanced_testcase {
         } else {
             $this->assertFalse(property_exists($data, 'question'), 'The $data object should not have a "question" field.');
         }
-    }
-
-
-    /**
-     * Function to construct a livequiz using reflection to access the private constructor
-     * @param int $testid
-     * @param string $quiztitle
-     * @param int $courseid
-     * @param string $intro
-     * @param int $introformat
-     * @param int $timecreated
-     * @param int $timemodified
-     * @return livequiz
-     * @throws ReflectionException
-     */
-    public static function constructlivequiz(
-        int $testid,
-        string $quiztitle,
-        int $courseid,
-        string $intro,
-        int $introformat,
-        int $timecreated,
-        int $timemodified
-    ): livequiz {
-
-        $class = new ReflectionClass(livequiz::class);
-        $constructor = $class->getConstructor();
-        $constructor->setAccessible(true);
-        $object = $class->newInstanceWithoutConstructor();
-        return $constructor->invoke($object, $testid, $quiztitle, $courseid, $intro, $introformat, $timecreated, $timemodified);
     }
 
     /**
