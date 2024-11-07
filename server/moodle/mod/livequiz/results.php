@@ -27,7 +27,7 @@ require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
 
-global $PAGE, $OUTPUT;
+global $PAGE, $OUTPUT, $USER;
 // Get submitted parameters.
 $id = required_param('id', PARAM_INT); // Course module id.
 $quizid = required_param('livequizid', PARAM_INT);
@@ -44,9 +44,11 @@ if (empty($currentquiz->get_questions())) {
     $demoquiz = $currentquiz;
 }
 
+// Create a new participation record in the database. NOTE: This might not be necesarry when reading from the session.
+$livequizservice->new_participation($USER->id, $instance->id);
+
 require_login($course, false, $cm);
 
-session_start();
 $_SESSION['completed'] = true;
 
 $context = context_module::instance($cm->id); // Set the context for the course module.

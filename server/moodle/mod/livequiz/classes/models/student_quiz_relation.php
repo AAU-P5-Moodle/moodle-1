@@ -36,7 +36,25 @@ class student_quiz_relation {
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function test_function(): string {
-        return "Hello World!";
+    public static function append_student_to_quiz(int $quizid, int $studentid): int {
+        global $DB;
+        return $DB->insert_record('livequiz_quiz_student', ['livequiz_id' => $quizid, 'student_id' => $studentid], true);
+    }
+    /**
+     * Get all participation the student has made for a quiz
+     * @param int $quizid
+     * @return void
+     */
+    public static function get_all_student_participation_for_quiz(int $quizid, int $studentid): array {
+        global $DB;
+        $participationrecords =
+            $DB->get_records('livequiz_quiz_student',
+            ['livequiz_id' => $quizid, 'student_id' => $studentid],
+            'id DESC', '*');
+        $participations = [];
+        foreach ($participationrecords as $participation) {
+            $participations[] = new participation($participation->student_id, $participation->livequiz_id);
+        }
+        return $participations;
     }
 }
