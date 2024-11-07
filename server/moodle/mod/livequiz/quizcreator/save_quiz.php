@@ -44,8 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($data && isset($data->name, $data->questions) && !empty($data->questions)) {
         try {
             // Create a new livequiz instance.
-            $livequiz = new livequiz(
-                0, // Placeholder for new quiz ID.
+            $livequiz = livequiz::create_instance(
                 $data->name ?? 'Untitled Quiz', // Name of the quiz.
                 $id, // Course ID from the request parameter.
                 $data->intro ?? '', // Introduction text.
