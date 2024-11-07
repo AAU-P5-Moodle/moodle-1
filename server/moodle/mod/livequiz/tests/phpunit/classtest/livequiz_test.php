@@ -31,6 +31,9 @@ use stdClass;
 use ReflectionClass;
 use ReflectionException;
 
+defined('MOODLE_INTERNAL') || die();
+require_once(__DIR__ . '/../test_utility.php');
+
 /**
  * Test class for livequiz class
  */
@@ -42,7 +45,6 @@ final class livequiz_test extends advanced_testcase {
         parent::setUp();
         $this->resetAfterTest();
     }
-
 
     /**
      * Tests the function prepare_for_template()
@@ -291,7 +293,7 @@ final class livequiz_test extends advanced_testcase {
      * @return livequiz
      * @throws ReflectionException
      */
-    private function constructlivequiz(
+    public static function constructlivequiz(
         int $testid,
         string $quiztitle,
         int $courseid,
@@ -313,14 +315,14 @@ final class livequiz_test extends advanced_testcase {
      * @return array
      */
     public static function dataprovider(): array {
-        $question1 = self::createquestionarray(
+        $question1 = test_utility::createquestionarray(
             1,
             'question1',
             'This is the description for question 1',
             5,
             'This is the explanation for question 1'
         );
-        $question2 = self::createquestionarray(
+        $question2 = test_utility::createquestionarray(
             2,
             'question2',
             'This is the description for question 2',
@@ -329,7 +331,7 @@ final class livequiz_test extends advanced_testcase {
         );
 
         return [
-            self::createquizarray(
+            test_utility::createquizarray(
                 1,
                 "TestQuiz 1",
                 2,
@@ -340,7 +342,7 @@ final class livequiz_test extends advanced_testcase {
                 [],
                 0
             ),
-            self::createquizarray(
+            test_utility::createquizarray(
                 2,
                 "TestQuiz 2",
                 2,
@@ -354,7 +356,7 @@ final class livequiz_test extends advanced_testcase {
                 ],
                 0
             ),
-            self::createquizarray(
+            test_utility::createquizarray(
                 3,
                 "TestQuiz 3",
                 2,
@@ -368,7 +370,7 @@ final class livequiz_test extends advanced_testcase {
                 ],
                 1
             ),
-          self::createquizarray(
+          test_utility::createquizarray(
               4,
               "TestQuiz 4",
               2,
@@ -382,68 +384,6 @@ final class livequiz_test extends advanced_testcase {
               ],
               0,
           ),
-        ];
-    }
-
-    /**
-     * Function that returns array of test data representing a question
-     * @param int $id
-     * @param string $title
-     * @param string $description
-     * @param int $timelimit
-     * @param string $explanation
-     * @return array
-     */
-    private static function createquestionarray(
-        int $id,
-        string $title,
-        string $description,
-        int $timelimit,
-        string $explanation
-    ): array {
-        return [
-            "id" => $id,
-            "title" => $title,
-            "description" => $description,
-            "timelimit" => $timelimit,
-            "explanation" => $explanation,
-        ];
-    }
-
-    /**
-     * Function that returns array of test data representing a quiz
-     * @param int $id
-     * @param string $title
-     * @param int $courseid
-     * @param string $intro
-     * @param int $introformat
-     * @param int $timecreated
-     * @param int $timemodified
-     * @param array $questions
-     * @param int $questionindex
-     * @return array
-     */
-    private static function createquizarray(
-        int $id,
-        string $title,
-        int $courseid,
-        string $intro,
-        int $introformat,
-        int $timecreated,
-        int $timemodified,
-        array $questions,
-        int $questionindex
-    ): array {
-        return [
-            "id" => $id,
-            "title" => $title,
-            "courseid" => $courseid,
-            "intro" => $intro,
-            "introformat" => $introformat,
-            "timecreated" => $timecreated,
-            "timemodified" => $timemodified,
-            "questions" => $questions,
-            "questionindex" => $questionindex,
         ];
     }
 }

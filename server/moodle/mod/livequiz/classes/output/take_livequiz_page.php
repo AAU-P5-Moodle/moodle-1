@@ -67,7 +67,7 @@ class take_livequiz_page implements renderable, templatable {
      * Get the next question id.
      * @return int
      */
-    private function get_next_question_index(): int {
+    public function get_next_question_index(): int {
         if ($this->questionindex < $this->nubmerofquestions - 1) {
             return $this->questionindex + 1;
         }
@@ -78,10 +78,25 @@ class take_livequiz_page implements renderable, templatable {
      * Get the previous question id.
      * @return int
      */
-    private function get_previous_question_index(): int {
+    public function get_previous_question_index(): int {
         if ($this->questionindex > 0) {
             return $this->questionindex - 1;
         }
+        return $this->questionindex;
+    }
+    /**
+     * Set the question index.
+     * @param int $index
+     */
+    public function set_question_index(int $index): void {
+        $this->questionindex = $index;
+    }
+
+    /**
+     * Get the question index.
+     * @return int questionindex
+     */
+    public function get_question_index(): int {
         return $this->questionindex;
     }
 
