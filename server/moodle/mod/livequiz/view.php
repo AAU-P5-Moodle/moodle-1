@@ -24,7 +24,9 @@
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 
-global $OUTPUT, $PAGE, $DB;
+use mod_livequiz\services\livequiz_services;
+
+global $OUTPUT, $PAGE, $DB, $USER;
 
 
 $id = required_param('id', PARAM_INT); // Course module ID.
@@ -38,6 +40,10 @@ $PAGE->set_context($context); // Make sure to set the page context.
 $PAGE->set_url('/mod/livequiz/view.php', ['id' => $id]);
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
+
+$livequizservice = livequiz_services::get_singleton_service_instance();
+// Create a new participation record in the database. NOTE: This might not be necesarry when reading from the session.
+$livequizservice->new_participation($USER->id, $instance->id);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading('This is the livequiz view page');
