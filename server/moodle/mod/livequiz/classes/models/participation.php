@@ -16,8 +16,6 @@
 
 namespace mod_livequiz\models;
 
-defined('MOODLE_INTERNAL') || die();
-
 use stdClass;
 
 /**
@@ -29,7 +27,7 @@ use stdClass;
  * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */class Participation {
+ */class participation {
     /**
      * Participation id
      * @var $id
