@@ -48,9 +48,12 @@ class student_quiz_relation {
     public static function get_all_student_participation_for_quiz(int $quizid, int $studentid): array {
         global $DB;
         $participationrecords =
-            $DB->get_records('livequiz_quiz_student',
-            ['livequiz_id' => $quizid, 'student_id' => $studentid],
-            'id DESC', '*');
+            $DB->get_records(
+                'livequiz_quiz_student',
+                ['livequiz_id' => $quizid, 'student_id' => $studentid],
+                'id DESC',
+                '*'
+            );
         $participations = [];
         foreach ($participationrecords as $participation) {
             $participations[] = new participation($participation->student_id, $participation->livequiz_id);
