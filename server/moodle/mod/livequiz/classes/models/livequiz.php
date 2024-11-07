@@ -82,7 +82,7 @@ class livequiz {
      * @param int $timemodified
      */
     private function __construct(
-        int $id = 0, // Placeholder id, recommeneded to replace with a database auto-increment.
+        int $id,
         string $name,
         int $course,
         string $intro,
