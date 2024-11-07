@@ -33,6 +33,15 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  */
 class mod_livequiz_mod_form extends moodleform_mod {
     /**
+     * Sets the form!
+     * @param MoodleQuickForm $form
+     * @return void
+     */
+    public function set_form(MoodleQuickForm $form): void {
+        $this->_form = $form;
+    }
+
+    /**
      * Defines the form elements.
      *
      * This function sets up the form elements for creating or editing a livequiz activity,
