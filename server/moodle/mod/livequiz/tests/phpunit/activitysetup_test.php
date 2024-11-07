@@ -62,12 +62,7 @@ final class activitysetup_test extends \advanced_testcase {
         // Create an instance of MoodleQuickForm and inject it into the _form property using reflection.
         $form = new \MoodleQuickForm('modform', 'POST', '', null, ['class' => 'mform'], true);
 
-        // Use reflection to set the protected _form property to public,
-        // such that there does not need to be an instantiation.
-        $reflection = new \ReflectionClass($mock);
-        $property = $reflection->getProperty('_form');
-        $property->setAccessible(true);
-        $property->setValue($mock, $form);
+        $mock->set_form($form);
 
         // Set expectations for methods called in definition().
         $mock->expects($this->once())
