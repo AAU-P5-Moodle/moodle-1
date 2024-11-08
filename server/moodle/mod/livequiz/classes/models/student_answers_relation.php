@@ -52,11 +52,12 @@ class student_answers_relation {
     /**
      * Get all answers for a student in a given participation
      *
-     * @param $quizid int
-     * @return array // An array of question objects.
+     * @param int $studentid
+     * @param int $participationid
+     * @return array An array of answer id's
      * @throws dml_exception
      */
-    public static function get_answers_from_student_in_participation(int $studentid, int $participationid): array {
+    public static function get_answersids_from_student_in_participation(int $studentid, int $participationid): array {
         global $DB;
 
         $answerids = $DB->get_records(
@@ -65,17 +66,6 @@ class student_answers_relation {
             '',
             'answer_id'
         );
-        $answers = [];
-        
-        foreach ($answerids as $answerid) {
-            // There is chance we are getting an answer that does not exist.
-            try {
-                $answers[] = answer::get_answer_from_id($answerid->answer_id);
-            } catch (Exception $e) {
-                error_log('Could not get answer from id: ' . $answerid->answer_id);
-            }
-        }
-
-        return $answers;
+        return $answerids;
     }
 }

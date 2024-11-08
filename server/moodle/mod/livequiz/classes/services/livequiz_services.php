@@ -32,6 +32,7 @@ use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
 use mod_livequiz\models\quiz_questions_relation;
+use mod_livequiz\models\student_answers_relation;
 use PhpXmlRpc\Exception;
 use function PHPUnit\Framework\throwException;
 
@@ -214,5 +215,27 @@ class livequiz_services {
             $question->add_answers($answers);
         }
         return $questions;
+    }
+
+    /**
+     * Gets answers from a student in a specific participation.
+     *
+     * @param int $studentid The ID of the student.
+     * @param int $participationid The ID of the participation.
+     * @return answer[] The list of answers.
+     * @throws dml_exception
+     */
+    public function get_answers_from_stundent_in_participation(int $studentid, int $participationid): array {
+        $answers = [];
+        $answerids = student_answers_relation::get_answersids_from_student_in_participation($studentid, $participationid);
+        foreach ($answerids as $answerid) {
+            // There is chance we are getting an answer that does not exist.
+            try {
+                $answers[] = answer::get_answer_from_id($answerid->answer_id);
+            } catch (Exception $e) {
+                error_log('Could not get answer from id: ' . $answerid->answer_id);
+            }
+        }
+        return $answers;
     }
 }
