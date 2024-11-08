@@ -1,6 +1,4 @@
-// File: mod/livequiz/amd/src/participation.js
-
-import { test_ajax } from "./repository";
+import { append_participation } from "./repository";
 
 /**
  * Participation module for Live Quiz.
@@ -9,5 +7,5 @@ import { test_ajax } from "./repository";
  */
 
 export const init = async (quizid) => {
-    window.console.log("Participation module for quiz ", await test_ajax(quizid));
+    window.console.log("Participation module for quiz ", await append_participation(quizid));
 };

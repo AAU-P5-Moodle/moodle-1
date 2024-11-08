@@ -31,46 +31,8 @@
 }}
 {{#js}}
 require(['mod_livequiz/participation'], (module) => module.init({{quizid}}));
+require(['mod_livequiz/session'], (module) => module.init({{quizid}}, {{questionid}}));
 {{/js}}
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        console.log("loaded DOM content")
-        // Select all answer options (radio buttons, checkboxes, and dropdowns)
-        const answerOptions = document.getElementsByClassName("{{quizid}}");
-
-        //console.log(answerOptions);
-        // Add a 'change' event listener to each option
-        answerOptions.forEach(option => {
-            option.addEventListener("change", function(event) {
-                // Get all selected answers
-                const selectedAnswers = [];
-                Array.from(answerOptions).forEach(input => {
-                    if (input.checked || input.type === 'radio' && input.checked || input.type === 'checkbox' && input.checked) {
-                        selectedAnswers.push(input.value);
-                    }
-                });
-                //KEPT FOR DEVELOPMENT
-                //console.log(selectedAnswers);
-
-                // Update session
-                const xhr = new XMLHttpRequest();
-                xhr.open("POST", "update_session.php", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                //KEPT FOR DEVELOPMENT
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        console.log("Session updated successfully");
-                    }
-                };
-                // JSON stringify is decoded in update_session.php
-                xhr.send(`questionid={{questionid}}&answervalue=${JSON.stringify(selectedAnswers)}`);
-
-            });
-        });
-
-    })
-</script>
 <div class="main-container">
   {{> mod_livequiz/question_section}} {{! question_section import - Context remains the same}}
   {{> mod_livequiz/nav_bar_section}} {{! nav_bar section import - Context remains the same}}
