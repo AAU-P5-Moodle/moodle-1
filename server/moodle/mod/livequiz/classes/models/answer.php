@@ -18,7 +18,6 @@ namespace mod_livequiz\models;
 
 use dml_exception;
 use Exception;
-use function PHPUnit\Framework\throwException;
 
 /**
  * Class answer.
@@ -71,7 +70,7 @@ class answer {
      * @return int
      * @throws dml_exception
      */
-    public static function submit_answer(answer $answer): int {
+    public static function insert_answer(answer $answer): int {
         global $DB;
 
         $answerdata = [
@@ -103,12 +102,30 @@ class answer {
     }
 
     /**
+     * Update an answer, given its id.
+     *
+     * @throws dml_exception
+     */
+    public function update_answer(): void {
+        global $DB;
+
+        $answerdata = [
+            'id' => $this->id,
+            'correct' => $this->correct,
+            'description' => $this->description,
+            'explanation' => $this->explanation,
+        ];
+
+        $DB->update_record('livequiz_answers', $answerdata);
+    }
+
+    /**
      * Gets the ID of the answer.
      *
      * @return int
      */
     public function get_id(): int {
-        return $this->id;
+        return $this->id ?? 0;
     }
 
     /**
@@ -145,5 +162,32 @@ class answer {
      */
     private function set_id(int $id): void {
         $this->id = $id;
+    }
+
+    /**
+     * Sets the correct status of the answer.
+     *
+     * @param int $correct
+     */
+    public function set_correct(int $correct): void {
+        $this->correct = $correct;
+    }
+
+    /**
+     * Sets the description of the answer.
+     *
+     * @param string $description
+     */
+    public function set_description(string $description): void {
+        $this->description = $description;
+    }
+
+    /**
+     * Sets the explanation of the answer.
+     *
+     * @param string $explanation
+     */
+    public function set_explanation(string $explanation): void {
+        $this->explanation = $explanation;
     }
 }
