@@ -22,6 +22,7 @@ use dml_transaction_exception;
 /**
  * 'Static' class, do not instantiate.
  * Displays the livequiz view page.
+ *
  * @package   mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -51,12 +52,11 @@ class questions_answers_relation {
     public static function get_answers_from_question(int $questionid): array {
         global $DB;
 
-        $answerrecords = $DB->get_records('livequiz_questions_answers', ['question_id' => $questionid], '', 'question_id');
-        $answerids = array_column($answerrecords, 'question_id');
+        $answerids = $DB->get_records('livequiz_questions_answers', ['question_id' => $questionid], '', 'answer_id');
         $answers = [];
 
         foreach ($answerids as $answerid) {
-            $answers[] = answer::get_answer_from_id($answerid);
+            $answers[] = answer::get_answer_from_id($answerid->answer_id);
         }
 
         return $answers;
