@@ -35,6 +35,13 @@ $functions = [
         'ajax'        => true,
         'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
     ],
+    'mod_livequiz_update_session' => [
+        'classname'   => 'mod_livequiz\external\update_session',
+        'description' => 'Update the session with currently checked answers in the live quiz module.',
+        'type'        => 'write',
+        'ajax'        => true,
+        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
 ];
 
 $services = [];
