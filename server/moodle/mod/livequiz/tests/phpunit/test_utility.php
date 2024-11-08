@@ -20,7 +20,6 @@ use advanced_testcase;
 use mod_livequiz\models\livequiz;
 use ReflectionClass;
 use ReflectionException;
-use stdClass;
 
 /**
  * Utility functions for tests of the livequiz.
@@ -54,7 +53,6 @@ final class test_utility extends advanced_testcase {
     ): livequiz {
         $class = new ReflectionClass(livequiz::class);
         $constructor = $class->getConstructor();
-        $constructor->setAccessible(true);
         $object = $class->newInstanceWithoutConstructor();
         return $constructor->invoke($object, $testid, $quiztitle, $courseid, $intro, $introformat, $timecreated, $timemodified);
     }
@@ -125,7 +123,7 @@ final class test_utility extends advanced_testcase {
     }
 
     /**
-     * Function that returns array of test data representing a question
+     * Function that returns array of test data representing an answer
      * @param int $id
      * @param string $description
      * @param string $explanation

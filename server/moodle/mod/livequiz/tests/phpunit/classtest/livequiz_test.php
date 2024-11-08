@@ -25,10 +25,8 @@
 namespace mod_livequiz;
 
 use advanced_testcase;
-use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use stdClass;
-use ReflectionClass;
 use ReflectionException;
 
 defined('MOODLE_INTERNAL') || die();
@@ -77,7 +75,7 @@ final class livequiz_test extends advanced_testcase {
 
         $mockquestions = [];
         foreach ($questions as $question) {
-            // Create a mock object for questions.
+            // Create a mock object for questions and defining which methods should be mocked.
             $mock = $this->getMockBuilder(question::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods(['prepare_for_template',
@@ -94,10 +92,10 @@ final class livequiz_test extends advanced_testcase {
             $mockdata->questiontimelimit = $question["timelimit"];
             $mockdata->questionexplanation = $question["explanation"];
 
-            // Define what the mock should return when the mocked functions are called.
-            $mock->expects($this->any())// Prepare_for_template can be called any number of times.
-                ->method('prepare_for_template')
-                ->willReturn($mockdata);
+            // Define what the mock should return when the mocked methods are called.
+            $mock->expects($this->any()) // Defines that the method can be called any number of times.
+                ->method('prepare_for_template') // Defines which method we are defining the mock for.
+                ->willReturn($mockdata); // Defines what should be returned when the mocked function is called.
 
             $mock->expects($this->any())
                 ->method('get_id')
@@ -190,7 +188,7 @@ final class livequiz_test extends advanced_testcase {
 
         $mockquestions = [];
         foreach ($questions as $question) {
-            // Create a mock object for questions.
+            // Create a mock object for questions and defining which methods should be mocked.
             $mock = $this->getMockBuilder(question::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods(['prepare_for_template',
@@ -216,10 +214,10 @@ final class livequiz_test extends advanced_testcase {
                     $data->answertype = 'checkbox';
                     return $data;
                 });
-
-            $mock->expects($this->any())
-                ->method('get_id')
-                ->willReturn($question["id"]);
+            // Define what the mock should return when the mocked methods are called.
+            $mock->expects($this->any()) // Defines that it can be called any number of times.
+                ->method('get_id') // Defines which method we are defining the mock for.
+                ->willReturn($question["id"]); // Defines what should be returned when the mocked function is called.
 
             $mock->expects($this->any())
                 ->method('get_title')
@@ -232,12 +230,15 @@ final class livequiz_test extends advanced_testcase {
             $mock->expects($this->any())
                 ->method('get_timelimit')
                 ->willReturn($question["timelimit"]);
+
             $mock->expects($this->any())
                 ->method('get_explanation')
                 ->willReturn($question["explanation"]);
+
             $mock->expects($this->any())
                 ->method('get_answers')
                 ->willReturn([]);
+
             $mockquestions[] = $mock;
         }
         $livequiz->add_questions($mockquestions);

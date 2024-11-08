@@ -65,10 +65,12 @@ final class question_test extends advanced_testcase {
     public function test_question_get_hasmultipleanswers_true(): void {
         $mockanswers = [];
         for ($x = 0; $x <= 3; $x++) {
+            // Create a mock object of the answer class.
             $mock = $this->getMockBuilder(answer::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods(['get_correct'])
                 ->getMock();
+            // Make the first 2 mock objects return 0 and the last 2 return 1.
             if ($x < 2) {
                 $mock->expects($this->any())
                     ->method('get_correct')
@@ -91,10 +93,12 @@ final class question_test extends advanced_testcase {
     public function test_question_get_hasmultipleanswers_false(): void {
         $mockanswers = [];
         for ($x = 0; $x <= 3; $x++) {
+            // Create a mock object of the answer class.
             $mock = $this->getMockBuilder(answer::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods(['get_correct'])
                 ->getMock();
+            // Make the first 3 mock objects return 0 and the last 1 return 1.
             if ($x < 3) {
                 $mock->expects($this->any())
                     ->method('get_correct')
@@ -114,6 +118,11 @@ final class question_test extends advanced_testcase {
      * Test of prepare_for_template for question class.
      * @covers       \mod_livequiz\models\question::prepare_for_template
      * @dataProvider dataprovider
+     * prepare__for_template() should return a stdClass object, data, for use in mustache templates
+     *  data should have the fields: questionid, questiontitle, questiondescription,
+     *  questiontimelimit, questionexplanation, answertype, answers[]
+     * The answer[] should hold the following fields: answerid, answerdescription,
+     *  answerexplanation, answercorrect
      * @throws ReflectionException
      */
     public function test_question_prepare_for_template(
@@ -132,7 +141,7 @@ final class question_test extends advanced_testcase {
 
         $mockanswers = [];
         foreach ($answers as $answer) {
-            // Create a mock object for questions.
+            // Create a mock object of the question class and defining which methods should be mocked.
             $mock = $this->getMockBuilder(answer::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods([
@@ -142,10 +151,10 @@ final class question_test extends advanced_testcase {
                     'get_explanation'])
                 ->getMock();
 
-            // Define what the mock should return when the mocked functions are called.
-            $mock->expects($this->any())
-                ->method('get_id')
-                ->willReturn($answer["id"]);
+            // Define what the mock should return when the mocked methods are called.
+            $mock->expects($this->any()) // Defines that the method can be called any number of times.
+                ->method('get_id') // Defines which method we are defining the mock for.
+                ->willReturn($answer["id"]); // Defines what should be returned when the mocked function is called.
 
             $mock->expects($this->any())
                 ->method('get_correct')
