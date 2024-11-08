@@ -114,4 +114,3 @@ try {
         'message' => 'Failed to save quiz: ' . $e->getMessage(),
     ]);
 }
-    
