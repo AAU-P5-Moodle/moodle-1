@@ -33,6 +33,8 @@ use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
 use mod_livequiz\models\quiz_questions_relation;
 use mod_livequiz\models\participation;
+use PhpXmlRpc\Exception;
+use function PHPUnit\Framework\throwException;
 
 /**
  * Class livequiz_services
@@ -129,6 +131,19 @@ class livequiz_services {
      * @throws dml_exception
      */
     public function submit_quiz(livequiz $livequiz): livequiz {
+        $questions = $livequiz->get_questions();
+
+        if (!count($questions)) {
+            throw new Exception("A Livequiz Must have atleast 1 Question");
+        }
+
+        foreach ($questions as $question) {
+            $answers = $question->get_answers();
+            if (!count($answers)) {
+                throw new Exception("A Livequiz Question must have at least 1 Answer");
+            }
+        }
+
         global $DB;
         $transaction = $DB->start_delegated_transaction();
         try {
@@ -155,10 +170,11 @@ class livequiz_services {
      */
     private function submit_questions(int $quizid, array $questions): void {
         foreach ($questions as $question) {
+            $answers = $question->get_answers();
             $questionid = question::submit_question($question);
 
             quiz_questions_relation::append_question_to_quiz($questionid, $quizid);
-            $this::submit_answers($questionid, $question->get_answers());
+            $this::submit_answers($questionid, $answers);
         }
     }
 
@@ -174,8 +190,6 @@ class livequiz_services {
             questions_answers_relation::append_answer_to_question($questionid, $answerid);
         }
     }
-
-
 
     /**
      * Gets questions with answers from the database.

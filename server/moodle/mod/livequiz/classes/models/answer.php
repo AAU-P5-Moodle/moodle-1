@@ -14,16 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Displays the livequiz view page.
- * @package   mod_livequiz
- * @copyright 2024 Software AAU
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace mod_livequiz\models;
 
 use dml_exception;
+use Exception;
+use function PHPUnit\Framework\throwException;
 
 /**
  * Class answer.
@@ -31,7 +26,7 @@ use dml_exception;
  * This class represents an answer in the LiveQuiz module.
  * It handles the creation, retrieval, and updates of answer associated with quiz questions.
  *
- * @package mod_livequiz\answer
+ * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -94,10 +89,14 @@ class answer {
      * @param int $id
      * @return mixed
      * @throws dml_exception
+     * @throws Exception
      */
     public static function get_answer_from_id(int $id): answer {
         global $DB;
         $answerdata = $DB->get_record('livequiz_answers', ['id' => $id]);
+        if (!$answerdata) {
+            throw new Exception("No answer found in answers table with id: " . $id);
+        }
         $answer = new answer($answerdata->correct, $answerdata->description, $answerdata->explanation);
         $answer->set_id($answerdata->id);
         return $answer;
