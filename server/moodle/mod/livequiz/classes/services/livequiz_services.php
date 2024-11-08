@@ -231,9 +231,9 @@ class livequiz_services {
         foreach ($answerids as $answerid) {
             // There is chance we are getting an answer that does not exist.
             try {
-                $answers[] = answer::get_answer_from_id($answerid->answer_id);
+                $answers[] = answer::get_answer_from_id($answerid);
             } catch (Exception $e) {
-                error_log('Could not get answer from id: ' . $answerid->answer_id);
+                error_log('Could not get answer from id: ' . $answerid);
             }
         }
         return $answers;

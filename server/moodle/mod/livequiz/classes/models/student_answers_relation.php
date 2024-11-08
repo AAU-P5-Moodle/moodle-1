@@ -40,9 +40,9 @@ class student_answers_relation {
      * @return void
      * @throws dml_exception
      */
-    public static function insert_student_answer_relation(int $studentid, int $answerid, int $participationid): void {
+    public static function insert_student_answer_relation(int $studentid, int $answerid, int $participationid): int {
         global $DB;
-        $DB->insert_record('livequiz_students_answers', [
+        return $DB->insert_record('livequiz_students_answers', [
             'student_id' => $studentid,
             'answer_id' => $answerid,
             'participation_id' => $participationid,
@@ -60,12 +60,13 @@ class student_answers_relation {
     public static function get_answersids_from_student_in_participation(int $studentid, int $participationid): array {
         global $DB;
 
-        $answerids = $DB->get_records(
+        $answerrecords = $DB->get_records(
             'livequiz_students_answers',
             ['student_id' => $studentid, 'participation_id' => $participationid],
             '',
             'answer_id'
         );
+        $answerids = array_column($answerrecords, 'answer_id');
         return $answerids;
     }
 }
