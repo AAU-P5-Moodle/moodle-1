@@ -82,13 +82,13 @@ class update_session extends \core_external\external_api {
         foreach ($decodeanswer as $key => $value) {
             $answers[] = $value;
         }
-        if (!isset($_SESSION['quiz_answers'])) {
+        if (!isset($_SESSION['quiz_answers'])) { // If the session variable is not set, set it to an empty array.
             $_SESSION['quiz_answers'] = [];
         }
-        $_SESSION['quiz_answers'][$questionid] = [
+        $_SESSION['quiz_answers'][$questionid] = [ // Update the session with the currently checked answers.
             'question_id' => $questionid,
             'answers' => $answers,
         ];
-        return isset($_SESSION['quiz_answers']);
+        return isset($_SESSION['quiz_answers']); // Return true if the session variable is set.
     }
 }
