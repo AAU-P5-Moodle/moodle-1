@@ -59,7 +59,7 @@ class quizcreator_renderable implements renderable, templatable {
         $this->savedquestionshtml = $savedquestionshtml;
         $this->filepickerhtml = $filepickerhtml;
         $this->scripts = [
-            new moodle_url('/mod/livequiz/amd/src/quizcreator.js')
+            new moodle_url('/mod/livequiz/amd/src/quizcreator.js'),
         ];
     }
 
