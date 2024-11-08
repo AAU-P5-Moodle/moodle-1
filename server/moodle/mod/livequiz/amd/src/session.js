@@ -29,9 +29,9 @@ export const init = async (quizid, questionid) => {
           selectedAnswers.push(input.value);
         }
       });
-    //KEPT FOR DEVELOPMENT
-    window.console.log(selectedAnswers);
-    update_session(questionid, selectedAnswers);
+        //KEPT FOR DEVELOPMENT
+        window.console.log(selectedAnswers);
+        update_session(questionid, JSON.stringify(selectedAnswers));
     });
   });
 

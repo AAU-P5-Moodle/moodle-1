@@ -18,6 +18,8 @@ namespace mod_livequiz\external;
 
 use core_external\external_function_parameters;
 use core_external\external_value;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
 use PhpParser\Node\Param;
 
 /**
@@ -32,18 +34,6 @@ use PhpParser\Node\Param;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class update_session extends \core_external\external_api {
-    private string $answervalue;
-    private int $questionid;
-
-    /**
-     * @var int $questionid The question id.
-     * @var string $answervalue The values of the answers in JSON format.
-     */
-    public function __construct($questionid, $answervalue) {
-        $this->questionid = $questionid;
-        $this->answervalue = $answervalue;
-    }
-   
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
@@ -51,7 +41,7 @@ class update_session extends \core_external\external_api {
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
             'questionid' => new external_value(PARAM_INT, 'questionid'),
-            'answervalue' => new external_value(PARAM_TEXT, 'answervalue'),
+            'answers' => new external_value(PARAM_TEXT, 'answers'),
         ]);
     }
 
@@ -59,41 +49,34 @@ class update_session extends \core_external\external_api {
      * Summary of execute
      * @param $questionid
      * @param $answervalue
-     * @return array
+     * @return bool
      * @throws \invalid_parameter_exception
      */
-    public static function execute($questionid, $answervalue): array {
+    public static function execute($questionid, $answervalue): bool {
         global $DB;
         self::validate_parameters(
             self::execute_parameters(),
-            ['questionid' => $questionid, 'answervalue' => $answervalue]
+            ['questionid' => $questionid, 'answers' => $answervalue]
         );
-        self::update_session($questionid, $answervalue);
-        return [
-            'questionid' => $questionid,
-            'answervalue' => $answervalue,
-        ];
+        return self::update_answers_in_session($questionid, $answervalue);
     }
 
     /**
      * Part of the webservice processing flow. Not called directly here,
      * but is in moodle's web service framework.
-     * @return array
+     * @return external_value
      */
-    public static function execute_returns(): array {
-        return [
-            new external_value(PARAM_INT, 'questionid'),
-            new external_value(PARAM_TEXT, 'answervalue'),
-        ];
+    public static function execute_returns(): external_value {
+        return new external_value(PARAM_BOOL, 'success');
     }
 
     /**
      * Update the session with the currently checked answers.
      * @param $questionid
      * @param $answervalue
-     * @return void
+     * @return bool
      */
-    public static function update_session($questionid, $answervalue): void {
+    public static function update_answers_in_session($questionid, $answervalue): bool {
         $answers = [];
         $decodeanswer = json_decode($answervalue, true);
         foreach ($decodeanswer as $key => $value) {
@@ -106,5 +89,6 @@ class update_session extends \core_external\external_api {
             'question_id' => $questionid,
             'answers' => $answers,
         ];
+        return isset($_SESSION['quiz_answers']);
     }
 }
