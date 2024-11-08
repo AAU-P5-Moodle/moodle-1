@@ -16,8 +16,6 @@
 
 namespace mod_livequiz\models;
 
-defined('MOODLE_INTERNAL') || die();
-
 use stdClass;
 
 /**

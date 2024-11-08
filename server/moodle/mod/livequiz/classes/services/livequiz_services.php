@@ -219,7 +219,5 @@ class livequiz_services {
         $participant->add_participation();
 
         return $participant;
-
     }
-
 }

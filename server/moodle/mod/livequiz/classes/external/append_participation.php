@@ -25,8 +25,10 @@ use core_external\external_value;
  * This class extends the core_external\external_api and is used to handle
  * the external API for appending participation in the live quiz module.
  *
- * @package    mod_livequiz
  * @return     external_function_parameters The parameters required for the execute function.
+ * @copyright 2024 Software AAU
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_livequiz
  */
 class append_participation extends \core_external\external_api {
     /**

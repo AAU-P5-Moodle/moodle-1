@@ -62,9 +62,18 @@ class readdemodata {
 
         // Prepare questions.
         foreach ($jsondata["questions"] as $question) {
-            $modelquestion = new question($question["title"], $question["description"], $question["timelimit"], $question["explanation"]);
+            $modelquestion = new question(
+                $question["title"],
+                $question["description"],
+                $question["timelimit"],
+                $question["explanation"]
+            );
             foreach ($question["answers"] as $answer) {
-                $modelanswer = new answer($answer["correct"],$answer["description"], $answer["explanation"]);
+                $modelanswer = new answer(
+                    $answer["correct"],
+                    $answer["description"],
+                    $answer["explanation"]
+                );
                 $modelquestion->add_answer($modelanswer);
             }
             $questions[] = $modelquestion;
