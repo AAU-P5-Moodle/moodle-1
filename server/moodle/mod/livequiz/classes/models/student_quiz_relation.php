@@ -28,7 +28,7 @@ use dml_transaction_exception;
  */
 class student_quiz_relation {
     /**
-     * Append an answer to a question, given its id
+     * Append a student to a quiz, given both their ids.
      *
      * @param int $questionid
      * @param int $answerid
@@ -36,7 +36,7 @@ class student_quiz_relation {
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function append_student_to_quiz(int $quizid, int $studentid): int {
+    public static function insert_student_quiz_relation(int $quizid, int $studentid): int {
         global $DB;
         return $DB->insert_record('livequiz_quiz_student', ['livequiz_id' => $quizid, 'student_id' => $studentid], true);
     }

@@ -226,13 +226,12 @@ class livequiz_services {
      * @return participation
      */
     public function new_participation(int $studentid, int $quizid): participation {
-        // Todo: Validate input data.
         // Add parcitipation using the model.
         global $DB;
         $transaction = $DB->start_delegated_transaction();
         $participation = new participation($studentid, $quizid);
         try {
-            $participation->set_id(student_quiz_relation::append_student_to_quiz($quizid, $studentid));
+            $participation->set_id(student_quiz_relation::insert_student_quiz_relation($quizid, $studentid));
 
             $transaction->allow_commit();
         } catch (dml_exception $e) {
