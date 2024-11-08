@@ -24,7 +24,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// Include necessary files
+// Include necessary files.
 require_once('../../../config.php');
 require_once('../form/createquizform.php');
 require_once('../hub/NavBar.php');
@@ -65,12 +65,12 @@ try {
     echo $OUTPUT->notification('Failed to retrieve quiz data: ' . $e->getMessage(), 'notifyproblem');
 }
 
-// Generate HTML for form and saved questions
-$form_html = $mform->render();  // Assuming you render the form here
-$saved_questions_html = '';    // Add logic to render saved questions if any
-$file_picker_html = '';        // You may generate the HTML for file picker here
+// Generate HTML for form and saved questions.
+$form_html = $mform->render();  // Assuming you render the form here.
+$saved_questions_html = '';    // Add logic to render saved questions if any.
+$file_picker_html = '';        // You may generate the HTML for file picker here.
 
-// Create and render the page
+// Create and render the page.
 $quizcreator = new \mod_livequiz\output\quizcreator_renderable($quizdata, $form_html, $saved_questions_html, $file_picker_html);
 echo $OUTPUT->render($quizcreator);
 
