@@ -66,12 +66,12 @@ try {
 }
 
 // Generate HTML for form and saved questions.
-$form_html = $mform->render();  // Assuming you render the form here.
-$saved_questions_html = '';    // Add logic to render saved questions if any.
-$file_picker_html = '';        // You may generate the HTML for file picker here.
+$formhtml = $mform->render();  // Assuming you render the form here.
+$savedquestionshtml = '';    // Add logic to render saved questions if any.
+$filepickerhtml = '';        // You may generate the HTML for file picker here.
 
 // Create and render the page.
-$quizcreator = new \mod_livequiz\output\quizcreator_renderable($quizdata, $form_html, $saved_questions_html, $file_picker_html);
+$quizcreator = new \mod_livequiz\output\quizcreator_renderable($quizdata, $formhtml, $savedquestionshtml, $filepickerhtml);
 echo $OUTPUT->render($quizcreator);
 
 // Output page footer.
