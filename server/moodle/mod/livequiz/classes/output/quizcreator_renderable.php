@@ -29,19 +29,18 @@ use templatable;
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class quizcreator_renderable implements renderable, templatable {
     /** @var array $quizData Data related to the quiz. */
     public $quizdata;
 
     /** @var string $formHtml HTML content for the quiz form. */
-    public $formHtml;
+    public $formhtml;
 
     /** @var string $savedQuestionsHtml HTML content for the saved questions. */
-    public $savedQuestionsHtml;
+    public $savedquestionshtml;
 
     /** @var string $filePickerHtml HTML content for the file picker. */
-    public $filePickerHtml;
+    public $filepickerhtml;
 
     /** @var array $scripts Array of script URLs. */
     public $scripts;
@@ -54,11 +53,11 @@ class quizcreator_renderable implements renderable, templatable {
      * @param string $savedQuestionsHtml HTML content for the saved questions.
      * @param string $filePickerHtml HTML content for the file picker.
      */
-    public function __construct($quizData, $formHtml, $savedQuestionsHtml, $filePickerHtml) {
-        $this->quizData = $quizData;
-        $this->formHtml = $formHtml;
-        $this->savedQuestionsHtml = $savedQuestionsHtml;
-        $this->filePickerHtml = $filePickerHtml;
+    public function __construct($quizdata, $formhtml, $savedquestionshtml, $filepickerhtml) {
+        $this->quizdata = $quizdata;
+        $this->formhtml = $formhtml;
+        $this->savedquestionshtml = $savedquestionshtml;
+        $this->filepickerhtml = $filepickerhtml;
         $this->scripts = [
             new moodle_url('/mod/livequiz/amd/src/quizcreator.js')
         ];
@@ -72,10 +71,10 @@ class quizcreator_renderable implements renderable, templatable {
      */
     public function export_for_template(\renderer_base $output) {
         return (object)[
-            'quizData' => $this->quizData,
-            'formHtml' => $this->formHtml,
-            'savedQuestionsHtml' => $this->savedQuestionsHtml,
-            'filePickerHtml' => $this->filePickerHtml,
+            'quizdata' => $this->quizdata,
+            'formhtml' => $this->formhtml,
+            'savedquestionshtml' => $this->savedquestionshtml,
+            'filepickerhtml' => $this->filepickerhtml,
             'scripts' => $this->scripts,
         ];
     }
