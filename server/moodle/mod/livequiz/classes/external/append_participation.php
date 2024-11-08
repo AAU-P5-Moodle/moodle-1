@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_livequiz\external;
 
@@ -19,7 +33,7 @@ class append_participation extends \core_external\external_api {
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
      */
-    public static function execute_parameters()  {
+    public static function execute_parameters() {
         return new external_function_parameters([
             'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
         ]);
@@ -31,7 +45,7 @@ class append_participation extends \core_external\external_api {
      */
     public static function execute($quizid) {
         global $DB;
-        $params = self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid]);
+        self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid]);
         return $quizid;
     }
     /**
