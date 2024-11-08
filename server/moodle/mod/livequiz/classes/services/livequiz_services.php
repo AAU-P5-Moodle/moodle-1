@@ -32,6 +32,8 @@ use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
 use mod_livequiz\models\quiz_questions_relation;
+use PhpXmlRpc\Exception;
+use function PHPUnit\Framework\throwException;
 
 /**
  * Class livequiz_services
@@ -82,43 +84,6 @@ class livequiz_services {
     }
 
     /**
-     * Constructs a new question object and appends it to the livequiz object.
-     *
-     * @param livequiz $livequiz
-     * @param string $title
-     * @param string $description
-     * @param int $timelimit
-     * @param string $explanation
-     * @return question
-     */
-    public function new_question(
-        livequiz $livequiz,
-        string $title,
-        string $description,
-        int $timelimit,
-        string $explanation
-    ): question {
-        $questiondata = new question($title, $description, $timelimit, $explanation);
-
-        $livequiz->add_questions([$questiondata]);
-        return new question($title, $description, $timelimit, $explanation);
-    }
-
-    /**
-     * Constructs a new answer object and appends it to the question object.
-     *
-     * @param question $question
-     * @param int $correct
-     * @param string $description
-     * @param string $explanation
-     * @return answer
-     */
-    public function new_answer(question $question, int $correct, string $description, string $explanation): answer {
-        $question->add_answer(new answer($correct, $description, $explanation));
-        return new answer($correct, $description, $explanation);
-    }
-
-    /**
      *  This method stores quiz data in the database.
      *  Before calling this method, none of the quiz data is safe.
      *  Please make sure that the quiz object is properly populated before using.
@@ -128,13 +93,25 @@ class livequiz_services {
      * @throws dml_exception
      */
     public function submit_quiz(livequiz $livequiz): livequiz {
+        $questions = $livequiz->get_questions();
+
+        if (!count($questions)) {
+            throw new Exception("A Livequiz Must have atleast 1 Question");
+        }
+
+        foreach ($questions as $question) {
+            $answers = $question->get_answers();
+            if (!count($answers)) {
+                throw new Exception("A Livequiz Question must have at least 1 Answer");
+            }
+        }
+
         global $DB;
         $transaction = $DB->start_delegated_transaction();
         try {
             $livequiz->update_quiz();
 
             $quizid = $livequiz->get_id();
-            $questions = $livequiz->get_questions();
 
             $this->submit_questions($quizid, $questions);
 
@@ -154,10 +131,11 @@ class livequiz_services {
      */
     private function submit_questions(int $quizid, array $questions): void {
         foreach ($questions as $question) {
+            $answers = $question->get_answers();
             $questionid = question::submit_question($question);
 
             quiz_questions_relation::append_question_to_quiz($questionid, $quizid);
-            $this::submit_answers($questionid, $question->get_answers());
+            $this::submit_answers($questionid, $answers);
         }
     }
 
@@ -173,8 +151,6 @@ class livequiz_services {
             questions_answers_relation::append_answer_to_question($questionid, $answerid);
         }
     }
-
-
 
     /**
      * Gets questions with answers from the database.

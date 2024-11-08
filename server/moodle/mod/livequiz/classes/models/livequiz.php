@@ -232,7 +232,7 @@ class livequiz {
      *
      * @param question $question
      */
-    private function add_question(question $question): void {
+    public function add_question(question $question): void {
         $this->questions[] = $question;
     }
 
