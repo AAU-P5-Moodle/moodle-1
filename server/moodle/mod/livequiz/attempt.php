@@ -31,27 +31,27 @@ global $PAGE, $OUTPUT, $testdataset;
 
 // Get submitted parameters.
 $cmid = required_param('cmid', PARAM_INT); // Course module id.
-$questionid = optional_param('questionid', 0, PARAM_INT); // Question id, default to 0 if not provided.
+$questionindex = optional_param('questionindex', 0, PARAM_INT); // Question id, default to 0 if not provided.
 [$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
-// Read demo data - REMOVE WHEN PUSHING TO STAGING
+// Read demo data - REMOVE WHEN PUSHING TO STAGING.
 $livequizservice = livequiz_services::get_singleton_service_instance();
 $currentquiz = $livequizservice->get_livequiz_instance($instance->id);
-if (empty($currentquiz->get_questions())) {
+if (empty($currentquiz->get_questions())) { // If the quiz has no questions, insert demo data.
     $demodatareader = new \mod_livequiz\readdemodata();
     $demoquiz = $demodatareader->insertdemodata($currentquiz);
 } else {
     $demoquiz = $currentquiz;
 }
 
-// Params for storage in session.
-$nextquestionid = optional_param('nextquestionid', 0, PARAM_INT);
-$quizid = optional_param('quizid', 0, PARAM_INT);
-$numberofquestions = optional_param('numberofquestions', 0, PARAM_INT);
-$questiontitle = optional_param('questiontitle', 0, PARAM_TEXT);
-
-//session_start();
+// Insert demo data if the site is running in behat mode.
+if (defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING) {
+    if (empty($currentquiz->get_questions())) { // The quiz should only be empty the first time attemp.php is called.
+        $demodatareader = new \mod_livequiz\readdemodata();
+        $demoquiz = $demodatareader->insertdemodata($currentquiz);
+    }
+}
 
 if (!$cm) { // If course module is not set, throw an exception.
     throw new moodle_exception('invalidcoursemodule', 'error');
@@ -63,34 +63,27 @@ if ($cm->course !== $course->id) { // Check if the course module matches the cou
 require_login($course, false, $cm);
 $PAGE->set_cacheable(false);
 
-//session_start();
-/*
+if (!isset($_SESSION['completed'])) { // If the session variable is not set, set it to false.
+    $_SESSION['completed'] = false;
+}
 if ($_SESSION['completed']) { // If the quiz has been submitted, the user is not allowed to go back.
     $text = 'You are not allowed to go back after submitting the quiz';
     echo $text;
     die();
 }
- */
+
 $context = context_module::instance($cmid); // Get the context.
 
 $PAGE->set_context($context); // Make sure to set the page context.
 
-if ($quizid){ // If quizid is set, answers have been stored for the question, thus next question is to be displayed.
-    $PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $nextquestionid]));
-}
-else { // If quizid is not set, the current question is to be displayed.
-    $PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questionid' => $questionid]));
-}
+// Set up the page.
+$PAGE->set_url(new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $cmid, 'questioniindex' => $questionindex]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
-
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionid);
-
-//Calling Javascript modules from .
-//$PAGE->requires->js_call_amd('mod_livequiz/participation', 'init', [$quizid]);
+$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionindex);
 
 // Output.
 echo $OUTPUT->header();

@@ -180,6 +180,15 @@ class livequiz {
     }
 
     /**
+     * Gets the introduction format for the livequiz.
+     *
+     * @return int
+     */
+    public function get_introformat(): int {
+        return $this->introformat;
+    }
+
+    /**
      * Gets the time the livequiz was created.
      *
      * @return int
@@ -211,7 +220,7 @@ class livequiz {
      * @param int $index the index of the question
      * @return question
      */
-    public function get_question_by_index(int $index) {
+    public function get_question_by_index(int $index): question {
         return $this->questions[$index];
     }
 
@@ -245,7 +254,7 @@ class livequiz {
         $this->questions[] = $question;
     }
     /**
-     * Prepares the template date for mustache.
+     * Prepares the template data for mustache.
      * @return stdClass
      */
     public function prepare_for_template(): stdClass {
@@ -255,7 +264,7 @@ class livequiz {
         $data->quizid = $this->id;
         $data->quiztitle = $this->get_name();
         $data->numberofquestions = count($this->get_questions());
-        
+
         // Prepare questions.
         $rawquestions = $this->questions;
 
@@ -267,7 +276,8 @@ class livequiz {
     }
 
     /**
-     * Prepares the template date for mustache.
+     * Prepares the template data for mustache.
+     * @param int $questionindex
      * @return stdClass
      */
     public function prepare_question_for_template(int $questionindex): stdClass {
@@ -276,8 +286,10 @@ class livequiz {
         $data->quizid = $this->id;
         $data->quiztitle = $this->name;
         $data->numberofquestions = count($this->get_questions());
-        $question = $this->get_question_by_index($questionindex);
-        $data = $question->prepare_for_template($data);
+        if ($data->numberofquestions > 0) {
+            $question = $this->get_question_by_index($questionindex);
+            $data = $question->prepare_for_template($data);
+        }
         return $data;
     }
 }

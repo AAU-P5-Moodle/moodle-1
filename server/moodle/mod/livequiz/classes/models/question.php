@@ -203,10 +203,10 @@ class question {
     }
 
     /**
-     * Getter for question hasmultipleanswers
+     * Getter for question hasmultiplecorrectanswers
      * @return bool
      */
-    public function get_hasmultipleanswers(): bool {
+    public function get_hasmultiplecorrectanswers(): bool {
         // This is a simple check to see if the question has multiple correct answers.
         $numcorrect = 0;
         $hasmultipleanswers = false;
@@ -223,6 +223,7 @@ class question {
 
     /**
      * Prepares the template data for mustache.
+     * @param stdClass $data
      * @return stdClass
      */
     public function prepare_for_template(stdClass $data): stdClass {
@@ -241,7 +242,7 @@ class question {
                 'answercorrect' => $answer->get_correct(),
             ];
         }
-        if ($this->get_hasmultipleanswers()) {
+        if ($this->get_hasmultiplecorrectanswers()) {
             $data->answertype = 'checkbox';
         } else {
             $data->answertype = 'radio';
