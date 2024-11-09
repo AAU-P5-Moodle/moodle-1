@@ -319,4 +319,50 @@ final class livequiz_service_test extends \advanced_testcase {
         self::assertEquals($questions[1], $finalquestions[1]);
         self::assertEquals($questions[2], $finalquestions[2]);
     }
+
+    /**
+     * Test getting answers from a student in participation.
+     *
+     * @covers \mod_livequiz\services\livequiz_services::get_answers_from_stundent_in_participation
+     * @return void
+     */
+    public function test_get_answers_from_stundent_in_participation(): void {
+        global $DB;
+        $service = livequiz_services::get_singleton_service_instance();
+        $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
+        $question = $livequiz->get_questions()[0];
+        $answers = $question->get_answers();
+        $answercount = count($answers);
+
+        $answerswithid = [];
+
+        // Insert answers into db.
+        for ($i = 0; $i < $answercount; $i++) {
+            $answerid = answer::insert_answer($answers[$i]);
+            $answerswithid[] = answer::get_answer_from_id($answerid); // This ensures id's are set since set_id() is private.
+            // Simulate answers where studentid = 1 ; participationid = 1.
+            $DB->insert_record('livequiz_students_answers', [
+                'student_id' => 1,
+                'answer_id' => $answerid,
+                'participation_id' => 1,
+            ]);
+        }
+        // Fetch all answers for studentid = 1 ; participationid = 1.
+        $returnedanswers = $service->get_answers_from_stundent_in_participation(1, 1);
+
+        $this->assertEquals($answerswithid[0]->get_id(), $returnedanswers[0]->get_id());
+        $this->assertEquals($answerswithid[0]->get_correct(), $returnedanswers[0]->get_correct());
+        $this->assertEquals($answerswithid[0]->get_description(), $returnedanswers[0]->get_description());
+        $this->assertEquals($answerswithid[0]->get_explanation(), $returnedanswers[0]->get_explanation());
+
+        $this->assertEquals($answerswithid[1]->get_id(), $returnedanswers[1]->get_id());
+        $this->assertEquals($answerswithid[1]->get_correct(), $returnedanswers[1]->get_correct());
+        $this->assertEquals($answerswithid[1]->get_description(), $returnedanswers[1]->get_description());
+        $this->assertEquals($answerswithid[1]->get_explanation(), $returnedanswers[1]->get_explanation());
+
+        $this->assertEquals($answerswithid[2]->get_id(), $returnedanswers[2]->get_id());
+        $this->assertEquals($answerswithid[2]->get_correct(), $returnedanswers[2]->get_correct());
+        $this->assertEquals($answerswithid[2]->get_description(), $returnedanswers[2]->get_description());
+        $this->assertEquals($answerswithid[2]->get_explanation(), $returnedanswers[2]->get_explanation());
+    }
 }
