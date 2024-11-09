@@ -67,7 +67,6 @@ final class student_answers_relation_test extends \advanced_testcase {
     }
     /**
      * Test of insert_student_answer_relation
-     * It is impossible to assert the actual table id, since it changes every time.
      * @covers \mod_livequiz\models\student_answers_relation::insert_student_answer_relation
      * @return void
      */
@@ -102,14 +101,14 @@ final class student_answers_relation_test extends \advanced_testcase {
             );
         }
 
-        // Get all answers for a student in a participation.
-        $answers = student_answers_relation::get_answersids_from_student_in_participation(
+        // Get all answerids for a student in a participation.
+        $answerids = student_answers_relation::get_answersids_from_student_in_participation(
             $studentanswerdata['studentid'],
             $studentanswerdata['participationid']
         );
         // For each answer ensure we are fetching the same id's we inserted.
         for ($i = 0; $i < 10; $i++) {
-            $this->assertEquals($answers[$i], $answerdata[$i]->get_id());
+            $this->assertEquals($answerids[$i], $answerdata[$i]->get_id());
         }
     }
 }

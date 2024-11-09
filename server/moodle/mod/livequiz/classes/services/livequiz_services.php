@@ -229,7 +229,7 @@ class livequiz_services {
         $answers = [];
         $answerids = student_answers_relation::get_answersids_from_student_in_participation($studentid, $participationid);
         foreach ($answerids as $answerid) {
-            // There is chance we are getting an answer that does not exist.
+            // There is chance we are searching for an answer that does not exist.
             try {
                 $answers[] = answer::get_answer_from_id($answerid);
             } catch (Exception $e) {
