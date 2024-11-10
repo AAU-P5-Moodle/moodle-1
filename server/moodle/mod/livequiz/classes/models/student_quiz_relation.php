@@ -20,23 +20,43 @@ use dml_exception;
 use dml_transaction_exception;
 
 /**
- * 'Static' class, do not instantiate.
- * Displays the livequiz view page.
+ * This class is responsible for handling the relationship between students and quizzes.
  * @package   mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class student_quiz_relation {
     /**
-     * Append an answer to a question, given its id
+     * Append a student-quiz relation given both their ids.
      *
      * @param int $questionid
-     * @param int $answerid
+     * @param int $studentid
      * @return void
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function test_function(): string {
-        return "Hello World!";
+    public static function insert_student_quiz_relation(int $quizid, int $studentid): int {
+        global $DB;
+        return $DB->insert_record('livequiz_quiz_student', ['livequiz_id' => $quizid, 'student_id' => $studentid], true);
+    }
+    /**
+     * Get all participation the student has made for a quiz
+     * @param int $quizid
+     * @return void
+     */
+    public static function get_all_student_participation_for_quiz(int $quizid, int $studentid): array {
+        global $DB;
+        $participationrecords =
+            $DB->get_records(
+                'livequiz_quiz_student',
+                ['livequiz_id' => $quizid, 'student_id' => $studentid],
+                'id DESC',
+                '*'
+            );
+        $participations = [];
+        foreach ($participationrecords as $participation) {
+            $participations[] = new participation($participation->student_id, $participation->livequiz_id);
+        }
+        return $participations;
     }
 }

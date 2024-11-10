@@ -27,7 +27,14 @@ use stdClass;
  * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */class Participation {
+ */
+class participation {
+    /**
+     * Participation id
+     * @var $id
+     */
+    private $id;
+
     /**
      * @var $studentid
      */
@@ -65,5 +72,51 @@ use stdClass;
     public static function get_participation_by_studentid($studentid) {
         global $DB;
         return $DB->get_record('participation', ['studentid' => $studentid]);
+    }
+
+    /**
+     * get_id
+     * @return int
+     */
+    public function get_id(): int {
+        return $this->id;
+    }
+    /**
+     * get_studentid
+     * @return int
+     */
+    public function get_studentid(): int {
+        return $this->studentid;
+    }
+    /**
+     * get_livequizid
+     * @return int
+     */
+    public function get_livequizid(): int {
+        return $this->livequizid;
+    }
+    /**
+     * set_id
+     * @param int $id
+     * @return void
+     */
+    public function set_id(int $id): void {
+        $this->id = $id;
+    }
+    /**
+     * set_studentid
+     * @param int $studentid
+     * @return void
+     */
+    public function set_studentid(int $studentid): void {
+        $this->studentid = $studentid;
+    }
+    /**
+     * set_livequizid
+     * @param int $livequizid
+     * @return void
+     */
+    public function set_livequizid(int $livequizid): void {
+        $this->livequizid = $livequizid;
     }
 }

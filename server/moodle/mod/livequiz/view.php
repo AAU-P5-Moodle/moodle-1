@@ -25,6 +25,8 @@ require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 require_once('readdemodata.php');
 
+use mod_livequiz\services\livequiz_services;
+
 global $OUTPUT, $PAGE, $DB;
 
 $cmid = required_param('id', PARAM_INT); // Course module ID.

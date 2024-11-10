@@ -30,6 +30,8 @@ use mod_livequiz\models\livequiz;
 use mod_livequiz\services\livequiz_services;
 use mod_livequiz\models\question;
 use mod_livequiz\models\answer;
+use mod_livequiz\models\participation;
+use mod_livequiz\models\student_quiz_relation;
 use PhpXmlRpc\Exception;
 
 /**
@@ -132,6 +134,17 @@ final class livequiz_service_test extends \advanced_testcase {
     }
 
     /**
+     * Create participation test data.
+     * @return array
+     */
+    protected function create_participation_data_for_test(): array {
+        return  $participationdata = [
+            'studentid' => 2,
+            'quizid' => 1,
+        ];
+    }
+
+    /**
      * Set up the test environment.
      */
     protected function setUp(): void {
@@ -168,7 +181,6 @@ final class livequiz_service_test extends \advanced_testcase {
         $explanation = "I don't know.";
 
         $question = new question($title, $description, $timelimit, $explanation);
-
         self::assertInstanceOf(question::class, $question);
         self::assertEqualsIgnoringCase($title, $question->get_title());
         self::assertEqualsIgnoringCase($description, $question->get_description());
@@ -364,5 +376,21 @@ final class livequiz_service_test extends \advanced_testcase {
         $this->assertEquals($answerswithid[2]->get_correct(), $returnedanswers[2]->get_correct());
         $this->assertEquals($answerswithid[2]->get_description(), $returnedanswers[2]->get_description());
         $this->assertEquals($answerswithid[2]->get_explanation(), $returnedanswers[2]->get_explanation());
+    }
+    /**
+     * Test of new_participation
+     * @covers \mod_livequiz\services\livequiz_services::new_participation
+     */
+    public function test_new_participation(): void {
+        $participationdata = $this->create_participation_data_for_test();
+        $service = livequiz_services::get_singleton_service_instance();
+
+        $actualstudentid = $participationdata['studentid'];
+        $acutalquizid = $participationdata['quizid'];
+
+        $participation = $service->new_participation($actualstudentid, $acutalquizid);
+        $this->assertInstanceOf(participation::class, $participation);
+        $this->assertEquals($participation->get_studentid(), $actualstudentid);
+        $this->assertEquals($participation->get_livequizid(), $acutalquizid);
     }
 }
