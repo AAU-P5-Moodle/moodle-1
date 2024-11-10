@@ -253,6 +253,7 @@ class livequiz {
     public function add_question(question $question): void {
         $this->questions[] = $question;
     }
+
     /**
      * Prepares the template data for mustache.
      * @return stdClass
@@ -291,5 +292,15 @@ class livequiz {
             $data = $question->prepare_for_template($data);
         }
         return $data;
+    }
+
+
+    /**
+     *
+     * Sets questions for the livequiz.
+     * @param array $questions
+     */
+    public function set_questions(array $questions): void {
+        $this->questions = $questions;
     }
 }

@@ -86,7 +86,7 @@ class question {
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function submit_question($question): int {
+    public static function insert_question($question): int {
         global $DB;
         $questiondata = [
                 'title' => $question->title,
@@ -99,7 +99,7 @@ class question {
     }
 
     /**
-     * Gets a question instance
+     * Gets a question instance.
      *
      * @param $id
      * @return question
@@ -119,12 +119,31 @@ class question {
     }
 
     /**
+     * Updates a question in the database.
+     *
+     * @throws dml_exception
+     * @throws dml_transaction_exception
+     * @return void
+     */
+    public function update_question(): void {
+        global $DB;
+        $questiondata = [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'timelimit' => $this->timelimit,
+            'explanation' => $this->explanation,
+        ];
+        $DB->update_record('livequiz_questions', $questiondata);
+    }
+
+    /**
      * Gets the ID of the question.
      *
-     * @return int
+     * @return int|0 // Returns the ID of the question, if it has one. 0 if it does not.
      */
     public function get_id(): int {
-        return $this->id;
+        return $this->id ?? 0;
     }
 
     /**
@@ -248,5 +267,40 @@ class question {
             $data->answertype = 'radio';
         }
         return $data;
+    }
+    /**
+     * Sets the title of the question.
+     *
+     * @param string $title The title of the question.
+     */
+    public function set_title(string $title): void {
+        $this->title = $title;
+    }
+
+    /**
+     * Sets the description of the question.
+     *
+     * @param string $description The description of the question.
+     */
+    public function set_description(string $description): void {
+        $this->description = $description;
+    }
+
+    /**
+     * Sets the time limit of the question.
+     *
+     * @param int $timelimit The time limit of the question.
+     */
+    public function set_timelimit(int $timelimit): void {
+        $this->timelimit = $timelimit;
+    }
+
+    /**
+     * Sets the explanation for the question.
+     *
+     * @param string $explanation The explanation of the question.
+     */
+    public function set_explanation(string $explanation): void {
+        $this->explanation = $explanation;
     }
 }
