@@ -58,12 +58,18 @@ class participation {
      * Summary of add_participation
      * @return boolean
      */
-    public function add_participation() {
+    public function add_participation(): bool {
         global $DB;
         $record = new stdClass();
         $record->studentid = $this->studentid;
         $record->livequizid = $this->livequizid;
-        return $DB->insert_record('participation', $record);
+        $success = false;
+        try {
+            $success = $DB->insert_record('participation', $record);
+        } catch (\dml_exception $dmle) {
+            echo $dmle->getMessage();
+        }
+        return $success;
     }
     /**
      * Summary of get_participation_by_studentid

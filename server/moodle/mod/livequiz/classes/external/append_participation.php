@@ -45,14 +45,13 @@ class append_participation extends \core_external\external_api {
     }
     /**
      * Summary of execute
-     * @param mixed $quizid
-     * @param mixed $studentid
+     * @param int $quizid
+     * @param int  $studentid
      * @return boolean
      */
-    public static function execute($quizid, $studentid) {
+    public static function execute(int $quizid, int $studentid) {
         self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
         $participation = new participation($quizid, $studentid);
-         $participation->add_participation();
         return $participation->add_participation();
     }
     /**
