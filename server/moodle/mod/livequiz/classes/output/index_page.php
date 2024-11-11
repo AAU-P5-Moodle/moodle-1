@@ -53,8 +53,9 @@ class index_page implements renderable, templatable {
      * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
+        global $USER;
         $data = new stdClass();
-        $data->sometext = $this->sometext;
+        $data->studentid = $USER->id;
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
         return $data;
     }

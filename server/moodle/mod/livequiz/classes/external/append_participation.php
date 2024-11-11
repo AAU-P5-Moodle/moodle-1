@@ -18,6 +18,8 @@ namespace mod_livequiz\external;
 
 use core_external\external_function_parameters;
 use core_external\external_value;
+use core_search\document;
+use mod_livequiz\models\participation;
 
 /**
  * Class append_participation
@@ -38,17 +40,20 @@ class append_participation extends \core_external\external_api {
     public static function execute_parameters() {
         return new external_function_parameters([
             'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
+            'studentid' => new external_value(PARAM_INT, 'Student ID'),
         ]);
     }
     /**
      * Summary of execute
      * @param mixed $quizid
-     * @return void
+     * @param mixed $studentid
+     * @return boolean
      */
-    public static function execute($quizid) {
-        global $DB;
-        self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid]);
-        return $quizid;
+    public static function execute($quizid, $studentid) {
+        self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
+        $participation = new participation($quizid, $studentid);
+         $participation->add_participation();
+        return $participation->add_participation();
     }
     /**
      * Part of the webservice processing flow. Not called directly here,
@@ -56,6 +61,6 @@ class append_participation extends \core_external\external_api {
      * @return \external_function_parameters
      */
     public static function execute_returns(): external_value {
-        return new external_value(PARAM_INT, 'Quiz ID');
+        return new external_value(PARAM_BOOL, 'Is insertion of participation successfull or not');
     }
 }

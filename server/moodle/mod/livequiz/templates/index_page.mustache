@@ -29,6 +29,9 @@
     * fill in later
 
 }}
+{{#js}}
+    require(['mod_livequiz/session'], (module) => module.init({{quizid}}, {{questionid}}));
+{{/js}}
 <div class="main-container">
   <h1>index_page</h1>
   <p>{{sometext}}</p>

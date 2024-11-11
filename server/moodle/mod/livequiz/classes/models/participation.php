@@ -56,14 +56,14 @@ class participation {
     }
     /**
      * Summary of add_participation
-     * @return void
+     * @return boolean
      */
     public function add_participation() {
         global $DB;
         $record = new stdClass();
         $record->studentid = $this->studentid;
         $record->livequizid = $this->livequizid;
-        $DB->insert_record('participation', $record);
+        return $DB->insert_record('participation', $record);
     }
     /**
      * Summary of get_participation_by_studentid
