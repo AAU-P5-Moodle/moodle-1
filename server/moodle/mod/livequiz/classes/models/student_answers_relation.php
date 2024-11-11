@@ -69,4 +69,21 @@ class student_answers_relation {
         $answerids = array_column($answerrecords, 'answer_id');
         return $answerids;
     }
+
+    /**
+     * Check if an answer has any participations.
+     * Returns amount of participations.
+     *
+     * @param int $answerid
+     * @return int
+     * @throws dml_exception
+     */
+    public static function get_answer_participation_count(int $answerid): int {
+        global $DB;
+
+        return $DB->count_records(
+            'livequiz_students_answers',
+            ['answer_id' => $answerid]
+        );
+    }
 }

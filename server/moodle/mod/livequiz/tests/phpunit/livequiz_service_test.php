@@ -27,6 +27,7 @@ namespace mod_livequiz;
 
 use dml_exception;
 use mod_livequiz\models\livequiz;
+use mod_livequiz\models\student_answers_relation;
 use mod_livequiz\services\livequiz_services;
 use mod_livequiz\models\question;
 use mod_livequiz\models\answer;
@@ -325,6 +326,7 @@ final class livequiz_service_test extends \advanced_testcase {
      *
      * @covers \mod_livequiz\services\livequiz_services::get_answers_from_stundent_in_participation
      * @return void
+     * @throws dml_exception
      */
     public function test_get_answers_from_stundent_in_participation(): void {
         global $DB;
@@ -364,5 +366,71 @@ final class livequiz_service_test extends \advanced_testcase {
         $this->assertEquals($answerswithid[2]->get_correct(), $returnedanswers[2]->get_correct());
         $this->assertEquals($answerswithid[2]->get_description(), $returnedanswers[2]->get_description());
         $this->assertEquals($answerswithid[2]->get_explanation(), $returnedanswers[2]->get_explanation());
+    }
+
+    /**
+     * @throws dml_exception
+     * @throws Exception
+     */
+    public function test_delete_question() {
+        $service = livequiz_services::get_singleton_service_instance();
+        $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
+
+        $testquizquestions = $testquiz->get_questions();
+
+        $testquizsubmitted = $service->submit_quiz($testquiz);
+        $testquizsubmittedquestions = $testquizsubmitted->get_questions();
+
+        array_shift($testquizsubmittedquestions);
+        $testquizsubmitted->set_questions($testquizsubmittedquestions);
+
+        $testquizresubmitted = $service->submit_quiz($testquizsubmitted);
+        $testquizresubmittedquestions = $testquizsubmitted->get_questions();
+
+        // Assert that the amount of questions has changed.
+        $this->assertNotSameSize($testquizquestions, $testquizresubmittedquestions);
+        // Assert that the first two questions are question 2 and 3, since 1 was deleted.
+        $this->assertEquals('Test question 2', $testquizresubmittedquestions[0]->get_title());
+        $this->assertEquals('Where is north on a compass.', $testquizresubmittedquestions[0]->get_description());
+        $this->assertEquals(46, $testquizresubmittedquestions[0]->get_timelimit());
+        $this->assertEquals("You need to answer where north is.", $testquizresubmittedquestions[0]->get_explanation());
+
+        $this->assertEquals('Test question 3', $testquizresubmittedquestions[1]->get_title());
+        $this->assertEquals('Why is compressed air important for driving a truck.', $testquizresubmittedquestions[1]->get_description());
+        $this->assertEquals(100, $testquizresubmittedquestions[1]->get_timelimit());
+        $this->assertEquals("Compressed air is essential for driving a truck, but why?", $testquizresubmittedquestions[1]->get_explanation());
+    }
+
+    /**
+     * @throws dml_exception
+     * @throws Exception
+     */
+    public function test_delete_question_throws_if_relation_exist()
+    {
+        $service = livequiz_services::get_singleton_service_instance();
+        $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
+
+        $testquizsubmitted = $service->submit_quiz($testquiz);
+        $testquizsubmittedquestions = $testquizsubmitted->get_questions();
+        $studentanswertestdata = [
+            'studentid' => 1,
+            'participationid' => 1,
+            'answerid' => $testquizsubmittedquestions[0]->get_answers()[0]->get_id()
+        ];
+
+        student_answers_relation::insert_student_answer_relation(
+            $studentanswertestdata['studentid'],
+            $studentanswertestdata['answerid'],
+            $studentanswertestdata['participationid']
+        );
+
+        array_shift($testquizsubmittedquestions);
+        $testquizsubmitted->set_questions($testquizsubmittedquestions);
+
+        $this->expectException(dml_exception::class);
+        $this->expectExceptionMessage('error/Cannot delete answer with participations');
+
+        $service->submit_quiz($testquizsubmitted);
+        $testquizresubmittedquestions = $testquizsubmitted->get_questions();
     }
 }
