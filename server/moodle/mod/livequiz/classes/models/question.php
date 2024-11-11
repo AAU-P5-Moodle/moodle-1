@@ -208,17 +208,18 @@ class question {
      */
     public function get_hasmultiplecorrectanswers(): bool {
         // This is a simple check to see if the question has multiple correct answers.
-        $numcorrect = 0;
-        $hasmultipleanswers = false;
-        foreach ($this->answers as $answer) {
-            if ($answer->get_correct()) {
-                $numcorrect++;
+       $numcorrect = 0;
+
+    foreach ($this->answers as $answer) {
+        if ($answer->get_correct()) {
+            $numcorrect++;
+            if ($numcorrect > 1) {
+                return true;
             }
         }
-        if ($numcorrect > 1) {
-            $hasmultipleanswers = true;
-        }
-        return $hasmultipleanswers;
+    }
+
+    return false;
     }
 
     /**
