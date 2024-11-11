@@ -235,7 +235,7 @@ class livequiz_services {
      * @return answer[] The list of answers.
      * @throws dml_exception
      */
-    public function get_answers_from_stundent_in_participation(int $studentid, int $participationid): array {
+    public function get_answers_from_student_in_participation(int $studentid, int $participationid): array {
         $answers = [];
         $answerids = student_answers_relation::get_answersids_from_student_in_participation($studentid, $participationid);
         foreach ($answerids as $answerid) {

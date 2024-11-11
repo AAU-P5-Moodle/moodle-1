@@ -324,7 +324,7 @@ final class livequiz_service_test extends \advanced_testcase {
     /**
      * Test getting answers from a student in participation.
      *
-     * @covers \mod_livequiz\services\livequiz_services::get_answers_from_stundent_in_participation
+     * @covers \mod_livequiz\services\livequiz_services::get_answers_from_student_in_participation
      * @return void
      * @throws dml_exception
      */
@@ -350,7 +350,7 @@ final class livequiz_service_test extends \advanced_testcase {
             ]);
         }
         // Fetch all answers for studentid = 1 ; participationid = 1.
-        $returnedanswers = $service->get_answers_from_stundent_in_participation(1, 1);
+        $returnedanswers = $service->get_answers_from_student_in_participation(1, 1);
 
         $this->assertEquals($answerswithid[0]->get_id(), $returnedanswers[0]->get_id());
         $this->assertEquals($answerswithid[0]->get_correct(), $returnedanswers[0]->get_correct());
