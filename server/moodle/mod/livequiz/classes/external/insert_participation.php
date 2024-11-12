@@ -18,12 +18,11 @@ namespace mod_livequiz\external;
 
 use core_external\external_function_parameters;
 use core_external\external_value;
-use core_search\document;
-use mod_livequiz\models\participation;
+use dml_exception;
 use mod_livequiz\services\livequiz_services;
 
 /**
- * Class append_participation
+ * Class insert_participation
  *
  * This class extends the core_external\external_api and is used to handle
  * the external API for appending participation in the live quiz module.
@@ -33,7 +32,7 @@ use mod_livequiz\services\livequiz_services;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class append_participation extends \core_external\external_api {
+class insert_participation extends \core_external\external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
@@ -53,8 +52,13 @@ class append_participation extends \core_external\external_api {
     public static function execute(int $quizid, int $studentid) {
         self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
         $services = livequiz_services::get_singleton_service_instance();
-        $participation = $services->new_participation($studentid, $quizid);
-        return $participation !== null;
+        try {
+            $services->new_participation($studentid, $quizid);
+            return true;
+        } catch (dml_exception $e) {
+            debugging('Error inserting participation: ' . $e->getMessage());
+            return false;
+        }
     }
     /**
      * Part of the webservice processing flow. Not called directly here,
@@ -65,8 +69,7 @@ class append_participation extends \core_external\external_api {
         return new external_value(PARAM_BOOL, 'Is insertion of participation successfull or not');
     }
 
-    private function read_answers_from_session() {
-        $_SESSION['quiz_answers'][]
-        
-    }
+    //private function read_answers_from_session() {
+    //    $_SESSION['quiz_answers'][]
+    //}
 }

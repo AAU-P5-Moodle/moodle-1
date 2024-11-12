@@ -30,7 +30,7 @@
 
 }}
 {{#js}}
-    require(['mod_livequiz/append_participation'], (module) => module.init({{quizid}}, {{studentid}}));
+    require(['mod_livequiz/submit_quiz'], (module) => module.init({{quizid}}, {{studentid}}));
     require(['mod_livequiz/session'], (module) => module.init({{quizid}}, {{questionid}}));
 {{/js}}
 <div class="main-container">
