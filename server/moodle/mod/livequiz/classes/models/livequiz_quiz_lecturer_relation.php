@@ -87,57 +87,6 @@ class livequiz_quiz_lecturer_relation {
 
     /**
      *
-     * Updates the overner of the quiz. in the relation. So the lecturerId will be updated.
-     *
-     *
-     * @param int $lecturerid
-     * @param int $id
-     * @return void
-     * @throws dml_exception
-     * @throws dml_transaction_exception
-     *
-     */
-    public static function update_lecturer_quiz_relation_lecturer_id(int $id, int $lecturerid): void {
-        global $DB;
-        $DB->update_record('livequiz_quiz_lecturer', ['id' => $id, 'lecturer_id' => $lecturerid]);
-    }
-
-    /**
-     *
-     * Updates the quiz_id using the relation id. Mabey used in the future.
-     *
-     *
-     * @param int $quizid
-     * @param int $id
-     * @return array
-     * @throws dml_exception
-     * @throws dml_transaction_exception
-     *
-     */
-    public static function update_lecturer_quiz_relation_quiz_id(int $id, int $quizid): void {
-        global $DB;
-        $DB->update_record('livequiz_quiz_lecturer', ['id' => $id, 'quiz_id' => $quizid]);
-    }
-
-    /**
-     *
-     * Updates both quiz_id and lecturer_id given a lecturer_quiz_relation_both id.
-     *
-     *
-     * @param int $lecturerid
-     * @param int $id
-     * @param int $quizid
-     * @return void
-     * @throws dml_exception
-     * @throws dml_transaction_exception
-     *
-     */
-    public static function update_lecturer_quiz_relation_both(int $id, int $quizid, int $lecturerid): void {
-        global $DB;
-        $DB->update_record('livequiz_quiz_lecturer', ['id' => $id, 'quiz_id' => $quizid, 'lecturer_id' => $lecturerid]);
-    }
-    /**
-     *
      * Deletes  lecturer_quiz_relation by the relation id
      *
      *
