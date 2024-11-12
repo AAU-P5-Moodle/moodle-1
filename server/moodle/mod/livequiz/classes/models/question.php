@@ -138,6 +138,18 @@ class question {
     }
 
     /**
+     * Deletes a question from the database.
+     *
+     * @param int $questionid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_question(int $questionid): bool {
+        global $DB;
+        return $DB->delete_records('livequiz_questions', ['id' => $questionid]);
+    }
+
+    /**
      * Gets the ID of the question.
      *
      * @return int|0 // Returns the ID of the question, if it has one. 0 if it does not.

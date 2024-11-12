@@ -190,4 +190,16 @@ class answer {
     public function set_explanation(string $explanation): void {
         $this->explanation = $explanation;
     }
+
+    /**
+     * Deletes an answer from the database.
+     *
+     * @param int $answerid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_answer(int $answerid): bool {
+        global $DB;
+        return $DB->delete_records('livequiz_answers', ['id' => $answerid]);
+    }
 }
