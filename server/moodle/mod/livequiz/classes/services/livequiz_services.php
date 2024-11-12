@@ -184,7 +184,6 @@ class livequiz_services {
 
         $updatedanswerids = [];
 
-
         $existinganswersmap = [];
         foreach ($existinganswers as $existinganswer) {
             $existinganswersmap[$existinganswer->get_id()] = $existinganswer;
@@ -221,7 +220,7 @@ class livequiz_services {
         }
         return $questions;
     }
-  
+
     /**
      * Creates a new participation record in the database.
      * @param int $studentid
@@ -243,6 +242,7 @@ class livequiz_services {
             throw $e;
         }
         return $participation;
+    }
 
     /**
      * Gets answers from a student in a specific participation.
