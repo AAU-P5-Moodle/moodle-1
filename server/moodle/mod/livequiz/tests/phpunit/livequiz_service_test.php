@@ -423,13 +423,13 @@ final class livequiz_service_test extends \advanced_testcase {
 
         $testquizquestions = $testquiz->get_questions();
 
-        $testquizsubmitted = $service->submit_quiz($testquiz,$lecturerid);
+        $testquizsubmitted = $service->submit_quiz($testquiz, $lecturerid);
         $testquizsubmittedquestions = $testquizsubmitted->get_questions();
 
         array_shift($testquizsubmittedquestions);
         $testquizsubmitted->set_questions($testquizsubmittedquestions);
 
-        $testquizresubmitted = $service->submit_quiz($testquizsubmitted,$lecturerid);
+        $testquizresubmitted = $service->submit_quiz($testquizsubmitted, $lecturerid);
         $testquizresubmittedquestions = $testquizsubmitted->get_questions();
 
         // Assert that the amount of questions has changed.
@@ -464,7 +464,7 @@ final class livequiz_service_test extends \advanced_testcase {
         $service = livequiz_services::get_singleton_service_instance();
         $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
 
-        $testquizsubmitted = $service->submit_quiz($testquiz,$lecturerid);
+        $testquizsubmitted = $service->submit_quiz($testquiz, $lecturerid);
         $testquizsubmittedquestions = $testquizsubmitted->get_questions();
         $studentanswertestdata = [
             'studentid' => 1,
@@ -484,7 +484,7 @@ final class livequiz_service_test extends \advanced_testcase {
         $this->expectException(dml_exception::class);
         $this->expectExceptionMessage('error/Cannot delete answer with participations');
 
-        $service->submit_quiz($testquizsubmitted,$lecturerid);
+        $service->submit_quiz($testquizsubmitted, $lecturerid);
         $testquizresubmittedquestions = $testquizsubmitted->get_questions();
     }
 
@@ -503,13 +503,13 @@ final class livequiz_service_test extends \advanced_testcase {
 
         $testquizquestions = $testquiz->get_questions();
         $testquizfirstquestionanswers = $testquizquestions[0]->get_answers();
-        $testquizsubmitted = $service->submit_quiz($testquiz,$lecturerid);
+        $testquizsubmitted = $service->submit_quiz($testquiz, $lecturerid);
         $testquizsubmittedquestions = $testquizsubmitted->get_questions();
 
         array_shift($testquizsubmittedquestions[0]->get_answers());
         $testquizsubmitted->set_questions($testquizsubmittedquestions);
 
-        $testquizresubmitted = $service->submit_quiz($testquizsubmitted,$lecturerid);
+        $testquizresubmitted = $service->submit_quiz($testquizsubmitted, $lecturerid);
         $testquizresubmittedquestions = $testquizsubmitted->get_questions();
         $testquizresubmittedanswers = $testquizresubmittedquestions[0]->get_answers();
 
