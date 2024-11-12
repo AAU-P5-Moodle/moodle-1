@@ -29,7 +29,7 @@ use dml_transaction_exception;
 class livequiz_questions_lecturer_relation {
     /**
      *
-     * Append a relation betweeen af lecturer_id and the question_id. For easy access
+     * Append a relation between af lecturer_id and the question_id. For easy access
      *
      * @param int $questionid
      * @param int $lecturerid

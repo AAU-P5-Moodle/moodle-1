@@ -110,7 +110,7 @@ class livequiz_services {
         $questions = $livequiz->get_questions();
 
         if (!count($questions)) {
-            throw new Exception("A Livequiz Must have atleast 1 Question");
+            throw new Exception("A Livequiz Must have at least 1 Question");
         }
 
         foreach ($questions as $question) {
