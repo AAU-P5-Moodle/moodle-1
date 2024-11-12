@@ -45,7 +45,7 @@ class livequiz_questions_lecturer_relation {
 
     /**
      *
-     * Gets lecturer relations to questions by lecturer id. Will be used to get all the quistions that relates to that teacher
+     * Gets lecturer relations to questions by lecturer id. Will be used to get all the question that relates to that teacher
      *
      *
      * @param int $lecturerid
@@ -61,7 +61,7 @@ class livequiz_questions_lecturer_relation {
 
     /**
      *
-     * Gets lecturer relation by quistion id. Will be used to get all the teachers that have made that question.
+     * Gets lecturer relation by question id. Will be used to get all the teachers that have made that question.
      *
      *
      * @param int $questionid
@@ -75,7 +75,7 @@ class livequiz_questions_lecturer_relation {
         return (array) $DB->get_record('livequiz_questions_lecturer', ['question_id' => $questionid]);
     }
     /**
-     * returns array with data from livequiz_questions_lecturer based on relation id
+     * returns array with data from livequiz_questions_lecturer based on the relation id
      * @param int $id
      * @return array
      * @throws dml_exception
