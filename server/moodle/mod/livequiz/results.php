@@ -27,11 +27,11 @@ require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
 
-global $PAGE, $OUTPUT;
+global $PAGE, $OUTPUT, $DB;
 // Get submitted parameters.
 $cmid = required_param('id', PARAM_INT); // Course module id.
 $quizid = required_param('livequizid', PARAM_INT);
-[$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
+[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
 // Read demo data - REMOVE WHEN PUSHING TO STAGING.
