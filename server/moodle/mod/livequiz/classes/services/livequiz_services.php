@@ -23,6 +23,7 @@ require_once(__DIR__ . '/../models/question.php');
 require_once(__DIR__ . '/../models/answer.php');
 require_once(__DIR__ . '/../models/questions_answers_relation.php');
 require_once(__DIR__ . '/../models/quiz_questions_relation.php');
+require_once(__DIR__ . '/../models/student_quiz_relation.php');
 
 use dml_exception;
 use dml_transaction_exception;
@@ -32,7 +33,11 @@ use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
 use mod_livequiz\models\quiz_questions_relation;
+use mod_livequiz\models\participation;
+use mod_livequiz\models\student_quiz_relation;
+
 use mod_livequiz\models\student_answers_relation;
+
 use PhpXmlRpc\Exception;
 use function PHPUnit\Framework\throwException;
 
@@ -179,7 +184,6 @@ class livequiz_services {
 
         $updatedanswerids = [];
 
-
         $existinganswersmap = [];
         foreach ($existinganswers as $existinganswer) {
             $existinganswersmap[$existinganswer->get_id()] = $existinganswer;
@@ -215,6 +219,29 @@ class livequiz_services {
             $question->add_answers($answers);
         }
         return $questions;
+    }
+
+    /**
+     * Creates a new participation record in the database.
+     * @param int $studentid
+     * @param int $quizid
+     * @throws dml_exception
+     * @return participation
+     */
+    public function new_participation(int $studentid, int $quizid): participation {
+        // Add parcitipation using the model.
+        global $DB;
+        $transaction = $DB->start_delegated_transaction();
+        $participation = new participation($studentid, $quizid);
+        try {
+            $participation->set_id(student_quiz_relation::insert_student_quiz_relation($quizid, $studentid));
+
+            $transaction->allow_commit();
+        } catch (dml_exception $e) {
+            $transaction->rollback($e);
+            throw $e;
+        }
+        return $participation;
     }
 
     /**
