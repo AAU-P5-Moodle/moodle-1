@@ -300,7 +300,7 @@ class livequiz_services {
     public function get_livequiz_question_lecturer(int $questionid): array {
         $lecturer = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_questions_id($questionid);
         return $lecturer;
-
+    }
     /**
      * Deletes an answer from the database.
      *
