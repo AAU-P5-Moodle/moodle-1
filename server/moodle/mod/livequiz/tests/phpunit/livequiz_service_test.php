@@ -198,7 +198,7 @@ final class livequiz_service_test extends \advanced_testcase {
      */
     public function test_new_answer(): void {
         $title = 'Test question';
-        $description = 'This is a test question.';
+        $description = 'This is a test question for testing purposes.';
         $timelimit = 60;
         $explanation = "I don't know.";
 
