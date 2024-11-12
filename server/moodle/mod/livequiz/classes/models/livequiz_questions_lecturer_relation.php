@@ -21,7 +21,7 @@ use dml_transaction_exception;
 
 /**
  * 'Static' class, do not instantiate.
- * Displays the livequiz view page.
+ * Class for relation between question and lecturer
  * @package   mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
