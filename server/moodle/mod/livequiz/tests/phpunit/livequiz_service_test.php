@@ -243,11 +243,11 @@ final class livequiz_service_test extends \advanced_testcase {
      * @throws dml_exception|Exception
      */
     public function test_create_livequiz(): void {
+        $lecturerid = "2";
         $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
         $service = livequiz_services::get_singleton_service_instance();
-        $livequizresult = $service->submit_quiz($livequiz);
-        $questions = $livequiz->get_questions();
-
+        $livequizresult = $service->submit_quiz($livequiz,$lecturerid);
+        $questions = $livequizresult->get_questions();
         // Assert properties of the LiveQuiz remain the same.
         self::assertEquals($livequiz->get_id(), $livequizresult->get_id());
         self::assertEqualsIgnoringCase($livequiz->get_name(), $livequizresult->get_name());
@@ -255,17 +255,6 @@ final class livequiz_service_test extends \advanced_testcase {
         self::assertEquals($livequiz->get_timecreated(), $livequizresult->get_timecreated());
         self::assertEquals($livequiz->get_timemodified(), $livequizresult->get_timemodified());
 
-
-        $correct = 1;
-        $answerdescription = 'This is a test answer.';
-        $answerexplanation = "I don't know this answer.";
-        $answer = new answer($correct, $answerdescription, $answerexplanation);
-        $question->add_answer($answer);
-
-        $livequiz->add_question($question);
-        $lecturerid = "2";
-        $livequiz = $service->submit_quiz($livequiz, $lecturerid);
-        $questions = $livequiz->get_questions();
 
         $getlecturer = $service->get_livequiz_question_lecturer($questions[0]->get_id());
         self::assertEquals($getlecturer['lecturer_id'], $lecturerid);
@@ -308,10 +297,10 @@ final class livequiz_service_test extends \advanced_testcase {
      * @throws dml_exception|Exception
      */
     public function test_update_livequiz(): void {
+        $lecturerid = "2";
         $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
         $service = livequiz_services::get_singleton_service_instance();
-
-        $firstlivequiz = $service->submit_quiz($livequiz);
+        $firstlivequiz = $service->submit_quiz($livequiz,$lecturerid);
         $questions = $firstlivequiz->get_questions();
 
         $questions[0]->set_title('New title');
@@ -324,7 +313,7 @@ final class livequiz_service_test extends \advanced_testcase {
         $newanswers[0]->set_explanation('New explanation');
 
         $firstlivequiz->set_questions($questions);
-        $updatedlivequiz = $service->submit_quiz($firstlivequiz);
+        $updatedlivequiz = $service->submit_quiz($firstlivequiz,$lecturerid);
 
         // Assert that the specific question was updated.
         $finalquestions = $updatedlivequiz->get_questions();
