@@ -20,6 +20,7 @@ use core_external\external_function_parameters;
 use core_external\external_value;
 use core_search\document;
 use mod_livequiz\models\participation;
+use mod_livequiz\services\livequiz_services;
 
 /**
  * Class append_participation
@@ -51,8 +52,9 @@ class append_participation extends \core_external\external_api {
      */
     public static function execute(int $quizid, int $studentid) {
         self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
-        $participation = new participation($quizid, $studentid);
-        return $participation->add_participation();
+        $services = livequiz_services::get_singleton_service_instance();
+        $participation = $services->new_participation($studentid, $quizid);
+        return $participation !== null;
     }
     /**
      * Part of the webservice processing flow. Not called directly here,

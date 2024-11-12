@@ -266,7 +266,7 @@ class livequiz_services {
      * @return participation
      */
     public function new_participation(int $studentid, int $quizid): participation {
-        // Add parcitipation using the model.
+        // Add participation using the model.
         global $DB;
         $transaction = $DB->start_delegated_transaction();
         $participation = new participation($studentid, $quizid);
