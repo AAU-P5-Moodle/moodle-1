@@ -20,16 +20,14 @@ use dml_exception;
 use dml_transaction_exception;
 
 /**
- * 'Static' class, do not instantiate.
- * Displays the livequiz view page.
- *
+ * This class is responsible for handling the relationship between students and quizzes.
  * @package   mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class questions_answers_relation {
+class student_quiz_relation {
     /**
-     * Append an answer to a question, given its id
+     * Append a student to a quiz, given both their ids.
      *
      * @param int $questionid
      * @param int $answerid
@@ -37,28 +35,28 @@ class questions_answers_relation {
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function insert_question_answer_relation(int $questionid, int $answerid): void {
+    public static function insert_student_quiz_relation(int $quizid, int $studentid): int {
         global $DB;
-        $DB->insert_record('livequiz_questions_answers', ['question_id' => $questionid, 'answer_id' => $answerid]);
+        return $DB->insert_record('livequiz_quiz_student', ['livequiz_id' => $quizid, 'student_id' => $studentid], true);
     }
-
     /**
-     * Get all answers from a question, given its id
-     *
-     * @param $questionid int
-     * @return array
-     * @throws dml_exception
+     * Get all participation the student has made for a quiz
+     * @param int $quizid
+     * @return void
      */
-    public static function get_answers_from_question(int $questionid): array {
+    public static function get_all_student_participation_for_quiz(int $quizid, int $studentid): array {
         global $DB;
-
-        $answerids = $DB->get_records('livequiz_questions_answers', ['question_id' => $questionid], '', 'answer_id');
-        $answers = [];
-
-        foreach ($answerids as $answerid) {
-            $answers[] = answer::get_answer_from_id($answerid->answer_id);
+        $participationrecords =
+            $DB->get_records(
+                'livequiz_quiz_student',
+                ['livequiz_id' => $quizid, 'student_id' => $studentid],
+                'id DESC',
+                '*'
+            );
+        $participations = [];
+        foreach ($participationrecords as $participation) {
+            $participations[] = new participation($participation->student_id, $participation->livequiz_id);
         }
-
-        return $answers;
+        return $participations;
     }
 }

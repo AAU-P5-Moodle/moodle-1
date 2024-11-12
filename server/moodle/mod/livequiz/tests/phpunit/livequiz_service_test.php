@@ -20,7 +20,7 @@
  * This class contains unit tests for the LiveQuiz service functionality.
  *
  * @package mod_livequiz
- * @copyright 2023
+ * @copyright 2024 Software AAU
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_livequiz;
@@ -30,6 +30,9 @@ use mod_livequiz\models\livequiz;
 use mod_livequiz\services\livequiz_services;
 use mod_livequiz\models\question;
 use mod_livequiz\models\answer;
+use mod_livequiz\models\participation;
+use mod_livequiz\models\student_quiz_relation;
+use PhpXmlRpc\Exception;
 
 /**
  * Testing examples for LiveQuiz service.
@@ -55,6 +58,90 @@ final class livequiz_service_test extends \advanced_testcase {
         $livequizid = $DB->insert_record('livequiz', $livequizdata);
 
         return livequiz::get_livequiz_instance($livequizid);
+    }
+
+    /**
+     * Create a LiveQuiz instance with questions and answers for testing.
+     *
+     * @return livequiz The created LiveQuiz instance.
+     * @throws dml_exception
+     */
+    protected function create_livequiz_with_questions_and_answers_for_test(): livequiz {
+        $livequiz = $this->create_livequiz_for_test();
+
+        $questions = [
+            new question(
+                'Test question 1',
+                'How much does a Polar Bear weigh?.',
+                45,
+                "Come on a Polar bear has a weight."
+            ),
+            new question(
+                'Test question 2',
+                'Where is north on a compass.',
+                46,
+                "You need to answer where north is."
+            ),
+            new question(
+                'Test question 3',
+                'Why is compressed air important for driving a truck.',
+                100,
+                "Compressed air is essential for driving a truck, but why?"
+            ),
+        ];
+
+        $answersquestion1 = [
+            new answer(1, '350-550 kg', "A male Polar Bear weighs this much."),
+            new answer(1, '150-350 kg', "A female Polar Bear weighs this much."),
+            new answer(
+                0,
+                '600-800 kg',
+                "Neither af female nor a male Polar Bear weighs this much."
+            ),
+        ];
+
+        $answersquestion2 = [
+            new answer(1, 'N', "The letter N"),
+            new answer(0, 'S', "The letter S"),
+            new answer(0, 'W', "The letter W"),
+        ];
+
+        $answersquestion3 = [
+            new answer(
+                1,
+                'The compressed air ensures that the handbrake spring is not permanently on',
+                "This correct as the air releases the spring"
+            ),
+            new answer(
+                0,
+                'The compressed air makes funny sounds.',
+                "It does not make it sound funny"
+            ),
+            new answer(
+                1,
+                'The compressed air ensures that gear changes happen, when switching from 1-6 gears to 7-12 gears',
+                "This is correct as the air is needed for the force that is needed"
+            ),
+        ];
+
+        $questions[0]->add_answers($answersquestion1);
+        $questions[1]->add_answers($answersquestion2);
+        $questions[2]->add_answers($answersquestion3);
+
+        $livequiz->add_questions($questions);
+
+        return $livequiz;
+    }
+
+    /**
+     * Create participation test data.
+     * @return array
+     */
+    protected function create_participation_data_for_test(): array {
+        return  $participationdata = [
+            'studentid' => 2,
+            'quizid' => 1,
+        ];
     }
 
     /**
@@ -94,7 +181,6 @@ final class livequiz_service_test extends \advanced_testcase {
         $explanation = "I don't know.";
 
         $question = new question($title, $description, $timelimit, $explanation);
-
         self::assertInstanceOf(question::class, $question);
         self::assertEqualsIgnoringCase($title, $question->get_title());
         self::assertEqualsIgnoringCase($description, $question->get_description());
@@ -110,7 +196,6 @@ final class livequiz_service_test extends \advanced_testcase {
      * @throws dml_exception
      */
     public function test_new_answer(): void {
-        $livequiz = $this->create_livequiz_for_test();
         $title = 'Test question';
         $description = 'This is a test question.';
         $timelimit = 60;
@@ -151,21 +236,25 @@ final class livequiz_service_test extends \advanced_testcase {
     }
 
     /**
-     * Test submitting a LiveQuiz with questions and answers.
+     * Test creating a new LiveQuiz instance.
      *
      * @covers \mod_livequiz\services\livequiz_services::submit_quiz
      * @return void
-     * @throws dml_exception
+     * @throws dml_exception|Exception
      */
-    public function test_submit_questions_with_answers(): void {
-        $livequiz = $this->create_livequiz_for_test();
+    public function test_create_livequiz(): void {
+        $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
         $service = livequiz_services::get_singleton_service_instance();
+        $livequizresult = $service->submit_quiz($livequiz);
+        $questions = $livequiz->get_questions();
 
-        $title = 'Test question';
-        $questiondescription = 'This is a test question.';
-        $timelimit = 60;
-        $questionexplanation = "I don't know.";
-        $question = new question($title, $questiondescription, $timelimit, $questionexplanation);
+        // Assert properties of the LiveQuiz remain the same.
+        self::assertEquals($livequiz->get_id(), $livequizresult->get_id());
+        self::assertEqualsIgnoringCase($livequiz->get_name(), $livequizresult->get_name());
+        self::assertEqualsIgnoringCase($livequiz->get_intro(), $livequizresult->get_intro());
+        self::assertEquals($livequiz->get_timecreated(), $livequizresult->get_timecreated());
+        self::assertEquals($livequiz->get_timemodified(), $livequizresult->get_timemodified());
+
 
         $correct = 1;
         $answerdescription = 'This is a test answer.';
@@ -184,16 +273,148 @@ final class livequiz_service_test extends \advanced_testcase {
         $getquiz = $service->get_livequiz_quiz_lecturer($livequiz->get_id());
         self::assertEquals($getquiz['lecturer_id'], $lecturerid);
 
-        self::assertCount(1, $questions);
-        self::assertEqualsIgnoringCase($title, $questions[0]->get_title());
-        self::assertEqualsIgnoringCase($questiondescription, $questions[0]->get_description());
-        self::assertEquals($timelimit, $questions[0]->get_timelimit());
-        self::assertEqualsIgnoringCase($questionexplanation, $questions[0]->get_explanation());
+     
+        
+       
 
-        $answers = $questions[0]->get_answers();
-        self::assertCount(1, $answers);
-        self::assertEquals($correct, $answers[0]->get_correct());
-        self::assertEqualsIgnoringCase($answerdescription, $answers[0]->get_description());
-        self::assertEqualsIgnoringCase($answerexplanation, $questions[0]->get_answers()[0]->get_explanation());
+        // The amount of questions remain the same.
+        $questionsresult = $livequizresult->get_questions();
+        self::assertCount(count($questions), $questionsresult);
+
+        // Assert properties of the questions and their answers remain the same.
+        for ($i = 0; $i < count($questions); $i++) {
+            self::assertEquals($questions[$i]->get_title(), $questionsresult[$i]->get_title());
+            self::assertEquals($questions[$i]->get_description(), $questionsresult[$i]->get_description());
+            self::assertEquals($questions[$i]->get_timelimit(), $questionsresult[$i]->get_timelimit());
+            self::assertEquals($questions[$i]->get_explanation(), $questionsresult[$i]->get_explanation());
+
+            $answers = $questions[$i]->get_answers();
+            $answersresult = $questionsresult[$i]->get_answers();
+            self::assertCount(count($answers), $answersresult);
+            for ($j = 0; $j < count($answers); $j++) {
+                self::assertEquals($answers[$j]->get_correct(), $answersresult[$j]->get_correct());
+                self::assertEquals($answers[$j]->get_description(), $answersresult[$j]->get_description());
+                self::assertEquals($answers[$j]->get_explanation(), $answersresult[$j]->get_explanation());
+            }
+        }
+    }
+
+    /**
+     * Test updating a LiveQuiz instance.
+     * The asserts in this test are very manual and could be improved,
+     * but as it turns out, cloning objects with arrays is a pain in PHP.
+     * @covers \mod_livequiz\services\livequiz_services::submit_quiz
+     * @return void
+     * @throws dml_exception|Exception
+     */
+    public function test_update_livequiz(): void {
+        $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
+        $service = livequiz_services::get_singleton_service_instance();
+
+        $firstlivequiz = $service->submit_quiz($livequiz);
+        $questions = $firstlivequiz->get_questions();
+
+        $questions[0]->set_title('New title');
+        $questions[0]->set_description('New description');
+        $questions[0]->set_timelimit(100);
+        $questions[0]->set_explanation('New explanation');
+        $newanswers = $questions[0]->get_answers();
+        $newanswers[0]->set_correct(0);
+        $newanswers[0]->set_description('New description');
+        $newanswers[0]->set_explanation('New explanation');
+
+        $firstlivequiz->set_questions($questions);
+        $updatedlivequiz = $service->submit_quiz($firstlivequiz);
+
+        // Assert that the specific question was updated.
+        $finalquestions = $updatedlivequiz->get_questions();
+        self::assertEquals($questions, $finalquestions);
+        self::assertEquals('New title', $finalquestions[0]->get_title());
+        self::assertEquals('New description', $finalquestions[0]->get_description());
+        self::assertEquals(100, $finalquestions[0]->get_timelimit());
+        self::assertEquals('New explanation', $finalquestions[0]->get_explanation());
+
+        // Assert the first answer, to the first question, has changed.
+        $finalanswers = $finalquestions[0]->get_answers();
+        self::assertEquals(0, $finalanswers[0]->get_correct());
+        self::assertEquals('New description', $finalanswers[0]->get_description());
+        self::assertEquals('New explanation', $finalanswers[0]->get_explanation());
+
+        // Assert that answers two and three remain the same.
+        self::assertEquals(1, $finalanswers[1]->get_correct());
+        self::assertEquals('150-350 kg', $finalanswers[1]->get_description());
+        self::assertEquals('A female Polar Bear weighs this much.', $finalanswers[1]->get_explanation());
+
+        self::assertEquals(0, $finalanswers[2]->get_correct());
+        self::assertEquals('600-800 kg', $finalanswers[2]->get_description());
+        self::assertEquals('Neither af female nor a male Polar Bear weighs this much.', $finalanswers[2]->get_explanation());
+
+        // Assert that the other questions remain the same.
+        self::assertEquals($questions[1], $finalquestions[1]);
+        self::assertEquals($questions[2], $finalquestions[2]);
+    }
+
+    /**
+     * Test of new_participation
+     * @covers \mod_livequiz\services\livequiz_services::new_participation
+     */
+    public function test_new_participation(): void {
+        $participationdata = $this->create_participation_data_for_test();
+        $service = livequiz_services::get_singleton_service_instance();
+
+        $actualstudentid = $participationdata['studentid'];
+        $acutalquizid = $participationdata['quizid'];
+
+        $participation = $service->new_participation($actualstudentid, $acutalquizid);
+        $this->assertInstanceOf(participation::class, $participation);
+        $this->assertEquals($participation->get_studentid(), $actualstudentid);
+        $this->assertEquals($participation->get_livequizid(), $acutalquizid);
+    }
+
+    /**
+     * Test getting answers from a student in participation.
+     *
+     * @covers \mod_livequiz\services\livequiz_services::get_answers_from_stundent_in_participation
+     * @return void
+     */
+    public function test_get_answers_from_stundent_in_participation(): void {
+        global $DB;
+        $service = livequiz_services::get_singleton_service_instance();
+        $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
+        $question = $livequiz->get_questions()[0];
+        $answers = $question->get_answers();
+        $answercount = count($answers);
+
+        $answerswithid = [];
+
+        // Insert answers into db.
+        for ($i = 0; $i < $answercount; $i++) {
+            $answerid = answer::insert_answer($answers[$i]);
+            $answerswithid[] = answer::get_answer_from_id($answerid); // This ensures id's are set since set_id() is private.
+            // Simulate answers where studentid = 1 ; participationid = 1.
+            $DB->insert_record('livequiz_students_answers', [
+                'student_id' => 1,
+                'answer_id' => $answerid,
+                'participation_id' => 1,
+            ]);
+        }
+        // Fetch all answers for studentid = 1 ; participationid = 1.
+        $returnedanswers = $service->get_answers_from_stundent_in_participation(1, 1);
+
+        $this->assertEquals($answerswithid[0]->get_id(), $returnedanswers[0]->get_id());
+        $this->assertEquals($answerswithid[0]->get_correct(), $returnedanswers[0]->get_correct());
+        $this->assertEquals($answerswithid[0]->get_description(), $returnedanswers[0]->get_description());
+        $this->assertEquals($answerswithid[0]->get_explanation(), $returnedanswers[0]->get_explanation());
+
+        $this->assertEquals($answerswithid[1]->get_id(), $returnedanswers[1]->get_id());
+        $this->assertEquals($answerswithid[1]->get_correct(), $returnedanswers[1]->get_correct());
+        $this->assertEquals($answerswithid[1]->get_description(), $returnedanswers[1]->get_description());
+        $this->assertEquals($answerswithid[1]->get_explanation(), $returnedanswers[1]->get_explanation());
+
+        $this->assertEquals($answerswithid[2]->get_id(), $returnedanswers[2]->get_id());
+        $this->assertEquals($answerswithid[2]->get_correct(), $returnedanswers[2]->get_correct());
+        $this->assertEquals($answerswithid[2]->get_description(), $returnedanswers[2]->get_description());
+        $this->assertEquals($answerswithid[2]->get_explanation(), $returnedanswers[2]->get_explanation());
+
     }
 }

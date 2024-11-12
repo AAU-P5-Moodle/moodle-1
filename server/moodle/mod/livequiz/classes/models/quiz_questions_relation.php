@@ -16,6 +16,7 @@
 
 /**
  * Displays the livequiz view page.
+ *
  * @package   mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -38,7 +39,7 @@ class quiz_questions_relation {
      * @return void
      * @throws dml_exception
      */
-    public static function append_question_to_quiz(int $questionid, int $quizid): void {
+    public static function insert_quiz_question_relation(int $questionid, int $quizid): void {
         global $DB;
         $DB->insert_record('livequiz_quiz_questions', ['quiz_id' => $quizid, 'question_id' => $questionid]);
     }
