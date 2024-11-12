@@ -22,7 +22,7 @@ use dml_exception;
 use mod_livequiz\services\livequiz_services;
 
 /**
- * Class insert_participation
+ * Class insert_answer_choices
  *
  * This class extends the core_external\external_api and is used to handle
  * the external API for appending participation in the live quiz module.
@@ -32,31 +32,37 @@ use mod_livequiz\services\livequiz_services;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class insert_participation extends \core_external\external_api {
+class insert_answer_choice extends \core_external\external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
      */
     public static function execute_parameters() {
         return new external_function_parameters([
-            'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
+            'participationid' => new external_value(PARAM_INT, 'Participation ID'),
+            'answerid' => new external_value(PARAM_INT, 'Answer ID'),
             'studentid' => new external_value(PARAM_INT, 'Student ID'),
         ]);
     }
     /**
      * Summary of execute
-     * @param int $quizid
-     * @param int  $studentid
+     * @param int $participationid
+     * @param int  $answerid
+     * @param int $studentid
      * @return boolean
      */
-    public static function execute(int $quizid, int $studentid) {
-        self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
+    public static function execute(int $participationid, int $answerid, int $studentid) {
+        self::validate_parameters(self::execute_parameters(), [
+            'participationid' => $participationid,
+            'questionid' => $answerid,
+            'studentid' => $studentid,
+        ]);
         $services = livequiz_services::get_singleton_service_instance();
         try {
-            $services->insert_participation($studentid, $quizid);
+            $services->insert_answer_choice($studentid, $answerid, $participationid);
             return true;
         } catch (dml_exception $e) {
-            debugging('Error inserting participation: ' . $e->getMessage());
+            debugging('Error inserting answer choice: ' . $e->getMessage());
             return false;
         }
     }

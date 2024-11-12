@@ -2,13 +2,25 @@
 
 import {call as fetchMany} from 'core/ajax';
 
-// Test function to append a participation.
+// Function to insert a participation.
 export const insert_participation = (quizid, studentid) => fetchMany([
     {
         methodname: 'mod_livequiz_insert_participation',
         args: {
             quizid,
             studentid
+        },
+    }
+])[0];
+
+// Function to insert an answer choice.
+export const insert_answer_choice = (studentid, answerid, participationid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_insert_answer_choice',
+        args: {
+            studentid,
+            answerid,
+            participationid
         },
     }
 ])[0];

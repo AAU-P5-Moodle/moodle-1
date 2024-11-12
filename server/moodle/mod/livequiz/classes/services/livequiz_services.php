@@ -259,13 +259,13 @@ class livequiz_services {
     }
 
     /**
-     * Creates a new participation record in the database.
+     * Creates a new participation record (quiz-student record) in the database.
      * @param int $studentid
      * @param int $quizid
      * @throws dml_exception
      * @return participation
      */
-    public function new_participation(int $studentid, int $quizid): participation {
+    public function insert_participation(int $studentid, int $quizid): participation {
         // Add participation using the model.
         global $DB;
         $transaction = $DB->start_delegated_transaction();
@@ -282,6 +282,28 @@ class livequiz_services {
     }
 
     /**
+     * Insert students_answers record in the database.
+     * @param int $studentid
+     * @param int $answerid
+     * @param int $participationid
+     * @throws dml_exception
+     * @return participation
+     */
+    public function insert_answer_choice(int $studentid, int $answerid, $participationid): participation {
+        // Add participation using the model.
+        global $DB;
+        $transaction = $DB->start_delegated_transaction();
+        try {
+            student_answers_relation::insert_student_answer_relation($studentid, $answerid, $participationid);
+            $transaction->allow_commit();
+        } catch (dml_exception $e) {
+            $transaction->rollback($e);
+            throw $e;
+        }
+    }
+
+
+    /**
      * Gets answers from a student in a specific participation.
      *
      * @param int $studentid The ID of the student.
@@ -289,7 +311,7 @@ class livequiz_services {
      * @return answer[] The list of answers.
      * @throws dml_exception
      */
-    public function get_answers_from_stundent_in_participation(int $studentid, int $participationid): array {
+    public function get_answers_from_student_in_participation(int $studentid, int $participationid): array {
         $answers = [];
         $answerids = student_answers_relation::get_answersids_from_student_in_participation($studentid, $participationid);
         foreach ($answerids as $answerid) {

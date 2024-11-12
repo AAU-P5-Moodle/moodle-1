@@ -1,10 +1,21 @@
-import {insert_participation} from "./repository";
+import {insert_participation, insert_answer_choice} from "./repository";
 
-export const init = async(quizid, studentid) => {
+export const init = async(quizid, studentid, answerids) => {
     const submitQuizButton = document.getElementById("submitQuizBtn");
     submitQuizButton.addEventListener("click", async function () {
         try {
-            window.console.log("insert_participation was successful: ", await insert_participation(quizid, studentid));
+            // Insert participation and wait for the participation ID.
+            let participationid = await insert_participation(quizid, studentid);
+            window.console.log("Inserted participation with ID: ", participationid);
+
+            // Insert each answer choice after participation is successfully created.
+            for (let answerid of answerids) {
+                try {
+                    await insert_answer_choice(studentid, answerid, participationid);
+                } catch (error) {
+                    window.console.error("Error in insert_answer_choice", error);
+                }
+            }
         } catch (error) {
             window.console.error("Error in insert_participation", error);
         }
