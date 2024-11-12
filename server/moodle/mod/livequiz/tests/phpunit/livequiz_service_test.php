@@ -329,7 +329,7 @@ final class livequiz_service_test extends \advanced_testcase {
      * @return void
      * @throws dml_exception
      */
-    public function test_get_answers_from_stundent_in_participation(): void {
+    public function test_get_answers_from_student_in_participation(): void {
         global $DB;
         $service = livequiz_services::get_singleton_service_instance();
         $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
