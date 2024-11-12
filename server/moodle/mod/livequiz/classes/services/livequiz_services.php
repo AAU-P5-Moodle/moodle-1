@@ -23,6 +23,7 @@ require_once(__DIR__ . '/../models/question.php');
 require_once(__DIR__ . '/../models/answer.php');
 require_once(__DIR__ . '/../models/questions_answers_relation.php');
 require_once(__DIR__ . '/../models/quiz_questions_relation.php');
+require_once(__DIR__ . '/../models/student_quiz_relation.php');
 
 use dml_exception;
 use dml_transaction_exception;
@@ -32,8 +33,10 @@ use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
 use mod_livequiz\models\quiz_questions_relation;
-use mod_livequiz\models\student_answers_relation;
 use mod_livequiz\models\participation;
+use mod_livequiz\models\student_quiz_relation;
+
+use mod_livequiz\models\student_answers_relation;
 use PhpXmlRpc\Exception;
 use function PHPUnit\Framework\throwException;
 
@@ -83,43 +86,6 @@ class livequiz_services {
         $livequiz->add_questions($questions);
 
         return $livequiz;
-    }
-
-    /**
-     * Constructs a new question object and appends it to the livequiz object.
-     *
-     * @param livequiz $livequiz
-     * @param string $title
-     * @param string $description
-     * @param int $timelimit
-     * @param string $explanation
-     * @return question
-     */
-    public function new_question(
-        livequiz $livequiz,
-        string $title,
-        string $description,
-        int $timelimit,
-        string $explanation
-    ): question {
-        $questiondata = new question($title, $description, $timelimit, $explanation);
-
-        $livequiz->add_questions([$questiondata]);
-        return new question($title, $description, $timelimit, $explanation);
-    }
-
-    /**
-     * Constructs a new answer object and appends it to the question object.
-     *
-     * @param question $question
-     * @param int $correct
-     * @param string $description
-     * @param string $explanation
-     * @return answer
-     */
-    public function new_answer(question $question, int $correct, string $description, string $explanation): answer {
-        $question->add_answer(new answer($correct, $description, $explanation));
-        return new answer($correct, $description, $explanation);
     }
 
     /**
@@ -217,7 +183,6 @@ class livequiz_services {
 
         $updatedanswerids = [];
 
-
         $existinganswersmap = [];
         foreach ($existinganswers as $existinganswer) {
             $existinganswersmap[$existinganswer->get_id()] = $existinganswer;
@@ -256,6 +221,29 @@ class livequiz_services {
     }
 
     /**
+     * Creates a new participation record in the database.
+     * @param int $studentid
+     * @param int $quizid
+     * @throws dml_exception
+     * @return participation
+     */
+    public function new_participation(int $studentid, int $quizid): participation {
+        // Add parcitipation using the model.
+        global $DB;
+        $transaction = $DB->start_delegated_transaction();
+        $participation = new participation($studentid, $quizid);
+        try {
+            $participation->set_id(student_quiz_relation::insert_student_quiz_relation($quizid, $studentid));
+
+            $transaction->allow_commit();
+        } catch (dml_exception $e) {
+            $transaction->rollback($e);
+            throw $e;
+        }
+        return $participation;
+    }
+
+    /**
      * Gets answers from a student in a specific participation.
      *
      * @param int $studentid The ID of the student.
@@ -270,20 +258,5 @@ class livequiz_services {
             $answers[] = answer::get_answer_from_id($answerid);
         }
         return $answers;
-    }
-    /**
-     * Creates a new participation record in the database.
-     * @param int $studentid
-     * @param int $quizid
-     * @throws dml_exception
-     * @return participation
-     */
-    public function new_participation(int $studentid, int $quizid): participation {
-        // Todo: Validate input data.
-        // Add parcitipation using the model.
-        $participant = new participation($studentid, $quizid);
-        $participant->add_participation();
-
-        return $participant;
     }
 }
