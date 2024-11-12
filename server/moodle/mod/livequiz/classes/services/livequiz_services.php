@@ -45,7 +45,6 @@ use mod_livequiz\models\participation;
 use mod_livequiz\models\student_quiz_relation;
 
 use mod_livequiz\models\student_answers_relation;
-
 use PhpXmlRpc\Exception;
 use function PHPUnit\Framework\throwException;
 

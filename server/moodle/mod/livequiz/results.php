@@ -15,39 +15,51 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Displays the livequiz view page.
+ * This displays when viewing results from attempting a quiz.
  * @package   mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once('../../config.php');
-require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
+require_once($CFG->libdir . '/accesslib.php');
 require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
 
-global $OUTPUT, $PAGE, $DB;
-
-$cmid = required_param('id', PARAM_INT); // Course module ID.
-[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
+global $PAGE, $OUTPUT;
+// Get submitted parameters.
+$id = required_param('id', PARAM_INT); // Course module id.
+$quizid = required_param('livequizid', PARAM_INT);
+[$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
-require_login($course, true, $cm); // Ensure the user is logged in and can access this module.
+// Read demo data - REMOVE WHEN PUSHING TO STAGING.
+$livequizservice = livequiz_services::get_singleton_service_instance();
+$currentquiz = $livequizservice->get_livequiz_instance($instance->id);
+if (empty($currentquiz->get_questions())) {
+    $demodatareader = new \mod_livequiz\readdemodata();
+    $demoquiz = $demodatareader->insertdemodata($currentquiz);
+} else {
+    $demoquiz = $currentquiz;
+}
+
+require_login($course, false, $cm);
+
+$_SESSION['completed'] = true;
+
 $context = context_module::instance($cm->id); // Set the context for the course module.
-$PAGE->set_cacheable(false);
+
 $PAGE->set_context($context); // Make sure to set the page context.
 
-$PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
+$PAGE->set_url(new moodle_url('/mod/livequiz/results.php', ['id' => $id, 'quizid' => $quizid ]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE OF ' . $instance->name, $cmid);
-
-unset($_SESSION['completed']);
+$results = new \mod_livequiz\output\results_page($id, $demoquiz);
 
 echo $OUTPUT->header();
-echo $output->render($renderable);
+echo $output->render($results);
 echo $OUTPUT->footer();

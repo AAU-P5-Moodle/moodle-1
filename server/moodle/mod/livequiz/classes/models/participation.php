@@ -16,8 +16,6 @@
 
 namespace mod_livequiz\models;
 
-use stdClass;
-
 /**
  * Class Participation
  *
@@ -30,18 +28,17 @@ use stdClass;
  */class participation {
     /**
      * Participation id
-     * @var $id
+     * @var int $id
      */
-    private $id;
+    private int $id;
     /**
-     * @var $studentid
+     * @var int $studentid
      */
-    private $studentid;
+    private int $studentid;
     /**
-     * @var $livequizid
+     * @var int $livequizid
      */
-    private $livequizid;
-
+    private int $livequizid;
 
     /**
      * Participation constructor.
