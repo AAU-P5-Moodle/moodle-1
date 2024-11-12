@@ -24,6 +24,8 @@
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 
+use mod_livequiz\services\livequiz_services;
+
 global $OUTPUT, $PAGE, $DB;
 
 
