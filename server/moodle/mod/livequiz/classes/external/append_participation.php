@@ -64,4 +64,9 @@ class append_participation extends \core_external\external_api {
     public static function execute_returns(): external_value {
         return new external_value(PARAM_BOOL, 'Is insertion of participation successfull or not');
     }
+
+    private function read_answers_from_session() {
+        $_SESSION['quiz_answers'][]
+        
+    }
 }

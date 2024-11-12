@@ -40,6 +40,7 @@ class update_session extends \core_external\external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
+            'quizid' => new external_value(PARAM_INT, 'quizid'),
             'questionid' => new external_value(PARAM_INT, 'questionid'),
             'answers' => new external_value(PARAM_TEXT, 'answers'),
         ]);
@@ -52,13 +53,13 @@ class update_session extends \core_external\external_api {
      * @return bool
      * @throws \invalid_parameter_exception
      */
-    public static function execute($questionid, $answervalue): bool {
+    public static function execute($quizid, $questionid, $answervalue): bool {
         global $DB;
         self::validate_parameters(
             self::execute_parameters(),
-            ['questionid' => $questionid, 'answers' => $answervalue]
+            ['quizid' => $quizid, 'questionid' => $questionid, 'answers' => $answervalue]
         );
-        return self::update_answers_in_session($questionid, $answervalue);
+        return self::update_answers_in_session($quizid, $questionid, $answervalue);
     }
 
     /**
@@ -76,7 +77,7 @@ class update_session extends \core_external\external_api {
      * @param $answervalue
      * @return bool
      */
-    public static function update_answers_in_session($questionid, $answervalue): bool {
+    public static function update_answers_in_session($quizid, $questionid, $answervalue): bool {
         $answers = [];
         $decodeanswer = json_decode($answervalue, true);
         foreach ($decodeanswer as $key => $value) {
@@ -85,10 +86,25 @@ class update_session extends \core_external\external_api {
         if (!isset($_SESSION['quiz_answers'])) { // If the session variable is not set, set it to an empty array.
             $_SESSION['quiz_answers'] = [];
         }
-        $_SESSION['quiz_answers'][$questionid] = [ // Update the session with the currently checked answers.
-            'question_id' => $questionid,
-            'answers' => $answers,
-        ];
+        // array[$quizid][quiz_questions][$questionid][answers] will give an array of the answers for that specific question id
+        $_SESSION['quiz_answers'][$quizid] = [
+            'quizid' => $quizid,
+            'quiz_questions' => [$questionid] = [
+                // Update the session with the currently checked answers.
+                'question_id' => $questionid,
+                'answers' => $answers,
+            ],
+        ];/*
+        $_SESSION['quiz_answers'][$quizid] = [
+            'quizid' => $quizid,
+            'quiz_questions' => [
+                $questionid => [
+                    // Update the session with the currently checked answers.
+                    'question_id' => $questionid,
+                    'answers' => $decodeanswer,
+                ],
+            ],
+        ];*/
         return isset($_SESSION['quiz_answers']); // Return true if the session variable is set.
     }
 }
