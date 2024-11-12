@@ -1,8 +1,8 @@
 import {append_participation} from "./repository";
 
 export const init = async(quizid, studentid) => {
-    const takeQuizButton = document.getElementById("submitQuizBtn");
-    takeQuizButton.addEventListener("click", async function () {
+    const submitQuizButton = document.getElementById("submitQuizBtn");
+    submitQuizButton.addEventListener("click", async function () {
         window.console.log("quizid: ", quizid);// For debugging.
         window.console.log("studentid: ", studentid);// For debugging.
         try {

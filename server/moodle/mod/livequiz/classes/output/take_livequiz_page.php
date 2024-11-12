@@ -43,6 +43,8 @@ class take_livequiz_page implements renderable, templatable {
     /** @var int $questionid . The id of the question to be rendered*/
     private int $questionid;
 
+    private int $studentid;
+
     /** @var int $questionindex The index of the question in the quiz - Used for navigation */
     private int $questionindex;
 
@@ -55,10 +57,11 @@ class take_livequiz_page implements renderable, templatable {
      * @param livequiz $livequiz
      * @param int $questionid
      */
-    public function __construct(int $cmid, livequiz $livequiz, int $questionindex) {
+    public function __construct(int $cmid, livequiz $livequiz, int $questionindex, int $studentid) {
         $this->cmid = $cmid;
         $this->livequiz = $livequiz;
         $this->questionindex = $questionindex;
+        $this->studentid = $studentid;
         $this->questionid = $livequiz->get_questions()[$questionindex]->get_id();
         $this->nubmerofquestions = count($livequiz->get_questions());
     }
@@ -109,6 +112,7 @@ class take_livequiz_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = $this->livequiz->prepare_question_for_template($this->questionindex);
+        $data->studentid = $this->studentid;
         $data->cmid = $this->cmid;
         $data->isattempting = true;
         $data->questionid = $this->questionid;
