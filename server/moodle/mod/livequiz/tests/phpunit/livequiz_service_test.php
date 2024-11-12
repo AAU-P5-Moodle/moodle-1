@@ -269,13 +269,13 @@ final class livequiz_service_test extends \advanced_testcase {
 
         $getlecturer = $service->get_livequiz_question_lecturer($questions[0]->get_id());
         self::assertEquals($getlecturer['lecturer_id'], $lecturerid);
-        
+
         $getquiz = $service->get_livequiz_quiz_lecturer($livequiz->get_id());
         self::assertEquals($getquiz['lecturer_id'], $lecturerid);
 
-     
-        
-       
+
+
+
 
         // The amount of questions remain the same.
         $questionsresult = $livequizresult->get_questions();
@@ -415,6 +415,5 @@ final class livequiz_service_test extends \advanced_testcase {
         $this->assertEquals($answerswithid[2]->get_correct(), $returnedanswers[2]->get_correct());
         $this->assertEquals($answerswithid[2]->get_description(), $returnedanswers[2]->get_description());
         $this->assertEquals($answerswithid[2]->get_explanation(), $returnedanswers[2]->get_explanation());
-
     }
 }

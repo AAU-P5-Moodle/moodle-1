@@ -128,7 +128,7 @@ class livequiz_services {
             $quizid = $livequiz->get_id();
 
             livequiz_quiz_lecturer_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
-            $this->submit_questions($livequiz,  $lecturerid);
+            $this->submit_questions($livequiz, $lecturerid);
 
 
             $transaction->allow_commit();
@@ -146,7 +146,6 @@ class livequiz_services {
      * @throws dml_exception
      * @throws Exception
      */
-
     private function submit_questions(livequiz $livequiz, int $lecturerid): void {
 
         $existingquestions = $this->get_questions_with_answers($livequiz->get_id());
@@ -178,7 +177,6 @@ class livequiz_services {
             }
             $answers = $newquestion->get_answers();
             $this->submit_answers($questionid, $answers);
-
         }
 
         // Find deleted questions by comparing existing question IDs with updated ones.
@@ -294,5 +292,4 @@ class livequiz_services {
         $lecturer = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_questions_id($questionid);
         return $lecturer;
     }
-
 }

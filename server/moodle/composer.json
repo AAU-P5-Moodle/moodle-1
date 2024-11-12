@@ -44,7 +44,8 @@
         "ext-json": "*",
         "ext-hash": "*",
         "ext-fileinfo": "*",
-        "ext-sodium": "*"
+        "ext-sodium": "*",
+        "moodlehq/moodle-cs": "^3.4"
     },
     "suggest": {
         "ext-mysqli": "Needed when Moodle uses MySQL or MariaDB database.",
@@ -54,5 +55,10 @@
         "ext-tokenizer": "Enabling Tokenizer PHP extension is recommended, it improves Moodle Networking functionality.",
         "ext-soap": "Enabling SOAP PHP extension is useful for web services and some plugins.",
         "ext-exif": "Enabling Exif PHP extension is recommended, it is used by Moodle to parse image meta data."
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
