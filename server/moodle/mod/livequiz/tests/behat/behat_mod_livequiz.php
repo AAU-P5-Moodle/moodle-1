@@ -14,20 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace mod_livequiz\tests\behat;
+
+use behat_base;
+
+// This is used because behat cannot find the class when the namespace is defined.
+class_alias('mod_livequiz\tests\behat\behat_mod_livequiz', 'behat_mod_livequiz');
+
 /**
- * Livequiz activity version information.
+ * Steps definitions related to mod_livequiz.
  *
  * @package   mod_livequiz
- * @copyright 2024 Software AAU
+ * @category  test
+ * @copyright Software AAU 2024
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
- defined('MOODLE_INTERNAL') || die();
-
-global $plugin;
-
-
-$plugin = new stdClass(); // Initialize $plugin as an object.
-$plugin->version = 2024072516;
-$plugin->requires = 2024041600;
-$plugin->component = 'mod_livequiz';
+class behat_mod_livequiz extends behat_base {
+    /**
+     * Asserts whether the given element is checked.
+     * @Then the :checkbox answer should be checked
+     * @param $element (radio button or checkbox)
+     */
+    public function assertischecked($element) {
+        $this->assertSession()->checkboxChecked($element);
+    }
+}

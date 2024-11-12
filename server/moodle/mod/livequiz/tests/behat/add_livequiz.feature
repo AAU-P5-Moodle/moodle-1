@@ -26,6 +26,7 @@ Scenario: Add a livequiz to a course
   And I press "Add an activity or resource"
   And I should see "Live Quiz"
   And I click on "Live Quiz" "link"
+  And I wait until the page is ready
   And I should see "New Live Quiz"
   And I should see "Common module settings"
   And I should see "Restrict access"
@@ -37,7 +38,6 @@ Scenario: Add a livequiz to a course
   And I press "Save and return to course"
   And I should see "livequiz"
   When I click on "livequiz" "link" in the "livequiz" activity
-  Then I should see "livequiz"
-  And I should see "This is the livequiz view page"
-  
+  And I should see "livequiz"
+  And I should see "index_page"
 

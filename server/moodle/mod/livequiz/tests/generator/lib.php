@@ -44,7 +44,6 @@ class mod_livequiz_generator extends testing_module_generator {
             'introformat' => 1,
             'timecreated' => time(),
             'timemodified' => time(),
-
         ];
         // Loop over record and insert values where they are missing.
         foreach ($defaultlivequizsettings as $name => $value) {
