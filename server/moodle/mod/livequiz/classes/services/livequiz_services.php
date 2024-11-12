@@ -166,7 +166,7 @@ class livequiz_services {
         $deletedquestions = array_diff($existingquestionids, $updatedquestionids);
 
         /* @var question $question // Type specification for $question, for PHPStorm IDE */
-        foreach($deletedquestions as $questionid) {
+        foreach ($deletedquestions as $questionid) {
             self::delete_question($questionid);
         }
     }
@@ -207,7 +207,7 @@ class livequiz_services {
         $deletedanswers = array_diff($existinganswerids, $updatedanswerids);
 
         /* @var answer $deletedanswer // Type specification for $deletedanswer, for PHPStorm IDE */
-        foreach($deletedanswers as $deletedanswer) {
+        foreach ($deletedanswers as $deletedanswer) {
             self::delete_answer($deletedanswer->get_id());
         }
     }
@@ -245,6 +245,9 @@ class livequiz_services {
     }
 
     /**
+     * Deletes an answer from the database.
+     *
+     * @param int $answerid
      * @throws dml_exception
      */
     private static function delete_answer(int $answerid): void {
@@ -256,21 +259,20 @@ class livequiz_services {
     }
 
     /** Deletes a question, it's answers and any relations to other entities.
-     * @warning Only run this within a transaction!
+     *
      * @throws dml_exception
      * @throws Exception
      */
     private static function delete_question(int $questionid): void {
         $answers = questions_answers_relation::get_answers_from_question($questionid);
 
-        foreach($answers as $answer) {
+        foreach ($answers as $answer) {
             $currentanswerid = $answer->get_id();
-            questions_answers_relation::delete_question_answer_relation($questionid,$currentanswerid);
+            questions_answers_relation::delete_question_answer_relation($questionid, $currentanswerid);
             self::delete_answer($currentanswerid);
         }
 
         quiz_questions_relation::delete_question_quiz_relation($questionid);
         question::delete_question($questionid);
     }
-
 }

@@ -324,7 +324,8 @@ final class livequiz_service_test extends \advanced_testcase {
     /**
      * Test getting answers from a student in participation.
      *
-     * @covers \mod_livequiz\services\livequiz_services::get_answers_from_student_in_participation
+     * @covers \mod_livequiz\services\livequiz_services::submit_quiz
+     * @covers \mod_livequiz\services\livequiz_services::delete_question
      * @return void
      * @throws dml_exception
      */
@@ -369,10 +370,13 @@ final class livequiz_service_test extends \advanced_testcase {
     }
 
     /**
+     * Tests deleting a question from the database
+     *
+     * @covers \mod_livequiz\services\livequiz_services::submit_quiz
      * @throws dml_exception
      * @throws Exception
      */
-    public function test_delete_question() {
+    public function test_delete_question(): void {
         $service = livequiz_services::get_singleton_service_instance();
         $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
 
@@ -396,17 +400,25 @@ final class livequiz_service_test extends \advanced_testcase {
         $this->assertEquals("You need to answer where north is.", $testquizresubmittedquestions[0]->get_explanation());
 
         $this->assertEquals('Test question 3', $testquizresubmittedquestions[1]->get_title());
-        $this->assertEquals('Why is compressed air important for driving a truck.', $testquizresubmittedquestions[1]->get_description());
+        $this->assertEquals(
+            'Why is compressed air important for driving a truck.',
+            $testquizresubmittedquestions[1]->get_description()
+        );
         $this->assertEquals(100, $testquizresubmittedquestions[1]->get_timelimit());
-        $this->assertEquals("Compressed air is essential for driving a truck, but why?", $testquizresubmittedquestions[1]->get_explanation());
+        $this->assertEquals(
+            "Compressed air is essential for driving a truck, but why?",
+            $testquizresubmittedquestions[1]->get_explanation()
+        );
     }
 
     /**
+     * Test that deleting a question, with a relation, throws.
+     *
+     * @covers \mod_livequiz\services\livequiz_services::submit_quiz
      * @throws dml_exception
      * @throws Exception
      */
-    public function test_delete_question_throws_if_relation_exist()
-    {
+    public function test_delete_question_throws_if_relation_exist(): void {
         $service = livequiz_services::get_singleton_service_instance();
         $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
 
@@ -415,7 +427,7 @@ final class livequiz_service_test extends \advanced_testcase {
         $studentanswertestdata = [
             'studentid' => 1,
             'participationid' => 1,
-            'answerid' => $testquizsubmittedquestions[0]->get_answers()[0]->get_id()
+            'answerid' => $testquizsubmittedquestions[0]->get_answers()[0]->get_id(),
         ];
 
         student_answers_relation::insert_student_answer_relation(
@@ -432,5 +444,47 @@ final class livequiz_service_test extends \advanced_testcase {
 
         $service->submit_quiz($testquizsubmitted);
         $testquizresubmittedquestions = $testquizsubmitted->get_questions();
+    }
+
+    /**
+     * Test deleting an answer.
+     *
+     * @covers \mod_livequiz\services\livequiz_services::submit_quiz
+     * @covers \mod_livequiz\services\livequiz_services::delete_answer
+     * @throws dml_exception
+     * @throws Exception
+     */
+    public function delete_answer(): void {
+        $service = livequiz_services::get_singleton_service_instance();
+        $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
+
+        $testquizquestions = $testquiz->get_questions();
+        $testquizfirstquestionanswers = $testquizquestions[0]->get_answers();
+        $testquizsubmitted = $service->submit_quiz($testquiz);
+        $testquizsubmittedquestions = $testquizsubmitted->get_questions();
+
+        array_shift($testquizsubmittedquestions[0]->get_answers());
+        $testquizsubmitted->set_questions($testquizsubmittedquestions);
+
+        $testquizresubmitted = $service->submit_quiz($testquizsubmitted);
+        $testquizresubmittedquestions = $testquizsubmitted->get_questions();
+        $testquizresubmittedanswers = $testquizresubmittedquestions[0]->get_answers();
+
+        // Assert that the amount of questions has changed.
+        $this->assertNotSameSize($testquizfirstquestionanswers, $testquizresubmittedanswers);
+        // Assert that the first two questions are question 2 and 3, since 1 was deleted.
+        $this->assertEquals(1, $testquizresubmittedanswers[0]->get_correct());
+        $this->assertEquals('150-350 kg', $testquizresubmittedanswers[0]->get_description());
+        $this->assertEquals(
+            'A female Polar Bear weighs this much.',
+            $testquizresubmittedanswers[0]->get_explanation()
+        );
+
+        $this->assertEquals(0, $testquizresubmittedanswers[1]->get_correct());
+        $this->assertEquals('600-800 kg', $testquizresubmittedanswers[1]->get_description());
+        $this->assertEquals(
+            'Neither af female nor a male Polar Bear weighs this much.',
+            $testquizresubmittedanswers[1]->get_explanation()
+        );
     }
 }
