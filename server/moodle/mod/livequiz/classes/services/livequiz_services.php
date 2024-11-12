@@ -168,6 +168,11 @@ class livequiz_services {
         // Find deleted questions by comparing existing question IDs with updated ones.
         $existingquestionids = array_keys($existingquestionmap);
         $deletedquestions = array_diff($existingquestionids, $updatedquestionids);
+
+        /* @var question $question // Type specification for $question, for PHPStorm IDE */
+        foreach ($deletedquestions as $questionid) {
+            self::delete_question($questionid);
+        }
     }
 
     /**
@@ -203,6 +208,11 @@ class livequiz_services {
 
         $existinganswerids = array_keys($existinganswersmap);
         $deletedanswers = array_diff($existinganswerids, $updatedanswerids);
+
+        /* @var answer $deletedanswer // Type specification for $deletedanswer, for PHPStorm IDE */
+        foreach ($deletedanswers as $deletedanswer) {
+            self::delete_answer($deletedanswer->get_id());
+        }
     }
 
     /**
@@ -251,12 +261,44 @@ class livequiz_services {
      * @return answer[] The list of answers.
      * @throws dml_exception
      */
-    public function get_answers_from_stundent_in_participation(int $studentid, int $participationid): array {
+    public function get_answers_from_student_in_participation(int $studentid, int $participationid): array {
         $answers = [];
         $answerids = student_answers_relation::get_answersids_from_student_in_participation($studentid, $participationid);
         foreach ($answerids as $answerid) {
             $answers[] = answer::get_answer_from_id($answerid);
         }
         return $answers;
+    }
+
+    /**
+     * Deletes an answer from the database.
+     *
+     * @param int $answerid
+     * @throws dml_exception
+     */
+    private static function delete_answer(int $answerid): void {
+        $participationcount = student_answers_relation::get_answer_participation_count($answerid);
+        if ($participationcount > 0) {
+            throw new dml_exception("Cannot delete answer with participations");
+        }
+        answer::delete_answer($answerid);
+    }
+
+    /** Deletes a question, it's answers and any relations to other entities.
+     *
+     * @throws dml_exception
+     * @throws Exception
+     */
+    private static function delete_question(int $questionid): void {
+        $answers = questions_answers_relation::get_answers_from_question($questionid);
+
+        foreach ($answers as $answer) {
+            $currentanswerid = $answer->get_id();
+            questions_answers_relation::delete_question_answer_relation($questionid, $currentanswerid);
+            self::delete_answer($currentanswerid);
+        }
+
+        quiz_questions_relation::delete_question_quiz_relation($questionid);
+        question::delete_question($questionid);
     }
 }
