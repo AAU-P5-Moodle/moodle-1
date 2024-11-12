@@ -16,8 +16,6 @@
 
 namespace mod_livequiz\models;
 
-use stdClass;
-
 /**
  * Class Participation
  *
@@ -30,17 +28,17 @@ use stdClass;
  */class participation {
     /**
      * Participation id
-     * @var $id
+     * @var int $id
      */
-    private $id;
+    private int $id;
     /**
-     * @var $studentid
+     * @var int $studentid
      */
-    private $studentid;
+    private int $studentid;
     /**
-     * @var $livequizid
+     * @var int $livequizid
      */
-    private $livequizid;
+    private int $livequizid;
 
     /**
      * Participation constructor.
@@ -96,24 +94,5 @@ use stdClass;
      */
     public function set_livequizid(int $livequizid): void {
         $this->livequizid = $livequizid;
-    }
-    /**
-     * Summary of add_participation
-     * @return void
-     */
-    public function add_participation() {
-        global $DB;
-        $record = new stdClass();
-        $record->studentid = $this->studentid;
-        $record->livequizid = $this->livequizid;
-        $DB->insert_record('participation', $record);
-    }
-    /**
-     * Summary of get_participation_by_studentid
-     * @param  $studentid
-     */
-    public static function get_participation_by_studentid($studentid) {
-        global $DB;
-        return $DB->get_record('participation', ['studentid' => $studentid]);
     }
 }
