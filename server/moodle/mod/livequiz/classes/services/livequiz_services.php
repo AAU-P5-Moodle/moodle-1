@@ -25,6 +25,7 @@ require_once(__DIR__ . '/../models/questions_answers_relation.php');
 require_once(__DIR__ . '/../models/quiz_questions_relation.php');
 require_once(__DIR__ . '/../models/livequiz_questions_lecturer_relation.php');
 require_once(__DIR__ . '/../models/livequiz_quiz_lecturer_relation.php');
+require_once(__DIR__ . '/../models/student_quiz_relation.php');
 
 use dml_exception;
 use dml_transaction_exception;
@@ -36,6 +37,11 @@ use mod_livequiz\models\questions_answers_relation;
 use mod_livequiz\models\quiz_questions_relation;
 use mod_livequiz\models\livequiz_quiz_lecturer_relation;
 use mod_livequiz\models\livequiz_questions_lecturer_relation;
+use mod_livequiz\models\participation;
+use mod_livequiz\models\student_quiz_relation;
+
+use mod_livequiz\models\student_answers_relation;
+
 use PhpXmlRpc\Exception;
 use function PHPUnit\Framework\throwException;
 
@@ -94,7 +100,7 @@ class livequiz_services {
      *  TODO:
      *  Handle lecturer id such that the intermediate table can be updated accordingly.
      *
-     * @throws dml_exception
+     * @throws dml_exception|Exception
      */
     public function submit_quiz(livequiz $livequiz, int $lecturerid): livequiz {
         $questions = $livequiz->get_questions();
@@ -117,7 +123,7 @@ class livequiz_services {
 
             $quizid = $livequiz->get_id();
             livequiz_quiz_lecturer_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
-            $this->submit_questions($quizid, $questions, $lecturerid);
+            $this->submit_questions($livequiz,  $lecturerid);
 
             $transaction->allow_commit();
         } catch (dml_exception $e) {
@@ -132,16 +138,42 @@ class livequiz_services {
      *
      * @throws dml_transaction_exception
      * @throws dml_exception
+     * @throws Exception
      */
-    private function submit_questions(int $quizid, array $questions, int $lecturerid): void {
-        foreach ($questions as $question) {
-            $answers = $question->get_answers();
-            $questionid = question::submit_question($question);
+    private function submit_questions(livequiz $livequiz, array $questions, int $lecturerid): void {
+        $existingquestions = $this->get_questions_with_answers($livequiz->get_id());
+        $newquestions = $livequiz->get_questions();
 
-            quiz_questions_relation::append_question_to_quiz($questionid, $quizid);
-            livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
+        $quizid = $livequiz->get_id();
+        $updatedquestionids = [];
+
+        // Create a map of existing questions for quick lookup by ID.
+        $existingquestionmap = [];
+        foreach ($existingquestions as $existingquestion) {
+            $existingquestionmap[$existingquestion->get_id()] = $existingquestion;
+        }
+        /* @var question $newquestion // Type specification for $newquestion, for PHPStorm IDE */
+        foreach ($newquestions as $newquestion) {
+            $questionid = $newquestion->get_id();
+
+            if ($questionid == 0) {
+                // Insert new question if ID is 0 (new question).
+                $questionid = question::insert_question($newquestion);
+                quiz_questions_relation::insert_quiz_question_relation($questionid, $livequiz->get_id());
+                livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
+                $updatedquestionids[] = $questionid;
+            } else if (isset($existingquestionmap[$questionid])) {
+                // Update existing question if found in the map.
+                $newquestion->update_question();
+                $updatedquestionids[] = $questionid;
+            }
+            $answers = $newquestion->get_answers();
             $this->submit_answers($questionid, $answers);
         }
+
+        // Find deleted questions by comparing existing question IDs with updated ones.
+        $existingquestionids = array_keys($existingquestionmap);
+        $deletedquestions = array_diff($existingquestionids, $updatedquestionids);
     }
 
     /**
@@ -149,12 +181,34 @@ class livequiz_services {
      *
      * @throws dml_transaction_exception
      * @throws dml_exception
+     * @throws Exception
      */
     private function submit_answers(int $questionid, array $answers): void {
-        foreach ($answers as $answer) {
-            $answerid = answer::submit_answer($answer);
-            questions_answers_relation::append_answer_to_question($questionid, $answerid);
+        $existinganswers = questions_answers_relation::get_answers_from_question($questionid);
+        $newanswers = $answers;
+
+        $updatedanswerids = [];
+
+        $existinganswersmap = [];
+        foreach ($existinganswers as $existinganswer) {
+            $existinganswersmap[$existinganswer->get_id()] = $existinganswer;
         }
+
+        /* @var answer $newanswer // Type specification for $newanswer, for PHPStorm IDE */
+        foreach ($newanswers as $newanswer) {
+            $answerid = $newanswer->get_id();
+            if ($answerid == 0) {
+                $answerid = answer::insert_answer($newanswer);
+                questions_answers_relation::insert_question_answer_relation($questionid, $answerid);
+                $updatedanswerids[] = $answerid;
+            } else if (isset($existinganswersmap[$answerid])) {
+                $newanswer->update_answer();
+                $updatedanswerids[] = $answerid;
+            }
+        }
+
+        $existinganswerids = array_keys($existinganswersmap);
+        $deletedanswers = array_diff($existinganswerids, $updatedanswerids);
     }
 
     /**
@@ -170,6 +224,46 @@ class livequiz_services {
             $question->add_answers($answers);
         }
         return $questions;
+    }
+
+    /**
+     * Creates a new participation record in the database.
+     * @param int $studentid
+     * @param int $quizid
+     * @throws dml_exception
+     * @return participation
+     */
+    public function new_participation(int $studentid, int $quizid): participation {
+        // Add parcitipation using the model.
+        global $DB;
+        $transaction = $DB->start_delegated_transaction();
+        $participation = new participation($studentid, $quizid);
+        try {
+            $participation->set_id(student_quiz_relation::insert_student_quiz_relation($quizid, $studentid));
+
+            $transaction->allow_commit();
+        } catch (dml_exception $e) {
+            $transaction->rollback($e);
+            throw $e;
+        }
+        return $participation;
+    }
+
+    /**
+     * Gets answers from a student in a specific participation.
+     *
+     * @param int $studentid The ID of the student.
+     * @param int $participationid The ID of the participation.
+     * @return answer[] The list of answers.
+     * @throws dml_exception
+     */
+    public function get_answers_from_stundent_in_participation(int $studentid, int $participationid): array {
+        $answers = [];
+        $answerids = student_answers_relation::get_answersids_from_student_in_participation($studentid, $participationid);
+        foreach ($answerids as $answerid) {
+            $answers[] = answer::get_answer_from_id($answerid);
+        }
+        return $answers;
     }
     /**
      * gets lecturer from quiz
