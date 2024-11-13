@@ -72,6 +72,10 @@ if ($_SESSION['completed']) { // If the quiz has been submitted, the user is not
     die();
 }
 
+if (!isset($_SESSION['quiz_answers'])) { // If the session variable is not set, set it to an empty array.
+    $_SESSION['quiz_answers'] = [];
+}
+
 $context = context_module::instance($cmid); // Get the context.
 
 $PAGE->set_context($context); // Make sure to set the page context.
