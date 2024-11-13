@@ -22,7 +22,7 @@ use dml_exception;
 use mod_livequiz\services\livequiz_services;
 
 /**
- * Class insert_participation
+ * Class submit_quiz
  *
  * This class extends the core_external\external_api and is used to handle
  * the external API for appending participation in the live quiz module.
@@ -32,7 +32,7 @@ use mod_livequiz\services\livequiz_services;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class insert_participation extends \core_external\external_api {
+class submit_quiz extends \core_external\external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
@@ -55,12 +55,14 @@ class insert_participation extends \core_external\external_api {
         self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
         $services = livequiz_services::get_singleton_service_instance();
         try {
-            $participationid = $services->insert_participation($studentid, $quizid);
-            self::insert_answers_from_session($quizid, $studentid, $participationid);
-            return true;
+            // Insert participation into the DB.
+            $participation = $services->insert_participation($studentid, $quizid);
+            // Insert answers from session into the DB.
+            self::insert_answers_from_session($quizid, $studentid, $participation->get_id());
+            return true; // Return true if successful.
         } catch (dml_exception $e) {
             debugging('Error inserting participation: ' . $e->getMessage());
-            return false;
+            return false; // Return false if unsuccessful.
         }
     }
 
@@ -81,7 +83,7 @@ class insert_participation extends \core_external\external_api {
      * @return void
      * @throws dml_exception
      */
-    private static function insert_answers_from_session(int $quizid, int $studentid, int $participationid): void {
+    public static function insert_answers_from_session(int $quizid, int $studentid, int $participationid): void {
         $quizquestions = $_SESSION['quiz_answers'][$quizid]; // Get the questions from the quiz.
         $answers = [];
         $services = livequiz_services::get_singleton_service_instance();

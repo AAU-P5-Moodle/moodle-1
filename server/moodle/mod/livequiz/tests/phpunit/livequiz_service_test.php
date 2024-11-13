@@ -381,7 +381,7 @@ final class livequiz_service_test extends \advanced_testcase {
      * Test of new_participation
      * @covers \mod_livequiz\services\livequiz_services::insert_participation
      */
-    public function test_new_participation(): void {
+    public function test_insert_participation(): void {
         $participationdata = $this->create_participation_data_for_test();
         $service = livequiz_services::get_singleton_service_instance();
 

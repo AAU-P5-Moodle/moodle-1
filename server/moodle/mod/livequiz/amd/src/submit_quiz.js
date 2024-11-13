@@ -1,12 +1,12 @@
-import {insert_participation} from "./repository";
+import {submit_quiz} from "./repository";
 
+// Setup eventlistener for insterting participation and answer choices upon submitting quiz.
 export const init = async(quizid, studentid) => {
     const submitQuizButton = document.getElementById("submitQuizBtn");
     submitQuizButton.addEventListener("click", function () {
         try {
-            // Insert participation and wait for the participation ID.
-            let participationid = insert_participation(quizid, studentid);
-            window.console.log("Inserted participation with ID: ", participationid);
+            // Insert participation and the answers given in the quiz.
+            submit_quiz(quizid, studentid);
         } catch (error) {
             window.console.error("Error in insert_participation", error);
         }

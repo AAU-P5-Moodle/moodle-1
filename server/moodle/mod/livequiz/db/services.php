@@ -28,16 +28,9 @@ namespace mod_livequiz\external;
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
-    'mod_livequiz_insert_participation' => [
-        'classname'   => 'mod_livequiz\external\insert_participation',
-        'description' => 'Record user participation in a livequiz.',
-        'type'        => 'write',
-        'ajax'        => true,
-        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
-    ],
-    'mod_livequiz_insert_answer_choice' => [
-        'classname'   => 'mod_livequiz\external\insert_answer_choices',
-        'description' => 'Record an answer choice in a livequiz.',
+    'mod_livequiz_submit_quiz' => [
+        'classname'   => 'mod_livequiz\external\submit_quiz',
+        'description' => 'Record user participation and answers in a livequiz.',
         'type'        => 'write',
         'ajax'        => true,
         'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
