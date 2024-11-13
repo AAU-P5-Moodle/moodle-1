@@ -104,6 +104,21 @@ class take_livequiz_page implements renderable, templatable {
     }
 
     /**
+     * Get the ids of the chosen answers
+     * @return array
+     */
+    private function get_answer_ids(): array{
+        $answerarray = [];
+        if (!isset($_SESSION['quiz_answers'])) {
+            return $answerarray;
+        }
+        foreach ($_SESSION['quiz_answers'][$this->livequiz->get_id()] as $questionid => $answers) {
+            $answerarray = array_merge($answerarray, $answers['answers']);
+        }
+        return $answerarray;
+    }
+
+    /**
      * Export this data so it can be used as the context for a mustache template.
      *
      * @param renderer_base $output
@@ -120,6 +135,8 @@ class take_livequiz_page implements renderable, templatable {
         $data->nextquestionindex = $this->get_next_question_index();
         $data->previousquestionindex = $this->get_previous_question_index();
         $data->numberofquestions = $this->nubmerofquestions;
+        $data->answerids = json_encode($this->get_answer_ids());
+
         // These are used for navigation.
         if ($data->nextquestionindex !== $this->questionindex) {
             // If the next question is the same as the current question, we don't want to show the next button.

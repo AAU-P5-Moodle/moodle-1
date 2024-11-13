@@ -35,6 +35,13 @@ $functions = [
         'ajax'        => true,
         'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
     ],
+    'mod_livequiz_insert_answer_choice' => [
+        'classname'   => 'mod_livequiz\external\insert_answer_choice',
+        'description' => 'Record an answer choice in a livequiz.',
+        'type'        => 'write',
+        'ajax'        => true,
+        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
     'mod_livequiz_update_session' => [
         'classname'   => 'mod_livequiz\external\update_session',
         'description' => 'Update the session with currently checked answers in the live quiz module.',

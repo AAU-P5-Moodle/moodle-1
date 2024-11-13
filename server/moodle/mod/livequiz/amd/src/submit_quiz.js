@@ -1,6 +1,7 @@
 import {insert_participation, insert_answer_choice} from "./repository";
 
 export const init = async(quizid, studentid, answerids) => {
+    window.console.log("submitting quiz");
     const submitQuizButton = document.getElementById("submitQuizBtn");
     submitQuizButton.addEventListener("click", async function () {
         try {
@@ -8,8 +9,10 @@ export const init = async(quizid, studentid, answerids) => {
             let participationid = await insert_participation(quizid, studentid);
             window.console.log("Inserted participation with ID: ", participationid);
 
+            let answers = JSON.parse(answerids);
+
             // Insert each answer choice after participation is successfully created.
-            for (let answerid of answerids) {
+            for (let answerid of answers) {
                 try {
                     await insert_answer_choice(studentid, answerid, participationid);
                 } catch (error) {

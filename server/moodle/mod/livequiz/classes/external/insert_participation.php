@@ -47,17 +47,16 @@ class insert_participation extends \core_external\external_api {
      * Summary of execute
      * @param int $quizid
      * @param int  $studentid
-     * @return boolean
+     * @return int
      */
     public static function execute(int $quizid, int $studentid) {
         self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
         $services = livequiz_services::get_singleton_service_instance();
         try {
-            $services->insert_participation($studentid, $quizid);
-            return true;
+            return $services->insert_participation($studentid, $quizid);
         } catch (dml_exception $e) {
             debugging('Error inserting participation: ' . $e->getMessage());
-            return false;
+            return -1;
         }
     }
     /**

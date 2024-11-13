@@ -265,7 +265,7 @@ class livequiz_services {
      * @throws dml_exception
      * @return participation
      */
-    public function insert_participation(int $studentid, int $quizid): participation {
+    public function insert_participation(int $studentid, int $quizid): int {
         // Add participation using the model.
         global $DB;
         $transaction = $DB->start_delegated_transaction();
@@ -278,7 +278,7 @@ class livequiz_services {
             $transaction->rollback($e);
             throw $e;
         }
-        return $participation;
+        return $participation->get_id();
     }
 
     /**

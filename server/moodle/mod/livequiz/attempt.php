@@ -88,7 +88,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionindex, $USER->id, $_SESSION['quiz_answers']);
+$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionindex, $USER->id);
 
 // Output.
 echo $OUTPUT->header();
