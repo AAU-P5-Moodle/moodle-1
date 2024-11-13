@@ -26,10 +26,11 @@ export const insert_answer_choice = (studentid, answerid, participationid) => fe
 ])[0];
 
 // A function to update session.
-export const update_session = (questionid, answers) => fetchMany([
+export const update_session = (quizid, questionid, answers) => fetchMany([
     {
         methodname: 'mod_livequiz_update_session',
         args: {
+            quizid,
             questionid,
             answers
         },
