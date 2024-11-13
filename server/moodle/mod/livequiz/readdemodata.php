@@ -39,6 +39,8 @@ class readdemodata {
      * @return livequiz object
      */
     public static function insertdemodata(livequiz $livequiz): livequiz {
+        global $USER;
+        $userid = $USER->id;
         $livequizservice = livequiz_services::get_singleton_service_instance();
 
         // Read the JSON file.
@@ -79,7 +81,7 @@ class readdemodata {
             $questions[] = $modelquestion;
         }
         $livequiz->add_questions($questions);
-        $livequiz = $livequizservice->submit_quiz($livequiz); // Insert into database.
+        $livequiz = $livequizservice->submit_quiz($livequiz, $userid); // Insert into database.
         return $livequiz;
     }
 }
