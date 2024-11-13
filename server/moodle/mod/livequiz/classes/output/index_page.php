@@ -64,7 +64,11 @@ class index_page implements renderable, templatable {
         $participations = student_quiz_relation::get_all_student_participation_for_quiz($this->cmid, $this->studentid);
         foreach ($participations as $participation) {
             $data->participations[] = (object) [
-                'id' => $participation->get_id(), // Only for visuals in the template.
+                'id' => $participation->get_id(), // This is the id from the database.
+                'resultsurl' => (new moodle_url(
+                    '/mod/livequiz/results.php',
+                    ['id' => $this->cmid, 'livequizid' => $participation->get_livequizid()]
+                ))->out(false),
             ];
         }
 
