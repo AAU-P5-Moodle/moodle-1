@@ -45,14 +45,6 @@ if (empty($currentquiz->get_questions())) { // If the quiz has no questions, ins
     $demoquiz = $currentquiz;
 }
 
-// Insert demo data if the site is running in behat mode.
-if (defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING) {
-    if (empty($currentquiz->get_questions())) { // The quiz should only be empty the first time attemp.php is called.
-        $demodatareader = new \mod_livequiz\readdemodata();
-        $demoquiz = $demodatareader->insertdemodata($currentquiz);
-    }
-}
-
 if (!$cm) { // If course module is not set, throw an exception.
     throw new moodle_exception('invalidcoursemodule', 'error');
 }
