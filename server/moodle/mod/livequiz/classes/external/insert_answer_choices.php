@@ -32,7 +32,7 @@ use mod_livequiz\services\livequiz_services;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class insert_answer_choice extends \core_external\external_api {
+class insert_answer_choices extends \core_external\external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
@@ -47,19 +47,17 @@ class insert_answer_choice extends \core_external\external_api {
     /**
      * Summary of execute
      * @param int $participationid
-     * @param int  $answerid
      * @param int $studentid
+     * @param int $quizid
      * @return boolean
      */
-    public static function execute(int $participationid, int $answerid, int $studentid) {
+    public static function execute(int $participationid, int $studentid, int $quizid) {
         self::validate_parameters(self::execute_parameters(), [
             'participationid' => $participationid,
-            'questionid' => $answerid,
             'studentid' => $studentid,
         ]);
-        $services = livequiz_services::get_singleton_service_instance();
         try {
-            $services->insert_answer_choice($studentid, $answerid, $participationid);
+            self::read_answers_from_session($quizid, $studentid, $participationid);
             return true;
         } catch (dml_exception $e) {
             debugging('Error inserting answer choice: ' . $e->getMessage());
@@ -75,7 +73,25 @@ class insert_answer_choice extends \core_external\external_api {
         return new external_value(PARAM_BOOL, 'Is insertion of participation successfull or not');
     }
 
-    //private function read_answers_from_session() {
-    //    $_SESSION['quiz_answers'][]
-    //}
+    /**
+     * Read answers from session.
+     * @param int $quizid
+     * @param int $studentid
+     * @param int $participationid
+     * @return void
+     * @throws dml_exception
+     */
+    private static function read_answers_from_session(int $quizid, int $studentid, int $participationid): void {
+        $quizquestions = $_SESSION['quiz_answers'][$quizid];
+        $answers = [];
+        $services = livequiz_services::get_singleton_service_instance();
+
+        foreach ($quizquestions as $questionid) {
+            $questionanswers = $questionid['answers'];
+            $answers = array_merge($answers, $questionanswers);
+        }
+        foreach ($answers as $answerid) {
+            $services->insert_answer_choice($studentid, $answerid, $participationid);
+        }
+    }
 }

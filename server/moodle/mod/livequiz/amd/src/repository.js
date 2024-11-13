@@ -14,13 +14,13 @@ export const insert_participation = (quizid, studentid) => fetchMany([
 ])[0];
 
 // Function to insert an answer choice.
-export const insert_answer_choice = (studentid, answerid, participationid) => fetchMany([
+export const insert_answer_choices = (studentid, participationid, quizid) => fetchMany([
     {
         methodname: 'mod_livequiz_insert_answer_choice',
         args: {
             studentid,
-            answerid,
-            participationid
+            participationid,
+            quizid
         },
     }
 ])[0];

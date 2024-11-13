@@ -271,9 +271,7 @@ class livequiz_services {
         //$transaction = $DB->start_delegated_transaction();
         $participation = new participation($studentid, $quizid);
         try {
-            echo "<script>console.log('before insert participation in service');</script>";
             $participation->set_id(student_quiz_relation::insert_student_quiz_relation($quizid, $studentid));
-            echo "<script>console.log('after insert participation in service');</script>";
             //$transaction->allow_commit();
         } catch (dml_exception $e) {
             //$transaction->rollback($e);

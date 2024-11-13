@@ -53,11 +53,9 @@ class insert_participation extends \core_external\external_api {
         self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
         $services = livequiz_services::get_singleton_service_instance();
         try {
-            debugging("before insert participation");
-            echo "<script>console.log('before insert participation');</script>";
+            error_log("before insert participation");
             $result = $services->insert_participation($studentid, $quizid);
-            echo "<script>console.log('after insert participation');</script>";
-            debugging("after insert participation");
+            error_log("after insert participation");
             return $result;
         } catch (dml_exception $e) {
             debugging('Error inserting participation: ' . $e->getMessage());
