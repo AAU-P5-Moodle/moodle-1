@@ -18,7 +18,7 @@
  * Livequiz activity version information.
  *
  * @package   mod_livequiz
- * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
+ * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

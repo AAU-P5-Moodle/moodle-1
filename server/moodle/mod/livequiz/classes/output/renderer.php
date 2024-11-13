@@ -28,7 +28,29 @@ use plugin_renderer_base;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends plugin_renderer_base {
-    
+    /**
+     *
+     * @param index_page $page
+     *
+     * @return string html for the page
+     * @throws moodle_exception
+     */
+    public function render_index_page(index_page $page): string {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('mod_livequiz/index_page', $data);
+    }
+
+    /**
+     *
+     * @param take_livequiz_page $page
+     *
+     * @return string html for the page
+     * @throws moodle_exception
+     */
+    public function render_take_livequiz_page(take_livequiz_page $page): string {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('mod_livequiz/take_livequiz_page', $data);
+    }
     /**
      * 
      * @return string html for the navbar
@@ -59,4 +81,5 @@ class renderer extends plugin_renderer_base {
         ];
         return parent::render_from_template('mod_livequiz/navigationbar', $tabs);
     }
+}
 }

@@ -43,6 +43,19 @@ class questions_answers_relation {
     }
 
     /**
+     * Deletes the relation between an answer and a question, given their IDs.
+     *
+     * @param int $answerid
+     * @param int $questionid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_question_answer_relation(int $questionid, int $answerid): bool {
+        global $DB;
+        return $DB->delete_records('livequiz_questions_answers', ['question_id' => $questionid, 'answer_id' => $answerid]);
+    }
+
+    /**
      * Get all answers from a question, given its id
      *
      * @param $questionid int
