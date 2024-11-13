@@ -8,7 +8,7 @@ export const init = async(quizid, studentid) => {
             // Insert participation and the answers given in the quiz.
             submit_quiz(quizid, studentid);
         } catch (error) {
-            window.console.error("Error in insert_participation", error);
+            window.console.error("Error in submit_quiz", error);
         }
     });
 };

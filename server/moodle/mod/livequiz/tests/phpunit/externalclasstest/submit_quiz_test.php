@@ -98,7 +98,7 @@ final class submit_quiz_test extends advanced_testcase {
         $studentid = 1;
         $participationid = 2;
 
-        // Call the function insert_participation() with the following parameters.
+        // Call the function insert_answers_from_session().
         submit_quiz::insert_answers_from_session($quizid, $studentid, $participationid);
 
         $this->assertDatabaseHas('livequiz_students_answers', [
