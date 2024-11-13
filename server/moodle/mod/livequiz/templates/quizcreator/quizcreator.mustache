@@ -15,20 +15,23 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 <div id="page-mod-livequiz-quizcreator">
-    <h1>{{#quizdata}}{{title}}{{/quizdata}}</h1>
+    <h1>{{quizdata.title}}</h1>
+
     <div id="form-container">
-        {{{form_html}}}
+        {{{quizdata.form}}}
     </div>
 
     <div id="saved-questions-container" style="border-radius: 10px; padding: 15px; background-color: #f9f9f9;">
-        <h3>{{#quizdata}} {{#questions}} Saved Questions: {{/questions}}{{/quizdata}}</h3>
+        <h3>Saved Questions:</h3>
         <ol id="saved_questions_list" style="padding-left: 20px; margin: 0;">
-            {{{saved_questions_html}}}
+            {{#savedquestions}}
+                <li>{{{.}}}</li>
+            {{/savedquestions}}
         </ol>
     </div>
 
     <div id="file-picker-container">
-        {{{file_picker_html}}}
+        {{{quizdata.filepicker}}}
     </div>
 
     <div id="quiz-modal-buttons">
@@ -36,7 +39,5 @@
         <button id="cancelQuiz" class="cancel_button">{{#str}}cancelquiz{{/str}}</button>
     </div>
 
-    {{#scripts}}
-        <script src="{{.}}"></script>
-    {{/scripts}}
+    <script src="{{scripturl}}"></script>
 </div>

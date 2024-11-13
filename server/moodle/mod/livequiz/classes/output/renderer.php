@@ -82,4 +82,4 @@ class renderer extends plugin_renderer_base {
         return parent::render_from_template('mod_livequiz/navigationbar', $tabs);
     }
 }
-}
+
