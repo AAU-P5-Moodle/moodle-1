@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-global $USER;
 
 /**
  * This displays when attempting a quiz.
@@ -28,7 +27,7 @@ require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
 
-global $PAGE, $OUTPUT;
+global $PAGE, $OUTPUT, $USER;
 
 // Get submitted parameters.
 $cmid = required_param('cmid', PARAM_INT); // Course module id.

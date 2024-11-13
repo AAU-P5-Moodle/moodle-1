@@ -34,7 +34,7 @@ $cmid = required_param('id', PARAM_INT); // Course module ID.
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
 require_login($course, true, $cm); // Ensure the user is logged in and can access this module.
-// Debugging: Check if $USER is defined and contains the id
+// Debugging: Check if $USER is defined and contains the id.
 if (!isset($USER->id)) {
     throw new moodle_exception('usernotauthenticated', 'error', '', null, 'User is not logged in or user data is missing.');
 }
