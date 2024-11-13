@@ -87,7 +87,7 @@ class update_session extends \core_external\external_api {
         if (!isset($_SESSION['quiz_answers'])) { // If the session variable is not set, set it to an empty array.
             $_SESSION['quiz_answers'] = [];
         }
-        // array[$quizid][$questionid][answers] will give an array of the answers for that specific question id
+        // The array[$quizid][$questionid][answers] will give an array of the answers for that specific question id.
         $_SESSION['quiz_answers'][$quizid][$questionid] = [
             'quizid' => $quizid,
             'questionid' => $questionid,
