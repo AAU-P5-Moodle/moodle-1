@@ -31,6 +31,8 @@ global $PAGE, $OUTPUT;
 // Get submitted parameters.
 $id = required_param('id', PARAM_INT); // Course module id.
 $quizid = required_param('livequizid', PARAM_INT);
+$participationindex = optional_param('participationindex', 0, PARAM_INT);
+
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
@@ -52,7 +54,17 @@ $context = context_module::instance($cm->id); // Set the context for the course 
 
 $PAGE->set_context($context); // Make sure to set the page context.
 
-$PAGE->set_url(new moodle_url('/mod/livequiz/results.php', ['id' => $id, 'quizid' => $quizid ]));
+if (!isset($_SESSION['participations'][$participationindex])) {
+    error_log('No participation found');
+}
+$participation = $_SESSION['participations'][$participationindex];
+
+$PAGE->set_url(new moodle_url('/mod/livequiz/results.php', [
+    'id' => $id,
+    'quizid' => $quizid,
+    'participationid' => $participation->get_id()]
+));
+
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 

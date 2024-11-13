@@ -62,17 +62,23 @@ class index_page implements renderable, templatable {
         $data->participations = [];
 
         $participations = student_quiz_relation::get_all_student_participation_for_quiz($this->cmid, $this->studentid);
-        foreach ($participations as $participation) {
+        $_SESSION['participations'] = $participations; // Store participations in session
+
+        foreach ($participations as $index => $participation) {
             $data->participations[] = (object) [
-                'id' => $participation->get_id(), // This is the id from the database.
-                'resultsurl' => (new moodle_url(
+                'participationindex' => $index,
+                'participationid'    => $participation->get_id(),
+                'resultsurl'         => (new moodle_url(
                     '/mod/livequiz/results.php',
-                    ['id' => $this->cmid, 'livequizid' => $participation->get_livequizid()]
+                    [
+                        'id' => $this->cmid,
+                        'livequizid' => $participation->get_livequizid(),
+                        'participationindex' => $index, // Pass the array index instead of the ID.
+                    ]
                 ))->out(false),
             ];
         }
 
-        error_log("WE PRINT HERE" . print_r($participations, true));
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
         return $data;
     }
