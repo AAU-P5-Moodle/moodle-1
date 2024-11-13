@@ -37,37 +37,60 @@ class insert_participation extends \core_external\external_api {
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
      */
-    public static function execute_parameters() {
+    public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
             'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
             'studentid' => new external_value(PARAM_INT, 'Student ID'),
         ]);
     }
+
     /**
      * Summary of execute
+     * Inserts participation and answers into the DB
      * @param int $quizid
-     * @param int  $studentid
-     * @return int
+     * @param int $studentid
+     * @return bool
      */
-    public static function execute(int $quizid, int $studentid): int {
+    public static function execute(int $quizid, int $studentid): bool {
         self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
         $services = livequiz_services::get_singleton_service_instance();
         try {
-            error_log("before insert participation");
-            $result = $services->insert_participation($studentid, $quizid);
-            error_log("after insert participation");
-            return $result;
+            $participationid = $services->insert_participation($studentid, $quizid);
+            self::insert_answers_from_session($quizid, $studentid, $participationid);
+            return true;
         } catch (dml_exception $e) {
             debugging('Error inserting participation: ' . $e->getMessage());
-            return -1;
+            return false;
         }
     }
+
     /**
      * Part of the webservice processing flow. Not called directly here,
      * but is in moodle's web service framework.
-     * @return \external_function_parameters
+     * @return external_value
      */
     public static function execute_returns(): external_value {
-        return new external_value(PARAM_INT, 'ID of the participation');
+        return new external_value(PARAM_BOOL, 'success');
+    }
+
+    /**
+     * Insert answers from session in DB.
+     * @param int $quizid
+     * @param int $studentid
+     * @param int $participationid
+     * @return void
+     * @throws dml_exception
+     */
+    private static function insert_answers_from_session(int $quizid, int $studentid, int $participationid): void {
+        $quizquestions = $_SESSION['quiz_answers'][$quizid]; // Get the questions from the quiz.
+        $answers = [];
+        $services = livequiz_services::get_singleton_service_instance();
+        foreach ($quizquestions as $questionid) { // Loop through each question in the quiz.
+            $questionanswers = $questionid['answers']; // Get the answers for the question.
+            $answers = array_merge($answers, $questionanswers); // Merge the answers into the answers array.
+        }
+        foreach ($answers as $answerid) { // Insert each answer choice in the DB.
+            $services->insert_answer_choice($studentid, $answerid, $participationid);
+        }
     }
 }

@@ -268,13 +268,13 @@ class livequiz_services {
     public function insert_participation(int $studentid, int $quizid): int {
         // Add participation using the model.
         global $DB;
-        //$transaction = $DB->start_delegated_transaction();
+        $transaction = $DB->start_delegated_transaction();
         $participation = new participation($studentid, $quizid);
         try {
             $participation->set_id(student_quiz_relation::insert_student_quiz_relation($quizid, $studentid));
-            //$transaction->allow_commit();
+            $transaction->allow_commit();
         } catch (dml_exception $e) {
-            //$transaction->rollback($e);
+            $transaction->rollback($e);
             throw $e;
         }
         return $participation->get_id();

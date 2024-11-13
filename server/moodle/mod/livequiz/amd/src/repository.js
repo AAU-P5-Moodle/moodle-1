@@ -13,18 +13,6 @@ export const insert_participation = (quizid, studentid) => fetchMany([
     }
 ])[0];
 
-// Function to insert an answer choice.
-export const insert_answer_choices = (studentid, participationid, quizid) => fetchMany([
-    {
-        methodname: 'mod_livequiz_insert_answer_choice',
-        args: {
-            studentid,
-            participationid,
-            quizid
-        },
-    }
-])[0];
-
 // A function to update session.
 export const update_session = (quizid, questionid, answers) => fetchMany([
     {

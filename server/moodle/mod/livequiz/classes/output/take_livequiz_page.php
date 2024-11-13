@@ -43,6 +43,7 @@ class take_livequiz_page implements renderable, templatable {
     /** @var int $questionid . The id of the question to be rendered*/
     private int $questionid;
 
+    /** @var int $studentid The id of the student taking the quiz */
     private int $studentid;
 
     /** @var int $questionindex The index of the question in the quiz - Used for navigation */
@@ -50,12 +51,14 @@ class take_livequiz_page implements renderable, templatable {
 
     /** @var int $nubmerofquestions The number of questions in the quiz - Used for navigation */
     private int $nubmerofquestions;
+
     /**
      * Constructor for take_livequiz_page, which sets the livequiz field.
      *
      * @param int $cmid
      * @param livequiz $livequiz
-     * @param int $questionid
+     * @param int $questionindex
+     * @param int $studentid
      */
     public function __construct(int $cmid, livequiz $livequiz, int $questionindex, int $studentid) {
         $this->cmid = $cmid;
@@ -104,23 +107,6 @@ class take_livequiz_page implements renderable, templatable {
     }
 
     /**
-     * Get the ids of the chosen answers
-     * @return array
-     */
-    private function get_answer_ids(): array {
-        $answerarray = [];
-        if (!isset($_SESSION['quiz_answers'])) {
-            return $answerarray;
-        }
-        foreach ($_SESSION['quiz_answers'][$this->livequiz->get_id()] as $questionid => $answers) {
-            foreach ($answers['answers'] as $answer) {
-                $answerarray[] = (int)$answer;
-            }
-        }
-        return $answerarray;
-    }
-
-    /**
      * Export this data so it can be used as the context for a mustache template.
      *
      * @param renderer_base $output
@@ -137,7 +123,6 @@ class take_livequiz_page implements renderable, templatable {
         $data->nextquestionindex = $this->get_next_question_index();
         $data->previousquestionindex = $this->get_previous_question_index();
         $data->numberofquestions = $this->nubmerofquestions;
-        $data->answerids = json_encode($this->get_answer_ids());
 
         // These are used for navigation.
         if ($data->nextquestionindex !== $this->questionindex) {
