@@ -138,6 +138,18 @@ class question {
     }
 
     /**
+     * Deletes a question from the database.
+     *
+     * @param int $questionid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_question(int $questionid): bool {
+        global $DB;
+        return $DB->delete_records('livequiz_questions', ['id' => $questionid]);
+    }
+
+    /**
      * Gets the ID of the question.
      *
      * @return int|0 // Returns the ID of the question, if it has one. 0 if it does not.
@@ -222,53 +234,6 @@ class question {
     }
 
     /**
-     * Getter for question hasmultiplecorrectanswers
-     * @return bool
-     */
-    public function get_hasmultiplecorrectanswers(): bool {
-        // This is a simple check to see if the question has multiple correct answers.
-        $numcorrect = 0;
-        $hasmultipleanswers = false;
-        foreach ($this->answers as $answer) {
-            if ($answer->get_correct()) {
-                $numcorrect++;
-            }
-        }
-        if ($numcorrect > 1) {
-            $hasmultipleanswers = true;
-        }
-        return $hasmultipleanswers;
-    }
-
-    /**
-     * Prepares the template data for mustache.
-     * @param stdClass $data
-     * @return stdClass
-     */
-    public function prepare_for_template(stdClass $data): stdClass {
-        // Add to data object.
-        $data->questionid = $this->id;
-        $data->questiontitle = $this->title;
-        $data->questiondescription = $this->description;
-        $data->questiontimelimit = $this->timelimit;
-        $data->questionexplanation = $this->explanation;
-        $data->answers = [];
-        foreach ($this->answers as $answer) {
-            $data->answers[] = [
-                'answerid' => $answer->get_id(),
-                'answerdescription' => $answer->get_description(),
-                'answerexplanation' => $answer->get_explanation(),
-                'answercorrect' => $answer->get_correct(),
-            ];
-        }
-        if ($this->get_hasmultiplecorrectanswers()) {
-            $data->answertype = 'checkbox';
-        } else {
-            $data->answertype = 'radio';
-        }
-        return $data;
-    }
-    /**
      * Sets the title of the question.
      *
      * @param string $title The title of the question.
@@ -302,5 +267,53 @@ class question {
      */
     public function set_explanation(string $explanation): void {
         $this->explanation = $explanation;
+    }
+
+    /**
+     * Getter for question hasmultiplecorrectanswers
+     * @return bool
+     */
+    public function get_hasmultiplecorrectanswers(): bool {
+        // This is a simple check to see if the question has multiple correct answers.
+        $numcorrect = 0;
+
+        foreach ($this->answers as $answer) {
+            if ($answer->get_correct()) {
+                $numcorrect++;
+                if ($numcorrect > 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Prepares the template data for mustache.
+     * @param stdClass $data
+     * @return stdClass
+     */
+    public function prepare_for_template(stdClass $data): stdClass {
+        // Add to data object.
+        $data->questionid = $this->id;
+        $data->questiontitle = $this->title;
+        $data->questiondescription = $this->description;
+        $data->questiontimelimit = $this->timelimit;
+        $data->questionexplanation = $this->explanation;
+        $data->answers = [];
+        foreach ($this->answers as $answer) {
+            $data->answers[] = [
+                'answerid' => $answer->get_id(),
+                'answerdescription' => $answer->get_description(),
+                'answerexplanation' => $answer->get_explanation(),
+                'answercorrect' => $answer->get_correct(),
+            ];
+        }
+        if ($this->get_hasmultiplecorrectanswers()) {
+            $data->answertype = 'checkbox';
+        } else {
+            $data->answertype = 'radio';
+        }
+        return $data;
     }
 }

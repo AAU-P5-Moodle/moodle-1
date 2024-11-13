@@ -64,4 +64,16 @@ class quiz_questions_relation {
 
         return $questions;
     }
+
+    /**
+     * Takes the ID of a question and deletes all relations between the question and quizzes.
+     *
+     * @param int $questionid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_question_quiz_relation(int $questionid): bool {
+        global $DB;
+        return $DB->delete_records('livequiz_quiz_questions', ['question_id' => $questionid]);
+    }
 }
