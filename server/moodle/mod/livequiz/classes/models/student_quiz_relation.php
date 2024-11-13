@@ -55,7 +55,9 @@ class student_quiz_relation {
             );
         $participations = [];
         foreach ($participationrecords as $participation) {
-            $participations[] = new participation($participation->student_id, $participation->livequiz_id);
+            $participationobject = new participation($participation->student_id, $participation->livequiz_id);
+            $participationobject->set_id($participation->id);
+            $participations[] = $participationobject;
         }
         return $participations;
     }

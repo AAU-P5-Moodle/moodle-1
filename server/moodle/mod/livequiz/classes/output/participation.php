@@ -21,32 +21,23 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
-use moodle_url;
-use mod_livequiz\models\student_quiz_relation;
 
 /**
- * Class index_page
+ * Class results_page
  * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class index_page implements renderable, templatable {
-    /** @var string $sometext Some text to show how to pass data to a template. */
-    private string $sometext;
+class participation implements renderable, templatable {
     /** @var int $cmid the course module id */
     protected int $cmid;
-    /** @var int $studentid the student id */
-    protected int $studentid;
 
     /**
      * index_page constructor.
-     * @param string $sometext
      * @param int $id
      */
-    public function __construct(string $sometext, int $id, int $studentid) {
-        $this->sometext = $sometext;
+    public function __construct(int $id) {
         $this->cmid = $id;
-        $this->studentid = $studentid;
     }
 
     /**
@@ -58,18 +49,7 @@ class index_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
-        $data->sometext = $this->sometext;
-        $data->participations = [];
-
-        $participations = student_quiz_relation::get_all_student_participation_for_quiz($this->cmid, $this->studentid);
-        foreach ($participations as $participation) {
-            $data->participations[] = (object) [
-                'id' => $participation->get_id(), // Only for visuals in the template.
-            ];
-        }
-
-        error_log("WE PRINT HERE" . print_r($participations, true));
-        $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
         return $data;
+
     }
 }

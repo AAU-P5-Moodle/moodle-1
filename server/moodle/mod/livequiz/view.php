@@ -26,6 +26,7 @@ require_once($CFG->libdir . '/accesslib.php'); // Include the access library for
 require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
+use mod_livequiz\output\index_page;
 
 global $OUTPUT, $PAGE, $DB;
 
@@ -44,7 +45,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE OF ' . $instance->name, $cmid);
+$renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE OF ' . $instance->name, $cmid, $USER->id);
 
 unset($_SESSION['completed']);
 
