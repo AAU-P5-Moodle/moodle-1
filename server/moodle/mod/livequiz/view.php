@@ -24,34 +24,31 @@
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 require_once('hub/NavBar.php');
+require_once('readdemodata.php');
+
+use mod_livequiz\services\livequiz_services;
 
 global $OUTPUT, $PAGE, $DB;
 
-
-$id = required_param('id', PARAM_INT); // Course module ID.
-[$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
+$cmid = required_param('id', PARAM_INT); // Course module ID.
+[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
 require_login($course, true, $cm); // Ensure the user is logged in and can access this module.
 $context = context_module::instance($cm->id); // Set the context for the course module.
+$PAGE->set_cacheable(false);
 $PAGE->set_context($context); // Make sure to set the page context.
 
-$PAGE->set_url('/mod/livequiz/view.php', ['id' => $id]);
+$PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
-$PAGE->requires->css(new moodle_url('/mod/livequiz/hub/navbar_style.css'));
 
-$activetab = optional_param('tab', 'normal', PARAM_ALPHA);
+// Rendering.
+$output = $PAGE->get_renderer('mod_livequiz');
+$renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE OF ' . $instance->name, $cmid);
+
+unset($_SESSION['completed']);
 
 echo $OUTPUT->header();
-
-if (class_exists('createNavbar')) {
-    // Create an instance of the Navbar class, passing the active tab.
-    $navbar = new createNavbar($activetab);
-    $navbar->display(); // Call the display method.
-} else {
-    echo "Navbar class does not exist.";
-}
-
-echo $OUTPUT->heading('This is the livequiz view page');
+echo $output->render($renderable);
 echo $OUTPUT->footer();

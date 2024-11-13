@@ -128,3 +128,4 @@ phpcbf.bat
 adminer_router.php
 etag.txt
 cacert.pem
+server/moodle/mod/livequiz/node_modules
