@@ -263,19 +263,20 @@ class livequiz_services {
      * @param int $studentid
      * @param int $quizid
      * @throws dml_exception
-     * @return participation
+     * @return int
      */
     public function insert_participation(int $studentid, int $quizid): int {
         // Add participation using the model.
         global $DB;
-        $transaction = $DB->start_delegated_transaction();
+        //$transaction = $DB->start_delegated_transaction();
         $participation = new participation($studentid, $quizid);
         try {
+            echo "<script>console.log('before insert participation in service');</script>";
             $participation->set_id(student_quiz_relation::insert_student_quiz_relation($quizid, $studentid));
-
-            $transaction->allow_commit();
+            echo "<script>console.log('after insert participation in service');</script>";
+            //$transaction->allow_commit();
         } catch (dml_exception $e) {
-            $transaction->rollback($e);
+            //$transaction->rollback($e);
             throw $e;
         }
         return $participation->get_id();
@@ -286,10 +287,10 @@ class livequiz_services {
      * @param int $studentid
      * @param int $answerid
      * @param int $participationid
-     * @throws dml_exception
      * @return participation
+     *@throws dml_exception
      */
-    public function insert_answer_choice(int $studentid, int $answerid, $participationid): participation {
+    public function insert_answer_choice(int $studentid, int $answerid, int $participationid): void {
         // Add participation using the model.
         global $DB;
         $transaction = $DB->start_delegated_transaction();

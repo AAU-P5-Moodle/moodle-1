@@ -107,13 +107,15 @@ class take_livequiz_page implements renderable, templatable {
      * Get the ids of the chosen answers
      * @return array
      */
-    private function get_answer_ids(): array{
+    private function get_answer_ids(): array {
         $answerarray = [];
         if (!isset($_SESSION['quiz_answers'])) {
             return $answerarray;
         }
         foreach ($_SESSION['quiz_answers'][$this->livequiz->get_id()] as $questionid => $answers) {
-            $answerarray = array_merge($answerarray, $answers['answers']);
+            foreach ($answers['answers'] as $answer) {
+                $answerarray[] = (int)$answer;
+            }
         }
         return $answerarray;
     }

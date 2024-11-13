@@ -21,7 +21,6 @@ export const init = async(quizid, questionid) => {
                   selectedAnswers.push(input.value);
                 }
             });
-            window.console.log("trying to update session");
             update_session(quizid, questionid, JSON.stringify(selectedAnswers));
             window.console.log("updated session");
         });

@@ -49,11 +49,16 @@ class insert_participation extends \core_external\external_api {
      * @param int  $studentid
      * @return int
      */
-    public static function execute(int $quizid, int $studentid) {
+    public static function execute(int $quizid, int $studentid): int {
         self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
         $services = livequiz_services::get_singleton_service_instance();
         try {
-            return $services->insert_participation($studentid, $quizid);
+            debugging("before insert participation");
+            echo "<script>console.log('before insert participation');</script>";
+            $result = $services->insert_participation($studentid, $quizid);
+            echo "<script>console.log('after insert participation');</script>";
+            debugging("after insert participation");
+            return $result;
         } catch (dml_exception $e) {
             debugging('Error inserting participation: ' . $e->getMessage());
             return -1;
@@ -65,10 +70,6 @@ class insert_participation extends \core_external\external_api {
      * @return \external_function_parameters
      */
     public static function execute_returns(): external_value {
-        return new external_value(PARAM_BOOL, 'Is insertion of participation successfull or not');
+        return new external_value(PARAM_INT, 'ID of the participation');
     }
-
-    //private function read_answers_from_session() {
-    //    $_SESSION['quiz_answers'][]
-    //}
 }
