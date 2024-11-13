@@ -45,14 +45,7 @@ $PAGE->requires->css(new moodle_url('/mod/livequiz/quizcreator/CreatorStyles.css
 // Output page header.
 echo $OUTPUT->header();
 
-// Display the navigation bar if the class exists.
-if (class_exists('createNavbar')) {
-    $activetab = 'quizcreator'; // Define the active tab.
-    $navbar = new createNavbar();
-    $navbar->display();
-} else {
-    echo $OUTPUT->notification(get_string('navbarclassmissing', 'mod_livequiz'), 'notifyproblem');
-}
+
 
 // Initialize the form.
 $mform = new createquizform();
@@ -71,8 +64,8 @@ $savedquestionshtml = '';    // Add logic to render saved questions if any.
 $filepickerhtml = '';        // You may generate the HTML for file picker here.
 
 // Create and render the page.
-$quizcreator = new \mod_livequiz\output\quizcreator_renderable($quizdata, $formhtml, $savedquestionshtml, $filepickerhtml);
-echo $OUTPUT->render($quizcreator);
-
+$output = $PAGE->get_renderer('mod_livequiz');
+$renderable = new \mod_livequiz\output\navigationbar();
+echo $output->render($renderable);
 // Output page footer.
 echo $OUTPUT->footer();

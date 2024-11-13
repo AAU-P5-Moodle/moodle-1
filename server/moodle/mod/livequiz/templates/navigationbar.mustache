@@ -14,7 +14,21 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-{{! Moodle Mustache template for navigation bar }}
+{{!
+    @template mod_livequiz/navigationbar
+
+    Navigation bar used to navigate in a quiz
+
+    Classes required for JS:
+    * none
+
+    Context variables required for this template:
+    * navigation tabs list
+
+    Example context (json):
+    * none
+
+}}
 <div class="nav-tabs">
     {{#tabs}}
         <a href="{{url}}" class="tab-button">

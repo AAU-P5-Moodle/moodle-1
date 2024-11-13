@@ -28,6 +28,8 @@ use plugin_renderer_base;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends plugin_renderer_base {
+
+    
     /**
      *
      * @param index_page $page
@@ -56,30 +58,9 @@ class renderer extends plugin_renderer_base {
      * @return string html for the navbar
      * @throws moodle_exception
      */
-    public function render_navigationbar(): string {
-        $id = required_param('id', PARAM_INT);
-        $tabs = [
-            [
-                'url' => new moodle_url('/mod/livequiz/quizcreator', ['id' => $id]),
-                'label' => get_string('quizcreator', 'mod_livequiz'),
-
-            ],
-            [
-                'url' => new moodle_url('/mod/livequiz/quizrunner', ['id' => $id]),
-                'label' => get_string('quizrunner', 'mod_livequiz'),
-
-            ],
-            [
-                'url' => new moodle_url('/mod/livequiz/quizstats', ['id' => $id]),
-                'label' => get_string('quizstats', 'mod_livequiz'),
-
-            ],
-            [
-                'url' => new moodle_url('/mod/livequiz/questionbank', ['id' => $id]),
-                'label' => get_string('questionbank', 'mod_livequiz'),
-            ],
-        ];
-        return parent::render_from_template('mod_livequiz/navigationbar', $tabs);
+    public function render_navigationbar(navigationbar $page): string {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('mod_livequiz/navigationbar', $data);
     }
 }
-}
+
