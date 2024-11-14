@@ -30,7 +30,7 @@
  *
  * Represents an interface for different types of answers in the quiz module.
  */
-interface answer {
+interface answer_interface {
     /**
      * Generate the HTML representation of the answer.
      *
