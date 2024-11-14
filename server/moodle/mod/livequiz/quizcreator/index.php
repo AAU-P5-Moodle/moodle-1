@@ -27,7 +27,6 @@
 // Include necessary files.
 require_once('../../../config.php');
 require_once('../form/createquizform.php');
-require_once('../hub/NavBar.php');
 
 $id = required_param('id', PARAM_INT); // Course module ID.
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
@@ -59,13 +58,12 @@ try {
 }
 
 // Generate HTML for form and saved questions.
-$formhtml = $mform->render();  // Assuming you render the form here.
-$savedquestionshtml = '';    // Add logic to render saved questions if any.
-$filepickerhtml = '';        // You may generate the HTML for file picker here.
 
 // Create and render the page.
+//todo:put form into renderer,
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\navigationbar();
+$renderable = new \mod_livequiz\output\create_quiz_page($quizdata,$id);
+$mform.display();
 echo $output->render($renderable);
 // Output page footer.
 echo $OUTPUT->footer();

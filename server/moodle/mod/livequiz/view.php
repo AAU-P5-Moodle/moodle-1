@@ -45,9 +45,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
 $renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE OF ' . $instance->name, $cmid);
-//$navbar = new \mod_livequiz\output\navigationbar($cmid);
 unset($_SESSION['completed']);
 echo $OUTPUT->header();
-//echo $output->render($navbar);
 echo $output->render($renderable);
 echo $OUTPUT->footer();
