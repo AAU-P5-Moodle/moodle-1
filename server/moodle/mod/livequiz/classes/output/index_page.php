@@ -31,8 +31,6 @@ use mod_livequiz\models\student_quiz_relation;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class index_page implements renderable, templatable {
-    /** @var string $sometext Some text to show how to pass data to a template. */
-    private string $sometext;
     /** @var int $cmid the course module id */
     protected int $cmid;
     /** @var int $studentid the student id */
@@ -40,40 +38,38 @@ class index_page implements renderable, templatable {
 
     /**
      * index_page constructor.
-     * @param string $sometext
      * @param int $id
+     * @param int $studentid
      */
-    public function __construct(string $sometext, int $id, int $studentid) {
-        $this->sometext = $sometext;
-        $this->cmid = $id;
+    public function __construct(int $cmid, int $studentid) {
+        $this->cmid = $cmid;
         $this->studentid = $studentid;
     }
 
     /**
      * Export this data so it can be used as the context for a mustache template.
-     *
+     * Keeps database ID's confidential by not exposing them in the URLs. Instead, the participation number is used (1-based).
      * @param renderer_base $output
      * @return stdClass
      * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
-        $data->sometext = $this->sometext;
         $data->participations = [];
 
         $participations = student_quiz_relation::get_all_student_participation_for_quiz($this->cmid, $this->studentid);
-        $_SESSION['participations'] = $participations; // Store participations in session
+        $_SESSION['participations'] = $participations; // Store participations in session.
 
         foreach ($participations as $index => $participation) {
+            $participationnumber = $index + 1;
             $data->participations[] = (object) [
-                'participationindex' => $index,
-                'participationid'    => $participation->get_id(),
-                'resultsurl'         => (new moodle_url(
+                'participationnumber'   => $participationnumber, // Displayed number to the user, starting from 1.
+                'resultsurl'            => (new moodle_url(
                     '/mod/livequiz/results.php',
                     [
-                        'id' => $this->cmid,
-                        'livequizid' => $participation->get_livequizid(),
-                        'participationindex' => $index, // Pass the array index instead of the ID.
+                        'id'                    => $this->cmid, // Course module ID.
+                        'livequizid'            => $participation->get_livequizid(), // Live quiz ID.
+                        'participationnumber'   => $participationnumber, // Pass the participation number to the results page.
                     ]
                 ))->out(false),
             ];

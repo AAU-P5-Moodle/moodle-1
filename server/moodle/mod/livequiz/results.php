@@ -31,7 +31,8 @@ global $PAGE, $OUTPUT;
 // Get submitted parameters.
 $id = required_param('id', PARAM_INT); // Course module id.
 $quizid = required_param('livequizid', PARAM_INT);
-$participationindex = optional_param('participationindex', 0, PARAM_INT);
+$participationnumber = optional_param('participationnumber', 0, PARAM_INT);
+$index = $participationnumber - 1; // Index is 0-based.
 
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
@@ -54,15 +55,20 @@ $context = context_module::instance($cm->id); // Set the context for the course 
 
 $PAGE->set_context($context); // Make sure to set the page context.
 
-if (!isset($_SESSION['participations'][$participationindex])) {
+if (!isset($_SESSION['participations'][$index])) {
     error_log('No participation found');
 }
-$participation = $_SESSION['participations'][$participationindex];
+// The following is the actual participation object, that we can use to display the results.
+$participation = $_SESSION['participations'][$index];
+error_log('Participation: ' . print_r($participation, true));
+error_log('Participation number: ' . $participationnumber);
+error_log('DB participation id: ' . $participation->get_id());
 
+// Set the page URL, without exposing the participationid.
 $PAGE->set_url(new moodle_url('/mod/livequiz/results.php', [
-    'id' => $id,
-    'quizid' => $quizid,
-    'participationid' => $participation->get_id()]
+    'id'                    => $id,
+    'quizid'                => $quizid,
+    'participationnumber'   => $participationnumber]
 ));
 
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
