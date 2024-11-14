@@ -124,7 +124,7 @@ class take_livequiz_page implements renderable, templatable {
         $data->previousquestionindex = $this->get_previous_question_index();
         $data->numberofquestions = $this->numberofquestions;
         // Check if user has selected answers for this question.
-        if (!empty($_SESSION['quiz_answers'][$this->questionid])) {
+        if (!empty($_SESSION['quiz_answers'][$this->livequiz->get_id()][$this->questionid])) {
             $chosenanswers = $_SESSION['quiz_answers'][$this->questionid]['answers'];
             foreach ($chosenanswers as $chosenanswer) {
                 for ($i = 0; $i < count($data->answers); $i++) {
