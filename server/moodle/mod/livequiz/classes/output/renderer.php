@@ -55,12 +55,21 @@ class renderer extends plugin_renderer_base {
     }
     /**
      * 
-     * @return string html for the navbar
+     * @return string html for the page
      * @throws moodle_exception
      */
     public function render_create_quiz_page(create_quiz_page $page): string {
         $data = $page->export_for_template($this);
         return parent::render_from_template('mod_livequiz/create_quiz_page', $data);
+    }
+    /**
+     * 
+     * @return string html for the page
+     * @throws moodle_exception
+     */
+    public function render_quiz_runner_page(quiz_runner_page $page): string {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('mod_livequiz/quiz_runner_page', $data);
     }
 }
 

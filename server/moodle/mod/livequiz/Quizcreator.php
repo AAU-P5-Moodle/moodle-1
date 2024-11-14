@@ -33,8 +33,7 @@ $id = required_param('id', PARAM_INT); // Course module ID.
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 
 // Require user to be logged in.
-require_login();
-
+require_login($course, true, cm: $cm); // Ensure the user is logged in and can access this module.
 // Set up the page.
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizcreator'));
 $context = context_module::instance($cm->id); // Set the context for the course module.
