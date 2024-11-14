@@ -1,14 +1,10 @@
-
+@import url('../hub/navbar_style.css');
 
 .main-container {
 
 }
 
 .title-container {
-    
-}
-
-.question-container {
     
 }
 
@@ -20,4 +16,631 @@
     
 }
 
+.Modal_div {
+   width: 80%;
+   max-height: 80vh;
+   overflow-y: auto;
+   color: #333;
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background: #f5f5f5;
+   border: 2px solid #ccc;
+   border-radius: 15px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+   padding: 20px;
+   z-index: 1000;
+}
 
+
+.question_input_large {
+   width: 100%;
+   height: 100px;
+   font-size: 1.3em;
+   padding: 12px;
+   margin-bottom: 20px;
+   border-radius: 8px;
+   border: 2px solid #ccc;
+   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.all_answers_for_question_div {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 15px;
+   margin-top: 10px;
+}
+.flex_container {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 20px;
+}
+
+
+
+
+.container_for_new_answer {
+   display: flex;
+   width: 49%;
+   align-items: center;
+   gap: 10px;         
+   padding: 10px;
+   border-radius: 8px;
+   border: 2px solid #ccc;
+   background-color: #f0f0f0;
+   position: relative;
+   margin-bottom: 10px;
+}
+
+
+.answer_checkbox {
+   margin-right: 10px; 
+}
+.answer_input {
+   flex-grow: 1;      
+   padding: 10px;     
+   border: 2px solid #ccc;
+   background: transparent;
+   font-size: 1.2em;
+   border-radius: 5px;
+}
+.delete_answer_button {
+   background-color: transparent;
+   border: none;
+   cursor: pointer;
+   padding: 5px;
+   background-image: url('/mod/livequiz/quizcreator/images/trashcan.png');
+   background-size: contain;
+   background-repeat: no-repeat;
+   width: 30px;
+   height: 30px;
+   border-radius: 4px;
+   position: absolute;
+   top: 25px;
+   right: 10px;
+}
+.answer_input:focus {
+   outline: none;
+}
+.delete_answer_button:hover {
+   background-color: rgba(255, 0, 0, 0.1);
+}
+
+
+.add_new_answer_to_question:hover {
+   background-color: #004edf;
+}
+
+
+/* File upload section */
+.file_upload_section img {
+   margin-top: 10px;
+   max-width: 50%;
+   max-height: 200px;
+   display: block;
+   object-fit: contain;
+   margin-left: auto;
+   margin-right: auto;
+}
+.file_upload_section input[type="file"] {
+   display: none; /* Hide the default file input */
+}
+.file_upload_section label {
+   width: 100%;
+   height: 80px;
+   border: 2px dashed #ccc;
+   border-radius: 10px;
+   background-color: #fafafa;
+   cursor: pointer;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: 1.2em;
+   color: #888;
+   font-weight: bold;
+   text-align: center;
+}
+
+
+.time_limit_container {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   margin-bottom: 20px;
+}
+.time_limit_label {
+   font-size: 1.2em;
+   margin-bottom: 5px;
+}
+.timer_input_container {
+   display: flex;
+   align-items: center;    
+   gap: 10px;             
+}
+.time_limit_checkbox {
+   margin-right: 10px;    
+}
+.set_timer_input {
+   width: 150px;            
+   padding: 5px 10px;     
+   border: 2px solid #ccc; 
+   border-radius: 10px;   
+   font-size: 1.1em;       
+   text-align: center;     
+   outline: none;
+}
+
+
+.add_new_answer_to_question {
+   background-color: #0059ff; 
+   color: white;
+   padding: 10px 15px;
+   font-size: 1em;
+   border-radius: 5px;
+   cursor: pointer;
+   border: none;
+   align-self: flex-end;
+   z-index: 100;
+}
+
+
+.save_button:hover {
+   background-color: #4cae4c;
+}
+.discard_question_button:hover {
+   background-color: #c10600;
+}
+
+
+.file_upload_container {
+   margin-bottom: 20px;
+}
+
+
+.file_upload_input {
+   border: 1px solid #ccc;
+   padding: 8px;
+   border-radius: 5px;
+   font-size: 1rem;
+}
+
+
+.file_upload_preview {
+   display: block;
+   margin-top: 10px;
+   max-width: 300px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+}
+.button_container {
+   display: flex;
+   justify-content: space-between;
+   margin-top: 20px;
+}
+.discard_question_button {
+   float: right;
+   background-color: red;
+   color: white;
+   padding: 10px 20px;
+   font-size: large;
+   border-radius: 5px;
+   cursor: pointer;
+}
+.save_button {
+   background-color: green;
+   color: white;
+   padding: 10px 20px;
+   font-size: large;
+   border-radius: 5px;
+   cursor: pointer;
+}
+/* Styling the cancel button to always appear at the bottom-right of the window */
+.cancel_button {
+   position: fixed;      
+   bottom: 10px;
+   right: 100px;
+   background-color: blue;
+   color: white;
+   padding: 10px 20px;
+   border-radius: 5px;
+   font-size: large;
+   cursor: pointer;
+   z-index: 1000;
+}
+
+
+
+
+
+
+.toast_promise_deletion_div {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background-color: #fff;
+   padding: 20px;
+   border: 2px solid #ccc;
+   border-radius: 10px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+   text-align: center;
+   width: 60%;
+}
+.toast_promise_deletion_div button {
+   margin: 10px;
+   padding: 10px 20px;
+   font-size: 1.1em;
+   cursor: pointer;
+}
+
+
+#id_buttonaddquestion {
+   position: fixed;  /* Fixed position to ensure it's always at the bottom-left */
+   bottom: 10px;     /* Position it 10px from the bottom of the page */
+   left: 10px;       /* Position it 10px from the left of the page */
+   background-color: green; /* Optional: Customize the background color */
+   color: white;     /* Optional: Customize the text color */
+   padding: 10px 20px; /* Optional: Add padding to make it larger */
+   font-size: large;   /* Optional: Increase font size */
+   border-radius: 5px; /* Optional: Add rounded corners */
+   cursor: pointer;    /* Optional: Change cursor to pointer */
+   z-index: 100;
+}
+
+
+.div_for_question {
+   margin-top: 25px;
+   display: flex;           /* Enable Flexbox */
+   flex-direction: column;  /* Stack items vertically */
+   gap: 10px;              /* Optional: space between buttons */
+}
+
+
+.question_for_main_page {
+   cursor: pointer;
+   background-color: #0000ff; /* Optional: Adjust background color */
+   color: white;         /* Optional: Adjust text color */
+   padding: 10px;        /* Optional: Add padding */
+   font-size: large;     /* Optional: Adjust font size */
+   border-radius: 5px;   /* Optional: Add rounded corners */
+}
+
+
+.quiz_form_container {
+   display: flex;
+   flex-direction: column;  /* Align items vertically */
+   width: 50%;              /* Take up the right half of the screen */     
+   padding: 20px;           /* Add some padding for spacing */
+   box-sizing: border-box;   /* Ensure padding does not overflow the container */
+}
+
+
+.quiz_form_container .fitem {
+   display: flex;
+   flex-direction: column;  /* Stack label and input vertically */
+   margin-bottom: 15px;     /* Add space between form fields */
+}
+
+
+.quiz_form_container label {
+   margin-bottom: 5px;      /* Add space between the label and input field */
+   font-weight: bold;       /* Make the label text bold */
+}
+
+
+.quiz_form_container input,
+.quiz_form_container textarea {
+   width: 100%;             /* Make the input/textarea take the full width of the container */
+   padding: 10px;           /* Add padding for better appearance */
+   border: 1px solid #ccc;  /* Add a border to the inputs */
+   border-radius: 5px;      /* Optional: Rounded corners */
+   font-size: 1rem;         /* Optional: Increase font size */
+}
+
+
+.image_upload_container {
+   position: relative;  /* Ensures it's placed relative to its normal position */
+   margin-top: 20px;    /* Add margin to push it down from the Navbar */
+   width: 100%;         /* Span the full width (or adjust as needed) */
+   padding: 10px 0;     /* Optional: Add some padding */
+}
+
+
+#imagePreviewContainer {
+   width: 300px;           /* Constrain the width of the preview */
+   height: 200px;          /* Constrain the height of the preview */
+   border: 2px solid #ccc; /* Add a border to the preview area */
+   border-radius: 10px;    /* Rounded corners */
+   margin-bottom: 15px;    /* Add space between the preview and button */
+   overflow: hidden;       /* Ensure image fits within the box */
+   display: flex;          /* Center the image within the box */
+   justify-content: center;
+   align-items: center;
+}
+
+
+#imagePreview {
+   max-width: 100%;        /* Scale the image to fit within the box */
+   max-height: 100%;       /* Ensure the image does not overflow vertically */
+   display: none;          /* Initially hidden until an image is uploaded */
+}
+
+
+.custom-file-upload {
+   display: inline-block;
+   padding: 10px 20px;     /* Add padding for the button */
+   cursor: pointer;        /* Make it look clickable */
+   background-color: #007bff; /* Button background color (can be customized) */
+   color: white;           /* White text */
+   border: 2px solid #007bff; /* Border matches background color */
+   border-radius: 10px;    /* Rounded corners */
+   font-size: 1rem;        /* Text size */
+   text-align: center;     /* Center the text */
+}
+
+
+.custom-file-upload:hover {
+   background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+#imageUpload {
+   display: none;          /* Hide the default file input */
+}
+
+
+#saved_questions_container {
+   width: 40%; /* Adjust as needed */
+   background-color: lightgray; /* Background color for the container */
+   padding: 20px; /* Padding for the container */
+   border-radius: 15px; /* Rounded corners for the container */
+   margin-top: 20px; /* Space above the container */
+   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3); /* Shadow effect for the container */
+}
+#saved_questions_list {
+   list-style-type: decimal; /* Change to decimal for ordered list */
+   padding-left: 0; /* Remove left padding */
+   margin: 0; /* Remove default margin */
+}
+#saved_questions_list li {
+   margin-bottom: 5px; /* Space between list items */
+   color: blue; /* Text color for questions */
+   cursor: pointer; /* Change cursor to pointer on hover */
+   transition: background-color 0.3s; /* Smooth background color transition */
+}
+#saved_questions_list li:hover {
+   background-color: #f0f0f0; /* Light background on hover */
+}
+
+
+/*Navbar Styles
+
+
+
+
+/* Styles for the navigation buttons */
+.nav-tabs {
+   display: flex;
+   margin-bottom: 20px;
+ }
+  .nav-tabs .tab-button {
+  
+   padding: 0px 10px;    /* Add some padding */
+   margin: 0px;           /* Add space between buttons */
+   border: none;          /* Remove default border */
+  
+   border-radius: 4px;
+   text-align: center;    /* Center the text */
+   text-decoration: none;  /* Remove underline */
+   cursor: pointer;       /* Pointer on hover */
+   transition: background-color 0.3s; /* Smooth color change on hover */
+ }
+  /* Styles for active button */
+ .nav-tabs .tab-button.active {
+   background-color: var(--button-active-bg, #9da6b0); /* Active button color */
+   font-weight: bold;  /* Bold text for active button */
+ }
+  /* Optional: Hover effect */
+ .nav-tabs .tab-button:hover {
+   background-color: var(--button-hover-bg, #9da6b0); /* Color change on hover */
+ }
+
+
+
+
+
+
+ /* Quizrunner Styles
+
+
+
+
+
+
+/* General Styles */
+body {
+   font-family: Arial, sans-serif;
+   background-color: #f4f4f4;
+   margin: 0;
+   padding: 0;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 100vh;
+}
+
+
+.container {
+   max-width: 800px;
+   margin: 20px;
+   padding: 20px;
+   background-color: white;
+   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+   border-radius: 10px;
+   text-align: center;
+}
+
+
+.question-container {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+}
+
+
+.question-container img {
+   max-width: 100%;
+   height: auto;
+}
+
+
+/*multichoice Button Styling */
+.answer.multichoice {
+   display: grid;
+   grid-template-columns: repeat(2, 1fr);
+   column-gap: 20px;
+   justify-items: center;
+}
+
+
+/* Ensure all buttons have the same size */
+.answer.multichoice button {
+   width: 200px;
+   height: 60px;
+   font-size: 16px;
+   padding: 10px;
+   text-align: center;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   background-color: #0073e6;
+   color: white;
+   border-radius: 5px;
+   border: none;
+   cursor: pointer;
+   transition: background-color 0.3s ease;
+}
+
+
+/* Hover effect */
+.answer.multichoice button:hover {
+   background-color: #005bb5;
+}
+
+
+/* Responsive Grid Adjustments */
+@media (max-width: 600px) {
+   .answer.multichoice {
+       grid-template-columns: 1fr;
+   }
+}
+
+
+/* Slider Styles */
+.answer.slider input[type="range"] {
+   width: 100%;
+   height: 25px;
+   background: #ddd;
+   border-radius: 5px;
+   outline: none;
+   transition: background 0.3s;
+}
+
+
+.answer.slider input[type="range"]::-webkit-slider-thumb {
+   width: 25px;
+   height: 25px;
+   background-color: #0073e6;
+   border-radius: 50%;
+   cursor: pointer;
+}
+
+
+/* Slider Value Display */
+.answer.slider output {
+   font-size: 20px;
+   margin-top: 10px;
+   display: block;
+}
+
+
+/* Progress Bar Styling */
+.progress-bar {
+   background-color: #e0e0e0;
+   border-radius: 5px;
+   overflow: hidden;
+   margin: 20px 0;
+   width: 100%;
+   max-width: 600px;
+   height: 20px;
+}
+
+
+/* Progress Indicator (inner div) */
+.progress-bar div {
+   height: 100%;
+   background: linear-gradient(to right, #4CAF50, #81C784);
+   transition: width 0.4s ease-in-out;
+   color: white;
+   text-align: center;
+   line-height: 20px;
+   padding: 0 5px;
+}
+
+
+/* Progress Text (if placed outside the bar) */
+.progress-text {
+   position: absolute;
+   width: 100%;
+   text-align: center;
+   line-height: 20px;
+   color: #333;           /* Darker text color if progress is shown outside */
+   z-index: 1;            /* Ensure text appears above the progress bar */
+}
+
+
+
+
+/* Styling for the quiz prompt */
+.prompt {
+   width: 420px;
+   background-color: #f9f9f9;
+   border: 2px solid #0073e6;
+   border-radius: 10px;
+   margin: 20px 0;
+   font-size: 20px;
+   font-weight: bold;
+   text-align: center;
+   color: #333;
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Form Styling */
+form {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+
+form button {
+   background-color: #0073e6; /* Moodle's primary button color */
+   color: white;
+   border: none;
+   padding: 10px 20px;
+   border-radius: 5px;
+   font-size: 16px;
+   cursor: pointer;
+   margin-top: 20px;
+}
+
+
+form button:hover {
+   background-color: #005bb5;
+}

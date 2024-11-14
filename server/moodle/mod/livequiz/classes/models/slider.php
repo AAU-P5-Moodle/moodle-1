@@ -35,7 +35,7 @@ require_once('answer.php');
  *
  * @package   mod_livequiz
  */
-class slider implements answer {
+class slider implements answer_interface {
     /**
      * @var int $min The minimum value of the slider.
      */

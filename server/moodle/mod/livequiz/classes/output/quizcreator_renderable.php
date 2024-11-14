@@ -19,6 +19,7 @@ namespace mod_livequiz\output;
 use moodle_url;
 use renderable;
 use templatable;
+use stdClass;
 
 /**
  * Class quizcreator_renderable
@@ -30,52 +31,35 @@ use templatable;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class quizcreator_renderable implements renderable, templatable {
-    /** @var array $quizData Data related to the quiz. */
-    public $quizdata;
+    /** @var array $quizdata Data related to the quiz structure */
+    private array $quizdata;
 
-    /** @var string $formHtml HTML content for the quiz form. */
-    public $formhtml;
-
-    /** @var string $savedQuestionsHtml HTML content for the saved questions. */
-    public $savedquestionshtml;
-
-    /** @var string $filePickerHtml HTML content for the file picker. */
-    public $filepickerhtml;
-
-    /** @var array $scripts Array of script URLs. */
-    public $scripts;
+    /** @var array $savedquestions List of saved questions */
+    private array $savedquestions;
 
     /**
      * Constructor for the quizcreator_renderable class.
      *
-     * @param array $quizData Data related to the quiz.
-     * @param string $formHtml HTML content for the quiz form.
-     * @param string $savedQuestionsHtml HTML content for the saved questions.
-     * @param string $filePickerHtml HTML content for the file picker.
+     * @param array $quizdata Data related to the quiz.
+     * @param array $savedquestions Array of saved questions.
      */
-    public function __construct($quizdata, $formhtml, $savedquestionshtml, $filepickerhtml) {
+    public function __construct(array $quizdata, array $savedquestions) {
         $this->quizdata = $quizdata;
-        $this->formhtml = $formhtml;
-        $this->savedquestionshtml = $savedquestionshtml;
-        $this->filepickerhtml = $filepickerhtml;
-        $this->scripts = [
-            new moodle_url('/mod/livequiz/amd/src/quizcreator.js'),
-        ];
+        $this->savedquestions = $savedquestions;
     }
 
     /**
-     * Exports data for use in a template.
+     * Exports data for use in a Mustache template.
      *
      * @param \renderer_base $output The renderer base.
      * @return stdClass Data to be used in the template.
      */
-    public function export_for_template(\renderer_base $output) {
-        return (object)[
-            'quizdata' => $this->quizdata,
-            'formhtml' => $this->formhtml,
-            'savedquestionshtml' => $this->savedquestionshtml,
-            'filepickerhtml' => $this->filepickerhtml,
-            'scripts' => $this->scripts,
-        ];
+    public function export_for_template(\renderer_base $output): stdClass {
+        $data = new stdClass();
+        $data->quizdata = $this->quizdata;
+        $data->savedquestions = $this->savedquestions;
+        $data->scripturl = (new moodle_url('/mod/livequiz/amd/src/quizcreator.js'))->out();
+
+        return $data;
     }
 }

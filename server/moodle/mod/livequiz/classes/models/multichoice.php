@@ -36,7 +36,7 @@ require_once('multichoiceoption.php');
  *
  * @package   mod_livequiz
  */
-class multichoice implements answer {
+class multichoice implements answer_interface {
     /**
      * @var multichoice_choice[] $choices An array of multiple choice options.
      */
