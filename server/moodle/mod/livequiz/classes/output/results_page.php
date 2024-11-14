@@ -22,6 +22,8 @@ use renderer_base;
 use templatable;
 use stdClass;
 use mod_livequiz\models\livequiz;
+use mod_livequiz\models\participation;
+use mod_livequiz\services\livequiz_services;
 
 defined('MOODLE_INTERNAL') || die();
 require_once(dirname(__DIR__) . '/models/livequiz.php');
@@ -37,15 +39,18 @@ class results_page implements renderable, templatable {
     protected int $cmid;
     /** @var livequiz $livequiz The live quiz instance */
     private livequiz $livequiz;
+    /** @var @*/
 
     /**
      * index_page constructor.
      * @param int $id
      * @param livequiz $livequiz
+     * @param participation $participation
      */
-    public function __construct(int $id, livequiz $livequiz) {
+    public function __construct(int $id, livequiz $livequiz, participation $participation) {
         $this->cmid = $id;
         $this->livequiz = $livequiz;
+        $this->participation = $participation;
     }
 
     /**
@@ -58,6 +63,35 @@ class results_page implements renderable, templatable {
     public function export_for_template(renderer_base $output): stdClass {
         $data = $this->livequiz->prepare_for_template();
         $data->isattempting = false; // This is the results page, so the user is not attempting the quiz.
+        // Get the questions with their answers.
+        $questions = livequiz_services::get_questions_with_answers($this->livequiz->get_id());
+
+        // Get the student's answers for the participation.
+        $participationanswerids = livequiz_services::get_answers_from_student_in_participation(
+            $this->participation->get_studentid(),
+            $this->participation->get_id()
+        );
+
+        // Prepare the questions data.
+        $data->questions = [];
+        foreach ($questions as $question) {
+            $questiondata = new stdClass;
+            $questiondata->id = $question->get_id();
+            $questiondata->title = $question->get_title();
+            $questiondata->description = $question->get_description();
+            $questiondata->answers = [];
+
+            // Get the student's answer for this question.
+            foreach ($question->get_answers() as $answer) {
+                $answerdata = new stdClass;
+                $answerdata->id = $answer->get_id();
+                $answerdata->iscorrect = $answer->get_correct();
+                // Check if the answer was selected by the student.
+                $answerdata->isselected = in_array($answer->get_id(), $participationanswerids);
+                $questiondata->answers[] = $answerdata;
+            }
+            $data->questions[] = $questiondata;
+        }
         return $data;
     }
 }

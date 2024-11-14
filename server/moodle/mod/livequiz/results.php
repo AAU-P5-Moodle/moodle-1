@@ -76,7 +76,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$results = new \mod_livequiz\output\results_page($id, $demoquiz);
+$results = new \mod_livequiz\output\results_page($id, $demoquiz, $participation);
 
 echo $OUTPUT->header();
 echo $output->render($results);
