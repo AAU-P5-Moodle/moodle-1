@@ -348,14 +348,14 @@ final class livequiz_service_test extends \advanced_testcase {
      * Test of new_participation
      * @covers \mod_livequiz\services\livequiz_services::new_participation
      */
-    public function test_new_participation(): void {
+    public function test_insert_participation(): void {
         $participationdata = $this->create_participation_data_for_test();
         $service = livequiz_services::get_singleton_service_instance();
 
         $actualstudentid = $participationdata['studentid'];
         $acutalquizid = $participationdata['quizid'];
 
-        $participation = $service->new_participation($actualstudentid, $acutalquizid);
+        $participation = $service->insert_participation($actualstudentid, $acutalquizid);
         $this->assertInstanceOf(participation::class, $participation);
         $this->assertEquals($participation->get_studentid(), $actualstudentid);
         $this->assertEquals($participation->get_livequizid(), $acutalquizid);

@@ -16,6 +16,8 @@
 
 namespace mod_livequiz\models;
 
+use stdClass;
+
 /**
  * Class Participation
  *
@@ -25,7 +27,8 @@ namespace mod_livequiz\models;
  * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */class participation {
+ */
+class participation {
     /**
      * Participation id
      * @var int $id
@@ -50,6 +53,32 @@ namespace mod_livequiz\models;
         $this->studentid = $studentid;
         $this->livequizid = $livequizid;
     }
+    /**
+     * Summary of add_participation
+     * @return boolean
+     */
+    public function add_participation(): bool {
+        global $DB;
+        $record = new stdClass();
+        $record->studentid = $this->studentid;
+        $record->livequizid = $this->livequizid;
+        $success = false;
+        try {
+            $success = $DB->insert_record('participation', $record);
+        } catch (\dml_exception $dmle) {
+            echo $dmle->getMessage();
+        }
+        return $success;
+    }
+    /**
+     * Summary of get_participation_by_studentid
+     * @param  $studentid
+     */
+    public static function get_participation_by_studentid($studentid) {
+        global $DB;
+        return $DB->get_record('participation', ['studentid' => $studentid]);
+    }
+
     /**
      * get_id
      * @return int

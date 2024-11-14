@@ -30,13 +30,12 @@
 
 }}
 {{#js}}
-require(['mod_livequiz/participation'], (module) => module.init({{quizid}}));
-require(['mod_livequiz/session'], (module) => module.init({{quizid}}, {{questionid}}));
+    require(['mod_livequiz/session'], (module) => module.init({{quizid}}, {{questionid}}));
+    require(['mod_livequiz/submit_quiz'], (module) => module.init({{quizid}}, {{studentid}}));
 {{/js}}
 <div class="main-container">
-  {{> mod_livequiz/question_section}} {{! question_section import - Context remains the same}}
-  {{> mod_livequiz/nav_bar_section}} {{! nav_bar section import - Context remains the same}}
-  {{> mod_livequiz/side_bar_section}} {{! side_bar section import - Context remains the same}}
+    {{> mod_livequiz/question_section}} {{! question_section import - Context remains the same}}
+    {{> mod_livequiz/nav_bar_section}} {{! nav_bar section import - Context remains the same}}
+    {{> mod_livequiz/side_bar_section}} {{! side_bar section import - Context remains the same}}
 </div>
-
 
