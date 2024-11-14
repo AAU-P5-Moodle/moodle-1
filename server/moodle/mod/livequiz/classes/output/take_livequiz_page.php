@@ -49,8 +49,8 @@ class take_livequiz_page implements renderable, templatable {
     /** @var int $questionindex The index of the question in the quiz - Used for navigation */
     private int $questionindex;
 
-    /** @var int $nubmerofquestions The number of questions in the quiz - Used for navigation */
-    private int $nubmerofquestions;
+    /** @var int $numberofquestions The number of questions in the quiz - Used for navigation */
+    private int $numberofquestions;
 
     /**
      * Constructor for take_livequiz_page, which sets the livequiz field.
@@ -66,7 +66,7 @@ class take_livequiz_page implements renderable, templatable {
         $this->questionindex = $questionindex;
         $this->studentid = $studentid;
         $this->questionid = $livequiz->get_questions()[$questionindex]->get_id();
-        $this->nubmerofquestions = count($livequiz->get_questions());
+        $this->numberofquestions = count($livequiz->get_questions());
     }
 
     /**
@@ -74,7 +74,7 @@ class take_livequiz_page implements renderable, templatable {
      * @return int
      */
     public function get_next_question_index(): int {
-        if ($this->questionindex < $this->nubmerofquestions - 1) {
+        if ($this->questionindex < $this->numberofquestions - 1) {
             return $this->questionindex + 1;
         }
         return $this->questionindex;
@@ -122,8 +122,18 @@ class take_livequiz_page implements renderable, templatable {
         $data->questionindex = $this->questionindex;
         $data->nextquestionindex = $this->get_next_question_index();
         $data->previousquestionindex = $this->get_previous_question_index();
-        $data->numberofquestions = $this->nubmerofquestions;
-
+        $data->numberofquestions = $this->numberofquestions;
+        // Check if user has selected answers for this question.
+        if (!empty($_SESSION['quiz_answers'][$this->questionid])) {
+            $chosenanswers = $_SESSION['quiz_answers'][$this->questionid]['answers'];
+            foreach ($chosenanswers as $chosenanswer) {
+                for ($i = 0; $i < count($data->answers); $i++) {
+                    if ($chosenanswer == $data->answers[$i]['answerid']) {
+                        $data->answers[$i]['chosen'] = true;
+                    }
+                }
+            }
+        }
         // These are used for navigation.
         if ($data->nextquestionindex !== $this->questionindex) {
             // If the next question is the same as the current question, we don't want to show the next button.

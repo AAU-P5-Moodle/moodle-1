@@ -45,14 +45,6 @@ if (empty($currentquiz->get_questions())) { // If the quiz has no questions, ins
     $demoquiz = $currentquiz;
 }
 
-// Insert demo data if the site is running in behat mode.
-if (defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING) {
-    if (empty($currentquiz->get_questions())) { // The quiz should only be empty the first time attemp.php is called.
-        $demodatareader = new \mod_livequiz\readdemodata();
-        $demoquiz = $demodatareader->insertdemodata($currentquiz);
-    }
-}
-
 if (!$cm) { // If course module is not set, throw an exception.
     throw new moodle_exception('invalidcoursemodule', 'error');
 }
@@ -70,6 +62,10 @@ if ($_SESSION['completed']) { // If the quiz has been submitted, the user is not
     $text = 'You are not allowed to go back after submitting the quiz';
     echo $text;
     die();
+}
+
+if (!isset($_SESSION['quiz_answers'])) { // If the session variable is not set, set it to an empty array.
+    $_SESSION['quiz_answers'] = [];
 }
 
 $context = context_module::instance($cmid); // Get the context.
