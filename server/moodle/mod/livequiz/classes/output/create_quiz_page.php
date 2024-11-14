@@ -31,17 +31,17 @@ use moodle_url;
  */
 class create_quiz_page implements renderable, templatable {
     /*The object we get from the database that we put into the rendered forms*/
-    protected stdClass $Questions;
+    protected stdClass $database;
     /** @var int $cmid the course module id */
     protected int $cmid;
 
     /**
      * index_page constructor.
-     * @param string $sometext
+     *
      * @param int $id
      */
-    public function __construct(stdclass $Dboject, int $id) {
-        
+    public function __construct(stdclass $dboject, int $id) {
+        $this->database = $dboject;
         $this->cmid = $id;
     }
 
@@ -54,27 +54,27 @@ class create_quiz_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
-        $data->url = new moodle_url('/mod/livequiz/Quizcreator.php', ['cmid' => $this->cmid]);
-
-        //Standard information for the navigationbar
+        $data->name = $this->database->name;
+        $data->intro = $this->database->intro;
+        // Standard information for the navigationbar.
         $data->tabs = [
             [
-                'url' => new moodle_url('/mod/livequiz/quizcreator', ['id' => $this->cmid]),
+                'url' => new moodle_url('/mod/livequiz/quizcreator.php', ['id' => $this->cmid]),
                 'label' => get_string('quizcreator', 'mod_livequiz'),
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/quizrunner', ['id' => $this->cmid]),
+                'url' => new moodle_url('/mod/livequiz/quizrunner.php', ['id' => $this->cmid]),
                 'label' => get_string('quizrunner', 'mod_livequiz'),
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/quizstats', ['id' => $this->cmid]),
+                'url' => new moodle_url('/mod/livequiz/quizstats.php', ['id' => $this->cmid]),
                 'label' => get_string('quizstats', 'mod_livequiz'),
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/questionbank', ['id' => $this->cmid]),
+                'url' => new moodle_url('/mod/livequiz/questionbank.php', ['id' => $this->cmid]),
                 'label' => get_string('questionbank', 'mod_livequiz'),
             ],
         ];

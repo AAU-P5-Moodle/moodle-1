@@ -1,21 +1,15 @@
-@import url('../hub/navbar_style.css');
+/**
+ * File style.css.
+ * Contains styles for Quizcreator, Quizrunner and Navbar.
+ */
 
-.main-container {
 
-}
 
-.title-container {
-    
-}
+/**
+ * Quizcreator.
+ */
 
-.sidebar {
-    
-}
-
-.navbar{
-    
-}
-
+ 
 .Modal_div {
    width: 80%;
    max-height: 80vh;
@@ -58,8 +52,6 @@
    align-items: center;
    margin-bottom: 20px;
 }
-
-
 
 
 .container_for_new_answer {
@@ -144,7 +136,7 @@
    text-align: center;
 }
 
-
+/* Time limit for question styling */
 .time_limit_container {
    display: flex;
    flex-direction: column;
@@ -252,10 +244,6 @@
 }
 
 
-
-
-
-
 .toast_promise_deletion_div {
    position: absolute;
    top: 50%;
@@ -269,6 +257,8 @@
    text-align: center;
    width: 60%;
 }
+
+
 .toast_promise_deletion_div button {
    margin: 10px;
    padding: 10px 20px;
@@ -278,174 +268,172 @@
 
 
 #id_buttonaddquestion {
-   position: fixed;  /* Fixed position to ensure it's always at the bottom-left */
-   bottom: 10px;     /* Position it 10px from the bottom of the page */
-   left: 10px;       /* Position it 10px from the left of the page */
-   background-color: green; /* Optional: Customize the background color */
-   color: white;     /* Optional: Customize the text color */
-   padding: 10px 20px; /* Optional: Add padding to make it larger */
-   font-size: large;   /* Optional: Increase font size */
-   border-radius: 5px; /* Optional: Add rounded corners */
-   cursor: pointer;    /* Optional: Change cursor to pointer */
+   position: fixed; 
+   bottom: 10px; 
+   left: 10px; 
+   background-color: green; 
+   color: white; 
+   padding: 10px 20px; 
+   font-size: large;  
+   border-radius: 5px; 
+   cursor: pointer; 
    z-index: 100;
 }
 
 
 .div_for_question {
    margin-top: 25px;
-   display: flex;           /* Enable Flexbox */
-   flex-direction: column;  /* Stack items vertically */
-   gap: 10px;              /* Optional: space between buttons */
+   display: flex; 
+   flex-direction: column; 
+   gap: 10px; 
 }
 
 
 .question_for_main_page {
    cursor: pointer;
-   background-color: #0000ff; /* Optional: Adjust background color */
-   color: white;         /* Optional: Adjust text color */
-   padding: 10px;        /* Optional: Add padding */
-   font-size: large;     /* Optional: Adjust font size */
-   border-radius: 5px;   /* Optional: Add rounded corners */
+   background-color: #0000ff; 
+   color: white; 
+   padding: 10px; 
+   font-size: large; 
+   border-radius: 5px; 
 }
 
 
 .quiz_form_container {
    display: flex;
-   flex-direction: column;  /* Align items vertically */
-   width: 50%;              /* Take up the right half of the screen */     
-   padding: 20px;           /* Add some padding for spacing */
-   box-sizing: border-box;   /* Ensure padding does not overflow the container */
+   flex-direction: column; 
+   width: 50%;     
+   padding: 20px; 
+   box-sizing: border-box;  
 }
 
 
 .quiz_form_container .fitem {
    display: flex;
-   flex-direction: column;  /* Stack label and input vertically */
-   margin-bottom: 15px;     /* Add space between form fields */
+   flex-direction: column; 
+   margin-bottom: 15px; 
 }
 
 
 .quiz_form_container label {
-   margin-bottom: 5px;      /* Add space between the label and input field */
-   font-weight: bold;       /* Make the label text bold */
+   margin-bottom: 5px; 
+   font-weight: bold;  
 }
 
 
 .quiz_form_container input,
 .quiz_form_container textarea {
-   width: 100%;             /* Make the input/textarea take the full width of the container */
-   padding: 10px;           /* Add padding for better appearance */
-   border: 1px solid #ccc;  /* Add a border to the inputs */
-   border-radius: 5px;      /* Optional: Rounded corners */
-   font-size: 1rem;         /* Optional: Increase font size */
+   width: 100%; 
+   padding: 10px; 
+   border: 1px solid #ccc; 
+   border-radius: 5px; 
+   font-size: 1rem; 
 }
 
 
 .image_upload_container {
-   position: relative;  /* Ensures it's placed relative to its normal position */
-   margin-top: 20px;    /* Add margin to push it down from the Navbar */
-   width: 100%;         /* Span the full width (or adjust as needed) */
-   padding: 10px 0;     /* Optional: Add some padding */
+   position: relative;  
+   margin-top: 20px; 
+   width: 100%; 
+   padding: 10px 0; 
 }
 
 
 #imagePreviewContainer {
-   width: 300px;           /* Constrain the width of the preview */
-   height: 200px;          /* Constrain the height of the preview */
-   border: 2px solid #ccc; /* Add a border to the preview area */
-   border-radius: 10px;    /* Rounded corners */
-   margin-bottom: 15px;    /* Add space between the preview and button */
-   overflow: hidden;       /* Ensure image fits within the box */
-   display: flex;          /* Center the image within the box */
+   width: 300px; 
+   height: 200px; 
+   border: 2px solid #ccc; 
+   border-radius: 10px; 
+   margin-bottom: 15px; 
+   overflow: hidden; 
+   display: flex; 
    justify-content: center;
    align-items: center;
 }
 
 
 #imagePreview {
-   max-width: 100%;        /* Scale the image to fit within the box */
-   max-height: 100%;       /* Ensure the image does not overflow vertically */
-   display: none;          /* Initially hidden until an image is uploaded */
+   max-width: 100%; 
+   max-height: 100%; 
+   display: none; /* Initially hidden until an image is uploaded */
 }
 
 
 .custom-file-upload {
    display: inline-block;
-   padding: 10px 20px;     /* Add padding for the button */
-   cursor: pointer;        /* Make it look clickable */
-   background-color: #007bff; /* Button background color (can be customized) */
-   color: white;           /* White text */
-   border: 2px solid #007bff; /* Border matches background color */
-   border-radius: 10px;    /* Rounded corners */
-   font-size: 1rem;        /* Text size */
-   text-align: center;     /* Center the text */
+   padding: 10px 20px; 
+   cursor: pointer; 
+   background-color: #007bff; 
+   color: white; 
+   border: 2px solid #007bff; 
+   border-radius: 10px; 
+   font-size: 1rem; 
+   text-align: center;
 }
 
 
 .custom-file-upload:hover {
-   background-color: #0056b3; /* Darker blue on hover */
+   background-color: #0056b3; 
 }
 
 
 #imageUpload {
-   display: none;          /* Hide the default file input */
+   display: none; /* Hide the default file input */
 }
 
 
 #saved_questions_container {
-   width: 40%; /* Adjust as needed */
-   background-color: lightgray; /* Background color for the container */
-   padding: 20px; /* Padding for the container */
-   border-radius: 15px; /* Rounded corners for the container */
-   margin-top: 20px; /* Space above the container */
-   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3); /* Shadow effect for the container */
+   width: 40%; 
+   background-color: lightgray; 
+   padding: 20px; 
+   border-radius: 15px; 
+   margin-top: 20px; 
+   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3); 
 }
 #saved_questions_list {
-   list-style-type: decimal; /* Change to decimal for ordered list */
-   padding-left: 0; /* Remove left padding */
-   margin: 0; /* Remove default margin */
+   list-style-type: decimal; 
+   padding-left: 0; 
+   margin: 0; 
 }
 #saved_questions_list li {
-   margin-bottom: 5px; /* Space between list items */
-   color: blue; /* Text color for questions */
-   cursor: pointer; /* Change cursor to pointer on hover */
-   transition: background-color 0.3s; /* Smooth background color transition */
+   margin-bottom: 5px; 
+   color: blue; 
+   cursor: pointer; 
+   transition: background-color 0.3s;
 }
 #saved_questions_list li:hover {
-   background-color: #f0f0f0; /* Light background on hover */
+   background-color: #f0f0f0;
 }
 
 
-/*Navbar Styles
+/**
+ * Navbar.
+ */
 
-
-
-
-/* Styles for the navigation buttons */
 .nav-tabs {
    display: flex;
    margin-bottom: 20px;
  }
   .nav-tabs .tab-button {
   
-   padding: 0px 10px;    /* Add some padding */
-   margin: 0px;           /* Add space between buttons */
-   border: none;          /* Remove default border */
+   padding: 0px 10px;
+   margin: 0px;
+   border: none;
   
    border-radius: 4px;
-   text-align: center;    /* Center the text */
-   text-decoration: none;  /* Remove underline */
-   cursor: pointer;       /* Pointer on hover */
-   transition: background-color 0.3s; /* Smooth color change on hover */
+   text-align: center;    
+   text-decoration: none;  
+   cursor: pointer;       
+   transition: background-color 0.3s;
  }
   /* Styles for active button */
  .nav-tabs .tab-button.active {
-   background-color: var(--button-active-bg, #9da6b0); /* Active button color */
-   font-weight: bold;  /* Bold text for active button */
+   background-color: var(--button-active-bg, #9da6b0);
+   font-weight: bold;
  }
   /* Optional: Hover effect */
  .nav-tabs .tab-button:hover {
-   background-color: var(--button-hover-bg, #9da6b0); /* Color change on hover */
+   background-color: var(--button-hover-bg, #9da6b0);
  }
 
 
@@ -453,36 +441,40 @@
 
 
 
- /* Quizrunner Styles
+ /**
+ * Quizrunner Styles.
+ */
+
+
+ .main-container {
+
+ }
+ 
+ .title-container {
+     
+ }
+ 
+ .sidebar {
+     
+ }
+ 
+ .navbar{
+     
+ }
 
 
 
 
-
-
-/* General Styles */
-body {
-   font-family: Arial, sans-serif;
-   background-color: #f4f4f4;
-   margin: 0;
-   padding: 0;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   height: 100vh;
+ .delete_question_button {
+   float: right;
+   background-color: red;
+   color: white;
+   padding: 10px 20px;
+   font-size: large;
+   border-radius: 5px;
+   cursor: pointer;
+   margin-right: 10px;
 }
-
-
-.container {
-   max-width: 800px;
-   margin: 20px;
-   padding: 20px;
-   background-color: white;
-   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-   border-radius: 10px;
-   text-align: center;
-}
-
 
 .question-container {
    display: flex;
@@ -599,8 +591,8 @@ body {
    width: 100%;
    text-align: center;
    line-height: 20px;
-   color: #333;           /* Darker text color if progress is shown outside */
-   z-index: 1;            /* Ensure text appears above the progress bar */
+   color: #333; 
+   z-index: 1; 
 }
 
 

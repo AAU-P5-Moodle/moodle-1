@@ -55,22 +55,22 @@ class navigationbar implements renderable, templatable {
         $id = $this->id;
         $data->tabs = [
             [
-                'url' => new moodle_url('/mod/livequiz/quizcreator', ['id' => $id]),
+                'url' => new moodle_url('/mod/livequiz/quizcreator.php', ['id' => $id]),
                 'label' => get_string('quizcreator', 'mod_livequiz'),
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/quizrunner', ['id' => $id]),
+                'url' => new moodle_url('/mod/livequiz/quizrunner.php', ['id' => $id]),
                 'label' => get_string('quizrunner', 'mod_livequiz'),
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/quizstats', ['id' => $id]),
+                'url' => new moodle_url('/mod/livequiz/quizstats.php', ['id' => $id]),
                 'label' => get_string('quizstats', 'mod_livequiz'),
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/questionbank', ['id' => $id]),
+                'url' => new moodle_url('/mod/livequiz/questionbank.php', ['id' => $id]),
                 'label' => get_string('questionbank', 'mod_livequiz'),
             ],
         ];

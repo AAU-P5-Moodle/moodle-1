@@ -26,24 +26,16 @@
  require_once('question.php');
  require_once('answer/slider.php');
  require_once('answer/multichoice.php');
- require_once('../hub/NavBar.php');
+
  
  $PAGE->set_url(new moodle_url('/mod/livequiz/quizrunner'));
  $PAGE->set_context(context_system::instance());
  $PAGE->set_title("Play quiz");
  $PAGE->set_heading("Join a quiz");
- $PAGE->requires->css(new moodle_url('/mod/livequiz/quizrunner/RunnerStyles.css'));
+ $PAGE->requires->css(new moodle_url('/mod/livequiz/style.css'));
  
  // Prepare context data for the Mustache template.
- $navbarHtml = '';
- if (class_exists('createNavbar')) {
-     $navbar = new createNavbar();
-     ob_start();
-     $navbar->display($activetab);
-     $navbarHtml = ob_get_clean(); // Capture the navbar HTML output.
- } else {
-     $navbarHtml = "Navbar class does not exist.";
- }
+
  
  $questionHtml = $question->html(); // Generate the question's HTML representation.
  

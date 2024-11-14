@@ -58,9 +58,9 @@ class renderer extends plugin_renderer_base {
      * @return string html for the navbar
      * @throws moodle_exception
      */
-    public function render_navigationbar(navigationbar $page): string {
+    public function render_create_quiz_page(create_quiz_page $page): string {
         $data = $page->export_for_template($this);
-        return parent::render_from_template('mod_livequiz/navigationbar', $data);
+        return parent::render_from_template('mod_livequiz/create_quiz_page', $data);
     }
 }
 

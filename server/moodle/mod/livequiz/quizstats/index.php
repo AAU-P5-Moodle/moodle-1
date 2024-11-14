@@ -22,7 +22,6 @@
  */
 
 require_once('../../../config.php');
-require_once('../hub/NavBar.php');
 
 require_login();
 
@@ -39,13 +38,6 @@ $PAGE->set_heading("Statistics");
 
 echo $OUTPUT->header();
 
-if (class_exists('createNavbar')) {
-    $navbar = new createNavbar(); // Create an instance of the Navbar class.
-    $navbar->display($activetab); // Call the display method with the active tab.
-} else {
-    // Handle the error if the class does not exist.
-    echo "Navbar class does not exist.";
-}
 
 
 $questiondata = [

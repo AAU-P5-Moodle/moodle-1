@@ -37,7 +37,7 @@ require_login($course, true, $cm); // Ensure the user is logged in and can acces
 $context = context_module::instance($cm->id); // Set the context for the course module.
 $PAGE->set_cacheable(false);
 $PAGE->set_context($context); // Make sure to set the page context.
-
+$PAGE->requires->css(new moodle_url('/mod/livequiz/style.css'));
 $PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));

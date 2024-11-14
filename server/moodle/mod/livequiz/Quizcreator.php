@@ -25,8 +25,9 @@
  */
 
 // Include necessary files.
-require_once('../../../config.php');
-require_once('../form/createquizform.php');
+require_once('../../config.php');
+require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
+require_once('readdemodata.php');
 
 $id = required_param('id', PARAM_INT); // Course module ID.
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
@@ -36,34 +37,29 @@ require_login();
 
 // Set up the page.
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizcreator'));
-$PAGE->set_context(context_system::instance());
+$context = context_module::instance($cm->id); // Set the context for the course module.
+$PAGE->set_cacheable(false);
+$PAGE->set_context($context); // Make sure to set the page context.
 $PAGE->set_title(get_string('createquiz', 'mod_livequiz'));
 $PAGE->set_heading(get_string('createquiz', 'mod_livequiz'));
-$PAGE->requires->css(new moodle_url('/mod/livequiz/quizcreator/CreatorStyles.css'));
+$PAGE->requires->css(new moodle_url('/mod/livequiz/style.css'));
 
 // Output page header.
 echo $OUTPUT->header();
 
 
-
-// Initialize the form.
-$mform = new createquizform();
 global $DB;
 
 try {
     $quizdata = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
-    $mform->set_data(['existingquizzes' => $quizdata]);
 } catch (Exception $e) {
     echo $OUTPUT->notification('Failed to retrieve quiz data: ' . $e->getMessage(), 'notifyproblem');
 }
 
-// Generate HTML for form and saved questions.
-
 // Create and render the page.
-//todo:put form into renderer,
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\create_quiz_page($quizdata,$id);
-$mform.display();
+$renderable = new \mod_livequiz\output\create_quiz_page($quizdata, $id);
 echo $output->render($renderable);
+$PAGE->requires->js(new moodle_url('/mod/livequiz/amd/src/quizcreator.js'));
 // Output page footer.
 echo $OUTPUT->footer();

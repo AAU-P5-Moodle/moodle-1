@@ -47,7 +47,7 @@ let editingIndex = null;
         let discard_question_button = create_element("discard_button", "div", "discard_question_button", "Discard");
     
         discard_question_button.addEventListener('click', () => {
-            let toast_promise_deletion_div = create_element("toast_promise_deletion_div", 'div', "toast_promise_deletion_div", "Are you sure you want to delete this question?");
+            let toast_promise_deletion_div = create_element("toast_promise_deletion_div", 'div', "toast_promise_deletion_div", "Are you sure you want to discard changes?");
             let cancel_question_deletion_button = create_element("cancel_question_deletion_button", 'button', "cancel_question_deletion_button", "No");
             let continue_question_deletion_button = create_element("continue_question_deletion_button", 'button', "continue_question_deletion_button", "Yes");
     
@@ -55,11 +55,11 @@ let editingIndex = null;
             toast_promise_deletion_div.appendChild(continue_question_deletion_button);
     
             let modal_div = document.querySelector('.Modal_div');
-    if (!document.querySelector('.toast_promise_deletion_div')) {
-    modal_div.appendChild(toast_promise_deletion_div);
-}
+            modal_div.appendChild(toast_promise_deletion_div);
     
             continue_question_deletion_button.addEventListener('click', () => {
+                isEditing = false;
+                editingIndex = null
                 modal_div.remove();
             });
     
@@ -69,6 +69,44 @@ let editingIndex = null;
         });
     
         return discard_question_button;
+    }
+
+    function create_delete_button(index) {
+        let delete_question_button = create_element("delete_button", "button", "delete_question_button", "Delete Question");
+    
+        delete_question_button.addEventListener('click', () => {
+            let toast_promise_deletion_div = create_element("toast_promise_deletion_div", 'div', "toast_promise_deletion_div", "Are you sure you want to delete this question?");
+            let cancel_question_deletion_button = create_element("cancel_question_deletion_button", 'button', "cancel_question_deletion_button", "No");
+            let continue_question_deletion_button = create_element("continue_question_deletion_button", 'button', "continue_question_deletion_button", "Yes");
+
+            toast_promise_deletion_div.appendChild(cancel_question_deletion_button);
+            toast_promise_deletion_div.appendChild(continue_question_deletion_button);
+
+            let modal_div = document.querySelector('.Modal_div');
+            modal_div.appendChild(toast_promise_deletion_div);
+
+            continue_question_deletion_button.addEventListener('click', () => {
+                savedQuestions.splice(index,1);
+                
+                let saved_questions_list = document.getElementById("saved_questions_list");
+                let question_list_item = saved_questions_list.children[index]
+                if (question_list_item){
+                    saved_questions_list.removeChild(question_list_item);
+                }
+                for (let i = index; i < saved_questions_list.children.length; i++) {
+                    saved_questions_list.children[i].dataset.index = i;
+                }
+                isEditing = false;
+                editingIndex = null
+                modal_div.remove();
+            });
+
+            cancel_question_deletion_button.addEventListener('click', () => {
+                toast_promise_deletion_div.remove();
+            });
+        });
+    
+        return delete_question_button;
     }
 
     function create_cancel_button() {
@@ -172,28 +210,20 @@ let editingIndex = null;
     }
  
     function save_question(page, question_input, modal_div, answers_div, file_picker) {
-        let save_question_button = create_element('save_question_button', 'button', 'save_button', 'Save question');
+        let save_question_button = create_element("save_question_button", 'button', "save_button", "Save question");
         save_question_button.addEventListener('click', () => {
             let questionText = question_input.value.trim();
             if (!questionText) {
-                alert('Please enter a question.');
+                alert("Please enter a question.");
                 return;
             }
     
             let answers = [];
             for (let i = 0; i < answers_div.children.length; i++) {
-                let answer_container = answers_div.children[i];
-                let answerData = {
-                    description: answer_container.querySelector('.answer_input').value.trim(),
-                    correct: answer_container.querySelector('.answer_checkbox').checked
-                };
-    
-                // Ensure the answer has a valid description
-                if (answerData.description !== '') {
-                    answers.push(answerData);
-                } else {
-                    console.error('An answer is missing a description and will not be saved.');
-                }
+                let answertext = answers_div.children[i].querySelector(".answer_input").value.trim();
+                let iscorrect = answers_div.children[i].querySelector(".answer_checkbox").checked;
+
+                answers.push({ text: answertext, correct: iscorrect });
             }
     
             let file_input = file_picker.querySelector('input[type="file"]');
@@ -204,34 +234,37 @@ let editingIndex = null;
                 answers: answers,
                 file: file
             };
+            
+            if (isEditing && editingIndex != null){
+            savedQuestions[editingIndex] = savedQuestion;
     
-            if (isEditing && editingIndex !== null) {
-                savedQuestions[editingIndex] = savedQuestion;
-    
-                let saved_questions_list = document.getElementById('saved_questions_list');
-                let question_list_item = saved_questions_list.children[editingIndex];
-                question_list_item.textContent = savedQuestion.question;
-    
-                isEditing = false;
-                editingIndex = null;
+            let saved_questions_list = document.getElementById("saved_questions_list");
+            let question_list_item = saved_questions_list.children[editingIndex];
+
+            question_list_item.textContent = savedQuestion.question;
+
+
+            isEditing = false;
+            editingIndex = null;
             } else {
                 savedQuestions.push(savedQuestion);
-    
-                let saved_questions_list = document.getElementById('saved_questions_list');
+
+                let saved_questions_list = document.getElementById("saved_questions_list");
                 let question_list_item = document.createElement('li');
                 question_list_item.textContent = savedQuestion.question;
                 question_list_item.dataset.index = savedQuestions.length - 1;
-    
-                question_list_item.addEventListener('click', () => {
+
+                const openModalHandler = () => {
                     open_saved_question_modal(savedQuestions[question_list_item.dataset.index], question_list_item.dataset.index);
-                });
-    
+                };
+
+                question_list_item.addEventListener('click',openModalHandler);
                 saved_questions_list.appendChild(question_list_item);
             }
-    
-            // Close the modal after saving the question
+            
             modal_div.remove();
         });
+    
     
         return save_question_button;
     }
@@ -266,9 +299,25 @@ let editingIndex = null;
 
             let answer_input = document.createElement('input');
             answer_input.className = "answer_input";
-            answer_input.value = answer;
+            answer_input.value = answer.text;
+            answer_input.setAttribute("required", true);
 
+            let answer_checkbox = document.createElement('input');
+            answer_checkbox.setAttribute("type", "checkbox");
+            answer_checkbox.className = "answer_checkbox";
+            answer_checkbox.checked = answer.correct;
+
+            let delete_answer_button = create_element("delete_answer_button", "button", "delete_answer_button", "");
+
+            delete_answer_button.addEventListener('click', () => {
+                answer_container.remove();
+                answer_count--;
+            });
+
+            answer_container.appendChild(answer_checkbox);
             answer_container.appendChild(answer_input);
+            answer_container.appendChild(delete_answer_button);
+
             all_answers_for_question_div.appendChild(answer_container);
         });
 
@@ -277,51 +326,44 @@ let editingIndex = null;
 
         modal_div.appendChild(save_question(null,question_input,modal_div,all_answers_for_question_div,file_picker));
         modal_div.appendChild(create_discard_button());
+        modal_div.appendChild(create_delete_button(index));
+
 
         let page = document.getElementById("page-mod-livequiz-quizcreator");
         page.appendChild(modal_div);
     }
  
     function create_answer_button(parent_element) {
-        let add_new_answer_to_question = create_element('add_answer_button', 'button', 'add_new_answer_to_question', 'Add Answer');
+        let add_new_answer_to_question = create_element("add_answer_button", 'button', 'add_new_answer_to_question', 'Add Answer');
         let answer_count = 0;
-    
+ 
         add_new_answer_to_question.addEventListener('click', () => {
             if (answer_count < 8) {
                 let answer_container = document.createElement('div');
-                answer_container.className = 'container_for_new_answer';
-    
+                answer_container.className = "container_for_new_answer";
+ 
                 let answer_input = document.createElement('input');
-                answer_input.className = 'answer_input';
-                answer_input.placeholder = 'Enter answer';
-                answer_input.setAttribute('required', true);
-    
+                answer_input.className = "answer_input";
+                answer_input.placeholder = "Enter answer";
+                answer_input.setAttribute("required", true);
+ 
                 let answer_checkbox = document.createElement('input');
-                answer_checkbox.setAttribute('type', 'checkbox');
-                answer_checkbox.className = 'answer_checkbox';
-    
-                let delete_answer_button = create_element('delete_answer_button', 'button', 'delete_answer_button', 'Delete');
-    
-                // Create answer object and append to parent element
-                answer_input.addEventListener('input', () => {
-                    answer_container.dataset.description = answer_input.value.trim();
-                });
-    
-                answer_checkbox.addEventListener('change', () => {
-                    answer_container.dataset.correct = answer_checkbox.checked;
-                });
-    
+                answer_checkbox.setAttribute("type", "checkbox");
+                answer_checkbox.className = "answer_checkbox"; 
+ 
+                let delete_answer_button = create_element("delete_answer_button", "button", "delete_answer_button", "");
+ 
                 answer_container.appendChild(answer_checkbox);
                 answer_container.appendChild(answer_input);
                 answer_container.appendChild(delete_answer_button);
-    
-                parent_element.appendChild(answer_container);
-                answer_count++;
-    
+
                 delete_answer_button.addEventListener('click', () => {
                     answer_container.remove();
                     answer_count--;
                 });
+ 
+                parent_element.appendChild(answer_container);
+                answer_count++;
             }
         });
         return add_new_answer_to_question;
@@ -371,32 +413,25 @@ let editingIndex = null;
                 questions: []
             }
 
-            savedQuestions.forEach(function(saved_question, question_counter) {
-                let question_data = {
-                    id: question_counter,
-                    title: saved_question.question,
-                    timelimit: saved_question.timelimit,
-                    explanation: saved_question.explanation,
-                    answers: []  // Prepare the answers array
-                };
-            
-                saved_question.answers.forEach(function(answer, answer_counter) {
-                    let answer_data = {
-                        id: answer_counter,
-                        description: answer.description || '',  // Ensure this field is set
-                        correct: answer.correct !== undefined ? answer.correct : false,  // Ensure this field is set
-                        explanation: answer.explanation || ''   // Optional field
+            savedQuestions.forEach((savedQuestion, questionCounter) => {
+                const questionData = {
+                    id: questionCounter,
+                    title: savedQuestion.question,
+                    timelimit: savedQuestion.timelimit,
+                    explanation: savedQuestion.explanation,
+                    answers: []
+                }
+
+                savedQuestion.answers.forEach((answer, answerCounter) => {
+                    const answerData = {
+                    id: answerCounter,
+                    correct: answer.correct,
+                    description: answer.description,
+                    explanation: answer.explanation,
                     };
-            
-                    // Validate that the required fields are present before adding
-                    if (answer_data.description !== '') {
-                        question_data.answers.push(answer_data);
-                    } else {
-                        console.error('Answer at index ' + answer_counter + ' for question ' + question_counter + ' is missing a description.');
-                    }
+                    questionData.answers.push(answerData);
                 });
-            
-                data.questions.push(question_data);
+                data.questions.push(questionData);
             });
             fetch('/mod/livequiz/quizcreator/save_quiz.php?id='+quizId, {
                 method: 'POST',
@@ -407,7 +442,7 @@ let editingIndex = null;
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok: ${response.status} ${response.statusText}');
+                    throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
@@ -419,5 +454,3 @@ let editingIndex = null;
             })
         })
     }
-
-

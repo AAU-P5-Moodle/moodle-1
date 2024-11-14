@@ -60,22 +60,22 @@ class index_page implements renderable, templatable {
         //Standard information for the navigationbar
         $data->tabs = [
             [
-                'url' => new moodle_url('/mod/livequiz/quizcreator', ['id' => $this->cmid]),
+                'url' => new moodle_url('/mod/livequiz/quizcreator.php', ['id' => $this->cmid]),
                 'label' => get_string('quizcreator', 'mod_livequiz'),
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/quizrunner', ['id' => $this->cmid]),
+                'url' => new moodle_url('/mod/livequiz/quizrunner.php', ['id' => $this->cmid]),
                 'label' => get_string('quizrunner', 'mod_livequiz'),
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/quizstats', ['id' => $this->cmid]),
+                'url' => new moodle_url('/mod/livequiz/.php', ['id' => $this->cmid]),
                 'label' => get_string('quizstats', 'mod_livequiz'),
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/questionbank', ['id' => $this->cmid]),
+                'url' => new moodle_url('/mod/livequiz/questionbank.php', ['id' => $this->cmid]),
                 'label' => get_string('questionbank', 'mod_livequiz'),
             ],
         ];
