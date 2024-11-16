@@ -23,9 +23,9 @@
 
  require_once('../../../config.php');
  require_login();
- require_once('question.php');
- require_once('answer/slider.php');
- require_once('answer/multichoice.php');
+ require_once('classes/models/question_renderer.php');
+ require_once('classes/models/slider.php');
+ require_once('classes/models/multichoice.php');
 
  
  $PAGE->set_url(new moodle_url('/mod/livequiz/quizrunner'));
@@ -38,13 +38,13 @@
 
  
  $questionHtml = $question->html(); // Generate the question's HTML representation.
- 
- $templateContext = [
-     'navbarHtml' => $navbarHtml,
-     'questionHtml' => $questionHtml,
- ];
- 
- // Render the template.
- echo $OUTPUT->header();
- echo $OUTPUT->render_from_template('mod_livequiz/quizrunner_page', $templateContext);
- echo $OUTPUT->footer();
+
+$templateContext = [
+    'navbarHtml' => $navbarHtml,
+    'questionHtml' => $questionHtml,
+];
+
+// Render the template.
+echo $OUTPUT->header();
+echo $OUTPUT->render_from_template('mod_livequiz/quizrunner_page', $templateContext);
+echo $OUTPUT->footer();
