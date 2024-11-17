@@ -27,24 +27,24 @@
  require_once('classes/models/slider.php');
  require_once('classes/models/multichoice.php');
 
- 
+
  $PAGE->set_url(new moodle_url('/mod/livequiz/quizrunner'));
  $PAGE->set_context(context_system::instance());
  $PAGE->set_title("Play quiz");
  $PAGE->set_heading("Join a quiz");
  $PAGE->requires->css(new moodle_url('/mod/livequiz/style.css'));
- 
+
  // Prepare context data for the Mustache template.
 
- 
- $questionHtml = $question->html(); // Generate the question's HTML representation.
 
-$templateContext = [
-    'navbarHtml' => $navbarHtml,
-    'questionHtml' => $questionHtml,
+ $questionhtml = $question->html(); // Generate the question's HTML representation.
+
+$templatecontext = [
+    'navbarHtml' => $navbarhtml,
+    'questionHtml' => $questionhtml,
 ];
 
 // Render the template.
 echo $OUTPUT->header();
-echo $OUTPUT->render_from_template('mod_livequiz/quizrunner_page', $templateContext);
+echo $OUTPUT->render_from_template('mod_livequiz/quizrunner_page', $templatecontext);
 echo $OUTPUT->footer();

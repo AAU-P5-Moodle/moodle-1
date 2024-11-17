@@ -28,8 +28,6 @@ use plugin_renderer_base;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends plugin_renderer_base {
-
-    
     /**
      *
      * @param index_page $page
@@ -54,7 +52,7 @@ class renderer extends plugin_renderer_base {
         return parent::render_from_template('mod_livequiz/take_livequiz_page', $data);
     }
     /**
-     * 
+     *
      * @return string html for the page
      * @throws moodle_exception
      */
@@ -63,7 +61,7 @@ class renderer extends plugin_renderer_base {
         return parent::render_from_template('mod_livequiz/create_quiz_page', $data);
     }
     /**
-     * 
+     *
      * @return string html for the page
      * @throws moodle_exception
      */
@@ -72,4 +70,3 @@ class renderer extends plugin_renderer_base {
         return parent::render_from_template('mod_livequiz/quiz_runner_page', $data);
     }
 }
-

@@ -30,7 +30,7 @@ use moodle_url;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class quiz_runner_page implements renderable, templatable {
-    /*The object we get from the database that we put into the rendered forms*/
+    /** The object we get from the database that we put into the rendered forms*/
     protected stdClass $database;
     /** @var int $cmid the course module id */
     protected int $cmid;
@@ -54,7 +54,7 @@ class quiz_runner_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
-        // todo: data we need to create this funny busniess.
+
         // Standard information for the navigationbar.
         $data->tabs = [
             [

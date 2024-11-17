@@ -35,7 +35,7 @@ class navigationbar implements renderable, templatable {
 
     /**
      * index_page constructor.
-     * 
+     *
      * @param int $id
      */
     public function __construct(int $id) {
@@ -76,5 +76,4 @@ class navigationbar implements renderable, templatable {
         ];
         return $data;
     }
-    
 }
