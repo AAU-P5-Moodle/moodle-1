@@ -29,7 +29,7 @@ use moodle_url;
  * @copyright 2024 Software AAU
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class navigationbar implements renderable, templatable {
+class navigationbar {
     /** @var int $cmid the course module id */
     protected int $id;
 
@@ -50,7 +50,7 @@ class navigationbar implements renderable, templatable {
      * @return stdClass
      * @throws moodle_exception
      */
-    public function export_for_template(renderer_base $output): stdclass {
+    public function export_for_template(): array {
         $data = new stdClass();
         $id = $this->id;
         $data->tabs = [
@@ -74,7 +74,6 @@ class navigationbar implements renderable, templatable {
                 'label' => get_string('questionbank', 'mod_livequiz'),
             ],
         ];
-        return $data;
+        return $data->tabs;
     }
-    
 }

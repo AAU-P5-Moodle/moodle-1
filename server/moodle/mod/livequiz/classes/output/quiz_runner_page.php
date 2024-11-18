@@ -56,27 +56,8 @@ class quiz_runner_page implements renderable, templatable {
         $data = new stdClass();
         // todo: data we need to create this funny busniess.
         // Standard information for the navigationbar.
-        $data->tabs = [
-            [
-                'url' => new moodle_url('/mod/livequiz/quizcreator.php', ['id' => $this->cmid]),
-                'label' => get_string('quizcreator', 'mod_livequiz'),
-
-            ],
-            [
-                'url' => new moodle_url('/mod/livequiz/quizrunner.php', ['id' => $this->cmid]),
-                'label' => get_string('quizrunner', 'mod_livequiz'),
-
-            ],
-            [
-                'url' => new moodle_url('/mod/livequiz/quizstats.php', ['id' => $this->cmid]),
-                'label' => get_string('quizstats', 'mod_livequiz'),
-
-            ],
-            [
-                'url' => new moodle_url('/mod/livequiz/questionbank.php', ['id' => $this->cmid]),
-                'label' => get_string('questionbank', 'mod_livequiz'),
-            ],
-        ];
+        $navigationbar = new navigationbar( $this->cmid);
+        $data->tabs = $navigationbar->export_for_template();
         return $data;
     }
 }
