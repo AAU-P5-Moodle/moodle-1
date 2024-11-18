@@ -546,12 +546,12 @@ final class livequiz_service_test extends \advanced_testcase {
 
 
         student_answers_relation::insert_student_answer_relation(
-            1, 1, $testquizsubmittedquestions[0]->get_answers()[1]->get_id()
+            1, $testquizsubmittedquestions[0]->get_answers()[1]->get_id(), 1
         );
 
         for ($i = 1; $i <= count($testquizsubmittedquestions); ++$i) {
             student_answers_relation::insert_student_answer_relation(
-                $i, $i, $testquizsubmittedquestions[$i-1]->get_answers()[0]->get_id()
+                1, $testquizsubmittedquestions[$i-1]->get_answers()[0]->get_id(), 1
             );
         }
 
