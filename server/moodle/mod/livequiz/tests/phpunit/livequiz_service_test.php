@@ -534,7 +534,8 @@ final class livequiz_service_test extends \advanced_testcase {
     /**
      * @throws dml_exception
      */
-    public function get_student_results(): void {
+    public function test_get_student_results(): void
+    {
         $lecturerid = 2;
         $service = livequiz_services::get_singleton_service_instance();
         $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
@@ -543,19 +544,18 @@ final class livequiz_service_test extends \advanced_testcase {
         $testquizsubmittedquestions = $testquizsubmitted->get_questions();
 
 
-        $studentanswertestdata = [
-            'studentid' => 1,
-            'participationid' => 1,
-            'answerid' => $testquizsubmittedquestions[0]->get_answers()[0]->get_id(),
-        ];
 
         student_answers_relation::insert_student_answer_relation(
-            $studentanswertestdata['studentid'],
-            $studentanswertestdata['answerid'],
-            $studentanswertestdata['participationid'],
+            1, 1, $testquizsubmittedquestions[0]->get_answers()[1]->get_id()
         );
 
-        $studentresults = $service->get_student_quiz_results($studentanswertestdata['participationid']);
+        for ($i = 1; $i <= count($testquizsubmittedquestions); ++$i) {
+            student_answers_relation::insert_student_answer_relation(
+                $i, $i, $testquizsubmittedquestions[$i-1]->get_answers()[0]->get_id()
+            );
+        }
+
+        $studentresults = $service->get_student_quiz_results(1);
         echo print_r($studentresults, true);
         $this->assertEquals(count($testquizsubmittedquestions), count($studentresults));
     }
