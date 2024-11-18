@@ -57,7 +57,7 @@ class index_page implements renderable, templatable {
         $data->sometext = $this->sometext;
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
 
-        $navigationbar = new navigationbar( $this->cmid);
+        $navigationbar = new navigationbar($this->cmid);
         $data->tabs = $navigationbar->export_for_template();
         return $data;
     }

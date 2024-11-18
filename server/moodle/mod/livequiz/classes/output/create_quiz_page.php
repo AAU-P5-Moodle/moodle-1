@@ -56,7 +56,7 @@ class create_quiz_page implements renderable, templatable {
         $data = new stdClass();
         $data->name = $this->database->name;
         $data->intro = $this->database->intro;
-        $navigationbar = new navigationbar( $this->cmid);
+        $navigationbar = new navigationbar($this->cmid);
         $data->tabs = $navigationbar->export_for_template();
         return $data;
     }
