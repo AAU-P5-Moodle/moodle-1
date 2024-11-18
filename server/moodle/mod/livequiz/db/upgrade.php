@@ -271,7 +271,7 @@ function xmldb_livequiz_upgrade($oldversion) {
         $questionslecturertable = new xmldb_table('questions_lecturer');
         $tables[] = $questionslecturertable;
         if ($dbman->table_exists($questionslecturertable)) {
-            $dbman->rename_table($questionslecturertable, 'livequiz_quiestions_lecturer');
+            $dbman->rename_table($questionslecturertable, 'livequiz_questions_lecturer');
         }
 
         // Rename table students_answers to livequiz_students_answers and updated foreign key reftables accordingly.
