@@ -35,7 +35,7 @@ class navigationbar {
 
     /**
      * index_page constructor.
-     * 
+     *
      * @param int $id
      */
     public function __construct(int $id) {
@@ -60,7 +60,7 @@ class navigationbar {
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/quizrunner.php', ['id' => $id]),
+                'url' => new moodle_url('/mod/livequiz/quizrunner_page.php', ['id' => $id]),
                 'label' => get_string('quizrunner', 'mod_livequiz'),
 
             ],

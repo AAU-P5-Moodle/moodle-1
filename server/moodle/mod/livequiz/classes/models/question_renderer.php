@@ -26,7 +26,7 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-require_once('answer/answer.php');
+require_once('answer.php');
 
 /**
  * Question class for representing a quiz question.
@@ -68,41 +68,17 @@ class question {
     }
 
     /**
-     * Generate the HTML representation of the question.
+     * Prepare the context for Mustache rendering.
      *
-     * @param int|null $progressPercentage Optional progress percentage.
-     * @return string The HTML representation.
+     * @param int|null $progresspercentage Optional progress percentage.
+     * @return array Template context.
      */
-    public function html(?int $progresspercentage = null): string {
-        $progressbarhtml = '';
-        if ($progresspercentage !== null && $progresspercentage > 0) {
-            $progressbarhtml = "
-                <div class='progress-bar'>
-                    <div style='width: {$progresspercentage}%;'>
-                        {$progresspercentage}%
-                    </div>
-                </div>
-            ";
-        }
-
-        return "
-            <div class='question-container'>
-                <img src='" . htmlspecialchars($this->image, ENT_QUOTES, 'UTF-8') . "' alt='quiz image' />
-                {$progressbarhtml}
-                <div class='prompt'>
-                    <p>" . htmlspecialchars($this->prompt, ENT_QUOTES, 'UTF-8') . "</p>
-                </div>
-                {$this->answer->html()}
-            </div>
-        ";
-    }
-
-    /**
-     * Display the question by outputting its HTML.
-     *
-     * @param int|null $progressPercentage Optional progress percentage.
-     */
-    public function display(?int $progresspercentage = null): void {
-        echo $this->html($progresspercentage);
+    public function get_context(?int $progresspercentage = null): array {
+        return [
+            'image' => htmlspecialchars($this->image, ENT_QUOTES, 'UTF-8'),
+            'prompt' => htmlspecialchars($this->prompt, ENT_QUOTES, 'UTF-8'),
+            'progress' => $progresspercentage,
+            'answer' => $this->answer->html(), // Assumes the answer is sanitized.
+        ];
     }
 }

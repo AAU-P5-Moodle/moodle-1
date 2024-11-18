@@ -116,6 +116,17 @@ class take_livequiz_page implements renderable, templatable {
         $data->nextquestionindex = $this->get_next_question_index();
         $data->previousquestionindex = $this->get_previous_question_index();
         $data->numberofquestions = $this->nubmerofquestions;
+        // Check if user has selected answers for this question.
+        if (!empty($_SESSION['quiz_answers'][$this->questionid])) {
+            $chosenanswers = $_SESSION['quiz_answers'][$this->questionid]['answers'];
+            foreach ($chosenanswers as $chosenanswer) {
+                for ($i = 0; $i < count($data->answers); $i++) {
+                    if ($chosenanswer == $data->answers[$i]['answerid']) {
+                        $data->answers[$i]['chosen'] = true;
+                    }
+                }
+            }
+        }
         // These are used for navigation.
         if ($data->nextquestionindex !== $this->questionindex) {
             // If the next question is the same as the current question, we don't want to show the next button.

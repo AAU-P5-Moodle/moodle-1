@@ -153,7 +153,6 @@ function xmldb_livequiz_upgrade($oldversion) {
             $dbman->create_table($quizquestionstable);
         }
 
-
         // Define table questions_answers to be created.
         $questionsanswerstable = new xmldb_table('questions_answers');
 
@@ -171,7 +170,6 @@ function xmldb_livequiz_upgrade($oldversion) {
         if (!$dbman->table_exists($questionsanswerstable)) {
             $dbman->create_table($questionsanswerstable);
         }
-
 
         // Define table questions_lecturer to be created.
         $questionslecturertable = new xmldb_table('questions_lecturer');
@@ -272,7 +270,6 @@ function xmldb_livequiz_upgrade($oldversion) {
         if ($dbman->table_exists($questionsanswerstable)) {
             $dbman->rename_table($questionsanswerstable, 'livequiz_questions_answers');
         }
-
 
         // Rename table questions_lecturer to livequiz_questions_lecturer and updated foreign key reftables accordingly.
         $questionslecturertable = new xmldb_table('questions_lecturer');

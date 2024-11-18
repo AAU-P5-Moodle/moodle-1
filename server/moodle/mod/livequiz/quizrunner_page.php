@@ -21,30 +21,31 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- require_once('../../../config.php');
+ require_once('../../config.php');
  require_login();
- require_once('question.php');
- require_once('answer/slider.php');
- require_once('answer/multichoice.php');
+ require_once('classes/models/answer_interface.php');
+ require_once('classes/models/question_renderer.php');
+ require_once('classes/models/slider.php');
+ require_once('classes/models/multichoice.php');
 
- 
+
  $PAGE->set_url(new moodle_url('/mod/livequiz/quizrunner'));
  $PAGE->set_context(context_system::instance());
  $PAGE->set_title("Play quiz");
  $PAGE->set_heading("Join a quiz");
  $PAGE->requires->css(new moodle_url('/mod/livequiz/style.css'));
- 
+
  // Prepare context data for the Mustache template.
 
- 
- $questionHtml = $question->html(); // Generate the question's HTML representation.
- 
- $templateContext = [
-     'navbarHtml' => $navbarHtml,
-     'questionHtml' => $questionHtml,
- ];
- 
- // Render the template.
- echo $OUTPUT->header();
- echo $OUTPUT->render_from_template('mod_livequiz/quizrunner_page', $templateContext);
- echo $OUTPUT->footer();
+
+ $questionhtml = $question->html(); // Generate the question's HTML representation.
+
+$templatecontext = [
+    'navbarHtml' => $navbarhtml,
+    'questionHtml' => $questionhtml,
+];
+
+// Render the template.
+echo $OUTPUT->header();
+echo $OUTPUT->render_from_template('mod_livequiz/quizrunner_page', $templatecontext);
+echo $OUTPUT->footer();

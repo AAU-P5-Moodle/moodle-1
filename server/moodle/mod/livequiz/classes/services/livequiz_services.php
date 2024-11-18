@@ -23,6 +23,10 @@ require_once(__DIR__ . '/../models/question.php');
 require_once(__DIR__ . '/../models/answer.php');
 require_once(__DIR__ . '/../models/questions_answers_relation.php');
 require_once(__DIR__ . '/../models/quiz_questions_relation.php');
+
+require_once(__DIR__ . '/../models/livequiz_questions_lecturer_relation.php');
+require_once(__DIR__ . '/../models/livequiz_quiz_lecturer_relation.php');
+
 require_once(__DIR__ . '/../models/student_quiz_relation.php');
 
 use dml_exception;
@@ -33,6 +37,10 @@ use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
 use mod_livequiz\models\quiz_questions_relation;
+
+use mod_livequiz\models\livequiz_quiz_lecturer_relation;
+use mod_livequiz\models\livequiz_questions_lecturer_relation;
+
 use mod_livequiz\models\participation;
 use mod_livequiz\models\student_quiz_relation;
 
@@ -97,11 +105,11 @@ class livequiz_services {
      *
      * @throws dml_exception|Exception
      */
-    public function submit_quiz(livequiz $livequiz): livequiz {
+    public function submit_quiz(livequiz $livequiz, int $lecturerid): livequiz {
         $questions = $livequiz->get_questions();
 
         if (!count($questions)) {
-            throw new Exception("A Livequiz Must have atleast 1 Question");
+            throw new Exception("A Livequiz Must have at least 1 Question");
         }
 
         foreach ($questions as $question) {
@@ -118,7 +126,9 @@ class livequiz_services {
 
             $quizid = $livequiz->get_id();
 
-            $this->submit_questions($livequiz);
+            livequiz_quiz_lecturer_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
+            $this->submit_questions($livequiz, $lecturerid);
+
 
             $transaction->allow_commit();
         } catch (dml_exception $e) {
@@ -135,7 +145,8 @@ class livequiz_services {
      * @throws dml_exception
      * @throws Exception
      */
-    private function submit_questions(livequiz $livequiz): void {
+    private function submit_questions(livequiz $livequiz, int $lecturerid): void {
+
         $existingquestions = $this->get_questions_with_answers($livequiz->get_id());
         $newquestions = $livequiz->get_questions();
 
@@ -154,7 +165,9 @@ class livequiz_services {
             if ($questionid == 0) {
                 // Insert new question if ID is 0 (new question).
                 $questionid = question::insert_question($newquestion);
+
                 quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
+                livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
                 $updatedquestionids[] = $questionid;
             } else if (isset($existingquestionmap[$questionid])) {
                 // Update existing question if found in the map.
@@ -162,7 +175,7 @@ class livequiz_services {
                 $updatedquestionids[] = $questionid;
             }
             $answers = $newquestion->get_answers();
-            $this::submit_answers($questionid, $answers);
+            $this->submit_answers($questionid, $answers);
         }
 
         // Find deleted questions by comparing existing question IDs with updated ones.
@@ -269,7 +282,25 @@ class livequiz_services {
         }
         return $answers;
     }
+    /**
+     * gets lecturer from quiz
+     * @param int $quizid
+     * @return array
+     */
+    public function get_livequiz_quiz_lecturer(int $quizid): array {
+        $lecturer = livequiz_quiz_lecturer_relation::get_lecturer_quiz_relation_by_quiz_id($quizid);
 
+        return $lecturer;
+    }
+    /**
+     * gets lecturer from question
+     * @param int $questionid
+     * @return array
+     */
+    public function get_livequiz_question_lecturer(int $questionid): array {
+        $lecturer = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_questions_id($questionid);
+        return $lecturer;
+    }
     /**
      * Deletes an answer from the database.
      *
