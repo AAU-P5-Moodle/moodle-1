@@ -26,7 +26,7 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-require_once('answer/answer.php');
+require_once('answer.php');
 
 /**
  * Question class for representing a quiz question.

@@ -21,8 +21,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- require_once('../../../config.php');
+ require_once('../../config.php');
  require_login();
+ require_once('classes/models/answer_interface.php');
  require_once('classes/models/question_renderer.php');
  require_once('classes/models/slider.php');
  require_once('classes/models/multichoice.php');

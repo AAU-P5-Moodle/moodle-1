@@ -50,7 +50,7 @@ class navigationbar implements renderable, templatable {
      * @return stdClass
      * @throws moodle_exception
      */
-    public function export_for_template(renderer_base $output): stdclass {
+    public function export_for_template(renderer_base $output): array {
         $data = new stdClass();
         $id = $this->id;
         $data->tabs = [
@@ -60,7 +60,7 @@ class navigationbar implements renderable, templatable {
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/quizrunner.php', ['id' => $id]),
+                'url' => new moodle_url('/mod/livequiz/quizrunner_page.php', ['id' => $id]),
                 'label' => get_string('quizrunner', 'mod_livequiz'),
 
             ],
@@ -74,6 +74,6 @@ class navigationbar implements renderable, templatable {
                 'label' => get_string('questionbank', 'mod_livequiz'),
             ],
         ];
-        return $data;
+        return $data->tabs;
     }
 }

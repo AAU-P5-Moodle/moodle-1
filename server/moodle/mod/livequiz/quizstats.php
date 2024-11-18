@@ -21,16 +21,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../../config.php');
+require_once('../../config.php');
 
 require_login();
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
-
-$PAGE->set_url(new moodle_url('/mod/livequiz/quizstats.php'));
-
-$PAGE->requires->css(new moodle_url('/mod/livequiz/hub/navbar_style.css'));
-
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title("View quiz statistics");

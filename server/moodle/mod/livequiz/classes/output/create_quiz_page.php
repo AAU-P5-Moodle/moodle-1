@@ -64,7 +64,7 @@ class create_quiz_page implements renderable, templatable {
 
             ],
             [
-                'url' => new moodle_url('/mod/livequiz/quizrunner.php', ['id' => $this->cmid]),
+                'url' => new moodle_url('/mod/livequiz/quizrunner_page.php', ['id' => $this->cmid]),
                 'label' => get_string('quizrunner', 'mod_livequiz'),
 
             ],
