@@ -332,4 +332,23 @@ class livequiz_services {
         quiz_questions_relation::delete_question_quiz_relation($questionid);
         question::delete_question($questionid);
     }
+
+    /**
+     * Given an ID for a participation, this method will return the answers the student chose for each of the questions.
+     *
+     * @param $participationid // The ID of the participation.
+     * @throws dml_exception
+     */
+    public static function get_student_quiz_results(int $participationid): array {
+        $answerids = student_answers_relation::get_answerids_from_participation($participationid);
+        $studentresults = [];
+
+        foreach ($answerids as $answerid) {
+            $questionid = questions_answers_relation::get_question_id_from_answer_id($answerid);
+            // Insert answer in the array associated with the question it belongs to
+            $studentresults[$questionid][] = $answerid;
+        }
+
+        return $studentresults;
+    }
 }

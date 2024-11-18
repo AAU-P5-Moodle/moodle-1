@@ -497,7 +497,7 @@ final class livequiz_service_test extends \advanced_testcase {
      * @throws Exception
      */
     public function delete_answer(): void {
-        $lecturerid = "2";
+        $lecturerid = 2;
         $service = livequiz_services::get_singleton_service_instance();
         $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
 
@@ -529,5 +529,34 @@ final class livequiz_service_test extends \advanced_testcase {
             'Neither af female nor a male Polar Bear weighs this much.',
             $testquizresubmittedanswers[1]->get_explanation()
         );
+    }
+
+    /**
+     * @throws dml_exception
+     */
+    public function get_student_results(): void {
+        $lecturerid = 2;
+        $service = livequiz_services::get_singleton_service_instance();
+        $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
+
+        $testquizsubmitted = $service->submit_quiz($testquiz, $lecturerid);
+        $testquizsubmittedquestions = $testquizsubmitted->get_questions();
+
+
+        $studentanswertestdata = [
+            'studentid' => 1,
+            'participationid' => 1,
+            'answerid' => $testquizsubmittedquestions[0]->get_answers()[0]->get_id(),
+        ];
+
+        student_answers_relation::insert_student_answer_relation(
+            $studentanswertestdata['studentid'],
+            $studentanswertestdata['answerid'],
+            $studentanswertestdata['participationid'],
+        );
+
+        $studentresults = $service->get_student_quiz_results($studentanswertestdata['participationid']);
+        echo print_r($studentresults, true);
+        $this->assertEquals(count($testquizsubmittedquestions), count($studentresults));
     }
 }

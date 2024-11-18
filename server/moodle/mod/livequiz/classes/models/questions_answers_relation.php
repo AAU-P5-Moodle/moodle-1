@@ -74,4 +74,13 @@ class questions_answers_relation {
 
         return $answers;
     }
+
+    /**
+     * @throws dml_exception
+     */
+    public static function get_question_id_from_answer_id(int $answerid): int {
+        global $DB;
+        $questionanswer = $DB->get_record('livequiz_questions_answers', ['answer_id' => $answerid]);
+        return $questionanswer->question_id;
+    }
 }

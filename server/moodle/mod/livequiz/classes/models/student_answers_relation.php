@@ -50,6 +50,35 @@ class student_answers_relation {
     }
 
     /**
+     * Return all answers a student has given.
+     *
+     * @param int $studentid
+     * @return array // Returns all answers associated with a student ID.
+     * @throws dml_exception
+     */
+    public static function get_answers_from_studentid(int $studentid): array {
+        global $DB;
+        return $DB->get_records('livequiz_students_answers', ['student_id' => $studentid]);
+    }
+
+    /**
+     * @throws dml_exception
+     */
+    public static function get_answerids_from_participation(int $participationid): array {
+        global $DB;
+        $answerrecords = $DB->get_records(
+            'livequiz_students_answers',
+            ['participation_id' => $participationid],
+            '',
+            'answer_id'
+        );
+
+        $answerids = array_column($answerrecords, 'answer_id');
+        return $answerids;
+    }
+
+
+    /**
      * Get all answers for a student in a given participation
      *
      * @param int $studentid
