@@ -56,7 +56,7 @@ class quiz_runner_page implements renderable, templatable {
         $data = new stdClass();
 
         // Standard information for the navigationbar.
-        $navigationbar = new navigationbar( $this->cmid);
+        $navigationbar = new navigationbar($this->cmid);
         $data->tabs = $navigationbar->export_for_template();
         return $data;
     }
