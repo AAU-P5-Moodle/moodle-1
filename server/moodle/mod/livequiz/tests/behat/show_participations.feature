@@ -25,7 +25,7 @@ Feature: View livequiz activity
     And I am on "Test Course" course homepage with editing mode off
 
   Scenario: Show a participations of a livequiz
-    #Testing taht participations for a livequiz can be shown and that the results of that participation can be shown
+    #Testing that participations for a livequiz can be shown and that the results of that participation can be shown
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
     And I should see "Take Quiz"
     And I click on "Take Quiz" "link"
