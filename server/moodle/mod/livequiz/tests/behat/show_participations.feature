@@ -42,7 +42,7 @@ Feature: View livequiz activity
     And I click on "Yes" "radio"
     And "Submit Quiz" "button" should exist
     And I click on "Submit Quiz" "button"
-    Then I should see "You have successfully submitted the quiz"
+    Then I should see "Results for attempt"
     And "Back to quiz menu" "link" should exist
     And I click on "Back to quiz menu" "link"
     Then "Participation 1" "link" should exist
@@ -62,7 +62,7 @@ Feature: View livequiz activity
     And I click on "No" "radio"
     And "Submit Quiz" "button" should exist
     And I click on "Submit Quiz" "button"
-    Then I should see "You have successfully submitted the quiz"
+    Then I should see "Results for attempt"
     And "Back to quiz menu" "link" should exist
     And I click on "Back to quiz menu" "link"
     Then "Participation 1" "link" should exist
