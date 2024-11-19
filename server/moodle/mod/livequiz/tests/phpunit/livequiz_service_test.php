@@ -198,7 +198,7 @@ final class livequiz_service_test extends \advanced_testcase {
      */
     public function test_new_answer(): void {
         $title = 'Test question';
-        $description = 'This is a test question.';
+        $description = 'This is a test question for testing purposes.';
         $timelimit = 60;
         $explanation = "I don't know.";
 
@@ -244,17 +244,28 @@ final class livequiz_service_test extends \advanced_testcase {
      * @throws dml_exception|Exception
      */
     public function test_create_livequiz(): void {
+        $lecturerid = "2";
         $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
         $service = livequiz_services::get_singleton_service_instance();
-        $livequizresult = $service->submit_quiz($livequiz);
-        $questions = $livequiz->get_questions();
-
+        $livequizresult = $service->submit_quiz($livequiz, $lecturerid);
+        $questions = $livequizresult->get_questions();
         // Assert properties of the LiveQuiz remain the same.
         self::assertEquals($livequiz->get_id(), $livequizresult->get_id());
         self::assertEqualsIgnoringCase($livequiz->get_name(), $livequizresult->get_name());
         self::assertEqualsIgnoringCase($livequiz->get_intro(), $livequizresult->get_intro());
         self::assertEquals($livequiz->get_timecreated(), $livequizresult->get_timecreated());
         self::assertEquals($livequiz->get_timemodified(), $livequizresult->get_timemodified());
+
+
+        $getlecturer = $service->get_livequiz_question_lecturer($questions[0]->get_id());
+        self::assertEquals($getlecturer['lecturer_id'], $lecturerid);
+
+        $getquiz = $service->get_livequiz_quiz_lecturer($livequiz->get_id());
+        self::assertEquals($getquiz['lecturer_id'], $lecturerid);
+
+
+
+
 
         // The amount of questions remain the same.
         $questionsresult = $livequizresult->get_questions();
@@ -287,10 +298,10 @@ final class livequiz_service_test extends \advanced_testcase {
      * @throws dml_exception|Exception
      */
     public function test_update_livequiz(): void {
+        $lecturerid = "2";
         $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
         $service = livequiz_services::get_singleton_service_instance();
-
-        $firstlivequiz = $service->submit_quiz($livequiz);
+        $firstlivequiz = $service->submit_quiz($livequiz, $lecturerid);
         $questions = $firstlivequiz->get_questions();
 
         $questions[0]->set_title('New title');
@@ -303,7 +314,7 @@ final class livequiz_service_test extends \advanced_testcase {
         $newanswers[0]->set_explanation('New explanation');
 
         $firstlivequiz->set_questions($questions);
-        $updatedlivequiz = $service->submit_quiz($firstlivequiz);
+        $updatedlivequiz = $service->submit_quiz($firstlivequiz, $lecturerid);
 
         // Assert that the specific question was updated.
         $finalquestions = $updatedlivequiz->get_questions();
@@ -337,14 +348,14 @@ final class livequiz_service_test extends \advanced_testcase {
      * Test of new_participation
      * @covers \mod_livequiz\services\livequiz_services::new_participation
      */
-    public function test_new_participation(): void {
+    public function test_insert_participation(): void {
         $participationdata = $this->create_participation_data_for_test();
         $service = livequiz_services::get_singleton_service_instance();
 
         $actualstudentid = $participationdata['studentid'];
         $acutalquizid = $participationdata['quizid'];
 
-        $participation = $service->new_participation($actualstudentid, $acutalquizid);
+        $participation = $service->insert_participation($actualstudentid, $acutalquizid);
         $this->assertInstanceOf(participation::class, $participation);
         $this->assertEquals($participation->get_studentid(), $actualstudentid);
         $this->assertEquals($participation->get_livequizid(), $acutalquizid);
@@ -406,18 +417,19 @@ final class livequiz_service_test extends \advanced_testcase {
      * @throws Exception
      */
     public function test_delete_question(): void {
+        $lecturerid = "2";
         $service = livequiz_services::get_singleton_service_instance();
         $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
 
         $testquizquestions = $testquiz->get_questions();
 
-        $testquizsubmitted = $service->submit_quiz($testquiz);
+        $testquizsubmitted = $service->submit_quiz($testquiz, $lecturerid);
         $testquizsubmittedquestions = $testquizsubmitted->get_questions();
 
         array_shift($testquizsubmittedquestions);
         $testquizsubmitted->set_questions($testquizsubmittedquestions);
 
-        $testquizresubmitted = $service->submit_quiz($testquizsubmitted);
+        $testquizresubmitted = $service->submit_quiz($testquizsubmitted, $lecturerid);
         $testquizresubmittedquestions = $testquizsubmitted->get_questions();
 
         // Assert that the amount of questions has changed.
@@ -448,10 +460,11 @@ final class livequiz_service_test extends \advanced_testcase {
      * @throws Exception
      */
     public function test_delete_question_throws_if_relation_exist(): void {
+        $lecturerid = "2";
         $service = livequiz_services::get_singleton_service_instance();
         $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
 
-        $testquizsubmitted = $service->submit_quiz($testquiz);
+        $testquizsubmitted = $service->submit_quiz($testquiz, $lecturerid);
         $testquizsubmittedquestions = $testquizsubmitted->get_questions();
         $studentanswertestdata = [
             'studentid' => 1,
@@ -471,7 +484,7 @@ final class livequiz_service_test extends \advanced_testcase {
         $this->expectException(dml_exception::class);
         $this->expectExceptionMessage('error/Cannot delete answer with participations');
 
-        $service->submit_quiz($testquizsubmitted);
+        $service->submit_quiz($testquizsubmitted, $lecturerid);
         $testquizresubmittedquestions = $testquizsubmitted->get_questions();
     }
 
@@ -484,18 +497,19 @@ final class livequiz_service_test extends \advanced_testcase {
      * @throws Exception
      */
     public function delete_answer(): void {
+        $lecturerid = "2";
         $service = livequiz_services::get_singleton_service_instance();
         $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
 
         $testquizquestions = $testquiz->get_questions();
         $testquizfirstquestionanswers = $testquizquestions[0]->get_answers();
-        $testquizsubmitted = $service->submit_quiz($testquiz);
+        $testquizsubmitted = $service->submit_quiz($testquiz, $lecturerid);
         $testquizsubmittedquestions = $testquizsubmitted->get_questions();
 
         array_shift($testquizsubmittedquestions[0]->get_answers());
         $testquizsubmitted->set_questions($testquizsubmittedquestions);
 
-        $testquizresubmitted = $service->submit_quiz($testquizsubmitted);
+        $testquizresubmitted = $service->submit_quiz($testquizsubmitted, $lecturerid);
         $testquizresubmittedquestions = $testquizsubmitted->get_questions();
         $testquizresubmittedanswers = $testquizresubmittedquestions[0]->get_answers();
 

@@ -162,7 +162,7 @@ class livequiz {
     }
 
     /**
-     * Gets the ID for the assicated course
+     * Gets the ID for the associated course.
      *
      * @return int
      */

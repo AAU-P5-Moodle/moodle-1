@@ -27,7 +27,7 @@ require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
 
-global $PAGE, $OUTPUT, $testdataset;
+global $PAGE, $OUTPUT, $USER;
 
 // Get submitted parameters.
 $cmid = required_param('cmid', PARAM_INT); // Course module id.
@@ -43,14 +43,6 @@ if (empty($currentquiz->get_questions())) { // If the quiz has no questions, ins
     $demoquiz = $demodatareader->insertdemodata($currentquiz);
 } else {
     $demoquiz = $currentquiz;
-}
-
-// Insert demo data if the site is running in behat mode.
-if (defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING) {
-    if (empty($currentquiz->get_questions())) { // The quiz should only be empty the first time attemp.php is called.
-        $demodatareader = new \mod_livequiz\readdemodata();
-        $demoquiz = $demodatareader->insertdemodata($currentquiz);
-    }
 }
 
 if (!$cm) { // If course module is not set, throw an exception.
@@ -72,6 +64,10 @@ if ($_SESSION['completed']) { // If the quiz has been submitted, the user is not
     die();
 }
 
+if (!isset($_SESSION['quiz_answers'])) { // If the session variable is not set, set it to an empty array.
+    $_SESSION['quiz_answers'] = [];
+}
+
 $context = context_module::instance($cmid); // Get the context.
 
 $PAGE->set_context($context); // Make sure to set the page context.
@@ -83,7 +79,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionindex);
+$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionindex, $USER->id);
 
 // Output.
 echo $OUTPUT->header();

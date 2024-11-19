@@ -27,10 +27,11 @@ require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
 
-global $PAGE, $OUTPUT;
+global $PAGE, $OUTPUT, $DB;
 // Get submitted parameters.
-$id = required_param('id', PARAM_INT); // Course module id.
+$cmid = required_param('id', PARAM_INT); // Course module id.
 $quizid = required_param('livequizid', PARAM_INT);
+[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $participationnumber = optional_param('participationnumber', 0, PARAM_INT);
 $index = $participationnumber - 1; // Index is 0-based.
 
@@ -66,7 +67,7 @@ error_log('DB participation id: ' . $participation->get_id());
 
 // Set the page URL, without exposing the participationid.
 $PAGE->set_url(new moodle_url('/mod/livequiz/results.php', [
-    'id'                    => $id,
+    'id'                    => $cmid,
     'quizid'                => $quizid,
     'participationnumber'   => $participationnumber]
 ));
@@ -76,7 +77,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$results = new \mod_livequiz\output\results_page($id, $demoquiz, $participation);
+$results = new \mod_livequiz\output\results_page($cmid, $demoquiz, $participation);
 
 echo $OUTPUT->header();
 echo $output->render($results);

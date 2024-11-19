@@ -28,7 +28,6 @@ Feature: View livequiz activity
     #Testing we can open the livequiz activity and the questions are shown.
     #The questions should be shown in different pages
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
-    And I should see "THIS IS THE INDEXPAGE OF livequiz_europe_quiz"
     And I should see "Take Quiz"
     And I click on "Take Quiz" "link"
     And I should see "Which of the following cities is in France?"
@@ -91,3 +90,39 @@ Feature: View livequiz activity
     And I click on "Next Question" "link"
     And I click on "Copenhagen" "radio"
     Then the "Copenhagen" answer should be checked
+
+Scenario: Chosen answers to question are preserved in checkbox
+  When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+  And I click on "Take Quiz" "link"
+  And "Paris" "checkbox" should exist
+  And I click on "Paris" "checkbox"
+  And "Champagne" "checkbox" should exist
+  And I click on "Champagne" "checkbox"
+  And "Next Question" "link" should exist
+  And I click on "Next Question" "link"
+  And "Previous Question" "link" should exist
+  And I click on "Previous Question" "link"
+  Then the "Paris" answer should be checked
+  And the "Champagne" answer should be checked
+
+Scenario: Chosen answers to question are preserved in radio button
+  When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+  And I click on "Take Quiz" "link"
+  And "Next Question" "link" should exist
+  And I click on "Next Question" "link"
+  And "Copenhagen" "radio" should exist
+  And I click on "Copenhagen" "radio"
+  And "Next Question" "link" should exist
+  And I click on "Next Question" "link"
+  And "Previous Question" "link" should exist
+  And I click on "Previous Question" "link"
+  Then the "Copenhagen" answer should be checked
+  And "Aarhus" "radio" should exist
+  And I click on "Aarhus" "radio"
+  And the "Aarhus" answer should be checked
+  And "Previous Question" "link" should exist
+  And I click on "Previous Question" "link"
+  And "Next Question" "link" should exist
+  And I click on "Next Question" "link"
+  And "Aarhus" "radio" should exist
+  And the "Aarhus" answer should be checked
