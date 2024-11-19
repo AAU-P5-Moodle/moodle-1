@@ -244,20 +244,19 @@ class livequiz_services {
     }
 
     /**
-     * Creates a new participation record in the database.
+     * Creates a new participation record (quiz-student record) in the database.
      * @param int $studentid
      * @param int $quizid
      * @throws dml_exception
-     * @return participation
+     * @return int
      */
-    public function new_participation(int $studentid, int $quizid): participation {
-        // Add parcitipation using the model.
+    public function insert_participation(int $studentid, int $quizid): participation {
+        // Add participation using the model.
         global $DB;
         $transaction = $DB->start_delegated_transaction();
         $participation = new participation($studentid, $quizid);
         try {
             $participation->set_id(student_quiz_relation::insert_student_quiz_relation($quizid, $studentid));
-
             $transaction->allow_commit();
         } catch (dml_exception $e) {
             $transaction->rollback($e);
@@ -265,6 +264,29 @@ class livequiz_services {
         }
         return $participation;
     }
+
+    /**
+     * Insert students_answers record in the database.
+     * @param int $studentid
+     * @param int $answerid
+     * @param int $participationid
+     * @return void
+     * @throws dml_exception
+     * @throws dml_transaction_exception
+     */
+    public function insert_answer_choice(int $studentid, int $answerid, int $participationid): void {
+        // Add participation using the model.
+        global $DB;
+        $transaction = $DB->start_delegated_transaction();
+        try {
+            student_answers_relation::insert_student_answer_relation($studentid, $answerid, $participationid);
+            $transaction->allow_commit();
+        } catch (dml_exception $e) {
+            $transaction->rollback($e);
+            throw $e;
+        }
+    }
+
 
     /**
      * Gets answers from a student in a specific participation.

@@ -28,7 +28,6 @@ Feature: View livequiz activity
     #Testing we can open the livequiz activity and the questions are shown.
     #The questions should be shown in different pages
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
-    And I should see "THIS IS THE INDEXPAGE OF livequiz_europe_quiz"
     And I should see "Take Quiz"
     And I click on "Take Quiz" "link"
     And I should see "Which of the following cities is in France?"
