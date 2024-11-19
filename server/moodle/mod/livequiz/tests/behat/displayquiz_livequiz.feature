@@ -1,7 +1,7 @@
 @mod @mod_livequiz @javascript
 
 Feature: View livequiz activity
-  as a student
+  as a student and allows the student to take a quiz
 
   Background:
     Given the following "users" exist:
