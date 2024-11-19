@@ -24,6 +24,7 @@ use stdClass;
 use mod_livequiz\models\livequiz;
 use mod_livequiz\models\participation;
 use mod_livequiz\services\livequiz_services;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 require_once(dirname(__DIR__) . '/models/livequiz.php');
@@ -65,19 +66,24 @@ class results_page implements renderable, templatable {
         $data = $this->livequiz->prepare_for_template();
         $data->isattempting = false; // This is the results page, so the user is not attempting the quiz.
         // Get the questions with their answers.
-        $livequiz_services = livequiz_services::get_singleton_service_instance();
-        $questions = $livequiz_services->get_questions_with_answers($this->livequiz->get_id());
+        $livequizservices = livequiz_services::get_singleton_service_instance();
+        $questions = $livequizservices->get_questions_with_answers($this->livequiz->get_id());
 
         // Get the student's answers for the participation.
         $participationanswer = $livequiz_services->get_answersids_from_student_in_participation(
             $this->participation->get_studentid(),
             $this->participation->get_id()
         );
+        // Add the menu URL for navigation.
+        $data->menuurl = (new moodle_url(
+            '/mod/livequiz/view.php',
+            ['cmid' => $this->cmid]
+        ))->out(false);
 
         // Prepare the questions data.
         $data->questions = [];
         foreach ($questions as $question) {
-            $questiondata = new stdClass;
+            $questiondata = new stdClass();
             $questiondata->id = $question->get_id();
             $questiondata->title = $question->get_title();
             $questiondata->description = $question->get_description();
@@ -85,7 +91,7 @@ class results_page implements renderable, templatable {
 
             // Get the student's answer for this question.
             foreach ($question->get_answers() as $answer) {
-                $answerdata = new stdClass;
+                $answerdata = new stdClass();
                 $answerdata->id = $answer->get_id();
                 $answerdata->iscorrect = $answer->get_correct();
                 // Check if the answer was selected by the student.
