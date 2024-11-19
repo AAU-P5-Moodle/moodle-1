@@ -17,6 +17,7 @@
 namespace mod_livequiz\output;
 
 use core\exception\moodle_exception;
+use mod_livequiz\models\livequiz;
 use renderable;
 use renderer_base;
 use templatable;
@@ -30,8 +31,8 @@ use moodle_url;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class create_quiz_page implements renderable, templatable {
-    /** @var object $database The object we get from the database that we put into the rendered forms*/
-    protected stdClass $database;
+    /** @var object $livequizobject The object we get from the database that we put into the rendered forms*/
+    protected livequiz $livequizobject;
     /** @var int $cmid the course module id */
     protected int $cmid;
 
@@ -40,8 +41,8 @@ class create_quiz_page implements renderable, templatable {
      *
      * @param int $id
      */
-    public function __construct(stdclass $dboject, int $id) {
-        $this->database = $dboject;
+    public function __construct(livequiz $dboject, int $id) {
+        $this->livequizobject = $dboject;
         $this->cmid = $id;
     }
 
@@ -54,8 +55,8 @@ class create_quiz_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
-        $data->name = $this->database->name;
-        $data->intro = $this->database->intro;
+        $data->name = $this->livequizobject->get_name();
+        $data->intro = $this->livequizobject->get_intro();
         $navigationbar = new navigationbar($this->cmid);
         $data->tabs = $navigationbar->export_for_template();
         return $data;
