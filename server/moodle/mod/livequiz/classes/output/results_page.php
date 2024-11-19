@@ -70,14 +70,14 @@ class results_page implements renderable, templatable {
         $questions = $livequizservices->get_questions_with_answers($this->livequiz->get_id());
 
         // Get the student's answers for the participation.
-        $participationanswer = $livequiz_services->get_answersids_from_student_in_participation(
+        $participationanswerids = $livequizservices->get_answersids_from_student_in_participation(
             $this->participation->get_studentid(),
             $this->participation->get_id()
         );
         // Add the menu URL for navigation.
         $data->menuurl = (new moodle_url(
             '/mod/livequiz/view.php',
-            ['cmid' => $this->cmid]
+            ['id' => $this->cmid]
         ))->out(false);
 
         // Prepare the questions data.
@@ -95,7 +95,7 @@ class results_page implements renderable, templatable {
                 $answerdata->id = $answer->get_id();
                 $answerdata->iscorrect = $answer->get_correct();
                 // Check if the answer was selected by the student.
-                $answerdata->isselected = in_array($answer->get_id(), $participationanswer);
+                $answerdata->isselected = in_array($answer->get_id(), $participationanswerids);
                 $questiondata->answers[] = $answerdata;
             }
             $data->questions[] = $questiondata;
