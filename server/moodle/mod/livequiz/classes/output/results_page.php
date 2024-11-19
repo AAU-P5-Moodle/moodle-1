@@ -44,6 +44,7 @@ class results_page implements renderable, templatable {
     /**
      * index_page constructor.
      * @param int $id
+     * @param int $cmid
      * @param livequiz $livequiz
      * @param participation $participation
      */
@@ -68,7 +69,7 @@ class results_page implements renderable, templatable {
         $questions = $livequiz_services->get_questions_with_answers($this->livequiz->get_id());
 
         // Get the student's answers for the participation.
-        $participationanswerids = $livequiz_services->get_answers_from_student_in_participation(
+        $participationanswer = $livequiz_services->get_answersids_from_student_in_participation(
             $this->participation->get_studentid(),
             $this->participation->get_id()
         );
@@ -88,7 +89,7 @@ class results_page implements renderable, templatable {
                 $answerdata->id = $answer->get_id();
                 $answerdata->iscorrect = $answer->get_correct();
                 // Check if the answer was selected by the student.
-                $answerdata->isselected = in_array($answer->get_id(), $participationanswerids);
+                $answerdata->isselected = in_array($answer->get_id(), $participationanswer);
                 $questiondata->answers[] = $answerdata;
             }
             $data->questions[] = $questiondata;

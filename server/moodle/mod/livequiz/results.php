@@ -56,14 +56,21 @@ $context = context_module::instance($cm->id); // Set the context for the course 
 $PAGE->set_context($context); // Make sure to set the page context.
 
 if ($index == -1) {
-    
-    error_log('No participation found');
+    $participation = $livequizservice->get_newest_participation_for_quiz($quizid, $USER->id);
 }
-// The following is the actual participation object, that we can use to display the results.
-$participation = $_SESSION['participations'][$index];
-error_log('Participation: ' . print_r($participation, true));
-error_log('Participation number: ' . $participationnumber);
-error_log('DB participation id: ' . $participation->get_id());
+else {
+    if (isset($_SESSION['participations'][$index])) {
+        // The following is the actual participation object, that we can use to display the results.
+        $participation = $_SESSION['participations'][$index];
+        error_log('Participation: ' . print_r($participation, true));
+        error_log('Participation number: ' . $participationnumber);
+        error_log('DB participation id: ' . $participation->get_id());
+        
+    }
+    else {
+        error_log("No participation was found in session");
+    }
+}
 
 // Set the page URL, without exposing the participationid.
 $PAGE->set_url(new moodle_url('/mod/livequiz/results.php', [

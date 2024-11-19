@@ -69,8 +69,10 @@ class student_quiz_relation {
      */
     public static function get_newest_participation_for_quiz(int $quizid, int $studentid): participation {
         global $DB;
-        $participations = $DB->get_records('livequiz_quiz_student', 
-        ['livequiz_id' => $quizid, 'student_id' => $studentid], 'id DESC', '*', 0, 1);
-        return reset($participations);
+        $participation = $DB->get_record('livequiz_quiz_student', 
+            ['livequiz_id' => $quizid, 'student_id' => $studentid], '*', IGNORE_MULTIPLE, 'id DESC');
+        $participationobject = new participation($studentid, $quizid);
+        $participationobject->set_id($participation->id);
+        return $participationobject;
     }
 }

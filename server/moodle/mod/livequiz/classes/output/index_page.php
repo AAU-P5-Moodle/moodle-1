@@ -34,6 +34,8 @@ use mod_livequiz\models\student_quiz_relation;
 class index_page implements renderable, templatable {
     /** @var int $cmid the course module id */
     protected int $cmid;
+    /** @var int $quizid the course module id */
+    protected int $quizid;
     /** @var int $studentid the student id */
     protected int $studentid;
 
@@ -42,8 +44,9 @@ class index_page implements renderable, templatable {
      * @param int $id
      * @param int $studentid
      */
-    public function __construct(int $cmid, int $studentid) {
+    public function __construct(int $cmid, int $quizid, int $studentid) {
         $this->cmid = $cmid;
+        $this->quizid = $quizid;
         $this->studentid = $studentid;
     }
 
@@ -58,7 +61,7 @@ class index_page implements renderable, templatable {
         $data = new stdClass();
         $data->participations = [];
 
-        $participations = student_quiz_relation::get_all_student_participation_for_quiz($this->cmid, $this->studentid);
+        $participations = student_quiz_relation::get_all_student_participation_for_quiz($this->quizid, $this->studentid);
         $_SESSION['participations'] = $participations; // Store participations in session.
 
         foreach ($participations as $index => $participation) {

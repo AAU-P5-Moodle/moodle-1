@@ -304,6 +304,14 @@ class livequiz_services {
         }
         return $answers;
     }
+    public function get_answersids_from_student_in_participation(int $studentid, int $participationid): array {
+        return student_answers_relation::get_answersids_from_student_in_participation($studentid, $participationid);
+    }
+
+    public function get_newest_participation_for_quiz(int $quizid, int $studentid): participation {
+        return student_quiz_relation::get_newest_participation_for_quiz($quizid, $studentid);
+    }
+
     /**
      * gets lecturer from quiz
      * @param int $quizid
@@ -354,4 +362,5 @@ class livequiz_services {
         quiz_questions_relation::delete_question_quiz_relation($questionid);
         question::delete_question($questionid);
     }
+
 }
