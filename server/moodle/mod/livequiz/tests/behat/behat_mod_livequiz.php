@@ -16,7 +16,13 @@
 
 namespace mod_livequiz\tests\behat;
 
+use Behat\Mink\Exception\ExpectationException;
 use behat_base;
+use demodatareader;
+use mod_livequiz\services\livequiz_services;
+
+// Include the demodatareader file(THIS IS NECESSARY).
+require_once(dirname(__DIR__) . '/behat/demodatareader.php');
 
 // This is used because behat cannot find the class when the namespace is defined.
 class_alias('mod_livequiz\tests\behat\behat_mod_livequiz', 'behat_mod_livequiz');
@@ -34,8 +40,40 @@ class behat_mod_livequiz extends behat_base {
      * Asserts whether the given element is checked.
      * @Then the :checkbox answer should be checked
      * @param $element (radio button or checkbox)
+     * @throws ExpectationException
      */
-    public function assertischecked($element) {
+    public function assertischecked($element): void {
         $this->assertSession()->checkboxChecked($element);
+    }
+
+    /**
+     * Reads the demo data and creates objects from it.
+     *
+     * @Given I use demodata for the course :coursename and activity :activityname
+     */
+    public function i_use_demodata($coursename, $activityname): void {
+        global $DB;
+
+        // Get the course ID.
+        $course = $DB->get_record('course', ['shortname' => $coursename], '*', MUST_EXIST);
+
+        // Get the module information (like 'livequiz').
+        $module = $DB->get_record('modules', ['name' => $activityname], '*', MUST_EXIST);
+
+        // Get the course module record.
+        $coursemodule = $DB->get_record('course_modules', [
+            'course' => $course->id,
+            'module' => $module->id,
+            'idnumber' => 1,
+        ], '*', MUST_EXIST);
+
+        // Get the instance of the module.
+        $instance = $DB->get_record('livequiz', ['id' => $coursemodule->instance], '*', MUST_EXIST);
+
+        // Read demo data and insert into DB to use for tests.
+        $livequizservice = livequiz_services::get_singleton_service_instance();
+        $livequiz = $livequizservice->get_livequiz_instance($instance->id);
+        $demodatareader = new demodatareader();
+        $demodatareader->insertdemodata($livequiz);
     }
 }
