@@ -24,6 +24,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_livequiz\services\livequiz_services;
+
 // Include necessary files.
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
@@ -48,9 +50,10 @@ echo $OUTPUT->header();
 
 
 global $DB;
-
 try {
-    $quizdata = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
+    $service = livequiz_services::get_singleton_service_instance();
+    $quizid = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
+    $quizdata = $service->get_livequiz_instance($quizid);
 } catch (Exception $e) {
     echo $OUTPUT->notification('Failed to retrieve quiz data: ' . $e->getMessage(), 'notifyproblem');
 }
