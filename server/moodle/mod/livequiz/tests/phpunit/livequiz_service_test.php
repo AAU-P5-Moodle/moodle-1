@@ -556,7 +556,15 @@ final class livequiz_service_test extends \advanced_testcase {
         }
 
         $studentresults = $service->get_student_quiz_results(1);
-        echo print_r($studentresults, true);
+//        echo print_r($studentresults, true);
         $this->assertEquals(count($testquizsubmittedquestions), count($studentresults));
+
+        $resultkeys = array_keys($studentresults);
+        $this->assertEquals(2, count($studentresults[$resultkeys[0]]));
+        $this->assertEquals(1, count($studentresults[$resultkeys[1]]));
+        $this->assertEquals(1, count($studentresults[$resultkeys[2]]));
+
+
+
     }
 }
