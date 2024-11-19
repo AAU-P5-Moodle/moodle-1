@@ -22,6 +22,7 @@ use renderer_base;
 use templatable;
 use stdClass;
 use moodle_url;
+use mod_livequiz\models\livequiz;
 
 /**
  * Class index_page
@@ -31,7 +32,7 @@ use moodle_url;
  */
 class create_quiz_page implements renderable, templatable {
     /** @var object $database The object we get from the database that we put into the rendered forms*/
-    protected stdClass $database;
+    protected livequiz $database;
     /** @var int $cmid the course module id */
     protected int $cmid;
 
@@ -40,7 +41,7 @@ class create_quiz_page implements renderable, templatable {
      *
      * @param int $id
      */
-    public function __construct(stdclass $dboject, int $id) {
+    public function __construct(livequiz $dboject, int $id) {
         $this->database = $dboject;
         $this->cmid = $id;
     }
@@ -54,8 +55,8 @@ class create_quiz_page implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
-        $data->name = $this->database->name;
-        $data->intro = $this->database->intro;
+        $data->name = $this->database->get_name();
+        $data->intro = $this->database->get_intro();
         $navigationbar = new navigationbar($this->cmid);
         $data->tabs = $navigationbar->export_for_template();
         return $data;

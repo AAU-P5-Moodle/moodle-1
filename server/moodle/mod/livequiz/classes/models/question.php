@@ -74,8 +74,6 @@ class question {
         $this->description = $description;
         $this->timelimit = $timelimit;
         $this->explanation = $explanation;
-
-        return $this;
     }
 
     /**

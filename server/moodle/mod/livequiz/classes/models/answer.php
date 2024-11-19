@@ -59,8 +59,6 @@ class answer {
         $this->correct = $correct;
         $this->description = $description;
         $this->explanation = $explanation;
-
-        return $this;
     }
 
     /**

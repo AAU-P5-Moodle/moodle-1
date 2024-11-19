@@ -97,8 +97,6 @@ class livequiz {
         $this->introformat = $introformat;
         $this->timecreated = $timecreated;
         $this->timemodified = $timemodified;
-
-        return $this;
     }
 
     /**
@@ -222,6 +220,21 @@ class livequiz {
      */
     public function get_question_by_index(int $index): question {
         return $this->questions[$index];
+    }
+
+    public function set_name(string $name) {
+        $this->name = $name;
+    }
+
+    public function set_intro(string $intro) {
+        $this->intro = $intro;
+    }
+
+    public function set_introformat(int $introformat) {
+        $this->introformat = $introformat;
+    }
+    public function set_id(int $id) {
+        $this->id = $id;
     }
 
 

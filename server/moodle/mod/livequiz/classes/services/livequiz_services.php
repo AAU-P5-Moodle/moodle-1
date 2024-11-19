@@ -107,7 +107,7 @@ class livequiz_services {
      */
     public function submit_quiz(livequiz $livequiz, int $lecturerid): livequiz {
         $questions = $livequiz->get_questions();
-
+        /* Actually doesnt do what it says it doesnt.
         if (!count($questions)) {
             throw new Exception("A Livequiz Must have at least 1 Question");
         }
@@ -117,7 +117,8 @@ class livequiz_services {
             if (!count($answers)) {
                 throw new Exception("A Livequiz Question must have at least 1 Answer");
             }
-        }
+        } 
+          */
 
         global $DB;
         $transaction = $DB->start_delegated_transaction();

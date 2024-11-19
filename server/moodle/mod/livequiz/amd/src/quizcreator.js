@@ -223,7 +223,7 @@ let editingIndex = null;
                 let answertext = answers_div.children[i].querySelector(".answer_input").value.trim();
                 let iscorrect = answers_div.children[i].querySelector(".answer_checkbox").checked;
 
-                answers.push({ text: answertext, correct: iscorrect });
+                answers.push({ description: answertext, correct: iscorrect, explanation:"" });
             }
     
             let file_input = file_picker.querySelector('input[type="file"]');
@@ -232,7 +232,11 @@ let editingIndex = null;
             let savedQuestion = {
                 question: questionText,
                 answers: answers,
-                file: file
+                file: file,
+                description:"",
+                explanation:"",
+                timelimit:0 //todo proper element get by id and logic for just empty = 0
+
             };
             
             if (isEditing && editingIndex != null){
@@ -408,8 +412,6 @@ let editingIndex = null;
                 name: document.getElementById('id_name').value,
                 intro: document.getElementById('id_quiz_description').value,
                 introformat: 1,
-                timemodified: Date.now(),
-                timecreated: Date.now(),
                 questions: []
             }
 
@@ -418,6 +420,7 @@ let editingIndex = null;
                     id: questionCounter,
                     title: savedQuestion.question,
                     timelimit: savedQuestion.timelimit,
+                    description: savedQuestion.description,
                     explanation: savedQuestion.explanation,
                     answers: []
                 }

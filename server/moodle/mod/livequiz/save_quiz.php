@@ -28,11 +28,14 @@ require_once($CFG->dirroot . '/mod/livequiz/classes/models/livequiz.php');
 
 use mod_livequiz\services\livequiz_services;
 use mod_livequiz\models\livequiz;
+use mod_livequiz\models\question;
+use mod_livequiz\models\answer;
 
 global $DB;
 
 // Get course ID from parameters.
-$id = required_param('id', PARAM_INT);
+$id = required_param('id', PARAM_INT); // Course module ID.
+[$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 
 require_login();
 
@@ -43,53 +46,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if the data is valid and contains required properties.
     if ($data && isset($data->name, $data->questions) && !empty($data->questions)) {
         try {
-            // Create a new livequiz instance.
-            $livequiz = new livequiz(
-                0, // Placeholder for new quiz ID.
-                $data->name ?? 'Untitled Quiz', // Name of the quiz.
-                $id, // Course ID from the request parameter.
-                $data->intro ?? '', // Introduction text.
-                FORMAT_HTML, // Intro format (assuming HTML).
-                time(), // Time created (current timestamp).
-                time() // Time modified (current timestamp).
-            );
-
+            $livequizservice = livequiz_services::get_singleton_service_instance();
+            $livequiz = $livequizservice->get_livequiz_instance($cm->instance);
+            $livequiz->set_name($data->name);
+            $livequiz->set_intro($data->intro);
+            $livequiz->set_introformat($data->introformat);
+            $questionsarray = [];
             // Add questions and their answers to the livequiz object.
             foreach ($data->questions as $question) {
                 if (isset($question->title, $question->answers) && !empty($question->answers)) {
-                    $questionobj = livequiz_services::get_singleton_service_instance()->new_question(
-                        $livequiz,
-                        $question->title,
-                        $question->description ?? '',
-                        $question->timelimit ?? 0,
-                        $question->explanation ?? ''
-                    );
-
+                    $newquestion = new question($question->title, $question->description, $question->timelimit, $question->explanation);
+                    $answersarray = [];
                     foreach ($question->answers as $answer) {
-                        if (isset($answer->description, $answer->correct)) {
-                            livequiz_services::get_singleton_service_instance()->new_answer(
-                                $questionobj,
-                                $answer->correct ? 1 : 0,
-                                $answer->description,
-                                $answer->explanation ?? ''
-                            );
-                        } else {
-                            throw new Exception('Invalid answer format: missing required fields.');
-                        }
+                        $newanswer = new answer($answer->correct, $answer->description, $answer->explanation);
+                        array_push($answersarray, $newanswer);
                     }
-                } else {
-                    throw new Exception('Invalid question format: missing title or answers.');
+                    $newquestion->add_answers($answersarray);
                 }
             }
-
+            $livequiz->set_questions($questionsarray);
             // Submit the quiz using the service.
-            $submittedquiz = livequiz_services::get_singleton_service_instance()->submit_quiz($livequiz);
+            $livequizservice->submit_quiz($livequiz, 0);// Todo get lector id somehow.
 
             http_response_code(200);
             echo json_encode([
                 'status' => 'success',
                 'message' => 'Quiz saved successfully.',
-                'quiz_id' => $submittedquiz->get_id(),
+                'quiz_id' => $livequiz->get_id(),
             ]);
         } catch (Exception $e) {
             http_response_code(500);

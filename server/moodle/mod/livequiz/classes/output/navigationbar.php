@@ -55,7 +55,7 @@ class navigationbar {
         $id = $this->id;
         $data->tabs = [
             [
-                'url' => new moodle_url('/mod/livequiz/quizcreator.php', ['id' => $id]),
+                'url' => new moodle_url('/mod/livequiz/quiz_creator.php', ['id' => $id]),
                 'label' => get_string('quizcreator', 'mod_livequiz'),
 
             ],
