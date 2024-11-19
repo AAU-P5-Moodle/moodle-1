@@ -48,8 +48,6 @@ $PAGE->requires->css(new moodle_url('/mod/livequiz/style.css'));
 // Output page header.
 echo $OUTPUT->header();
 
-
-
 try {
     $service = livequiz_services::get_singleton_service_instance();
     $quizdata = $service->get_livequiz_instance($cm->instance);
