@@ -22,6 +22,7 @@ use dml_transaction_exception;
 /**
  * 'Static' class, do not instantiate.
  * Displays the livequiz view page.
+ *
  * @package   mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -36,9 +37,22 @@ class questions_answers_relation {
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
-    public static function append_answer_to_question(int $questionid, int $answerid): void {
+    public static function insert_question_answer_relation(int $questionid, int $answerid): void {
         global $DB;
         $DB->insert_record('livequiz_questions_answers', ['question_id' => $questionid, 'answer_id' => $answerid]);
+    }
+
+    /**
+     * Deletes the relation between an answer and a question, given their IDs.
+     *
+     * @param int $answerid
+     * @param int $questionid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_question_answer_relation(int $questionid, int $answerid): bool {
+        global $DB;
+        return $DB->delete_records('livequiz_questions_answers', ['question_id' => $questionid, 'answer_id' => $answerid]);
     }
 
     /**
@@ -51,12 +65,11 @@ class questions_answers_relation {
     public static function get_answers_from_question(int $questionid): array {
         global $DB;
 
-        $answerrecords = $DB->get_records('livequiz_questions_answers', ['question_id' => $questionid], '', 'question_id');
-        $answerids = array_column($answerrecords, 'question_id');
+        $answerids = $DB->get_records('livequiz_questions_answers', ['question_id' => $questionid], '', 'answer_id');
         $answers = [];
 
         foreach ($answerids as $answerid) {
-            $answers[] = answer::get_answer_from_id($answerid);
+            $answers[] = answer::get_answer_from_id($answerid->answer_id);
         }
 
         return $answers;

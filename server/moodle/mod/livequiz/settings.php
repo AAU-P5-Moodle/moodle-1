@@ -23,7 +23,7 @@
  */
 defined('MOODLE_INTERNAL') || die();
 global $ADMIN;
-if ($ADMIN->fulltree) {
+if ($ADMIN->fulltree) { // Check if the admin tree is fully expanded.
     $settings->add(new admin_settingpage('mod_livequiz', get_string('pluginname', 'mod_livequiz')));
 
     $settings->add(new admin_setting_configtext(

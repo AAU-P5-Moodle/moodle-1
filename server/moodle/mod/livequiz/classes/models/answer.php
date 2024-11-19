@@ -14,16 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Displays the livequiz view page.
- * @package   mod_livequiz
- * @copyright 2024 Software AAU
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace mod_livequiz\models;
 
 use dml_exception;
+use Exception;
 
 /**
  * Class answer.
@@ -31,7 +25,7 @@ use dml_exception;
  * This class represents an answer in the LiveQuiz module.
  * It handles the creation, retrieval, and updates of answer associated with quiz questions.
  *
- * @package mod_livequiz\answer
+ * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -76,7 +70,7 @@ class answer {
      * @return int
      * @throws dml_exception
      */
-    public static function submit_answer(answer $answer): int {
+    public static function insert_answer(answer $answer): int {
         global $DB;
 
         $answerdata = [
@@ -94,13 +88,35 @@ class answer {
      * @param int $id
      * @return mixed
      * @throws dml_exception
+     * @throws Exception
      */
     public static function get_answer_from_id(int $id): answer {
         global $DB;
         $answerdata = $DB->get_record('livequiz_answers', ['id' => $id]);
+        if (!$answerdata) {
+            throw new Exception("No answer found in answers table with id: " . $id);
+        }
         $answer = new answer($answerdata->correct, $answerdata->description, $answerdata->explanation);
         $answer->set_id($answerdata->id);
         return $answer;
+    }
+
+    /**
+     * Update an answer, given its id.
+     *
+     * @throws dml_exception
+     */
+    public function update_answer(): void {
+        global $DB;
+
+        $answerdata = [
+            'id' => $this->id,
+            'correct' => $this->correct,
+            'description' => $this->description,
+            'explanation' => $this->explanation,
+        ];
+
+        $DB->update_record('livequiz_answers', $answerdata);
     }
 
     /**
@@ -109,7 +125,7 @@ class answer {
      * @return int
      */
     public function get_id(): int {
-        return $this->id;
+        return $this->id ?? 0;
     }
 
     /**
@@ -146,5 +162,44 @@ class answer {
      */
     private function set_id(int $id): void {
         $this->id = $id;
+    }
+
+    /**
+     * Sets the correct status of the answer.
+     *
+     * @param int $correct
+     */
+    public function set_correct(int $correct): void {
+        $this->correct = $correct;
+    }
+
+    /**
+     * Sets the description of the answer.
+     *
+     * @param string $description
+     */
+    public function set_description(string $description): void {
+        $this->description = $description;
+    }
+
+    /**
+     * Sets the explanation of the answer.
+     *
+     * @param string $explanation
+     */
+    public function set_explanation(string $explanation): void {
+        $this->explanation = $explanation;
+    }
+
+    /**
+     * Deletes an answer from the database.
+     *
+     * @param int $answerid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_answer(int $answerid): bool {
+        global $DB;
+        return $DB->delete_records('livequiz_answers', ['id' => $answerid]);
     }
 }

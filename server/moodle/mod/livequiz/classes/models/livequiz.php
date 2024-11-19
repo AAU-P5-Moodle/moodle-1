@@ -162,7 +162,7 @@ class livequiz {
     }
 
     /**
-     * Gets the ID for the assicated course
+     * Gets the ID for the associated course.
      *
      * @return int
      */
@@ -177,6 +177,15 @@ class livequiz {
      */
     public function get_intro(): string {
         return $this->intro;
+    }
+
+    /**
+     * Gets the introduction format for the livequiz.
+     *
+     * @return int
+     */
+    public function get_introformat(): int {
+        return $this->introformat;
     }
 
     /**
@@ -206,6 +215,15 @@ class livequiz {
         return $this->questions;
     }
 
+    /**
+     * Getter that gets the question object in the parsed index
+     * @param int $index the index of the question
+     * @return question
+     */
+    public function get_question_by_index(int $index): question {
+        return $this->questions[$index];
+    }
+
 
     /**
      * Sets the timemodified field to the current time.
@@ -232,7 +250,55 @@ class livequiz {
      *
      * @param question $question
      */
-    private function add_question(question $question): void {
+    public function add_question(question $question): void {
         $this->questions[] = $question;
+    }
+
+    /**
+     *
+     * Sets questions for the livequiz.
+     * @param array $questions
+     */
+    public function set_questions(array $questions): void {
+        $this->questions = $questions;
+    }
+    /**
+     * Prepares the template data for mustache.
+     * @return stdClass
+     */
+    public function prepare_for_template(): stdClass {
+        // Prepare data object.
+        $data = new stdClass();
+
+        $data->quizid = $this->id;
+        $data->quiztitle = $this->get_name();
+        $data->numberofquestions = count($this->get_questions());
+
+        // Prepare questions.
+        $rawquestions = $this->questions;
+
+        $data->questions = [];
+        foreach ($rawquestions as $rawquestion) {
+            $data->questions[] = $rawquestion->prepare_for_template(new stdClass());
+        }
+        return $data;
+    }
+
+    /**
+     * Prepares the template data for mustache.
+     * @param int $questionindex
+     * @return stdClass
+     */
+    public function prepare_question_for_template(int $questionindex): stdClass {
+        // Prepare data object.
+        $data = new stdClass();
+        $data->quizid = $this->id;
+        $data->quiztitle = $this->name;
+        $data->numberofquestions = count($this->get_questions());
+        if ($data->numberofquestions > 0) {
+            $question = $this->get_question_by_index($questionindex);
+            $data = $question->prepare_for_template($data);
+        }
+        return $data;
     }
 }
