@@ -433,7 +433,7 @@ let editingIndex = null;
                 });
                 data.questions.push(questionData);
             });
-            fetch('/mod/livequiz/quizcreator/save_quiz.php?id='+quizId, {
+            fetch('/mod/livequiz/save_quiz.php?id='+quizId, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
