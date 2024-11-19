@@ -61,18 +61,5 @@ class student_quiz_relation {
         }
         return $participations;
     }
-    /**
-     * Get newest participation in table. The participation with highest id.
-     * @param int $quizid
-     * @param int $studentid
-     * @return participation
-     */
-    public static function get_newest_participation_for_quiz(int $quizid, int $studentid): participation {
-        global $DB;
-        $participation = $DB->get_record('livequiz_quiz_student', 
-            ['livequiz_id' => $quizid, 'student_id' => $studentid], '*', IGNORE_MULTIPLE, 'id DESC');
-        $participationobject = new participation($studentid, $quizid);
-        $participationobject->set_id($participation->id);
-        return $participationobject;
-    }
+
 }

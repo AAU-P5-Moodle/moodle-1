@@ -74,31 +74,25 @@ class results_page implements renderable, templatable {
             $this->participation->get_studentid(),
             $this->participation->get_id()
         );
+        error_log(print_r($participationanswerids));
         // Add the menu URL for navigation.
         $data->menuurl = (new moodle_url(
             '/mod/livequiz/view.php',
             ['id' => $this->cmid]
         ))->out(false);
+        
 
         // Prepare the questions data.
-        $data->questions = [];
-        foreach ($questions as $question) {
-            $questiondata = new stdClass();
-            $questiondata->id = $question->get_id();
-            $questiondata->title = $question->get_title();
-            $questiondata->description = $question->get_description();
-            $questiondata->answers = [];
-
+        foreach ($data->questions as $qindex => $question) {
             // Get the student's answer for this question.
-            foreach ($question->get_answers() as $answer) {
-                $answerdata = new stdClass();
-                $answerdata->id = $answer->get_id();
-                $answerdata->iscorrect = $answer->get_correct();
+            foreach ($question->answers as $aindex => $answer) {
                 // Check if the answer was selected by the student.
-                $answerdata->isselected = in_array($answer->get_id(), $participationanswerids);
-                $questiondata->answers[] = $answerdata;
+                $data->questions[$qindex]->answers[$aindex]['chosen'] =
+                    in_array($answer['answerid'], $participationanswerids);
+                //error_log(print_r($data->questions[$qindex]->answers[$aindex]));
+                error_log(print_r(in_array($answer->answerid, $participationanswerids)));
+                
             }
-            $data->questions[] = $questiondata;
         }
         return $data;
     }

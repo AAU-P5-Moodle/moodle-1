@@ -308,8 +308,16 @@ class livequiz_services {
         return student_answers_relation::get_answersids_from_student_in_participation($studentid, $participationid);
     }
 
+    /**
+     * Get newest participation in table. The participation with highest id.
+     * @param int $quizid
+     * @param int $studentid
+     * @return participation
+     */
     public function get_newest_participation_for_quiz(int $quizid, int $studentid): participation {
-        return student_quiz_relation::get_newest_participation_for_quiz($quizid, $studentid);
+        global $DB;
+        $participations = student_quiz_relation::get_all_student_participation_for_quiz($quizid, $studentid);
+        return $participations[0];
     }
 
     /**
