@@ -233,7 +233,7 @@ class livequiz_services {
      *
      * @throws dml_exception
      */
-    private function get_questions_with_answers(int $quizid): array {
+    public function get_questions_with_answers(int $quizid): array {
         $questions = quiz_questions_relation::get_questions_from_quiz_id($quizid);
 
         foreach ($questions as $question) {

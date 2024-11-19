@@ -35,7 +35,6 @@ $quizid = required_param('livequizid', PARAM_INT);
 $participationnumber = optional_param('participationnumber', 0, PARAM_INT);
 $index = $participationnumber - 1; // Index is 0-based.
 
-[$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
 // Read demo data - REMOVE WHEN PUSHING TO STAGING.
@@ -56,7 +55,8 @@ $context = context_module::instance($cm->id); // Set the context for the course 
 
 $PAGE->set_context($context); // Make sure to set the page context.
 
-if (!isset($_SESSION['participations'][$index])) {
+if ($index == -1) {
+    
     error_log('No participation found');
 }
 // The following is the actual participation object, that we can use to display the results.

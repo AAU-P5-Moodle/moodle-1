@@ -64,10 +64,11 @@ class results_page implements renderable, templatable {
         $data = $this->livequiz->prepare_for_template();
         $data->isattempting = false; // This is the results page, so the user is not attempting the quiz.
         // Get the questions with their answers.
-        $questions = livequiz_services::get_questions_with_answers($this->livequiz->get_id());
+        $livequiz_services = livequiz_services::get_singleton_service_instance();
+        $questions = $livequiz_services->get_questions_with_answers($this->livequiz->get_id());
 
         // Get the student's answers for the participation.
-        $participationanswerids = livequiz_services::get_answers_from_student_in_participation(
+        $participationanswerids = $livequiz_services->get_answers_from_student_in_participation(
             $this->participation->get_studentid(),
             $this->participation->get_id()
         );
