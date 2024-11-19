@@ -407,7 +407,7 @@ let editingIndex = null;
                 id: quizId,
                 name: document.getElementById('id_name').value,
                 intro: document.getElementById('id_quiz_description').value,
-                //introformat: document.getElementById('').value, WHAT IS INTRO FORMAT
+                introformat: 1,
                 timemodified: Date.now(),
                 timecreated: Date.now(),
                 questions: []

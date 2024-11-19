@@ -48,7 +48,7 @@ class livequiz {
     /**
      * @var string $intro
      */
-    private string $intro;
+    private ?string $intro;
 
     /**
      * @var int $introformat

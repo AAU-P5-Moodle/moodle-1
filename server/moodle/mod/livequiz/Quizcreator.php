@@ -49,11 +49,10 @@ $PAGE->requires->css(new moodle_url('/mod/livequiz/style.css'));
 echo $OUTPUT->header();
 
 
-global $DB;
+
 try {
     $service = livequiz_services::get_singleton_service_instance();
-    $quizid = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
-    $quizdata = $service->get_livequiz_instance($quizid);
+    $quizdata = $service->get_livequiz_instance($cm->instance);
 } catch (Exception $e) {
     echo $OUTPUT->notification('Failed to retrieve quiz data: ' . $e->getMessage(), 'notifyproblem');
 }
