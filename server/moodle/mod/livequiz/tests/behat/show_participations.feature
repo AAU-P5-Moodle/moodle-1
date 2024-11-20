@@ -43,9 +43,9 @@ Feature: View livequiz activity
     And "Submit Quiz" "button" should exist
     And I click on "Submit Quiz" "button"
     Then I should see "Results for attempt"
-    And "Back to quiz menu" "link" should exist
-    And I click on "Back to quiz menu" "link"
-    Then "Participation 1" "link" should exist
+    And "Back to livequiz menu" "link" should exist
+    And I click on "Back to livequiz menu" "link"
+    Then "Go to participation 1" "button" should exist
     #Making another participation to test multiple can be shown
     And I should see "Take Quiz"
     And I click on "Take Quiz" "link"
@@ -63,16 +63,16 @@ Feature: View livequiz activity
     And "Submit Quiz" "button" should exist
     And I click on "Submit Quiz" "button"
     Then I should see "Results for attempt"
-    And "Back to quiz menu" "link" should exist
-    And I click on "Back to quiz menu" "link"
-    Then "Participation 1" "link" should exist
-    And "Participation 2" "link" should exist
-    And I click on "Participation 1" "link"
+    And "Back to livequiz menu" "link" should exist
+    And I click on "Back to livequiz menu" "link"
+    Then "Go to participation 1" "button" should exist
+    And "Go to participation 2" "button" should exist
+    And I press "Go to participation 1"
     Then I should see "This is about France"
     Then the "Nice" answer should be checked
     Then the "Aalborg" answer should be checked
     Then the "No" answer should be checked
-    And "Back to quiz menu" "link" should exist
-    And I click on "Back to quiz menu" "link"
-    Then "Participation 1" "link" should exist
-    And "Participation 2" "link" should exist
+    And "Back to livequiz menu" "link" should exist
+    And I click on "Back to livequiz menu" "link"
+    Then "Go to participation 1" "button" should exist
+    And "Go to participation 2" "button" should exist

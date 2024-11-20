@@ -40,7 +40,8 @@ class results_page implements renderable, templatable {
     protected int $cmid;
     /** @var livequiz $livequiz The live quiz instance */
     private livequiz $livequiz;
-    /** @var @*/
+    /** @var participation $participation The participation which should be shown*/
+    private participation $participation;
 
     /**
      * index_page constructor.

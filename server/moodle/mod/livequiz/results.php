@@ -25,11 +25,12 @@ require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php');
 require_once('readdemodata.php');
 
+use mod_livequiz\models\participation;
 use mod_livequiz\output\results_page;
 use mod_livequiz\readdemodata;
 use mod_livequiz\services\livequiz_services;
 
-global $PAGE, $OUTPUT, $DB;
+global $PAGE, $OUTPUT, $DB, $USER;
 // Get submitted parameters.
 $cmid = required_param('id', PARAM_INT); // Course module id.
 $quizid = required_param('livequizid', PARAM_INT);
@@ -56,15 +57,18 @@ $_SESSION['completed'] = true;
 $context = context_module::instance($cm->id); // Set the context for the course module.
 
 $PAGE->set_context($context); // Make sure to set the page context.
-
+$participation = new participation(-1, -1);
 if ($index == -1) {
     $participation = $livequizservice->get_newest_participation_for_quiz($quizid, $USER->id);
-}
-else {
+} else {
     if (isset($_SESSION['participations'][$index])) {
         // The following is the actual participation object, that we can use to display the results.
         $participation = $_SESSION['participations'][$index];
     }
+}
+
+if($participation->get_id() == -1){
+    die();
 }
 
 // Set the page URL, without exposing the participationid.
@@ -73,7 +77,6 @@ $PAGE->set_url(new moodle_url('/mod/livequiz/results.php', [
     'quizid'                => $quizid,
     'participationnumber'   => $participationnumber]
 ));
-
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
