@@ -43,6 +43,10 @@ Feature: View livequiz activity
     And "Submit Quiz" "button" should exist
     And I click on "Submit Quiz" "button"
     Then I should see "Results for attempt"
+    Then I should see "This is about France"
+    Then the "Paris" answer should be checked
+    Then the "Copenhagen" answer should be checked
+    Then the "Yes" answer should be checked
     And "Back to livequiz menu" "link" should exist
     And I click on "Back to livequiz menu" "link"
     Then "Go to participation 1" "button" should exist
