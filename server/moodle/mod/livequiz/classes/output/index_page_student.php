@@ -25,12 +25,12 @@ use stdClass;
 use moodle_url;
 
 /**
- * Class index_page
+ * Class index_page_student
  * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class index_page implements renderable, templatable {
+class index_page_student implements renderable, templatable {
     /** @var int $quizid the livequiz to take or retake*/
     private int $quizid;
     /** @var int $studentid the id of the student who is interacting with the quiz.
