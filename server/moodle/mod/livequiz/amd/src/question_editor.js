@@ -1,4 +1,5 @@
 import Templates from "core/templates";
+import {exception as displayException} from 'core/notification';
 
 isEditing = false;
 editingIndex = 0;
@@ -13,7 +14,7 @@ export const init = async () => {
 
 function render_question_menu_popup() {
   // This will call the function to load and render our template.
-  Templates.renderForPromise("mod_livequiz/question_menu_popup", context)
+  Templates.renderForPromise("mod_livequiz/question_menu_popup")
 
     // It returns a promise that needs to be resoved.
     .then(({ html, js }) => {
@@ -114,14 +115,16 @@ function question_button(){
 }
 
 function add_discard_question_button_listener() {
-  let discard_question_button = querySelector(".discard_question_button");
+  let discard_question_button = document.querySelector(".discard_question_button");
+  console.log(discard_question_button);
   discard_question_button.addEventListener('click', () => {
     render_question_confirmation();
   });
 }
 
 function render_question_confirmation() {
-  Templates.renderForPromise("mod_livequiz/question_confirmation", context)
+  console.log("GOT INTO LISTENER");
+  Templates.renderForPromise("mod_livequiz/question_confirmation")
 
   .then(({ html, js }) => {
     Templates.appendNodeContents(".Modal_div", html, js);
@@ -131,9 +134,9 @@ function render_question_confirmation() {
 }
 
 function question_confirmation() {
-  let toast_promise_deletion_div = querySelector(".toast_promise_deletion_div");
-  let cancel_question_deletion_button = querySelector(".cancel_question_deletion_button");
-  let continue_question_deletion_button = querySelector(".continue_question_deletion_button");
+  let toast_promise_deletion_div = document.querySelector(".toast_promise_deletion_div");
+  let cancel_question_deletion_button = document.querySelector(".cancel_question_deletion_button");
+  let continue_question_deletion_button = document.querySelector(".continue_question_deletion_button");
     
   let modal_div = document.querySelector('.Modal_div');
     
