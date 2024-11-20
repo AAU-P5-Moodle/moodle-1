@@ -1,0 +1,64 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_livequiz/index_page
+
+    Index Page for the livequiz plugin
+
+    Classes required for JS:
+    * none
+
+    Context variables required for this template:
+    * fill in later
+
+    Example context (json):
+    * fill in later
+
+}}
+<div class="Modal_div">
+  <textarea
+    placeholder="Enter question"
+    class="question_input_large"
+  ></textarea>
+  <div class="file_upload_section">
+    <label for="file_input" class="file_upload_section"
+      >+ Add video or image</label
+    ><input
+      class="file_picker_input"
+      type="file"
+      accept="image/*,video/*"
+      id="file_input"
+    /><img />
+  </div>
+  <div class="time_limit_container">
+    <label class="time_limit_label">Add time limit: </label>
+    <div class="timer_input_container">
+      <input type="checkbox" class="time_limit_checkbox" /><input
+        type="number"
+        placeholder="0 sec"
+        class="set_timer_input"
+        disabled="true"
+        style="text-align: center"
+      />
+    </div>
+  </div>
+  <button class="add_new_answer_to_question">Add Answer</button>
+  <div class="all_answers_for_question_div"></div>
+  <button class="save_button">Save question</button>
+  <div class="discard_question_button">Discard</div>
+</div>
+
