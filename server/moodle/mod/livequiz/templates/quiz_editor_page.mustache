@@ -24,9 +24,9 @@
     <div id="saved-questions-container" style="border-radius: 10px; padding: 15px; background-color: #f9f9f9;">
         <h3>Saved Questions:</h3>
         <ol id="saved_questions_list" style="padding-left: 20px; margin: 0;">
-            {{#savedquestions}}
-                <li>{{{.}}}</li>
-            {{/savedquestions}}
+            {{#questions}}
+                <li>{{questiontitle}}</li>
+            {{/questions}}
         </ol>
     </div>
 
