@@ -17,7 +17,6 @@
 namespace mod_livequiz\output;
 
 use core\exception\moodle_exception;
-use mod_livequiz\models\livequiz;
 use renderable;
 use renderer_base;
 use templatable;
