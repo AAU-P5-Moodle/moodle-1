@@ -44,7 +44,15 @@ if (!isset($USER->id)) {
 $context = context_module::instance($cm->id); // Set the context for the course module.
 $PAGE->set_cacheable(false);
 $PAGE->set_context($context); // Make sure to set the page context.
-$PAGE->requires->css('/mod/livequiz/style.css'); //Adds styling to the page.
+$PAGE->requires->css('/mod/livequiz/style.css'); // Adds styling to the page.
+
+// Read demo data - REMOVE WHEN PUSHING TO STAGING.
+$livequizservice = livequiz_services::get_singleton_service_instance();
+$currentquiz = $livequizservice->get_livequiz_instance($instance->id);
+if (empty($currentquiz->get_questions())) { // If the quiz has no questions, insert demo data.
+    $demodatareader = new \mod_livequiz\readdemodata();
+    $demoquiz = $demodatareader->insertdemodata($currentquiz);
+}
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));

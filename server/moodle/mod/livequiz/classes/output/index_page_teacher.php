@@ -18,6 +18,7 @@ namespace mod_livequiz\output;
 
 use core\exception\moodle_exception;
 use mod_livequiz\models\livequiz;
+use mod_livequiz\services\livequiz_services;
 use renderable;
 use renderer_base;
 use templatable;
@@ -38,6 +39,9 @@ class index_page_teacher implements renderable, templatable {
     /** @var int $cmid the course module id */
     protected int $cmid;
 
+    /** @var livequiz $livequiz the livequiz object */
+    private livequiz $livequiz;
+
     /**
      * index_page_teacher constructor.
      * @param int $quizid
@@ -48,6 +52,8 @@ class index_page_teacher implements renderable, templatable {
         $this->quizid = $quizid;
         $this->teacherid = $teacherid;
         $this->cmid = $courseid;
+        $service = livequiz_services::get_singleton_service_instance();
+        $this->livequiz = $service->get_livequiz_instance($quizid);
     }
 
     /**
@@ -58,12 +64,13 @@ class index_page_teacher implements renderable, templatable {
      * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
-        $data = new stdClass();
+        $data = $this->livequiz->prepare_for_template();
         $data->pagename = "Quiz editor page";
         $data->teacherid = $this->teacherid;
         $data->quizid = $this->quizid;
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
         $data->isteacher = true;
+        error_log(print_r($data, true));
         return $data;
     }
 }
