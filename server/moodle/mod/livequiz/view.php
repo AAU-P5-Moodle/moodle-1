@@ -26,6 +26,8 @@ require_once($CFG->libdir . '/accesslib.php'); // Include the access library for
 require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
+use mod_livequiz\output\index_page_student;
+use mod_livequiz\output\index_page_teacher;
 
 global $OUTPUT, $PAGE, $DB, $USER;
 
@@ -42,7 +44,15 @@ if (!isset($USER->id)) {
 $context = context_module::instance($cm->id); // Set the context for the course module.
 $PAGE->set_cacheable(false);
 $PAGE->set_context($context); // Make sure to set the page context.
-$PAGE->requires->css('/mod/livequiz/style.css'); //Adds styling to the page.
+$PAGE->requires->css('/mod/livequiz/style.css'); // Adds styling to the page.
+
+// Read demo data - REMOVE WHEN PUSHING TO STAGING.
+$livequizservice = livequiz_services::get_singleton_service_instance();
+$currentquiz = $livequizservice->get_livequiz_instance($instance->id);
+if (empty($currentquiz->get_questions())) { // If the quiz has no questions, insert demo data.
+    $demodatareader = new \mod_livequiz\readdemodata();
+    $demoquiz = $demodatareader->insertdemodata($currentquiz);
+}
 
 $PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
@@ -52,10 +62,10 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 $output = "";
 $renderer = $PAGE->get_renderer('mod_livequiz');
 if (has_capability('moodle/course:manageactivities', $context)) {
-    $renderable = new \mod_livequiz\output\index_page_teacher($instance->id, $USER->id, $cmid);
+    $renderable = new index_page_teacher($instance->id, $USER->id, $cmid);
     $output = $renderer->render_index_page_teacher($renderable);
 } else {
-    $renderable = new \mod_livequiz\output\index_page_student($instance->id, $USER->id, $cmid);
+    $renderable = new index_page_student($instance->id, $USER->id, $cmid);
     $output = $renderer->render_index_page_student($renderable);
 }
 
