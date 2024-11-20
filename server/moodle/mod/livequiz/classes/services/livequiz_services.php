@@ -195,11 +195,11 @@ class livequiz_services {
      * @throws dml_exception
      * @throws Exception
      */
-    private function insert_question(question $question, int $lecturerid, int $quizid): void {
+    public function insert_question(question $question, int $lecturerid, int $quizid): void {
         $questionid = question::insert_question($question);
         quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
         livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
-        $answers = $question>get_answers();
+        $answers = $question->get_answers();
         $this->submit_answers($questionid, $answers);
     }
 
@@ -266,6 +266,7 @@ class livequiz_services {
      * @return int
      */
     public function insert_participation(int $studentid, int $quizid): participation {
+        debugging("execute");
         // Add participation using the model.
         global $DB;
         $transaction = $DB->start_delegated_transaction();

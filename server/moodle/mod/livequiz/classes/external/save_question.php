@@ -17,8 +17,12 @@
 namespace mod_livequiz\external;
 
 use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
 use core_external\external_value;
+use core_external\external_single_structure;
 use dml_exception;
+use mod_livequiz\models\answer;
+use mod_livequiz\models\question;
 use mod_livequiz\services\livequiz_services;
 
 /**
@@ -32,34 +36,50 @@ use mod_livequiz\services\livequiz_services;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class submit_quiz extends \core_external\external_api {
+class save_question extends \core_external\external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
+            'question' => new external_single_structure([
+                'title' => new external_value(PARAM_TEXT, 'Title'),
+                'description' => new external_value(PARAM_TEXT, 'Description of Question'),
+                'explanation' => new external_value(PARAM_TEXT, 'Explanation of Question'),
+                'answers' => new external_multiple_structure(
+                    new external_single_structure([
+                        'description' => new external_value(PARAM_TEXT, 'Description of Answer'),
+                        'correct' => new external_value(PARAM_BOOL, 'Correctness of Answer'),
+                        'explanation' => new external_value(PARAM_TEXT, 'Explanation of Answer'),
+                     ]),
+                    'Answers'
+                ),
+            ]),
+            'lecturerid' => new external_value(PARAM_INT, 'Lecturer ID'),
             'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
-            'studentid' => new external_value(PARAM_INT, 'Student ID'),
         ]);
     }
 
     /**
      * Summary of execute
      * Inserts participation and answers into the DB
-     * @param int $quizid
+     * @param ?? $question
      * @param int $studentid
      * @return bool
      */
-    public static function execute(int $quizid, int $studentid): bool {
+    public static function execute(array $questionarray, int $lecturerid, int $quizid): bool {
         debugging("execute");
-        self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
+        $params = self::validate_parameters(self::execute_parameters(), [
+            'question' => $questionarray,
+            'lecturerid' => $lecturerid,
+            'quizid' => $quizid,
+        ]);
         $services = livequiz_services::get_singleton_service_instance();
+        $question = self::new_question($questionarray);
+
         try {
-            // Insert participation into the DB.
-            $participation = $services->insert_participation($studentid, $quizid);
-            // Insert answers from session into the DB.
-            self::insert_answers_from_session($quizid, $studentid, $participation->get_id());
+            $services->insert_question($question, $lecturerid, $quizid);
             return true; // Return true if successful.
         } catch (dml_exception $e) {
             debugging('Error inserting participation: ' . $e->getMessage());
@@ -95,5 +115,26 @@ class submit_quiz extends \core_external\external_api {
         foreach ($answers as $answerid) { // Insert each answer choice in the DB.
             $services->insert_answer_choice($studentid, $answerid, $participationid);
         }
+    }
+
+    /**
+     * Create new question from intermediate array-representation
+     * @param array $questionarray
+     * @return question
+     */
+    private static function new_question(array $questionarray): question {
+        $question = new question($questionarray['title'], $questionarray['description'], 0, $questionarray['explanation']);
+
+        if (!empty($questionarray['answers'])) {
+            foreach ($questionarray['answers'] as $answerarray) {
+                $answer = new answer(
+                    $answerarray['description'],
+                    $answerarray['correct'],
+                    $answerarray['explanation']
+                );
+                $question->add_answer($answer);
+            }
+        }
+        return $question;
     }
 }

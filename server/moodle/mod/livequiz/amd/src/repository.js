@@ -22,3 +22,16 @@ export const update_session = (quizid, questionid, answers) => fetchMany([
         },
     }
 ])[0];
+
+// Function to save a question.
+export const save_question = (question, lecturerid, quizid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_save_question',
+        args: {
+            question,
+            lecturerid,
+            quizid
+        },
+    }
+])[0];
+

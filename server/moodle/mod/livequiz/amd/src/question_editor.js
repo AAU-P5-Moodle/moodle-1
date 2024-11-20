@@ -1,18 +1,19 @@
 import Templates from "core/templates";
 import {exception as displayException} from 'core/notification';
+import {save_question} from "./repository";
 
-isEditing = false;
-editingIndex = 0;
+let isEditing = false;
+let editingIndex = 0;
 let answer_count = 0;
 
-export const init = async () => {
+export const init = async (quizid, lecturerid) => {
   let add_question_button = document.getElementById("id_buttonaddquestion");
   add_question_button.addEventListener("click", () => {
-    render_question_menu_popup();
+    render_question_menu_popup(quizid, lecturerid);
   });
 };
 
-function render_question_menu_popup() {
+function render_question_menu_popup(quizid, lecturerid) {
   // This will call the function to load and render our template.
   Templates.renderForPromise("mod_livequiz/question_menu_popup")
 
@@ -22,7 +23,7 @@ function render_question_menu_popup() {
       // The templates object has append, prepend and replace functions.
       Templates.appendNodeContents(".main-container", html, js);
       add_answer_button_event_listerner();
-      add_save_question_button_listener();
+      add_save_question_button_listener(quizid, lecturerid);
       add_discard_question_button_listener();
     })
 
@@ -72,15 +73,15 @@ function append_answer_input() {
   answer_count++;
 }
 
-function add_save_question_button_listener() {
+function add_save_question_button_listener(quizid, lecturerid) {
   let save_question_button = document.querySelector(".save_button");
-  save_question_button.addEventListener("click", () => {question_button();});
+  save_question_button.addEventListener("click", () => {question_button(quizid, lecturerid);});
 }
 
-function question_button(){
+async function question_button(quizid, lecturerid){
     let question_input = document.querySelector(".question_input_large");
     let questionText = question_input.value.trim();
-    
+
     if (!questionText) {
       alert("Please enter a question.");
       return;
@@ -92,7 +93,7 @@ function question_button(){
       let answertext = answers_div.children[i]
         .querySelector(".answer_input")
         .value.trim();
-      
+
         let iscorrect =
         answers_div.children[i].querySelector(".answer_checkbox").checked;
 
@@ -104,11 +105,16 @@ function question_button(){
     }
 
     let savedQuestion = {
-      question: questionText,
+      title: questionText,
       answers: answers,
       description: "",
       explanation: "",
     };
+
+    console.log("before");
+    let bool=save_question(savedQuestion, lecturerid, quizid);
+    console.log("bool :",bool);
+    console.log("after");
     let modal_div = document.querySelector(".Modal_div");
     console.log(savedQuestion);
     modal_div.remove();
@@ -137,15 +143,15 @@ function question_confirmation() {
   let toast_promise_deletion_div = document.querySelector(".toast_promise_deletion_div");
   let cancel_question_deletion_button = document.querySelector(".cancel_question_deletion_button");
   let continue_question_deletion_button = document.querySelector(".continue_question_deletion_button");
-    
+
   let modal_div = document.querySelector('.Modal_div');
-    
+
   continue_question_deletion_button.addEventListener('click', () => {
     isEditing = false;
     editingIndex = null
     modal_div.remove();
   });
-    
+
   cancel_question_deletion_button.addEventListener('click', () => {
     toast_promise_deletion_div.remove();
   });
