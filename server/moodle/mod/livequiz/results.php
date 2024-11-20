@@ -62,13 +62,6 @@ else {
     if (isset($_SESSION['participations'][$index])) {
         // The following is the actual participation object, that we can use to display the results.
         $participation = $_SESSION['participations'][$index];
-        error_log('Participation: ' . print_r($participation, true));
-        error_log('Participation number: ' . $participationnumber);
-        error_log('DB participation id: ' . $participation->get_id());
-        
-    }
-    else {
-        error_log("No participation was found in session");
     }
 }
 

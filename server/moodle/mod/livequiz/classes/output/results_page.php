@@ -74,14 +74,12 @@ class results_page implements renderable, templatable {
             $this->participation->get_studentid(),
             $this->participation->get_id()
         );
-        error_log(print_r($participationanswerids));
         // Add the menu URL for navigation.
         $data->menuurl = (new moodle_url(
             '/mod/livequiz/view.php',
             ['id' => $this->cmid]
         ))->out(false);
         
-
         // Prepare the questions data.
         foreach ($data->questions as $qindex => $question) {
             // Get the student's answer for this question.
@@ -89,9 +87,6 @@ class results_page implements renderable, templatable {
                 // Check if the answer was selected by the student.
                 $data->questions[$qindex]->answers[$aindex]['chosen'] =
                     in_array($answer['answerid'], $participationanswerids);
-                //error_log(print_r($data->questions[$qindex]->answers[$aindex]));
-                error_log(print_r(in_array($answer->answerid, $participationanswerids)));
-                
             }
         }
         return $data;

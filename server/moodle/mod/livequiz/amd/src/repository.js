@@ -1,12 +1,13 @@
 import {call as fetchMany} from 'core/ajax';
 
 // Function to insert a participation.
-export const submit_quiz = (quizid, studentid) => fetchMany([
+export const submit_quiz = (quizid, studentid, resultsurl) => fetchMany([
     {
         methodname: 'mod_livequiz_submit_quiz',
         args: {
             quizid,
-            studentid
+            studentid,
+            resultsurl
         },
     }
 ])[0];
