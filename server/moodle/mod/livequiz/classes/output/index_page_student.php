@@ -60,6 +60,7 @@ class index_page_student implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
+        $data->pagename = "Quiz menu page";
         $data->studentid = $this->studentid;
         $data->quizid = $this->quizid;
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);

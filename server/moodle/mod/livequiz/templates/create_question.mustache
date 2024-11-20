@@ -29,13 +29,7 @@
     * fill in later
 
 }}
-{{#js}}
-    require(['mod_livequiz/question_editor'], (module) => module.init());
-{{/js}}
-<div class="main-container">
-    <h1>{{pagename}}</h1>
-    {{#isteacher}} 
-       {{> mod_livequiz/quiz_editor_page}}
-    {{/isteacher}}
-    <a href="{{url}}" type="button" id="takeQuizBtn"> Take Quiz </a>
+<div id="createQuestionPopup" style="display:none;">
+    <p>This is a pop-up window!</p>
+    <button id="SaveQuestionBtn">Save Question</button>
 </div>

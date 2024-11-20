@@ -59,9 +59,11 @@ class index_page_teacher implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
+        $data->pagename = "Quiz editor page";
         $data->teacherid = $this->teacherid;
         $data->quizid = $this->quizid;
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
+        $data->isteacher = true;
         return $data;
     }
 }

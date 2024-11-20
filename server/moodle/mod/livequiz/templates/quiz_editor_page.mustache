@@ -14,28 +14,24 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-{{!
-    @template mod_livequiz/index_page
+<div id="page-mod-livequiz-quizcreator">
+    <h1>{{quizdata.title}}</h1>
 
-    Index Page for the livequiz plugin
+    <div id="form-container" class="quiz_form_container">
+        <button type='button' id='id_buttonaddquestion'>Add Question </button>
+    </div>
+    
+    <div id="saved-questions-container" style="border-radius: 10px; padding: 15px; background-color: #f9f9f9;">
+        <h3>Saved Questions:</h3>
+        <ol id="saved_questions_list" style="padding-left: 20px; margin: 0;">
+            {{#savedquestions}}
+                <li>{{{.}}}</li>
+            {{/savedquestions}}
+        </ol>
+    </div>
 
-    Classes required for JS:
-    * none
+    <div id="file-picker-container">
+        {{{quizdata.filepicker}}}
+    </div>
 
-    Context variables required for this template:
-    * fill in later
-
-    Example context (json):
-    * fill in later
-
-}}
-{{#js}}
-    require(['mod_livequiz/question_editor'], (module) => module.init());
-{{/js}}
-<div class="main-container">
-    <h1>{{pagename}}</h1>
-    {{#isteacher}} 
-       {{> mod_livequiz/quiz_editor_page}}
-    {{/isteacher}}
-    <a href="{{url}}" type="button" id="takeQuizBtn"> Take Quiz </a>
-</div>
+</div>    

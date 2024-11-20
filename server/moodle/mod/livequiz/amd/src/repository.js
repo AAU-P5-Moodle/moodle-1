@@ -22,4 +22,3 @@ export const update_session = (quizid, questionid, answers) => fetchMany([
         },
     }
 ])[0];
-
