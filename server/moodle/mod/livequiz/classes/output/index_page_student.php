@@ -35,7 +35,7 @@ class index_page_student implements renderable, templatable {
     private int $quizid;
     /** @var int $studentid the id of the student who is interacting with the quiz.
      */
-    private $studentid;
+    private int $studentid;
     /** @var int $cmid the course module id */
     protected int $cmid;
 

@@ -39,7 +39,7 @@ class index_page_teacher implements renderable, templatable {
     protected int $cmid;
 
     /**
-     * index_page constructor.
+     * index_page_teacher constructor.
      * @param int $quizid
      * @param int $teacherid
      * @param int $courseid

@@ -39,7 +39,6 @@ if (!isset($USER->id)) {
     throw new moodle_exception('usernotauthenticated', 'error', '', null, 'User is not logged in or user data is missing.');
 }
 
-
 $context = context_module::instance($cm->id); // Set the context for the course module.
 $PAGE->set_cacheable(false);
 $PAGE->set_context($context); // Make sure to set the page context.
@@ -48,17 +47,13 @@ $PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
-// Check if the user is a teacher.
-$is_teacher = has_capability('moodle/course:manageactivities', $context);
-echo "<script>console.log('Checking capabilities')</script>";
-if ($is_teacher){
-    echo "<script>console.log('User is a teacher.')</script>";
-}
-
-
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\index_page_student($instance->id, $USER->id, $cmid);
+if (has_capability('moodle/course:manageactivities', $context)) {
+    $renderable = new \mod_livequiz\output\index_page_teacher($instance->id, $USER->id, $cmid);
+} else {
+    $renderable = new \mod_livequiz\output\index_page_student($instance->id, $USER->id, $cmid);
+}
 
 unset($_SESSION['completed']);
 
