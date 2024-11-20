@@ -62,6 +62,7 @@ class submit_quiz extends external_api {
             $participation = $services->insert_participation($studentid, $quizid);
             // Insert answers from session into the DB.
             self::insert_answers_from_session($quizid, $studentid, $participation->get_id());
+            $_SESSION['quiz_answers'][$quizid] = []; // Remove the current participation from the session.
             return true; // Return true if successful.
         } catch (dml_exception $e) {
             debugging('Error inserting participation: ' . $e->getMessage());
