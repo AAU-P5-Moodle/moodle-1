@@ -67,7 +67,7 @@ if ($index == -1) {
     }
 }
 
-if($participation->get_id() == -1){
+if ($participation->get_id() == -1) {
     die();
 }
 
@@ -75,8 +75,7 @@ if($participation->get_id() == -1){
 $PAGE->set_url(new moodle_url('/mod/livequiz/results.php', [
     'id'                    => $cmid,
     'quizid'                => $quizid,
-    'participationnumber'   => $participationnumber]
-));
+    'participationnumber'   => $participationnumber]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
