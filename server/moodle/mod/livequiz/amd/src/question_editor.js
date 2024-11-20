@@ -1,10 +1,5 @@
 import Templates from "core/templates";
 
-// This will be the context for our template. So {{name}} in the template will resolve to "Tweety bird".
-const context = {
-  name: "Tweety bird",
-  intelligence: 2,
-};
 isEditing = false;
 editingIndex = 0;
 let answer_count = 0;
@@ -27,6 +22,7 @@ function render_question_menu_popup() {
       Templates.appendNodeContents(".main-container", html, js);
       add_answer_button_event_listerner();
       add_save_question_button_listener();
+      add_discard_question_button_listener();
     })
 
     // Deal with this exception (Using core/notify exception function is recommended).
@@ -115,6 +111,41 @@ function question_button(){
     let modal_div = document.querySelector(".Modal_div");
     console.log(savedQuestion);
     modal_div.remove();
+}
+
+function add_discard_question_button_listener() {
+  let discard_question_button = querySelector(".discard_question_button");
+  discard_question_button.addEventListener('click', () => {
+    render_question_confirmation();
+  });
+}
+
+function render_question_confirmation() {
+  Templates.renderForPromise("mod_livequiz/question_confirmation", context)
+
+  .then(({ html, js }) => {
+    Templates.appendNodeContents(".Modal_div", html, js);
+    question_confirmation();
+  })
+  .catch((error) => displayException(error));
+}
+
+function question_confirmation() {
+  let toast_promise_deletion_div = querySelector(".toast_promise_deletion_div");
+  let cancel_question_deletion_button = querySelector(".cancel_question_deletion_button");
+  let continue_question_deletion_button = querySelector(".continue_question_deletion_button");
+    
+  let modal_div = document.querySelector('.Modal_div');
+    
+  continue_question_deletion_button.addEventListener('click', () => {
+    isEditing = false;
+    editingIndex = null
+    modal_div.remove();
+  });
+    
+  cancel_question_deletion_button.addEventListener('click', () => {
+    toast_promise_deletion_div.remove();
+  });
 }
 
 function create_element(element_name, type, class_name, content) {

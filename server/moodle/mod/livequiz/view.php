@@ -26,6 +26,8 @@ require_once($CFG->libdir . '/accesslib.php'); // Include the access library for
 require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
+use mod_livequiz\output\index_page_student;
+use mod_livequiz\output\index_page_teacher;
 
 global $OUTPUT, $PAGE, $DB, $USER;
 
@@ -52,10 +54,10 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 $output = "";
 $renderer = $PAGE->get_renderer('mod_livequiz');
 if (has_capability('moodle/course:manageactivities', $context)) {
-    $renderable = new \mod_livequiz\output\index_page_teacher($instance->id, $USER->id, $cmid);
+    $renderable = new index_page_teacher($instance->id, $USER->id, $cmid);
     $output = $renderer->render_index_page_teacher($renderable);
 } else {
-    $renderable = new \mod_livequiz\output\index_page_student($instance->id, $USER->id, $cmid);
+    $renderable = new index_page_student($instance->id, $USER->id, $cmid);
     $output = $renderer->render_index_page_student($renderable);
 }
 
