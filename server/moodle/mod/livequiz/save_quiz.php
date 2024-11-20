@@ -42,7 +42,6 @@ require_login();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputdata = file_get_contents("php://input");
     $data = json_decode($inputdata);
-
     // Check if the data is valid and contains required properties.
     if ($data && isset($data->name, $data->questions) && !empty($data->questions)) {
         try {
@@ -54,15 +53,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $questionsarray = [];
             // Add questions and their answers to the livequiz object.
             foreach ($data->questions as $question) {
-                if (isset($question->title, $question->answers) && !empty($question->answers)) {
                     $newquestion = new question($question->title, $question->description, $question->timelimit, $question->explanation);
                     $answersarray = [];
-                    foreach ($question->answers as $answer) {
-                        $newanswer = new answer($answer->correct, $answer->description, $answer->explanation);
-                        array_push($answersarray, $newanswer);
-                    }
-                    $newquestion->add_answers($answersarray);
+                foreach ($question->answers as $answer) {
+                    $newanswer = new answer($answer->correct, $answer->description, $answer->explanation);
+                    array_push($answersarray, $newanswer);
                 }
+                    $newquestion->add_answers($answersarray);
+                    array_push($questionsarray, $newquestion);
             }
             $livequiz->set_questions($questionsarray);
             // Submit the quiz using the service.
