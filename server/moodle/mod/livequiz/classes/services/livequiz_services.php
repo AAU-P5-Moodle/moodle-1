@@ -189,6 +189,21 @@ class livequiz_services {
     }
 
     /**
+     * inserts a question into the database
+     *
+     * @throws dml_transaction_exception
+     * @throws dml_exception
+     * @throws Exception
+     */
+    private function insert_question(question $question, int $lecturerid, int $quizid): void {
+        $questionid = question::insert_question($question);
+        quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
+        livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
+        $answers = $question>get_answers();
+        $this->submit_answers($questionid, $answers);
+    }
+
+    /**
      * Submits answers to the database.
      *
      * @throws dml_transaction_exception
