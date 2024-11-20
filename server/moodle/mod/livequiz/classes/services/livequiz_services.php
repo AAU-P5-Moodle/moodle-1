@@ -334,9 +334,15 @@ class livequiz_services {
     }
 
     /**
-     * Given an ID for a participation, this method will return the answers the student chose for each of the questions.
+     * Given an ID for a participation, this method will return
+     * the answers (their IDs) the student chose for each of the questions,
+     * that the student provided an answer for.
+     *
+     * Be aware: If the student did not provide an answer for a question,
+     * that question ID will not be included in the returned array.
      *
      * @param $participationid // The ID of the participation.
+     * @return array // An array of question IDs, with nested arrays for connected answer IDs.
      * @throws dml_exception
      */
     public static function get_student_quiz_results(int $participationid): array {

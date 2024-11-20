@@ -560,11 +560,27 @@ final class livequiz_service_test extends \advanced_testcase {
         $this->assertEquals(count($testquizsubmittedquestions), count($studentresults));
 
         $resultkeys = array_keys($studentresults);
-        $this->assertEquals(2, count($studentresults[$resultkeys[0]]));
-        $this->assertEquals(1, count($studentresults[$resultkeys[1]]));
-        $this->assertEquals(1, count($studentresults[$resultkeys[2]]));
+        $this->assertCount(2, $studentresults[$resultkeys[0]]);
+        $this->assertCount(1, $studentresults[$resultkeys[1]]);
+        $this->assertCount(1, $studentresults[$resultkeys[2]]);
 
+        $answersfromdb = [];
 
+        foreach ($studentresults as $result) {
+            foreach ($result as $answer) {
+                $answersfromdb[] = answer::get_answer_from_id($answer);
+            }
+        }
 
+        //echo print_r($answersfromdb, true);
+
+        // All answers are correct in this case.
+        for ($i = 0; $i < count($answersfromdb); ++$i) {
+            $this->assertInstanceOf(answer::class, $answersfromdb[$i]);
+            $this->assertEquals(1, $answersfromdb[$i]->get_correct());
+            $this->assertNotEmpty($answersfromdb[$i]->get_description());
+            $this->assertNotEmpty($answersfromdb[$i]->get_explanation());
+            $this->assertNotEmpty($answersfromdb[$i]->get_id());
+        }
     }
 }
