@@ -26,12 +26,11 @@ function render_question_menu_popup() {
       // The templates object has append, prepend and replace functions.
       Templates.appendNodeContents(".main-container", html, js);
       add_answer_button_event_listerner();
+      add_save_question_button_listener();
     })
 
     // Deal with this exception (Using core/notify exception function is recommended).
     .catch((error) => displayException(error));
-
-  //add_save_question_button_listener();
 }
 
 function add_answer_button_event_listerner() {
@@ -78,19 +77,26 @@ function append_answer_input() {
 
 function add_save_question_button_listener() {
   let save_question_button = document.querySelector(".save_button");
-  save_question_button.addEventListener("click", () => {
+  save_question_button.addEventListener("click", () => {question_button();});
+}
+
+function question_button(){
+    let question_input = document.querySelector(".question_input_large");
     let questionText = question_input.value.trim();
+    
     if (!questionText) {
       alert("Please enter a question.");
       return;
     }
 
     let answers = [];
+    let answers_div = document.querySelector(".all_answers_for_question_div");
     for (let i = 0; i < answers_div.children.length; i++) {
       let answertext = answers_div.children[i]
         .querySelector(".answer_input")
         .value.trim();
-      let iscorrect =
+      
+        let iscorrect =
         answers_div.children[i].querySelector(".answer_checkbox").checked;
 
       answers.push({
@@ -100,54 +106,15 @@ function add_save_question_button_listener() {
       });
     }
 
-    let file_input = file_picker.querySelector('input[type="file"]');
-    let file = file_input.files[0];
-
     let savedQuestion = {
       question: questionText,
       answers: answers,
-      file: file,
       description: "",
       explanation: "",
     };
-
-    if (isEditing && editingIndex != null) {
-      savedQuestions[editingIndex] = savedQuestion;
-
-      let saved_questions_list = document.getElementById(
-        "saved_questions_list"
-      );
-      let question_list_item = saved_questions_list.children[editingIndex];
-
-      question_list_item.textContent = savedQuestion.question;
-
-      isEditing = false;
-      editingIndex = null;
-    } else {
-      savedQuestions.push(savedQuestion);
-
-      let saved_questions_list = document.getElementById(
-        "saved_questions_list"
-      );
-      let question_list_item = document.createElement("li");
-      question_list_item.textContent = savedQuestion.question;
-      question_list_item.dataset.index = savedQuestions.length - 1;
-
-      const openModalHandler = () => {
-        open_saved_question_modal(
-          savedQuestions[question_list_item.dataset.index],
-          question_list_item.dataset.index
-        );
-      };
-
-      question_list_item.addEventListener("click", openModalHandler);
-      saved_questions_list.appendChild(question_list_item);
-    }
-
+    let modal_div = document.querySelector(".Modal_div");
+    console.log(savedQuestion);
     modal_div.remove();
-  });
-
-  return save_question_button;
 }
 
 function create_element(element_name, type, class_name, content) {
