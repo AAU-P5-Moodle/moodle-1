@@ -45,7 +45,6 @@ class results_page implements renderable, templatable {
     /**
      * index_page constructor.
      * @param int $id
-     * @param int $cmid
      * @param livequiz $livequiz
      * @param participation $participation
      */
@@ -79,7 +78,7 @@ class results_page implements renderable, templatable {
             '/mod/livequiz/view.php',
             ['id' => $this->cmid]
         ))->out(false);
-        
+
         // Prepare the questions data.
         foreach ($data->questions as $qindex => $question) {
             // Get the student's answer for this question.

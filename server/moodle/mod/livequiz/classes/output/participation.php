@@ -16,7 +16,6 @@
 
 namespace mod_livequiz\output;
 
-use core\exception\moodle_exception;
 use renderable;
 use renderer_base;
 use templatable;
@@ -45,11 +44,8 @@ class participation implements renderable, templatable {
      *
      * @param renderer_base $output
      * @return stdClass
-     * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
-        $data = new stdClass();
-        return $data;
-
+        return new stdClass();
     }
 }

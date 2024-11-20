@@ -25,6 +25,8 @@ require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php');
 require_once('readdemodata.php');
 
+use mod_livequiz\output\results_page;
+use mod_livequiz\readdemodata;
 use mod_livequiz\services\livequiz_services;
 
 global $PAGE, $OUTPUT, $DB;
@@ -41,7 +43,7 @@ $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST
 $livequizservice = livequiz_services::get_singleton_service_instance();
 $currentquiz = $livequizservice->get_livequiz_instance($instance->id);
 if (empty($currentquiz->get_questions())) {
-    $demodatareader = new \mod_livequiz\readdemodata();
+    $demodatareader = new readdemodata();
     $demoquiz = $demodatareader->insertdemodata($currentquiz);
 } else {
     $demoquiz = $currentquiz;
@@ -77,7 +79,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$results = new \mod_livequiz\output\results_page($cmid, $demoquiz, $participation);
+$results = new results_page($cmid, $demoquiz, $participation);
 
 echo $OUTPUT->header();
 echo $output->render($results);

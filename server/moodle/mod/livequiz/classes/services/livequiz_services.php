@@ -46,7 +46,6 @@ use mod_livequiz\models\student_quiz_relation;
 
 use mod_livequiz\models\student_answers_relation;
 use PhpXmlRpc\Exception;
-use function PHPUnit\Framework\throwException;
 
 /**
  * Class livequiz_services
@@ -247,8 +246,9 @@ class livequiz_services {
      * Creates a new participation record (quiz-student record) in the database.
      * @param int $studentid
      * @param int $quizid
+     * @return participation
      * @throws dml_exception
-     * @return int
+     * @throws dml_transaction_exception
      */
     public function insert_participation(int $studentid, int $quizid): participation {
         // Add participation using the model.
@@ -304,12 +304,20 @@ class livequiz_services {
         }
         return $answers;
     }
+
+    /**
+     * Get all answerids based on a participation id and student id
+     * @param int $studentid
+     * @param int $participationid
+     * @return array
+     * @throws dml_exception
+     */
     public function get_answersids_from_student_in_participation(int $studentid, int $participationid): array {
         return student_answers_relation::get_answersids_from_student_in_participation($studentid, $participationid);
     }
 
     /**
-     * Get newest participation in table. The participation with highest id.
+     * Get the newest participation in table. The participation with highest id.
      * @param int $quizid
      * @param int $studentid
      * @return participation
@@ -324,16 +332,20 @@ class livequiz_services {
      * gets lecturer from quiz
      * @param int $quizid
      * @return array
+     * @throws dml_exception
+     * @throws dml_transaction_exception
      */
     public function get_livequiz_quiz_lecturer(int $quizid): array {
         $lecturer = livequiz_quiz_lecturer_relation::get_lecturer_quiz_relation_by_quiz_id($quizid);
-
         return $lecturer;
     }
+
     /**
      * gets lecturer from question
      * @param int $questionid
      * @return array
+     * @throws dml_exception
+     * @throws dml_transaction_exception
      */
     public function get_livequiz_question_lecturer(int $questionid): array {
         $lecturer = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_questions_id($questionid);
@@ -370,5 +382,4 @@ class livequiz_services {
         quiz_questions_relation::delete_question_quiz_relation($questionid);
         question::delete_question($questionid);
     }
-
 }

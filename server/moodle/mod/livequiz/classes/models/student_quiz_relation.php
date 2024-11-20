@@ -39,10 +39,13 @@ class student_quiz_relation {
         global $DB;
         return $DB->insert_record('livequiz_quiz_student', ['livequiz_id' => $quizid, 'student_id' => $studentid], true);
     }
+
     /**
      * Get all participation the student has made for a quiz
      * @param int $quizid
-     * @return void
+     * @param int $studentid
+     * @return array
+     * @throws dml_exception
      */
     public static function get_all_student_participation_for_quiz(int $quizid, int $studentid): array {
         global $DB;

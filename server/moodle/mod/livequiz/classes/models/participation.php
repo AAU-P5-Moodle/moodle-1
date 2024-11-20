@@ -16,6 +16,7 @@
 
 namespace mod_livequiz\models;
 
+use dml_exception;
 use stdClass;
 
 /**
@@ -65,14 +66,17 @@ class participation {
         $success = false;
         try {
             $success = $DB->insert_record('participation', $record);
-        } catch (\dml_exception $dmle) {
+        } catch (dml_exception $dmle) {
             echo $dmle->getMessage();
         }
         return $success;
     }
+
     /**
      * Summary of get_participation_by_studentid
      * @param  $studentid
+     * @return false|mixed|stdClass
+     * @throws dml_exception
      */
     public static function get_participation_by_studentid($studentid) {
         global $DB;

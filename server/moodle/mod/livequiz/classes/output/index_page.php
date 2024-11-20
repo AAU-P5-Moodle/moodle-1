@@ -17,7 +17,6 @@
 namespace mod_livequiz\output;
 
 use core\exception\moodle_exception;
-use mod_livequiz\models\livequiz;
 use renderable;
 use renderer_base;
 use templatable;
@@ -41,7 +40,8 @@ class index_page implements renderable, templatable {
 
     /**
      * index_page constructor.
-     * @param int $id
+     * @param int $cmid
+     * @param int $quizid
      * @param int $studentid
      */
     public function __construct(int $cmid, int $quizid, int $studentid) {
