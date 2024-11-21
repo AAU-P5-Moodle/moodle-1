@@ -345,7 +345,7 @@ class livequiz_services {
 
         foreach ($answerids as $answerid) {
             $questionid = questions_answers_relation::get_question_id_from_answer_id($answerid);
-            // Insert answer in the array associated with the question it belongs to
+            // Insert answer in the array associated with the question it belongs to.
             $studentresults[$questionid][] = $answerid;
         }
 

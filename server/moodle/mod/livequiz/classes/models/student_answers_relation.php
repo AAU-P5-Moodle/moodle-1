@@ -62,6 +62,10 @@ class student_answers_relation {
     }
 
     /**
+     * Method to get all answerid's from a participation.
+     *
+     * @param int $participationid
+     * @return array
      * @throws dml_exception
      */
     public static function get_answerids_from_participation(int $participationid): array {

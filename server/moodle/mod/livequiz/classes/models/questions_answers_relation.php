@@ -76,6 +76,10 @@ class questions_answers_relation {
     }
 
     /**
+     * Get the question id from an answer id
+     *
+     * @param int $answerid
+     * @return int
      * @throws dml_exception
      */
     public static function get_question_id_from_answer_id(int $answerid): int {
