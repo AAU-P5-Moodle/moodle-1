@@ -64,6 +64,7 @@ pkgs.mkShell {
     geckodriver
     git
     unixtools.netstat
+    nodejs_20
     (if stdenv.isDarwin then null else firefox)
   ];
   shellHook = ''
@@ -345,6 +346,17 @@ EOF
 
       cd $CURRENT_PATH
     }
+
+    gruntit(){
+      CURRENT_PATH="$(pwd)"
+      cd $MOODLE_ROOT
+      npm install
+      cd mod/livequiz
+      npx grunt stylelint
+      npx grunt js
+      cd $CURRENT_PATH
+    }
+    
     # Trap to ensure services are stopped when exiting the shell
     trap stop_services EXIT
 
