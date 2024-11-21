@@ -85,10 +85,10 @@ function question_button(quizid, lecturerid){
     let question_input = document.querySelector(".question_input_large");
     let questionText = question_input.value.trim();
 
-    if (!questionText) {
+  if (!questionText) {
       alert("Please enter a question.");
       return;
-    }
+  }
 
     let answers = [];
     let answers_div = document.querySelector(".all_answers_for_question_div");
@@ -144,15 +144,15 @@ function question_confirmation() {
   let toast_promise_deletion_div = document.querySelector(".toast_promise_deletion_div");
   let cancel_question_deletion_button = document.querySelector(".cancel_question_deletion_button");
   let continue_question_deletion_button = document.querySelector(".continue_question_deletion_button");
-
+    
   let modal_div = document.querySelector('.Modal_div');
-
+    
   continue_question_deletion_button.addEventListener('click', () => {
     isEditing = false;
     editingIndex = null
     modal_div.remove();
   });
-
+    
   cancel_question_deletion_button.addEventListener('click', () => {
     toast_promise_deletion_div.remove();
   });
@@ -163,4 +163,48 @@ function create_element(element_name, type, class_name, content) {
   element_name.className = class_name;
   element_name.textContent = content;
   return element_name;
+}
+
+//listener for edit buttons
+document.addEventListener("click", (event) => {
+  if (event.target.classList.contains("edit-question")) {
+      console.log("Edit button clicked!");
+      const questionId = event.target.dataset.id;
+      loadQuestionForEditing(questionId, quizid); // Pass quizid here
+  }
+});
+
+async function loadQuestionForEditing(questionId, quizid) {
+  try {
+      const response = await fetch(`/mod/livequiz/get_question.php?id=${questionId}&quizid=${quizid}`);
+      const questionData = await response.json();
+      console.log("Fetched question data:", questionData);
+
+      // Populate answers here
+      const answersContainer = document.querySelector(".all_answers_for_question_div");
+      const existingAnswerInputs = answersContainer.querySelectorAll(".container_for_new_answer");
+
+      questionData.answers.forEach((answer, index) => {
+          let answerInputContainer;
+
+          if (index < existingAnswerInputs.length) {
+              answerInputContainer = existingAnswerInputs[index];
+          } else {
+              appendAnswerInput();
+              answerInputContainer = answersContainer.lastElementChild;
+          }
+
+          answerInputContainer.querySelector(".answer_input").value = answer.description;
+          answerInputContainer.querySelector(".answer_checkbox").checked = answer.correct;
+      });
+
+      while (existingAnswerInputs.length > questionData.answers.length) {
+          existingAnswerInputs[existingAnswerInputs.length - 1].remove();
+      }
+
+      isEditing = true;
+      editingIndex = questionId;
+  } catch (error) {
+      console.error("Failed to load question:", error);
+  }
 }

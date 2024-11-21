@@ -25,7 +25,10 @@
         <h3>Saved Questions:</h3>
         <ol id="saved_questions_list" style="padding-left: 20px; margin: 0;">
             {{#questions}}
-                <li>{{questiontitle}}</li>
+                <li>
+                    {{questiontitle}}
+                    <button class="edit-question" data-id="{{questionid}}">Edit</button>
+                </li>
             {{/questions}}
         </ol>
     </div>
