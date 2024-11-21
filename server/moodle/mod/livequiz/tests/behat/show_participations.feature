@@ -21,6 +21,7 @@ Feature: View livequiz activity
       | name     | livequiz_europe_quiz    |
       | intro    | Test description |
       | section  | 0                |
+    And I use demodata for the course "TC" and activity "livequiz"
     And I log in as "student1"
     And I am on "Test Course" course homepage with editing mode off
 
