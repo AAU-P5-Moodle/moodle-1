@@ -27,11 +27,11 @@ require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
 
-global $PAGE, $OUTPUT;
+global $PAGE, $OUTPUT, $DB;
 // Get submitted parameters.
-$id = required_param('id', PARAM_INT); // Course module id.
+$cmid = required_param('id', PARAM_INT); // Course module id.
 $quizid = required_param('livequizid', PARAM_INT);
-[$course, $cm] = get_course_and_cm_from_cmid($id, 'livequiz');
+[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
 // Read demo data - REMOVE WHEN PUSHING TO STAGING.
@@ -52,13 +52,13 @@ $context = context_module::instance($cm->id); // Set the context for the course 
 
 $PAGE->set_context($context); // Make sure to set the page context.
 
-$PAGE->set_url(new moodle_url('/mod/livequiz/results.php', ['id' => $id, 'quizid' => $quizid ]));
+$PAGE->set_url(new moodle_url('/mod/livequiz/results.php', ['id' => $cmid, 'quizid' => $quizid ]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$results = new \mod_livequiz\output\results_page($id, $demoquiz);
+$results = new \mod_livequiz\output\results_page($cmid, $demoquiz);
 
 echo $OUTPUT->header();
 echo $output->render($results);

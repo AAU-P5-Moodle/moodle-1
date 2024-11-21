@@ -27,13 +27,19 @@ require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
 
-global $OUTPUT, $PAGE, $DB;
+global $OUTPUT, $PAGE, $DB, $USER;
 
 $cmid = required_param('id', PARAM_INT); // Course module ID.
 [$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
 require_login($course, true, $cm); // Ensure the user is logged in and can access this module.
+// Debugging: Check if $USER is defined and contains the id.
+if (!isset($USER->id)) {
+    throw new moodle_exception('usernotauthenticated', 'error', '', null, 'User is not logged in or user data is missing.');
+}
+
+
 $context = context_module::instance($cm->id); // Set the context for the course module.
 $PAGE->set_cacheable(false);
 $PAGE->set_context($context); // Make sure to set the page context.
@@ -44,7 +50,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\index_page('THIS IS THE INDEXPAGE OF ' . $instance->name, $cmid);
+$renderable = new \mod_livequiz\output\index_page($instance->id, $USER->id, $cmid);
 
 unset($_SESSION['completed']);
 
