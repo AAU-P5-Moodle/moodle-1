@@ -72,7 +72,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$takelivequiz = new take_livequiz_page($cmid, $currentquiz, $questionindex, $USER->id);
+$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $currentquiz, $questionindex, $USER->id);
 
 // Output.
 echo $OUTPUT->header();

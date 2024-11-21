@@ -23,9 +23,7 @@
 
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
-require_once('readdemodata.php');
 
-use mod_livequiz\services\livequiz_services;
 use mod_livequiz\output\index_page_student;
 use mod_livequiz\output\index_page_teacher;
 
