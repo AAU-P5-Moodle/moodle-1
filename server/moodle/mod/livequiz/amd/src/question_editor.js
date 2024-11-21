@@ -106,6 +106,7 @@ function question_button(quizid, lecturerid){
     }
 
     let savedQuestion = {
+      id: 0,
       title: questionText,
       answers: answers,
       description: "",

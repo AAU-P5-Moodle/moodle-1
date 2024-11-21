@@ -224,6 +224,15 @@ class question {
     }
 
     /**
+     * Removes all answers from the question
+     *
+     */
+    public function remove_answers(): void {
+        $this->answers = [];
+    }
+
+
+    /**
      * Sets the ID of the question.
      *
      * @param $id

@@ -177,10 +177,10 @@ class livequiz_services {
 
         // Find deleted questions by comparing existing question IDs with updated ones.
         $existingquestionids = array_keys($existingquestionmap);
-        $deletedquestions = array_diff($existingquestionids, $updatedquestionids);
+        $deletedquestionids = array_diff($existingquestionids, $updatedquestionids);
 
         /* @var question $question // Type specification for $question, for PHPStorm IDE */
-        foreach ($deletedquestions as $questionid) {
+        foreach ($deletedquestionids as $questionid) {
             self::delete_question($questionid);
         }
     }

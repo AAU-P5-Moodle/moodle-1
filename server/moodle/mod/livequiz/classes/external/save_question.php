@@ -45,6 +45,7 @@ class save_question extends \core_external\external_api {
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
             'question' => new external_single_structure([
+                'id' => new external_value(PARAM_INT, 'ID'),
                 'title' => new external_value(PARAM_TEXT, 'Title'),
                 'description' => new external_value(PARAM_TEXT, 'Description of Question'),
                 'explanation' => new external_value(PARAM_TEXT, 'Explanation of Question'),
@@ -80,17 +81,24 @@ class save_question extends \core_external\external_api {
             'quizid' => $quizid,
         ]);
         $services = livequiz_services::get_singleton_service_instance();
-
-        // Get livequiz object and add the new question to it.
-        $livequiz = $services->get_livequiz_instance($quizid);
-        $question = self::new_question($questiondata);
-        $livequiz->add_question($question);
+        $livequiz = $services->get_livequiz_instance($quizid);// Get livequiz object and add the new question to it.
+        $questionid = $questiondata['id'];
+        if ($questionid === 0) {// The question is new.
+            $livequiz->add_question(self::new_question($questiondata));
+        } else if ($questionid > 0) {// The question is already in the database.
+            // Get the question from the database and set new attributes.
+            $question = question::get_question_from_id($questionid);
+            self::set_question_attributes($question, $questiondata);
+            // Remove the old version of the question from the livequiz object and add the new version.
+            $livequiz->remove_question_by_id($questionid);
+            $livequiz->add_question($question);
+        }
 
         try {
             $services->submit_quiz($livequiz, $lecturerid);// Submit the livequiz to the database.
             return true; // Return true if successful.
         } catch (dml_exception $e) {
-            debugging('Error inserting participation: ' . $e->getMessage());
+            debugging('Error submitting quiz: ' . $e->getMessage());
             return false; // Return false if unsuccessful.
         }
     }
@@ -111,7 +119,18 @@ class save_question extends \core_external\external_api {
      */
     private static function new_question(array $questiondata): question {
         $question = new question($questiondata['title'], $questiondata['description'], 0, $questiondata['explanation']);
+        self::add_answers_from_questiondata($question, $questiondata);
+        return $question;
+    }
 
+    /**
+     * Create answer objects based on the question data passed from the front-end, and add them to a question object.
+     *
+     * @param question $question
+     * @param array $questiondata
+     * @return question
+     */
+    private static function add_answers_from_questiondata(question $question, array $questiondata): void {
         if (!empty($questiondata['answers'])) { // Loop through answers and add them to the question.
             foreach ($questiondata['answers'] as $answerdata) {
                 $answer = new answer(
@@ -122,6 +141,20 @@ class save_question extends \core_external\external_api {
                 $question->add_answer($answer);
             }
         }
-        return $question;
+    }
+
+    /**
+     * Set attributes of a question object based on the question data passed from the front-end.
+     *
+     * @param question $question
+     * @param array $questiondata
+     * @return question
+     */
+    private static function set_question_attributes(question $question, array $questiondata): void {
+        $question->set_title($questiondata['title']);
+        $question->set_description($questiondata['description']);
+        $question->set_explanation($questiondata['explanation']);
+        $question->remove_answers();
+        self::add_answers_from_questiondata($question, $questiondata);
     }
 }
