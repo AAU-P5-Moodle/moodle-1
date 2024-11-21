@@ -64,5 +64,4 @@ class student_quiz_relation {
         }
         return $participations;
     }
-
 }
