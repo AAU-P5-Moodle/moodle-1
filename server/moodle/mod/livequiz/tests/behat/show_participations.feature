@@ -54,15 +54,21 @@ Feature: View livequiz activity
     And I should see "Take Quiz"
     And I click on "Take Quiz" "link"
     And I should see "This is about France"
+    And "Paris" "checkbox" should exist
+    Then the "Paris" answer should not be checked
     And "Nice" "checkbox" should exist
     And I click on "Nice" "checkbox"
     And "Next Question" "link" should exist
     And I click on "Next Question" "link"
     And "Aalborg" "radio" should exist
+    And "Copenhagen" "radio" should exist
+    Then the "Copenhagen" answer should not be checked
     And I click on "Aalborg" "radio"
     And "Next Question" "link" should exist
     And I click on "Next Question" "link"
     And "No" "radio" should exist
+    And "Yes" "radio" should exist
+    Then the "Yes" answer should not be checked
     And I click on "No" "radio"
     And "Submit Quiz" "button" should exist
     And I click on "Submit Quiz" "button"

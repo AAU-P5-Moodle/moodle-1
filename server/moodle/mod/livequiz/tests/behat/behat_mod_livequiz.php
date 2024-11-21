@@ -16,6 +16,7 @@
 
 namespace mod_livequiz\tests\behat;
 
+use Behat\Mink\Exception\ExpectationException;
 use behat_base;
 
 // This is used because behat cannot find the class when the namespace is defined.
@@ -34,8 +35,19 @@ class behat_mod_livequiz extends behat_base {
      * Asserts whether the given element is checked.
      * @Then the :checkbox answer should be checked
      * @param $element (radio button or checkbox)
+     * @throws ExpectationException
      */
-    public function assertischecked($element) {
+    public function assertischecked($element): void {
         $this->assertSession()->checkboxChecked($element);
+    }
+
+    /**
+     * Asserts whether the given element is checked.
+     * @Then the :checkbox answer should not be checked
+     * @param $element (radio button or checkbox)
+     * @throws ExpectationException
+     */
+    public function assertisnotchecked($element): void {
+        $this->assertSession()->checkboxNotChecked($element);
     }
 }
