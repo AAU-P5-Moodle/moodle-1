@@ -78,7 +78,7 @@ function add_save_question_button_listener(quizid, lecturerid) {
   save_question_button.addEventListener("click", () => {question_button(quizid, lecturerid);});
 }
 
-async function question_button(quizid, lecturerid){
+function question_button(quizid, lecturerid){
     let question_input = document.querySelector(".question_input_large");
     let questionText = question_input.value.trim();
 
@@ -94,8 +94,9 @@ async function question_button(quizid, lecturerid){
         .querySelector(".answer_input")
         .value.trim();
 
-        let iscorrect =
-        answers_div.children[i].querySelector(".answer_checkbox").checked;
+        let iscorrect = answers_div.children[i].querySelector(".answer_checkbox").checked;
+        iscorrect ? iscorrect = 1 : iscorrect = 0;
+
 
       answers.push({
         description: answertext,
@@ -111,10 +112,7 @@ async function question_button(quizid, lecturerid){
       explanation: "",
     };
 
-    console.log("before");
-    let bool=save_question(savedQuestion, lecturerid, quizid);
-    console.log("bool :",bool);
-    console.log("after");
+    save_question(savedQuestion, lecturerid, quizid);
     let modal_div = document.querySelector(".Modal_div");
     console.log(savedQuestion);
     modal_div.remove();

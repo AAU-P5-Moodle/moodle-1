@@ -35,7 +35,7 @@ class index_page_teacher implements renderable, templatable {
     /** @var int $quizid the livequiz to take or retake*/
     private int $quizid;
     /** @var int $teacherid the id of the teacher who is interacting with the quiz. */
-    private int $teacherid;
+    private int $lecturerid;
     /** @var int $cmid the course module id */
     protected int $cmid;
 
@@ -45,12 +45,12 @@ class index_page_teacher implements renderable, templatable {
     /**
      * index_page_teacher constructor.
      * @param int $quizid
-     * @param int $teacherid
+     * @param int $lecturerid
      * @param int $courseid
      */
-    public function __construct(int $quizid, int $teacherid, int $courseid) {
+    public function __construct(int $quizid, int $lecturerid, int $courseid) {
         $this->quizid = $quizid;
-        $this->teacherid = $teacherid;
+        $this->lecturerid = $lecturerid;
         $this->cmid = $courseid;
         $service = livequiz_services::get_singleton_service_instance();
         $this->livequiz = $service->get_livequiz_instance($quizid);
@@ -66,11 +66,10 @@ class index_page_teacher implements renderable, templatable {
     public function export_for_template(renderer_base $output): stdClass {
         $data = $this->livequiz->prepare_for_template();
         $data->pagename = "Quiz editor page";
-        $data->teacherid = $this->teacherid;
+        $data->lecturerid = $this->lecturerid;
         $data->quizid = $this->quizid;
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
-        $data->isteacher = true;
-        error_log(print_r($data, true));
+        $data->islecturer = true;
         return $data;
     }
 }

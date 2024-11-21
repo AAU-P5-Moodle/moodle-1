@@ -128,8 +128,8 @@ class save_question extends \core_external\external_api {
         if (!empty($questionarray['answers'])) {
             foreach ($questionarray['answers'] as $answerarray) {
                 $answer = new answer(
-                    $answerarray['description'],
                     $answerarray['correct'],
+                    $answerarray['description'],
                     $answerarray['explanation']
                 );
                 $question->add_answer($answer);
