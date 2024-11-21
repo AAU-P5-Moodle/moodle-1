@@ -42,7 +42,7 @@ class behat_mod_livequiz extends behat_base {
     }
 
     /**
-     * Asserts whether the given element is checked.
+     * Asserts whether the given element is not checked.
      * @Then the :checkbox answer should not be checked
      * @param $element (radio button or checkbox)
      * @throws ExpectationException
