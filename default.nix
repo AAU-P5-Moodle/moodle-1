@@ -216,10 +216,15 @@ EOF
       PHP_SERVER_PID=$!
     }
 
+    start_websocket() {
+      echo "Starting WebSocket for livequiz"
+      php ./server/moodle/mod/livequiz/classes/websocket/start_websocket.php
+      WEBSOCKET_PID=$!
+    }
     # Function to stop services
     stop_services() {
       echo "Stopping services..."
-      kill -9 $MARIADB_PID $ADMINER_PID $PHP_SERVER_PID $SELENIUM_PID 2>/dev/null
+      kill -9 $MARIADB_PID $ADMINER_PID $PHP_SERVER_PID $WEBSOCKET_PID $SELENIUM_PID 2>/dev/null
       rm -f ${mariadb_socket}
       rm -f ./adminer_router.php
     }
@@ -242,6 +247,26 @@ EOF
       echo "success installing phpunit"
       cd "$CURRENT_PATH"
     }
+
+    check_ratchet() {
+      if [ ! -f "$MOODLE_ROOT/vendor/cboden/ratchet" ]; then
+      echo "no ratchet installed installing it now"
+      install_ratchet
+      fi
+      if [ ! -f "$MOODLE_ROOT/vendor/cboden/ratchet" ]; then
+      echo "installing failed exiting"
+      exit 1
+      fi
+      echo "cboden/ratchet found"
+    }
+    install_ratchet() {
+      CURRENT_PATH="$(pwd)"
+      cd "$MOODLE_ROOT"
+      composer require --dev cboden/ratchet
+      echo "success installing cboden/ratchet"
+      cd "$CURRENT_PATH"
+    }
+
     create_config(){
      if [ ! -f "$MOODLE_ROOT/config.php" ]; then
       echo "no config found creating a new one";
@@ -364,7 +389,7 @@ EOF
     start_mariadb
     start_adminer
     start_php_server
-
+    start_websocket
 
 
 
