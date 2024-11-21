@@ -45,12 +45,15 @@ function append_answer_input() {
 
   let answer_input = document.createElement("input");
   answer_input.className = "answer_input";
-  answer_input.placeholder = "Enter answer";
+  answer_input.placeholder = "Enter answer " + (answer_count + 1);
+  answer_input.id = "answer_input_" + (answer_count + 1);
   answer_input.setAttribute("required", true);
+
 
   let answer_checkbox = document.createElement("input");
   answer_checkbox.setAttribute("type", "checkbox");
   answer_checkbox.className = "answer_checkbox";
+  answer_checkbox.id = "answer_checkbox_" + (answer_count + 1);
 
   let delete_answer_button = create_element(
     "delete_answer_button",
@@ -94,8 +97,8 @@ function question_button(quizid, lecturerid){
         .querySelector(".answer_input")
         .value.trim();
 
-        let iscorrect = answers_div.children[i].querySelector(".answer_checkbox").checked;
-        iscorrect ? iscorrect = 1 : iscorrect = 0;
+      let iscorrect = answers_div.children[i].querySelector(".answer_checkbox").checked;
+      iscorrect ? iscorrect = 1 : iscorrect = 0;
 
 
       answers.push({

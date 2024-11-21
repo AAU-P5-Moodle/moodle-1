@@ -32,7 +32,7 @@ Scenario: Open a livequiz on course
   And I should see "Live Quiz"
   And I should see "livequiz_europe_quiz"
   And I should see "Test description"
-  And I should see "index_page"
+  And I should see "Quiz editor page"
 
   Scenario: Delete livequiz
   #Testing we can delete the livequiz activity
