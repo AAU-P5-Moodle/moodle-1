@@ -43,12 +43,6 @@ $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST
 // Read demo data - REMOVE WHEN PUSHING TO STAGING.
 $livequizservice = livequiz_services::get_singleton_service_instance();
 $currentquiz = $livequizservice->get_livequiz_instance($instance->id);
-if (empty($currentquiz->get_questions())) {
-    $demodatareader = new readdemodata();
-    $demoquiz = $demodatareader->insertdemodata($currentquiz);
-} else {
-    $demoquiz = $currentquiz;
-}
 
 require_login($course, false, $cm);
 
@@ -81,7 +75,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$results = new results_page($cmid, $demoquiz, $participation);
+$results = new results_page($cmid, $currentquiz, $participation);
 
 echo $OUTPUT->header();
 echo $output->render($results);

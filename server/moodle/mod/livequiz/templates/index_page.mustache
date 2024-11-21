@@ -39,6 +39,8 @@
        {{> mod_livequiz/quiz_editor_page}}
     {{/islecturer}}
      <a href="{{url}}" type="button" id="takeQuizBtn"> Take Quiz </a>
-    {{> mod_livequiz/participations_section}} {{! participations_section import - Context remains the same}}
+    {{#studentid}}
+        {{> mod_livequiz/participations_section}} {{! participations_section import - Context remains the same}}
+    {{/studentid}}
 </div>
 

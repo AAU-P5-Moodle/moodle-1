@@ -46,12 +46,12 @@ class index_page_teacher implements renderable, templatable {
      * index_page_teacher constructor.
      * @param int $quizid
      * @param int $lecturerid
-     * @param int $courseid
+     * @param int $cmid
      */
-    public function __construct(int $quizid, int $lecturerid, int $courseid) {
+    public function __construct(int $quizid, int $lecturerid, int $cmid) {
         $this->quizid = $quizid;
         $this->lecturerid = $lecturerid;
-        $this->cmid = $courseid;
+        $this->cmid = $cmid;
         $service = livequiz_services::get_singleton_service_instance();
         $this->livequiz = $service->get_livequiz_instance($quizid);
     }

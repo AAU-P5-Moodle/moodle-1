@@ -57,7 +57,7 @@ if (has_capability('moodle/course:manageactivities', $context)) {
     $renderable = new index_page_teacher($instance->id, $USER->id, $cmid);
     $output = $renderer->render_index_page_teacher($renderable);
 } else {
-    $renderable = new index_page_student($instance->id, $USER->id, $cmid);
+    $renderable = new index_page_student($cmid, $instance->id, $USER->id);
     $output = $renderer->render_index_page_student($renderable);
 }
 
