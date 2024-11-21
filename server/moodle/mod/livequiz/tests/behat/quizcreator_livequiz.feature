@@ -30,14 +30,15 @@ Feature: View livequiz activity
     Then I should see "Quiz editor page"
     And "Add Question" "button" should exist
     And I should see "Saved Questions"
-    And "Which of the following cities is in France?" "list_item" should exist
-    And "What is the Capital of Denmark?" "list_item" should exist
-    And "Is Hamburg in Germany" "list_item" should exist
+    And "Question 1" "list_item" should exist
+    And "Question 2" "list_item" should exist
+    And "Question 3" "list_item" should exist
     And I click on "Add Question" "button"
     Then "Enter question" "field" should exist
     And "Add Answer" "button" should exist
     And "Save Question" "button" should exist
     And "Discard" "button" should exist
+    # Following step should be Question nr, when description is added
     Then I set the field "Enter question" to "What is the Capital of Sweden?"
     Then I click on "Add Answer" "button"
     And "Enter answer 1" "field" should exist
@@ -58,9 +59,9 @@ Feature: View livequiz activity
     Then I should see "Quiz editor page"
     And "Add Question" "button" should exist
     And I should see "Saved Questions"
-    And "Which of the following cities is in France?" "list_item" should exist
-    And "What is the Capital of Denmark?" "list_item" should exist
-    And "Is Hamburg in Germany" "list_item" should exist
+    And "Question 1" "list_item" should exist
+    And "Question 2" "list_item" should exist
+    And "Question 3" "list_item" should exist
     And I click on "Add Question" "button"
     Then "Enter question" "field" should exist
     And "Add Answer" "button" should exist
@@ -79,7 +80,7 @@ Feature: View livequiz activity
     And I click on "Yes" "button"
     # This should be done automatically, so next step should be deleted
     And I reload the page
-    Then "Which of the following cities is in France?" "list_item" should exist
-    And "What is the Capital of Denmark?" "list_item" should exist
-    And "Is Hamburg in Germany" "list_item" should exist
+    Then "Question 1" "list_item" should exist
+    And "Question 2" "list_item" should exist
+    And "Question 3" "list_item" should exist
     And "What is the Capital of Sweden?" "list_item" should not exist
