@@ -24,6 +24,7 @@ use dml_exception;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\question;
 use mod_livequiz\services\livequiz_services;
+use mod_livequiz\models\livequiz;
 
 /**
  * Class submit_quiz
@@ -68,7 +69,7 @@ class save_question extends \core_external\external_api {
      * @param int $studentid
      * @return bool
      */
-    public static function execute(array $questionarray, int $lecturerid, int $quizid): bool {
+    public static function execute(array $questionarray, int $lecturerid, int $quizid): array {
         debugging("execute");
         $params = self::validate_parameters(self::execute_parameters(), [
             'question' => $questionarray,
@@ -80,10 +81,13 @@ class save_question extends \core_external\external_api {
 
         try {
             $services->insert_question($question, $lecturerid, $quizid);
-            return true; // Return true if successful.
+            $livequiz = $services->get_livequiz_instance($quizid);
+            $templatelivequiz = $livequiz->prepare_for_template();
+            $templatequestions = $templatelivequiz->questions;
+            return $templatequestions;
         } catch (dml_exception $e) {
             debugging('Error inserting participation: ' . $e->getMessage());
-            return false; // Return false if unsuccessful.
+            return []; // Return empty array if unsucceful.
         }
     }
 
@@ -92,8 +96,31 @@ class save_question extends \core_external\external_api {
      * but is in moodle's web service framework.
      * @return external_value
      */
-    public static function execute_returns(): external_value {
-        return new external_value(PARAM_BOOL, 'success');
+    public static function execute_returns(): external_multiple_structure {
+        return new external_multiple_structure(
+            new external_single_structure(
+                [
+                    'questionid' => new external_value(PARAM_INT, 'The ID of the question'),
+                    'questiontitle' => new external_value(PARAM_TEXT, 'The title of the question'),
+                    'questiondescription' => new external_value(PARAM_RAW, 'The description of the question'),
+                    'questiontimelimit' => new external_value(PARAM_INT, 'The time limit for the question'),
+                    'questionexplanation' => new external_value(PARAM_RAW, 'Explanation of the question'),
+                    'answers' => new external_multiple_structure(
+                        new external_single_structure(
+                            [
+                                'answerid' => new external_value(PARAM_INT, 'The ID of the answer'),
+                                'answerdescription' => new external_value(PARAM_RAW, 'The description of the answer'),
+                                'answerexplanation' => new external_value(PARAM_RAW, 'Explanation of the answer'),
+                                'answercorrect' => new external_value(PARAM_BOOL, 'Whether the answer is correct (1 for true, 0 for false)'),
+                            ]
+                        ),
+                        'List of answers for the question'
+                    ),
+                    'answertype' => new external_value(PARAM_TEXT, 'The type of answers (e.g., checkbox, radio)'),
+                ]
+            ),
+            'List of questions'
+        );
     }
 
     /**

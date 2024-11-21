@@ -1,6 +1,6 @@
 import Templates from "core/templates";
-import {exception as displayException} from 'core/notification';
-import {save_question} from "./repository";
+import { exception as displayException } from "core/notification";
+import { save_question } from "./repository";
 
 let isEditing = false;
 let editingIndex = 0;
@@ -75,53 +75,82 @@ function append_answer_input() {
 
 function add_save_question_button_listener(quizid, lecturerid) {
   let save_question_button = document.querySelector(".save_button");
-  save_question_button.addEventListener("click", () => {question_button(quizid, lecturerid);});
+  save_question_button.addEventListener("click", () => {
+    question_button(quizid, lecturerid);
+  });
 }
 
-function question_button(quizid, lecturerid){
-    let question_input = document.querySelector(".question_input_large");
-    let questionText = question_input.value.trim();
+function question_button(quizid, lecturerid) {
+  let question_input = document.querySelector(".question_input_large");
+  let questionText = question_input.value.trim();
 
-    if (!questionText) {
-      alert("Please enter a question.");
-      return;
-    }
+  if (!questionText) {
+    alert("Please enter a question.");
+    return;
+  }
 
-    let answers = [];
-    let answers_div = document.querySelector(".all_answers_for_question_div");
-    for (let i = 0; i < answers_div.children.length; i++) {
-      let answertext = answers_div.children[i]
-        .querySelector(".answer_input")
-        .value.trim();
+  let answers = [];
+  let answers_div = document.querySelector(".all_answers_for_question_div");
+  for (let i = 0; i < answers_div.children.length; i++) {
+    let answertext = answers_div.children[i]
+      .querySelector(".answer_input")
+      .value.trim();
 
-        let iscorrect = answers_div.children[i].querySelector(".answer_checkbox").checked;
-        iscorrect ? iscorrect = 1 : iscorrect = 0;
+    let iscorrect =
+      answers_div.children[i].querySelector(".answer_checkbox").checked;
+    iscorrect ? (iscorrect = 1) : (iscorrect = 0);
 
-
-      answers.push({
-        description: answertext,
-        correct: iscorrect,
-        explanation: "",
-      });
-    }
-
-    let savedQuestion = {
-      title: questionText,
-      answers: answers,
-      description: "",
+    answers.push({
+      description: answertext,
+      correct: iscorrect,
       explanation: "",
+    });
+  }
+
+  let savedQuestion = {
+    title: questionText,
+    answers: answers,
+    description: "",
+    explanation: "",
+  };
+
+  save_question(savedQuestion, lecturerid, quizid).then((questions) => {
+    const context = {
+      questions: questions,
     };
 
-    save_question(savedQuestion, lecturerid, quizid);
-    let modal_div = document.querySelector(".Modal_div");
-    console.log(savedQuestion);
-    modal_div.remove();
+    Templates.renderForPromise("mod_livequiz/quiz_editor_page", context)
+
+      // It returns a promise that needs to be resoved.
+      .then(({ html, js }) => {
+        // Here eventually I have my compiled template, and any javascript that it generated.
+        // The templates object has append, prepend and replace functions.
+        question_editor_wrapper = document.querySelector("#page-mod-livequiz-quizcreator");
+        console.log(question_editor_wrapper);
+        while (question_editor_wrapper.firstChild) {
+          myNode.removeChild(question_editor_wrapper.lastChild);
+        }
+
+        Templates.appendNodeContents("#page-mod-livequiz-quizcreator", html, js);
+        add_answer_button_event_listerner();
+        //add_save_question_button_listener(quizid, lecturerid);
+        add_discard_question_button_listener();
+      })
+
+      // Deal with this exception (Using core/notify exception function is recommended).
+      .catch((error) => displayException(error));
+
+  });
+  let modal_div = document.querySelector(".Modal_div");
+  modal_div.remove();
 }
 
 function add_discard_question_button_listener() {
-  let discard_question_button = document.querySelector(".discard_question_button");
+  let discard_question_button = document.querySelector(
+    ".discard_question_button"
+  );
   console.log(discard_question_button);
-  discard_question_button.addEventListener('click', () => {
+  discard_question_button.addEventListener("click", () => {
     render_question_confirmation();
   });
 }
@@ -130,27 +159,33 @@ function render_question_confirmation() {
   console.log("GOT INTO LISTENER");
   Templates.renderForPromise("mod_livequiz/question_confirmation")
 
-  .then(({ html, js }) => {
-    Templates.appendNodeContents(".Modal_div", html, js);
-    question_confirmation();
-  })
-  .catch((error) => displayException(error));
+    .then(({ html, js }) => {
+      Templates.appendNodeContents(".Modal_div", html, js);
+      question_confirmation();
+    })
+    .catch((error) => displayException(error));
 }
 
 function question_confirmation() {
-  let toast_promise_deletion_div = document.querySelector(".toast_promise_deletion_div");
-  let cancel_question_deletion_button = document.querySelector(".cancel_question_deletion_button");
-  let continue_question_deletion_button = document.querySelector(".continue_question_deletion_button");
+  let toast_promise_deletion_div = document.querySelector(
+    ".toast_promise_deletion_div"
+  );
+  let cancel_question_deletion_button = document.querySelector(
+    ".cancel_question_deletion_button"
+  );
+  let continue_question_deletion_button = document.querySelector(
+    ".continue_question_deletion_button"
+  );
 
-  let modal_div = document.querySelector('.Modal_div');
+  let modal_div = document.querySelector(".Modal_div");
 
-  continue_question_deletion_button.addEventListener('click', () => {
+  continue_question_deletion_button.addEventListener("click", () => {
     isEditing = false;
-    editingIndex = null
+    editingIndex = null;
     modal_div.remove();
   });
 
-  cancel_question_deletion_button.addEventListener('click', () => {
+  cancel_question_deletion_button.addEventListener("click", () => {
     toast_promise_deletion_div.remove();
   });
 }
