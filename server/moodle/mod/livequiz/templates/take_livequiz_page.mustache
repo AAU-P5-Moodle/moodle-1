@@ -31,7 +31,8 @@
 }}
 {{#js}}
     require(['mod_livequiz/session'], (module) => module.init({{quizid}}, {{questionid}}));
-    require(['mod_livequiz/submit_quiz'], (module) => module.init({{quizid}}, {{studentid}}));
+    {{! triple curling brackets escapes amp refactoring of strings}}
+    require(['mod_livequiz/submit_quiz'], (module) => module.init({{quizid}}, {{studentid}}, '{{{resultsurl}}}')); 
 {{/js}}
 <div class="main-container">
     {{> mod_livequiz/question_section}} {{! question_section import - Context remains the same}}

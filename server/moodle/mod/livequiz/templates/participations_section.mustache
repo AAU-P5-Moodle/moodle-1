@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_livequiz/side_bar
+    @template mod_livequiz/index_page
 
     Index Page for the livequiz plugin
 
@@ -29,6 +29,17 @@
     * fill in later
 
 }}
-<div class="side_bar">
-    <button class="submit-quiz" id="submitQuizBtn">Submit Quiz</button>
+
+<div class="participations-container">
+    <h2 class="Participation-title">Participations</h2>
+    <div class="participations">
+        {{#participations}}
+        <div class="participation">
+        <p></p>
+            <button class="participation-button" onclick="location.href='{{resultsurl}}'">
+                Go to participation {{participationnumber}}
+            </button>
+        </div>
+        {{/participations}}
+    </div>
 </div>

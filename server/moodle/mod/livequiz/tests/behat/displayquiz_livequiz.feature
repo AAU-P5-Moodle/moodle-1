@@ -1,7 +1,7 @@
 @mod @mod_livequiz @javascript
 
 Feature: View livequiz activity
-  as a student
+  as a student and allows the student to take a quiz
 
   Background:
     Given the following "users" exist:
@@ -21,6 +21,8 @@ Feature: View livequiz activity
       | name     | livequiz_europe_quiz    |
       | intro    | Test description |
       | section  | 0                |
+    # This is a custom made function to insert demodata from behatdata.json into DB for the tests.
+    And I use demodata for the course "TC" and activity "livequiz"
     And I log in as "student1"
     And I am on "Test Course" course homepage with editing mode off
 
