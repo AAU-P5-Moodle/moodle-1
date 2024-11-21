@@ -149,7 +149,6 @@ function add_discard_question_button_listener() {
 }
 
 function render_question_confirmation() {
-  console.log("GOT INTO LISTENER");
   Templates.renderForPromise("mod_livequiz/question_confirmation")
 
     .then(({ html, js }) => {

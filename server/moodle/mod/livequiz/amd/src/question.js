@@ -1,3 +1,4 @@
+// THIS FILE SHOULD BE DELETED WHEN THE QUESTION CREATION IS IMPLEMENTED IN THE MOODLE PLUGIN
 let savedQuestions = [];
 let isEditing = false;
 let editingIndex = null;

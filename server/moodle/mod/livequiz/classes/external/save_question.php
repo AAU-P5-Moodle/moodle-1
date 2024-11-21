@@ -24,6 +24,7 @@ use dml_exception;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\question;
 use mod_livequiz\services\livequiz_services;
+use PhpXmlRpc\Exception;
 use mod_livequiz\models\livequiz;
 
 /**
@@ -65,23 +66,30 @@ class save_question extends \core_external\external_api {
     /**
      * Summary of execute
      * Inserts participation and answers into the DB
-     * @param ?? $question
-     * @param int $studentid
+     * @param array $questiondata
+     * @param int $lecturerid
+     * @param int $quizid
      * @return bool
+     * @throws Exception
+     * @throws \invalid_parameter_exception
+     * @throws dml_exception
      */
-    public static function execute(array $questionarray, int $lecturerid, int $quizid): array {
+    public static function execute(array $questiondata, int $lecturerid, int $quizid): array {
         debugging("execute");
         $params = self::validate_parameters(self::execute_parameters(), [
-            'question' => $questionarray,
+            'question' => $questiondata,
             'lecturerid' => $lecturerid,
             'quizid' => $quizid,
         ]);
         $services = livequiz_services::get_singleton_service_instance();
-        $question = self::new_question($questionarray);
+
+        // Get livequiz object and add the new question to it.
+        $livequiz = $services->get_livequiz_instance($quizid);
+        $question = self::new_question($questiondata);
+        $livequiz->add_question($question);
 
         try {
-            $services->insert_question($question, $lecturerid, $quizid);
-            $livequiz = $services->get_livequiz_instance($quizid);
+            $livequiz = $services->submit_quiz($livequiz, $lecturerid);// Submit the livequiz to the database.
             $templatelivequiz = $livequiz->prepare_for_template();
             $templatequestions = $templatelivequiz->questions;
             return $templatequestions;
@@ -124,40 +132,19 @@ class save_question extends \core_external\external_api {
     }
 
     /**
-     * Insert answers from session in DB.
-     * @param int $quizid
-     * @param int $studentid
-     * @param int $participationid
-     * @return void
-     * @throws dml_exception
-     */
-    public static function insert_answers_from_session(int $quizid, int $studentid, int $participationid): void {
-        $quizquestions = $_SESSION['quiz_answers'][$quizid]; // Get the questions from the quiz.
-        $answers = [];
-        $services = livequiz_services::get_singleton_service_instance();
-        foreach ($quizquestions as $questionid) { // Loop through each question in the quiz.
-            $questionanswers = $questionid['answers']; // Get the answers for the question.
-            $answers = array_merge($answers, $questionanswers); // Merge the answers into the answers array.
-        }
-        foreach ($answers as $answerid) { // Insert each answer choice in the DB.
-            $services->insert_answer_choice($studentid, $answerid, $participationid);
-        }
-    }
-
-    /**
      * Create new question from intermediate array-representation
-     * @param array $questionarray
+     * @param array $questiondata
      * @return question
      */
-    private static function new_question(array $questionarray): question {
-        $question = new question($questionarray['title'], $questionarray['description'], 0, $questionarray['explanation']);
+    private static function new_question(array $questiondata): question {
+        $question = new question($questiondata['title'], $questiondata['description'], 0, $questiondata['explanation']);
 
-        if (!empty($questionarray['answers'])) {
-            foreach ($questionarray['answers'] as $answerarray) {
+        if (!empty($questiondata['answers'])) { // Loop through answers and add them to the question.
+            foreach ($questiondata['answers'] as $answerdata) {
                 $answer = new answer(
-                    $answerarray['correct'],
-                    $answerarray['description'],
-                    $answerarray['explanation']
+                    $answerdata['correct'],
+                    $answerdata['description'],
+                    $answerdata['explanation']
                 );
                 $question->add_answer($answer);
             }
