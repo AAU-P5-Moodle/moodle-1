@@ -23,7 +23,6 @@
 
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php');
-require_once('readdemodata.php');
 
 use mod_livequiz\services\livequiz_services;
 
@@ -35,15 +34,8 @@ $questionindex = optional_param('questionindex', 0, PARAM_INT); // Question id, 
 [$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
-// Read demo data - REMOVE WHEN PUSHING TO STAGING.
 $livequizservice = livequiz_services::get_singleton_service_instance();
 $currentquiz = $livequizservice->get_livequiz_instance($instance->id);
-if (empty($currentquiz->get_questions())) { // If the quiz has no questions, insert demo data.
-    $demodatareader = new \mod_livequiz\readdemodata();
-    $demoquiz = $demodatareader->insertdemodata($currentquiz);
-} else {
-    $demoquiz = $currentquiz;
-}
 
 if (!$cm) { // If course module is not set, throw an exception.
     throw new moodle_exception('invalidcoursemodule', 'error');
@@ -79,7 +71,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $demoquiz, $questionindex, $USER->id);
+$takelivequiz = new \mod_livequiz\output\take_livequiz_page($cmid, $currentquiz, $questionindex, $USER->id);
 
 // Output.
 echo $OUTPUT->header();
