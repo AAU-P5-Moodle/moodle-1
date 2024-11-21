@@ -578,8 +578,6 @@ final class livequiz_service_test extends \advanced_testcase {
             }
         }
 
-        //echo print_r($answersfromdb, true);
-
         // All answers are correct in this case.
         for ($i = 0; $i < count($answersfromdb); ++$i) {
             $this->assertInstanceOf(answer::class, $answersfromdb[$i]);
