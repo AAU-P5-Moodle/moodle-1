@@ -119,22 +119,15 @@ function question_button(quizid, lecturerid) {
       questions: questions,
     };
 
-    Templates.renderForPromise("mod_livequiz/quiz_editor_page", context)
+    questions_list = document.querySelector("#saved_questions_list");
+    questions_list.remove();
 
+    Templates.renderForPromise("mod_livequiz/saved_questions_list", context)
       // It returns a promise that needs to be resoved.
       .then(({ html, js }) => {
         // Here eventually I have my compiled template, and any javascript that it generated.
         // The templates object has append, prepend and replace functions.
-        question_editor_wrapper = document.querySelector("#page-mod-livequiz-quizcreator");
-        console.log(question_editor_wrapper);
-        while (question_editor_wrapper.firstChild) {
-          myNode.removeChild(question_editor_wrapper.lastChild);
-        }
-
-        Templates.appendNodeContents("#page-mod-livequiz-quizcreator", html, js);
-        add_answer_button_event_listerner();
-        //add_save_question_button_listener(quizid, lecturerid);
-        add_discard_question_button_listener();
+        Templates.appendNodeContents("#saved-questions-container", html, js);
       })
 
       // Deal with this exception (Using core/notify exception function is recommended).
