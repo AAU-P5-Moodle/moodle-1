@@ -52,7 +52,6 @@ class submit_quiz extends \core_external\external_api {
      * @return bool
      */
     public static function execute(int $quizid, int $studentid): bool {
-        debugging("execute");
         self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
         $services = livequiz_services::get_singleton_service_instance();
         try {

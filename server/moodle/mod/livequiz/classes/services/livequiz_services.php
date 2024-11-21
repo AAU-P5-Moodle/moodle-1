@@ -164,10 +164,7 @@ class livequiz_services {
 
             if ($questionid == 0) {
                 // Insert new question if ID is 0 (new question).
-                $questionid = question::insert_question($newquestion);
-
-                quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
-                livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
+                $questionid = $this->insert_question_with_relations($newquestion, $lecturerid, $quizid);
                 $updatedquestionids[] = $questionid;
             } else if (isset($existingquestionmap[$questionid])) {
                 // Update existing question if found in the map.
@@ -195,12 +192,11 @@ class livequiz_services {
      * @throws dml_exception
      * @throws Exception
      */
-    public function insert_question(question $question, int $lecturerid, int $quizid): void {
+    private function insert_question_with_relations(question $question, int $lecturerid, int $quizid): int {
         $questionid = question::insert_question($question);
         quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
         livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
-        $answers = $question->get_answers();
-        $this->submit_answers($questionid, $answers);
+        return $questionid;
     }
 
     /**
@@ -237,9 +233,8 @@ class livequiz_services {
         $existinganswerids = array_keys($existinganswersmap);
         $deletedanswers = array_diff($existinganswerids, $updatedanswerids);
 
-        /* @var answer $deletedanswer // Type specification for $deletedanswer, for PHPStorm IDE */
         foreach ($deletedanswers as $deletedanswer) {
-            self::delete_answer($deletedanswer->get_id());
+            self::delete_answer($deletedanswer);
         }
     }
 

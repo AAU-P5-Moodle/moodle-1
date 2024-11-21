@@ -114,20 +114,17 @@ function question_button(quizid, lecturerid){
 
     save_question(savedQuestion, lecturerid, quizid);
     let modal_div = document.querySelector(".Modal_div");
-    console.log(savedQuestion);
     modal_div.remove();
 }
 
 function add_discard_question_button_listener() {
   let discard_question_button = document.querySelector(".discard_question_button");
-  console.log(discard_question_button);
   discard_question_button.addEventListener('click', () => {
     render_question_confirmation();
   });
 }
 
 function render_question_confirmation() {
-  console.log("GOT INTO LISTENER");
   Templates.renderForPromise("mod_livequiz/question_confirmation")
 
   .then(({ html, js }) => {
