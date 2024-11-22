@@ -41,17 +41,15 @@ Feature: View livequiz activity
     # Following step should be Question nr, when description is added
     Then I set the field "Enter question" to "What is the Capital of Sweden?"
     Then I click on "Add Answer" "button"
-    And "Enter answer 1" "field" should exist
-    Then the checkbox with id "answer_checkbox_1" should exist
-    And I set the field "Enter answer 1" to "Stockholm"
+    Then the "field" with id "answer_input_1" should exist
+    Then the "checkbox" with id "answer_checkbox_1" should exist
+    And I set the field "answer_input_1" to "Stockholm"
     And I click on "answer_checkbox_1" "checkbox"
     Then I click on "Add Answer" "button"
-    And "Enter answer 2" "field" should exist
+    Then the "field" with id "answer_input_2" should exist
     Then the checkbox with id "answer_checkbox_2" should exist
-    And I set the field "Enter answer 2" to "Malmö"
+    And I set the field "answer_input_2" to "Malmö"
     And I click on "Save Question" "button"
-    # This should be done automatically, so next step should be deleted
-    And I reload the page
     Then "What is the Capital of Sweden?" "list_item" should exist
 
   Scenario: Discard questions for livequiz
@@ -78,8 +76,6 @@ Feature: View livequiz activity
     Then the field "Enter question" matches value "What is the Capital of Sweden?"
     And I click on "Discard" "button"
     And I click on "Yes" "button"
-    # This should be done automatically, so next step should be deleted
-    And I reload the page
     Then "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
