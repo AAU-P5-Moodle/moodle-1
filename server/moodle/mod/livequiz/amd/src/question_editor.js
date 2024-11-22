@@ -83,14 +83,20 @@ function add_save_question_button_listener(quizid, lecturerid) {
 }
 
 function question_button(quizid, lecturerid) {
-  let question_input = document.querySelector(".question_input_large");
-  let questionText = question_input.value.trim();
+  let question_input_title = document.getElementById("question_title_id");
+  let question_indput_description = document.getElementById("question_description_id");
+  let question_indput_explanation = document.getElementById("question_explanation_id");
+  let questionTitle = question_input_title.value.trim();
+  let questionDesription = question_indput_description.value.trim();
+  let questionExplanation = question_indput_explanation.value.trim();
 
-  if (!questionText) {
-    alert("Please enter a question.");
+  if (!questionDesription) {
+    alert("Please enter a question description.");
     return;
   }
-
+  if(!questionTitle){
+    questionTitle = "Question"
+  }
   let answers = [];
   let answers_div = document.querySelector(".all_answers_for_question_div");
   for (let i = 0; i < answers_div.children.length; i++) {
@@ -110,10 +116,10 @@ function question_button(quizid, lecturerid) {
   }
 
   let savedQuestion = {
-    title: questionText,
+    title: questionTitle,
     answers: answers,
-    description: "",
-    explanation: "",
+    description: questionDesription,
+    explanation: questionExplanation,
   };
 
   save_question(savedQuestion, lecturerid, quizid).then((questions) => {
