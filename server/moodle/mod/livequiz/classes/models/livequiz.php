@@ -220,22 +220,6 @@ class livequiz {
      * @param int $questionid
      * @return bool was a question with the specified id found and removed form the questions.
      */
-    /*public function remove_question_by_id(int $questionid): bool {
-        $questions = $this->get_questions();
-        foreach ($questions as $question) {
-            if ($question->get_id() === $questionid) {
-                $this->set_questions(array_diff($questions, [$question]));
-                return true;
-            }
-        }
-        return false;
-    }*/
-
-    /**
-     * Removes a question from the livequiz
-     * @param int $questionid
-     * @return bool was a question with the specified id found and removed form the questions.
-     */
     public function remove_question_by_id(int $questionid): bool {
         $questions = $this->get_questions();
 
