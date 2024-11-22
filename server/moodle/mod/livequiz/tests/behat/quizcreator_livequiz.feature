@@ -34,23 +34,37 @@ Feature: View livequiz activity
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
     And I click on "Add Question" "button"
-    Then "Enter question" "field" should exist
+    Then the "field" with id "question_title_id" should exist
+    Then the "field" with id "question_description_id" should exist
+    Then the "field" with id "question_explanation_id" should exist
     And "Add Answer" "button" should exist
     And "Save Question" "button" should exist
     And "Discard" "button" should exist
-    # Following step should be Question nr, when description is added
-    Then I set the field "Enter question" to "What is the Capital of Sweden?"
+    Then I set the field "question_title_id" to "Geography 1"
+    Then I set the field "question_description_id" to "What is the Capital of Sweden?"
+    Then I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
     Then I click on "Add Answer" "button"
+    Then the "button" with id "delete_answer_button_1" should exist
     Then the "field" with id "answer_input_1" should exist
     Then the "checkbox" with id "answer_checkbox_1" should exist
     And I set the field "answer_input_1" to "Stockholm"
     And I click on "answer_checkbox_1" "checkbox"
     Then I click on "Add Answer" "button"
     Then the "field" with id "answer_input_2" should exist
+    Then the "button" with id "delete_answer_button_2" should exist
     Then the checkbox with id "answer_checkbox_2" should exist
-    And I set the field "answer_input_2" to "Malmö"
+    # Next step should be deleted when css is fixed
+    And I click on "Close block drawer" "button"
+    And I click on "delete_answer_button_2" "button"
+    Then the "field" with id "answer_input_2" should not exist
+    And I click on "Add Answer" "button"
+    # The id of answers are just counted up thus the id is 3
+    Then the "field" with id "answer_input_3" should exist
+    Then the "button" with id "delete_answer_button_3" should exist
+    Then the checkbox with id "answer_checkbox_3" should exist
+    And I set the field "answer_input_3" to "Malmö"
     And I click on "Save Question" "button"
-    Then "What is the Capital of Sweden?" "list_item" should exist
+    Then "Geography 1" "list_item" should exist
 
   Scenario: Discard questions for livequiz
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
