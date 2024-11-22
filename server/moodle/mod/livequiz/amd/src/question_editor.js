@@ -143,7 +143,6 @@ function add_discard_question_button_listener() {
   let discard_question_button = document.querySelector(
     ".discard_question_button"
   );
-  console.log(discard_question_button);
   discard_question_button.addEventListener("click", () => {
     render_question_confirmation();
   });

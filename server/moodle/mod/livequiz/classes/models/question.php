@@ -299,6 +299,14 @@ class question {
 
     /**
      * Prepares the template data for mustache.
+     * The data object will hold the following properties:
+     * - questionid
+     * - questiontitle
+     * - questiondescription
+     * - questiontimelimit
+     * - questionexplanation
+     * - answers
+     * - answertype
      * @param stdClass $data
      * @return stdClass
      */

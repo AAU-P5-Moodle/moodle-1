@@ -280,6 +280,20 @@ class livequiz {
     }
     /**
      * Prepares the template data for mustache.
+     * The data object will hold the following properties:
+     * - quizid
+     * - quiztitle
+     * - numberofquestions
+     * - questions
+     *
+     * Each question will have the following properties:
+     * - questionid
+     * - questiontitle
+     * - questiondescription
+     * - questiontimelimit
+     * - questionexplanation
+     * - answers
+     * - answertype
      * @return stdClass
      */
     public function prepare_for_template(): stdClass {
