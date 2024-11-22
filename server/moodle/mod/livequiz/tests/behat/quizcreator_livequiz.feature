@@ -75,19 +75,23 @@ Feature: View livequiz activity
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
     And I click on "Add Question" "button"
-    Then "Enter question" "field" should exist
+    Then the "field" with id "question_title_id" should exist
+    Then the "field" with id "question_description_id" should exist
+    Then the "field" with id "question_explanation_id" should exist
     And "Add Answer" "button" should exist
     And "Save Question" "button" should exist
     And "Discard" "button" should exist
     # Next step should be deleted when css is fixed
     And I click on "Close block drawer" "button"
-    Then I set the field "Enter question" to "What is the Capital of Sweden?"
+    Then I set the field "question_title_id" to "Geography 1"
+    Then I set the field "question_description_id" to "What is the Capital of Sweden?"
+    Then I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
     And I click on "Discard" "button"
     Then I should see "Are you sure you want to discard changes?"
     And "No" "button" should exist
     And "Yes" "button" should exist
     And I click on "No" "button"
-    Then the field "Enter question" matches value "What is the Capital of Sweden?"
+    Then the field "question_description_id" matches value "What is the Capital of Sweden?"
     And I click on "Discard" "button"
     And I click on "Yes" "button"
     Then "Question 1" "list_item" should exist
