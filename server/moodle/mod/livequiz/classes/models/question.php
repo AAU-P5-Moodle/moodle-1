@@ -203,6 +203,10 @@ class question {
         return $this->answers;
     }
 
+    public function set_answers(array $newanswers): void {
+        $this->answers = $newanswers;
+    }
+
     /**
      * Appends an answer to the question object.
      *
