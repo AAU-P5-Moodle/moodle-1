@@ -40,7 +40,6 @@ Feature: View livequiz activity
     And "Add Answer" "button" should exist
     And "Save Question" "button" should exist
     And "Discard" "button" should exist
-    # Following step should be Question nr, when description is added
     Then I set the field "question_title_id" to "Geography 1"
     Then I set the field "question_description_id" to "What is the Capital of Sweden?"
     Then I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
@@ -59,6 +58,7 @@ Feature: View livequiz activity
     And I click on "delete_answer_button_2" "button"
     Then the "field" with id "answer_input_2" should not exist
     And I click on "Add Answer" "button"
+    # The id of answers are just counted up thus the id is 3
     Then the "field" with id "answer_input_3" should exist
     Then the "button" with id "delete_answer_button_3" should exist
     Then the checkbox with id "answer_checkbox_3" should exist
