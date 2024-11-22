@@ -29,7 +29,7 @@ use ReflectionException;
  * @copyright  2024 Software AAU
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class test_utility extends advanced_testcase {
+final class test_utility {
     /**
      * Function to construct a livequiz using reflection to access the private constructor
      * @param int $testid

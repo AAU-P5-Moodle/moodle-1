@@ -261,7 +261,6 @@ class livequiz_services {
      * @throws dml_transaction_exception
      */
     public function insert_participation(int $studentid, int $quizid): participation {
-        debugging("execute");
         // Add participation using the model.
         global $DB;
         $transaction = $DB->start_delegated_transaction();
