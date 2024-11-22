@@ -5,6 +5,7 @@ import { save_question } from "./repository";
 let isEditing = false;
 let editingIndex = 0;
 let answer_count = 0;
+let IDs = 0;
 
 export const init = async (quizid, lecturerid) => {
   let add_question_button = document.getElementById("id_buttonaddquestion");
@@ -58,8 +59,9 @@ function append_answer_input() {
     "delete_answer_button",
     "button",
     "delete_answer_button",
-    ""
+    "delete"
   );
+  delete_answer_button.id = "delete_answer_button_" + (IDs + 1);
 
   answer_container.appendChild(answer_checkbox);
   answer_container.appendChild(answer_input);
