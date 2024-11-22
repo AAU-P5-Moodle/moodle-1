@@ -59,8 +59,9 @@ function append_answer_input() {
     "delete_answer_button",
     "button",
     "delete_answer_button",
-    ""
+    "delete"
   );
+  delete_answer_button.id = "delete_answer_button_" + (IDs + 1);
 
   answer_container.appendChild(answer_checkbox);
   answer_container.appendChild(answer_input);
