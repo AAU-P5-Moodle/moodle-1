@@ -119,7 +119,10 @@ class save_question extends \core_external\external_api {
                                 'answerid' => new external_value(PARAM_INT, 'The ID of the answer'),
                                 'answerdescription' => new external_value(PARAM_RAW, 'The description of the answer'),
                                 'answerexplanation' => new external_value(PARAM_RAW, 'Explanation of the answer'),
-                                'answercorrect' => new external_value(PARAM_BOOL, 'Whether the answer is correct (1 for true, 0 for false)'),
+                                'answercorrect' => new external_value(
+                                    PARAM_BOOL,
+                                    'Whether the answer is correct (1 for true, 0 for false)'
+                                ),
                             ]
                         ),
                         'List of answers for the question'
