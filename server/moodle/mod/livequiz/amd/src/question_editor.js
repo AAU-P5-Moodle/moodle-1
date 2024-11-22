@@ -5,6 +5,7 @@ import { save_question } from "./repository";
 let isEditing = false;
 let editingIndex = 0;
 let answer_count = 0;
+let IDs = 0;
 let take_quiz_url = "";
 
 export const init = async (quizid, lecturerid, url) => {
@@ -47,21 +48,22 @@ function append_answer_input() {
 
   let answer_input = document.createElement("input");
   answer_input.className = "answer_input";
-  answer_input.placeholder = "Enter answer " + (answer_count + 1);
-  answer_input.id = "answer_input_" + (answer_count + 1);
+  answer_input.placeholder = "Enter answer";
+  answer_input.id = "answer_input_" + (IDs + 1);
   answer_input.setAttribute("required", true);
 
   let answer_checkbox = document.createElement("input");
   answer_checkbox.setAttribute("type", "checkbox");
   answer_checkbox.className = "answer_checkbox";
-  answer_checkbox.id = "answer_checkbox_" + (answer_count + 1);
+  answer_checkbox.id = "answer_checkbox_" + (IDs + 1);
 
   let delete_answer_button = create_element(
     "delete_answer_button",
     "button",
     "delete_answer_button",
-    ""
+    "X"
   );
+  delete_answer_button.id = "delete_answer_button_" + (IDs + 1);
 
   answer_container.appendChild(answer_checkbox);
   answer_container.appendChild(answer_input);
@@ -75,6 +77,7 @@ function append_answer_input() {
   let parent_element = document.querySelector(".all_answers_for_question_div");
   parent_element.appendChild(answer_container);
   answer_count++;
+  IDs++;
 }
 
 function add_save_question_button_listener(quizid, lecturerid) {
@@ -85,14 +88,20 @@ function add_save_question_button_listener(quizid, lecturerid) {
 }
 
 function question_button(quizid, lecturerid) {
-  let question_input = document.querySelector(".question_input_large");
-  let questionText = question_input.value.trim();
+  let question_input_title = document.getElementById("question_title_id");
+  let question_indput_description = document.getElementById("question_description_id");
+  let question_indput_explanation = document.getElementById("question_explanation_id");
+  let questionTitle = question_input_title.value.trim();
+  let questionDesription = question_indput_description.value.trim();
+  let questionExplanation = question_indput_explanation.value.trim();
 
-  if (!questionText) {
-    alert("Please enter a question.");
+  if (!questionDesription) {
+    alert("Please enter a question description.");
     return;
   }
-
+  if(!questionTitle){
+    questionTitle = "Question"
+  }
   let answers = [];
   let answers_div = document.querySelector(".all_answers_for_question_div");
   for (let i = 0; i < answers_div.children.length; i++) {
@@ -112,10 +121,10 @@ function question_button(quizid, lecturerid) {
   }
 
   let savedQuestion = {
-    title: questionText,
+    title: questionTitle,
     answers: answers,
-    description: "",
-    explanation: "",
+    description: questionDesription,
+    explanation: questionExplanation,
   };
 
   save_question(savedQuestion, lecturerid, quizid).then((questions) => {
@@ -177,7 +186,6 @@ function add_discard_question_button_listener() {
   let discard_question_button = document.querySelector(
     ".discard_question_button"
   );
-  console.log(discard_question_button);
   discard_question_button.addEventListener("click", () => {
     render_question_confirmation();
   });

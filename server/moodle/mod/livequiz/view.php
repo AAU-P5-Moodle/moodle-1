@@ -29,7 +29,7 @@ use mod_livequiz\output\index_page_teacher;
 
 global $OUTPUT, $PAGE, $DB, $USER;
 
-$cmid = required_param('id', PARAM_INT); // Course module ID.
+$cmid = required_param('id', PARAM_INT); // Course module ID. (the param has to be named "id" as moodle will send id and not cmid).
 [$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
@@ -44,7 +44,7 @@ $PAGE->set_cacheable(false);
 $PAGE->set_context($context); // Make sure to set the page context.
 $PAGE->requires->css('/mod/livequiz/style.css'); // Adds styling to the page.
 
-$PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
+$PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['id' => $cmid]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
