@@ -48,7 +48,7 @@ class behat_mod_livequiz extends behat_base {
 
     /**
      * Asserts the id for a checkbox or radio button.
-     * @Then the checkbox with id :checkboxId should exist
+     * @Then the :selectorType with id :checkboxId should exist
      */
     public function assertElementId($checkboxId) {
         $this->assertSession()->elementExists('css', '#' . $checkboxId);

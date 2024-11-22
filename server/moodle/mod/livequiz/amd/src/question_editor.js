@@ -5,6 +5,7 @@ import { save_question } from "./repository";
 let isEditing = false;
 let editingIndex = 0;
 let answer_count = 0;
+let IDs = 0;
 
 export const init = async (quizid, lecturerid) => {
   let add_question_button = document.getElementById("id_buttonaddquestion");
@@ -45,14 +46,14 @@ function append_answer_input() {
 
   let answer_input = document.createElement("input");
   answer_input.className = "answer_input";
-  answer_input.placeholder = "Enter answer " + (answer_count + 1);
-  answer_input.id = "answer_input_" + (answer_count + 1);
+  answer_input.placeholder = "Enter answer";
+  answer_input.id = "answer_input_" + (IDs + 1);
   answer_input.setAttribute("required", true);
 
   let answer_checkbox = document.createElement("input");
   answer_checkbox.setAttribute("type", "checkbox");
   answer_checkbox.className = "answer_checkbox";
-  answer_checkbox.id = "answer_checkbox_" + (answer_count + 1);
+  answer_checkbox.id = "answer_checkbox_" + (IDs + 1);
 
   let delete_answer_button = create_element(
     "delete_answer_button",
@@ -73,6 +74,7 @@ function append_answer_input() {
   let parent_element = document.querySelector(".all_answers_for_question_div");
   parent_element.appendChild(answer_container);
   answer_count++;
+  IDs++;
 }
 
 function add_save_question_button_listener(quizid, lecturerid) {
