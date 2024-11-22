@@ -5,8 +5,10 @@ import { save_question } from "./repository";
 let isEditing = false;
 let editingIndex = 0;
 let answer_count = 0;
+let take_quiz_url = "";
 
-export const init = async (quizid, lecturerid) => {
+export const init = async (quizid, lecturerid, url) => {
+  take_quiz_url = url; //Set url to quiz attempt page to global variable
   let add_question_button = document.getElementById("id_buttonaddquestion");
   add_question_button.addEventListener("click", () => {
     render_question_menu_popup(quizid, lecturerid);
@@ -98,9 +100,9 @@ function question_button(quizid, lecturerid) {
       .querySelector(".answer_input")
       .value.trim();
 
-      let iscorrect = answers_div.children[i].querySelector(".answer_checkbox").checked;
-      iscorrect ? iscorrect = 1 : iscorrect = 0;
-
+    let iscorrect =
+      answers_div.children[i].querySelector(".answer_checkbox").checked;
+    iscorrect ? (iscorrect = 1) : (iscorrect = 0);
 
     answers.push({
       description: answertext,
@@ -117,14 +119,23 @@ function question_button(quizid, lecturerid) {
   };
 
   save_question(savedQuestion, lecturerid, quizid).then((questions) => {
-    const context = {
+    const contextsavedquestions = {
       questions: questions,
     };
 
-    questions_list = document.querySelector("#saved_questions_list");
+    const contexttakequiz = {
+      url: take_quiz_url,
+      hasquestions: true,
+    };
+
+    //Remove the saved questions list and take quiz button
+    let questions_list = document.querySelector("#saved_questions_list");
     questions_list.remove();
 
-    Templates.renderForPromise("mod_livequiz/saved_questions_list", context)
+    Templates.renderForPromise(
+      "mod_livequiz/saved_questions_list",
+      contextsavedquestions
+    )
       // It returns a promise that needs to be resoved.
       .then(({ html, js }) => {
         // Here eventually I have my compiled template, and any javascript that it generated.
@@ -135,6 +146,28 @@ function question_button(quizid, lecturerid) {
       // Deal with this exception (Using core/notify exception function is recommended).
       .catch((error) => displayException(error));
 
+    let no_question_paragraph = document.querySelector(".no-question-text");
+
+    if (no_question_paragraph != null) {
+      no_question_paragraph.remove(); //We have just added a question so reomve the no question text
+      Templates.renderForPromise(
+        "mod_livequiz/take_quiz_button",
+        contexttakequiz
+      )
+        // It returns a promise that needs to be resoved.
+        .then(({ html, js }) => {
+          // Here eventually I have my compiled template, and any javascript that it generated.
+          // The templates object has append, prepend and replace functions.
+          Templates.appendNodeContents(
+            "#page-mod-livequiz-quizcreator",
+            html,
+            js
+          );
+        })
+
+        // Deal with this exception (Using core/notify exception function is recommended).
+        .catch((error) => displayException(error));
+    }
   });
   let modal_div = document.querySelector(".Modal_div");
   modal_div.remove();

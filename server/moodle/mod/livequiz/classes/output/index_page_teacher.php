@@ -65,6 +65,7 @@ class index_page_teacher implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = $this->livequiz->prepare_for_template();
+        $data->hasquestions = !empty($this->livequiz->get_questions());
         $data->pagename = "Quiz editor page";
         $data->lecturerid = $this->lecturerid;
         $data->quizid = $this->quizid;

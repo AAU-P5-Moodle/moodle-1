@@ -18,6 +18,7 @@ namespace mod_livequiz\output;
 
 use core\exception\moodle_exception;
 use mod_livequiz\models\livequiz;
+use mod_livequiz\services\livequiz_services;
 use renderable;
 use renderer_base;
 use templatable;
@@ -40,16 +41,22 @@ class index_page_student implements renderable, templatable {
     /** @var int $cmid the course module id */
     protected int $cmid;
 
+    /** @var livequiz $livequiz the livequiz instance */
+    private livequiz $livequiz;
+
     /**
      * index_page constructor.
      * @param int $cmid
      * @param int $quizid
      * @param int $studentid
+     * @param livequiz $livequiz
      */
     public function __construct(int $cmid, int $quizid, int $studentid) {
         $this->cmid = $cmid;
         $this->quizid = $quizid;
         $this->studentid = $studentid;
+        $service = livequiz_services::get_singleton_service_instance();
+        $this->livequiz = $service->get_livequiz_instance($quizid);
     }
 
     /**
@@ -63,6 +70,7 @@ class index_page_student implements renderable, templatable {
         $data = new stdClass();
         $data->pagename = "Quiz menu page";
         $data->studentid = $this->studentid;
+        $data->hasquestions = !empty($this->livequiz->get_questions());
         $data->quizid = $this->quizid;
         $data->participations = [];
 
