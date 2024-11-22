@@ -59,7 +59,7 @@ function append_answer_input() {
     "delete_answer_button",
     "button",
     "delete_answer_button",
-    "delete"
+    "X"
   );
   delete_answer_button.id = "delete_answer_button_" + (IDs + 1);
 
