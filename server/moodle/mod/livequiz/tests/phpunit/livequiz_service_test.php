@@ -264,9 +264,6 @@ final class livequiz_service_test extends \advanced_testcase {
         self::assertEquals($getquiz['lecturer_id'], $lecturerid);
 
 
-
-
-
         // The amount of questions remain the same.
         $questionsresult = $livequizresult->get_questions();
         self::assertCount(count($questions), $questionsresult);
@@ -496,7 +493,7 @@ final class livequiz_service_test extends \advanced_testcase {
      * @throws dml_exception
      * @throws Exception
      */
-    public function delete_answer(): void {
+    public function test_delete_answer(): void {
         $lecturerid = "2";
         $service = livequiz_services::get_singleton_service_instance();
         $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();

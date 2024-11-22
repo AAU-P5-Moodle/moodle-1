@@ -35,3 +35,15 @@ export const save_question = (question, lecturerid, quizid) => fetchMany([
     }
 ])[0];
 
+// Function to delete a question.
+export const delete_question = (questionid, lecturerid, quizid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_delete_question',
+        args: {
+            questionid,
+            lecturerid,
+            quizid
+        },
+    }
+])[0];
+

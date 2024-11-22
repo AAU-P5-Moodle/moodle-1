@@ -14,7 +14,9 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-
+{{#js}}
+    require(['mod_livequiz/delete_question'], (module) => module.init({{quizid}}, {{lecturerid}}));
+{{/js}}
 <ol id="saved_questions_list" style="padding-left: 20px; margin: 0;">
             {{#questions}}
                 <li id="question_list_{{questionid}}">{{questiontitle}}</li>
