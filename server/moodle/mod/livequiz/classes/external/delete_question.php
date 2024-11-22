@@ -59,7 +59,7 @@ class delete_question extends \core_external\external_api {
      */
     public static function execute(int $questionid, int $lecturerid, int $quizid): bool {
         self::validate_parameters(self::execute_parameters(), [
-            'question' => $questionid,
+            'questionid' => $questionid,
             'lecturerid' => $lecturerid,
             'quizid' => $quizid,
         ]);
