@@ -28,10 +28,10 @@ use PhpXmlRpc\Exception;
 use mod_livequiz\models\livequiz;
 
 /**
- * Class submit_quiz
+ * Class save_question
  *
  * This class extends the core_external\external_api and is used to handle
- * the external API for appending participation in the live quiz module.
+ * the external API for saving questions to a livequiz.
  *
  * @return     external_function_parameters The parameters required for the execute function.
  * @copyright 2024 Software AAU

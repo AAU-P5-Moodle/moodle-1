@@ -49,6 +49,13 @@ $functions = [
         'ajax'        => true,
         'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
     ],
+    'mod_livequiz_delete_question' => [
+        'classname'   => 'mod_livequiz\external\delete_question',
+        'description' => 'Delete a question.',
+        'type'        => 'write',
+        'ajax'        => true,
+        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
 ];
 
 $services = [];
