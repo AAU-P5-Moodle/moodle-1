@@ -1,6 +1,8 @@
 import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
 import { save_question } from "./repository";
+import {add_delete_question_listeners} from "./delete_question";
+import {add_edit_question_listeners} from "./edit_question";
 
 let isEditing = false;
 let editingIndex = 0;
@@ -22,8 +24,7 @@ function render_create_question_menu_popup(quizid, lecturerid) {
 
     // It returns a promise that needs to be resoved.
     .then(({ html, js }) => {
-      // Here eventually I have my compiled template, and any javascript that it generated.
-      // The templates object has append, prepend and replace functions.
+      // Here we have compiled template.
       Templates.appendNodeContents(".main-container", html, js);
       add_answer_button_event_listerner();
       add_save_question_button_listener(quizid, lecturerid);
@@ -148,9 +149,10 @@ function question_button(quizid, lecturerid) {
     )
       // It returns a promise that needs to be resoved.
       .then(({ html, js }) => {
-        // Here eventually I have my compiled template, and any javascript that it generated.
-        // The templates object has append, prepend and replace functions.
+        // Here we have compiled template.
         Templates.appendNodeContents("#saved-questions-container", html, js);
+        add_delete_question_listeners(quizid, lecturerid);
+        add_edit_question_listeners(quizid, lecturerid);
       })
 
       // Deal with this exception (Using core/notify exception function is recommended).
@@ -166,8 +168,7 @@ function question_button(quizid, lecturerid) {
       )
         // It returns a promise that needs to be resoved.
         .then(({ html, js }) => {
-          // Here eventually I have my compiled template, and any javascript that it generated.
-          // The templates object has append, prepend and replace functions.
+          // Here we have compiled template.
           Templates.appendNodeContents(
             "#page-mod-livequiz-quizcreator",
             html,

@@ -2,16 +2,10 @@ import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
 import { save_question } from "./repository";
 import {add_answer_button_event_listener, add_discard_question_button_listener} from "./edit_question_helper";
+import {add_delete_question_listeners} from "./delete_question";
 
 export const init = async (quizid, lecturerid) => {
-    let question_list = document.getElementById("saved_questions_list");
-    let edit_question_elements = question_list.querySelectorAll(".edit-question");
-    edit_question_elements.forEach((element) => {
-        let questionid = element.dataset.id;
-        element.addEventListener("click", () => {
-            render_edit_question_menu_popup(quizid, lecturerid, questionid);
-        });
-    });
+    add_edit_question_listeners(quizid, lecturerid);
 };
 
 
@@ -30,6 +24,17 @@ function render_edit_question_menu_popup(quizid, lecturerid, questionid) {
 
         // Deal with this exception (Using core/notify exception function is recommended).
         .catch((error) => displayException(error));
+}
+
+export function add_edit_question_listeners(quizid, lecturerid){
+    let question_list = document.getElementById("saved_questions_list");
+    let edit_question_elements = question_list.querySelectorAll(".edit-question");
+    edit_question_elements.forEach((element) => {
+        let questionid = element.dataset.id;
+        element.addEventListener("click", () => {
+            render_edit_question_menu_popup(quizid, lecturerid, questionid);
+        });
+    });
 }
 
 function add_save_question_button_listener(quizid, lecturerid, questionid) {
@@ -84,26 +89,23 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
             questions: questions,
         };
 
-        //Remove the saved questions list and take quiz button
+        //Remove the saved questions list.
         let questions_list = document.querySelector("#saved_questions_list");
         questions_list.remove();
 
+        //Re-render saved questions list.
         Templates.renderForPromise(
             "mod_livequiz/saved_questions_list",
             contextsavedquestions
         )
-            // It returns a promise that needs to be resoved.
             .then(({ html, js }) => {
-                // Here eventually I have my compiled template, and any javascript that it generated.
-                // The templates object has append, prepend and replace functions.
                 Templates.appendNodeContents("#saved-questions-container", html, js);
+                add_edit_question_listeners(quizid, lecturerid);
+                add_delete_question_listeners(quizid,lecturerid);
             })
-
-            // Deal with this exception (Using core/notify exception function is recommended).
             .catch((error) => displayException(error));
-
-
     });
+    //Remove edit question pop-up
     let modal_div = document.querySelector(".Modal_div");
     modal_div.remove();
 }
