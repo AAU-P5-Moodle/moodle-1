@@ -16,9 +16,11 @@
 }}
 {{#js}}
     require(['mod_livequiz/delete_question'], (module) => module.init({{quizid}}, {{lecturerid}}));
+    require(['mod_livequiz/edit_question'], (module) => module.init({{quizid}}, {{lecturerid}}));
 {{/js}}
 <ol id="saved_questions_list" style="padding-left: 20px; margin: 0;">
             {{#questions}}
                 <li id="question_list_{{questionid}}">{{questiontitle}}</li>
+                <button class="edit-question" data-id="{{questionid}}">Edit</button>
             {{/questions}}
 </ol>

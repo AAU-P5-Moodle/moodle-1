@@ -21,11 +21,10 @@ use core_external\external_multiple_structure;
 use core_external\external_value;
 use core_external\external_single_structure;
 use dml_exception;
+use exception;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\question;
 use mod_livequiz\services\livequiz_services;
-use PhpXmlRpc\Exception;
-use mod_livequiz\models\livequiz;
 
 /**
  * Class save_question
@@ -88,12 +87,9 @@ class save_question extends \core_external\external_api {
         if ($questionid === 0) {// The question is new.
             $livequiz->add_question(self::new_question($questiondata));
         } else if ($questionid > 0) {// The question is already in the database.
-            // Get the question from the database and set new attributes.
-            $question = question::get_question_from_id($questionid);
+            // Get the question from the livequiz and set new attributes.
+            $question = $livequiz->get_question_by_id($questionid);
             self::set_question_attributes($question, $questiondata);
-            // Remove the old version of the question from the livequiz object and add the new version.
-            $livequiz->remove_question_by_id($questionid);
-            $livequiz->add_question($question);
         }
 
         try {
@@ -101,9 +97,9 @@ class save_question extends \core_external\external_api {
             $templatelivequiz = $livequiz->prepare_for_template();
             $templatequestions = $templatelivequiz->questions;
             return $templatequestions;
-        } catch (dml_exception $e) {
-            debugging('Error submitting quiz: ' . $e->getMessage());
-            return []; // Return empty array if unsucceful.
+        } catch (dml_exception $dmle) {
+            debugging('Error inserting livequiz into database: ' . $dmle->getMessage());
+            throw $dmle;
         }
     }
 

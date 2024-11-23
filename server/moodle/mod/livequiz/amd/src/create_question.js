@@ -12,11 +12,11 @@ export const init = async (quizid, lecturerid, url) => {
   take_quiz_url = url; //Set url to quiz attempt page to global variable
   let add_question_button = document.getElementById("id_buttonaddquestion");
   add_question_button.addEventListener("click", () => {
-    render_question_menu_popup(quizid, lecturerid);
+    render_create_question_menu_popup(quizid, lecturerid);
   });
 };
 
-function render_question_menu_popup(quizid, lecturerid) {
+function render_create_question_menu_popup(quizid, lecturerid) {
   // This will call the function to load and render our template.
   Templates.renderForPromise("mod_livequiz/question_menu_popup")
 

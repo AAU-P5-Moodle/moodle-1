@@ -1,8 +1,7 @@
-import Templates from "core/templates";
-import { exception as displayException } from "core/notification";
 import { delete_question } from "./repository";
 
 export const init = async (quizid, lecturerid) => {
+    console.log("delete question init");
     let question_list = document.getElementById("saved_questions_list");
     let list_items = question_list.querySelectorAll("li");
 

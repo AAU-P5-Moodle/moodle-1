@@ -17,6 +17,7 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
+use mysql_xdevapi\Exception;
 use stdClass;
 
 /**
@@ -234,6 +235,30 @@ class livequiz {
             return true;
         }
         return false; // No question was removed.
+    }
+
+    /**
+     * Gets a question from the livequiz
+     * @param int $questionid
+     * @return bool was a question with the specified id found and removed form the questions.
+     */
+    public function get_question_by_id(int $questionid): question {
+        $questions = $this->get_questions();
+        $questionwithid = null;
+        $count = 0;
+        foreach ($questions as $question) {
+            if ($question->get_id() === $questionid) {
+                $questionwithid = $question;
+                $count++;
+            }
+        }
+        if ($count === 0) {
+            throw new Exception("Could not find question with id {$questionid}");
+        } else if ($count > 1) {
+            throw new Exception("Something is wrong. Multiple questions found with id {$questionid}");
+        } else {
+            return $questionwithid;
+        }
     }
 
     /**

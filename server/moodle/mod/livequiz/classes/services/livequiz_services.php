@@ -230,10 +230,10 @@ class livequiz_services {
         }
 
         $existinganswerids = array_keys($existinganswersmap);
-        $deletedanswers = array_diff($existinganswerids, $updatedanswerids);
+        $deletedanswerids = array_diff($existinganswerids, $updatedanswerids);
 
-        foreach ($deletedanswers as $deletedanswer) {
-            self::delete_answer($deletedanswer);
+        foreach ($deletedanswerids as $deletedanswerid) {
+            self::delete_answer($deletedanswerid, $questionid);
         }
     }
 
@@ -367,11 +367,12 @@ class livequiz_services {
      * @param int $answerid
      * @throws dml_exception
      */
-    private static function delete_answer(int $answerid): void {
+    private static function delete_answer(int $answerid, int $questionid): void {
         $participationcount = student_answers_relation::get_answer_participation_count($answerid);
         if ($participationcount > 0) {
             throw new dml_exception("Cannot delete answer with participations");
         }
+        questions_answers_relation::delete_question_answer_relation($questionid, $answerid);
         answer::delete_answer($answerid);
     }
 
@@ -382,11 +383,9 @@ class livequiz_services {
      */
     private static function delete_question(int $questionid): void {
         $answers = questions_answers_relation::get_answers_from_question($questionid);
-
         foreach ($answers as $answer) {
             $currentanswerid = $answer->get_id();
-            questions_answers_relation::delete_question_answer_relation($questionid, $currentanswerid);
-            self::delete_answer($currentanswerid);
+            self::delete_answer($currentanswerid, $questionid);
         }
 
         quiz_questions_relation::delete_question_quiz_relation($questionid);
