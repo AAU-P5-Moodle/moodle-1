@@ -24,6 +24,7 @@
 require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php');
 
+use mod_livequiz\output\take_livequiz_page;
 use mod_livequiz\services\livequiz_services;
 
 global $PAGE, $OUTPUT, $USER;

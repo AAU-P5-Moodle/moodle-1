@@ -5,8 +5,11 @@ import { save_question } from "./repository";
 let isEditing = false;
 let editingIndex = 0;
 let answer_count = 0;
+let IDs = 0;
+let take_quiz_url = "";
 
-export const init = async (quizid, lecturerid) => {
+export const init = async (quizid, lecturerid, url) => {
+  take_quiz_url = url; //Set url to quiz attempt page to global variable
   let add_question_button = document.getElementById("id_buttonaddquestion");
   add_question_button.addEventListener("click", () => {
     render_question_menu_popup(quizid, lecturerid);
@@ -46,18 +49,21 @@ function append_answer_input() {
   let answer_input = document.createElement("input");
   answer_input.className = "answer_input";
   answer_input.placeholder = "Enter answer";
+  answer_input.id = "answer_input_" + (IDs + 1);
   answer_input.setAttribute("required", true);
 
   let answer_checkbox = document.createElement("input");
   answer_checkbox.setAttribute("type", "checkbox");
   answer_checkbox.className = "answer_checkbox";
+  answer_checkbox.id = "answer_checkbox_" + (IDs + 1);
 
   let delete_answer_button = create_element(
     "delete_answer_button",
     "button",
     "delete_answer_button",
-    ""
+    "X"
   );
+  delete_answer_button.id = "delete_answer_button_" + (IDs + 1);
 
   answer_container.appendChild(answer_checkbox);
   answer_container.appendChild(answer_input);
@@ -71,6 +77,7 @@ function append_answer_input() {
   let parent_element = document.querySelector(".all_answers_for_question_div");
   parent_element.appendChild(answer_container);
   answer_count++;
+  IDs++;
 }
 
 function add_save_question_button_listener(quizid, lecturerid) {
@@ -81,14 +88,20 @@ function add_save_question_button_listener(quizid, lecturerid) {
 }
 
 function question_button(quizid, lecturerid) {
-  let question_input = document.querySelector(".question_input_large");
-  let questionText = question_input.value.trim();
+  let question_input_title = document.getElementById("question_title_id");
+  let question_indput_description = document.getElementById("question_description_id");
+  let question_indput_explanation = document.getElementById("question_explanation_id");
+  let questionTitle = question_input_title.value.trim();
+  let questionDesription = question_indput_description.value.trim();
+  let questionExplanation = question_indput_explanation.value.trim();
 
-  if (!questionText) {
-    alert("Please enter a question.");
+  if (!questionDesription) {
+    alert("Please enter a question description.");
     return;
   }
-
+  if(!questionTitle){
+    questionTitle = "Question"
+  }
   let answers = [];
   let answers_div = document.querySelector(".all_answers_for_question_div");
   for (let i = 0; i < answers_div.children.length; i++) {
@@ -109,21 +122,30 @@ function question_button(quizid, lecturerid) {
 
   let savedQuestion = {
     id: 0,
-    title: questionText,
+    title: questionTitle,
     answers: answers,
-    description: "",
-    explanation: "",
+    description: questionDesription,
+    explanation: questionExplanation,
   };
 
   save_question(savedQuestion, lecturerid, quizid).then((questions) => {
-    const context = {
+    const contextsavedquestions = {
       questions: questions,
     };
 
-    questions_list = document.querySelector("#saved_questions_list");
+    const contexttakequiz = {
+      url: take_quiz_url,
+      hasquestions: true,
+    };
+
+    //Remove the saved questions list and take quiz button
+    let questions_list = document.querySelector("#saved_questions_list");
     questions_list.remove();
 
-    Templates.renderForPromise("mod_livequiz/saved_questions_list", context)
+    Templates.renderForPromise(
+      "mod_livequiz/saved_questions_list",
+      contextsavedquestions
+    )
       // It returns a promise that needs to be resoved.
       .then(({ html, js }) => {
         // Here eventually I have my compiled template, and any javascript that it generated.
@@ -134,6 +156,28 @@ function question_button(quizid, lecturerid) {
       // Deal with this exception (Using core/notify exception function is recommended).
       .catch((error) => displayException(error));
 
+    let no_question_paragraph = document.querySelector(".no-question-text");
+
+    if (no_question_paragraph != null) {
+      no_question_paragraph.remove(); //We have just added a question so reomve the no question text
+      Templates.renderForPromise(
+        "mod_livequiz/take_quiz_button",
+        contexttakequiz
+      )
+        // It returns a promise that needs to be resoved.
+        .then(({ html, js }) => {
+          // Here eventually I have my compiled template, and any javascript that it generated.
+          // The templates object has append, prepend and replace functions.
+          Templates.appendNodeContents(
+            "#page-mod-livequiz-quizcreator",
+            html,
+            js
+          );
+        })
+
+        // Deal with this exception (Using core/notify exception function is recommended).
+        .catch((error) => displayException(error));
+    }
   });
   let modal_div = document.querySelector(".Modal_div");
   modal_div.remove();

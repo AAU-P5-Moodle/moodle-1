@@ -72,25 +72,33 @@
     border-radius: 5px;
  }
  .delete_answer_button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-    background-image: url('/mod/livequiz/quizcreator/images/trashcan.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    width: 30px;
-    height: 30px;
-    border-radius: 4px;
-    position: absolute;
-    top: 25px;
-    right: 10px;
+     background-color: #e63946; /* A bold red color */
+     color: #fff; /* White text */
+     border: none;
+     border-radius: 8px; /* Rounded corners */
+     padding: 10px 20px;
+     font-size: 16px;
+     font-weight: bold;
+     cursor: pointer;
+     transition: background-color 0.3s ease, transform 0.2s ease;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
  }
  .answer_input:focus {
     outline: none;
  }
  .delete_answer_button:hover {
-    background-color: rgba(255, 0, 0, 0.1);
+     background-color: #d62828; /* Slightly darker red on hover */
+     transform: scale(1.05); /* Grows slightly */
+     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+ }
+ .delete_answer_button:active {
+     background-color: #b51717; /* Even darker red when clicked */
+     transform: scale(0.95); /* Shrinks slightly */
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
+ .delete_answer_button:focus{
+     outline: none;
+     box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.5); /* A focus ring for accessibility */
  }
  
  .add_new_answer_to_question:hover {
@@ -419,7 +427,7 @@
   .navbar{
       
   }
- 
+
   .delete_question_button {
     float: right;
     background-color: red;

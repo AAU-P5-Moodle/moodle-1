@@ -30,13 +30,17 @@
 
 }}
 {{#js}}
-    require(['mod_livequiz/question_editor'], (module) => module.init({{quizid}}, {{lecturerid}}));
+    require(['mod_livequiz/question_editor'], (module) => module.init({{quizid}}, {{lecturerid}}, "{{{url}}}" ));
 {{/js}}
 
 <div class="main-container">
     <h1>{{pagename}}</h1>
-    {{#islecturer}} 
+    {{#islecturer}}
        {{> mod_livequiz/quiz_editor_page}}
     {{/islecturer}}
-     <a href="{{url}}" type="button" id="takeQuizBtn"> Take Quiz </a>
+       {{> mod_livequiz/take_quiz_button}}
+    {{#studentid}}
+        {{> mod_livequiz/participations_section}} {{! participations_section import - Context remains the same}}
+    {{/studentid}}
 </div>
+
