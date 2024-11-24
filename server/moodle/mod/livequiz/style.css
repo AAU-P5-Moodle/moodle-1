@@ -375,6 +375,28 @@
  #saved_questions_list li:hover {
     background-color: #f0f0f0;
  }
+
+.edit-question-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #555;
+}
+
+.edit-question-btn:hover {
+    color: #000;
+}
+
+.delete-question {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #555;
+}
+
+.delete-question:hover {
+    color: #f00;
+}
  
  
  /**

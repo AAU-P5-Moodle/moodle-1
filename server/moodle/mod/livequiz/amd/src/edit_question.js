@@ -12,7 +12,7 @@ export function add_edit_question_listeners(quizid, lecturerid){
     let question_list = document.getElementById("saved_questions_list");
     question_list.addEventListener("click", (event) => {
         let target = event.target;
-        if(target.classList.contains("edit-question") || target.classList.contains("question-title")){
+        if(target.classList.contains("edit-question-btn") || target.classList.contains("question-title")){
             let questionid = parseInt(target.dataset.id, 10);
             render_edit_question_menu_popup(quizid, lecturerid, questionid);
         }
