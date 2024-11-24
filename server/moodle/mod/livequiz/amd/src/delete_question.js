@@ -6,16 +6,21 @@ export const init = async (quizid, lecturerid) => {
 
 export function add_delete_question_listeners(quizid, lecturerid){
     let question_list = document.getElementById("saved_questions_list");
-    let list_items = question_list.querySelectorAll("li");
+    let delete_question_elements = question_list.querySelectorAll(".delete-question");
 
-    list_items.forEach((item) => {
-        item.addEventListener("click", () => {
-            let questionid = item.id;
-            questionid = parseInt(questionid.replace("question_list_", ""));
-            delete_question(questionid, lecturerid, quizid);
-            let edit_button = item.nextElementSibling; //The edit buttons is always a sibling of the question
-            edit_button.remove();
-            item.remove();
+    delete_question_elements.forEach((element) => {
+        element.addEventListener("click", () => {
+            let list_item = element.closest("li"); // Get the list item.
+            let questionid = parseInt(element.dataset.id, 10);
+            if(!confirm("Are you sure you want to delete this question?")){
+                return;
+            }
+            else{
+                delete_question(questionid, lecturerid, quizid);
+                list_item.remove(); // Remove the question from the list.
+                element.remove(); // Remove the delete button.
+            }
         });
     });
 }
+

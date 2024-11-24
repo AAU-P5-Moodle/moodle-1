@@ -20,7 +20,10 @@
 {{/js}}
 <ol id="saved_questions_list" style="padding-left: 20px; margin: 0;">
             {{#questions}}
-                <li id="question_list_{{questionid}}">{{questiontitle}}</li>
-                <button class="edit-question" data-id="{{questionid}}">Edit</button>
+                <li id="question_list_{{questionid}}">
+                    {{questiontitle}}
+                    <button class="edit-question" data-id="{{questionid}}">Edit</button>
+                    <button class="delete-question" data-id="{{questionid}}">X</button>
+                </li>
             {{/questions}}
 </ol>
