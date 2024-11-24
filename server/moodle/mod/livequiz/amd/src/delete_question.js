@@ -1,7 +1,7 @@
 import { delete_question } from "./repository";
 import { rerender_take_quiz_button } from "./helper";
 
-const take_quiz_url = "";
+let take_quiz_url = "";
 
 export const init = async (quizid, lecturerid, url) => {
   take_quiz_url = url; //Set url to quiz attempt page to global variable
@@ -20,7 +20,11 @@ export function add_delete_question_listeners(quizid, lecturerid) {
       let edit_button = item.nextElementSibling; //The edit buttons is always a sibling of the question
       edit_button.remove();
       item.remove();
-
+      
+      let updated_list_length = question_list.querySelectorAll("li").length;
+      if(updated_list_length === 0) {
+        rerender_take_quiz_button(take_quiz_url, false);
+      }
     });
   });
 }

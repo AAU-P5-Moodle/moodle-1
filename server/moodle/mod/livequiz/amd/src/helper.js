@@ -139,10 +139,15 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
     hasquestions: hasquestions,
   };
 
-  //Remove no question paragraph if there are questions.
   if (hasquestions) {
+    //Remove no question paragraph if there are questions.
     let no_question_paragraph = document.querySelector(".no-question-text");
     no_question_paragraph.remove(); //We have just added a question so remove the no question text
+  } else {
+    //Remove take quiz link if there are no questions
+    let take_quiz_button = document.querySelector("#takeQuizBtn");
+    console.log(take_quiz_button);
+    take_quiz_button.remove();
   }
 
   Templates.renderForPromise("mod_livequiz/take_quiz_button", contexttakequiz)
@@ -154,7 +159,7 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
         callback();
       }
     })
-    
+
     // Deal with this exception (Using core/notify exception function is recommended).
     .catch((error) => displayException(error));
 }

@@ -1,8 +1,9 @@
 import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
 import { save_question } from "./repository";
-import {add_delete_question_listeners} from "./delete_question";
-import {add_edit_question_listeners} from "./edit_question";
+import { add_delete_question_listeners } from "./delete_question";
+import { add_edit_question_listeners } from "./edit_question";
+import { rerender_take_quiz_button } from "./helper";
 
 let isEditing = false;
 let editingIndex = 0;
@@ -90,8 +91,12 @@ function add_save_question_button_listener(quizid, lecturerid) {
 
 function question_button(quizid, lecturerid) {
   let question_input_title = document.getElementById("question_title_id");
-  let question_indput_description = document.getElementById("question_description_id");
-  let question_indput_explanation = document.getElementById("question_explanation_id");
+  let question_indput_description = document.getElementById(
+    "question_description_id"
+  );
+  let question_indput_explanation = document.getElementById(
+    "question_explanation_id"
+  );
   let questionTitle = question_input_title.value.trim();
   let questionDesription = question_indput_description.value.trim();
   let questionExplanation = question_indput_explanation.value.trim();
@@ -100,7 +105,7 @@ function question_button(quizid, lecturerid) {
     alert("Please enter a question description.");
     return;
   }
-  if(!questionTitle){
+  if (!questionTitle) {
     questionTitle = "Question";
   }
   let answers = [];
@@ -115,10 +120,10 @@ function question_button(quizid, lecturerid) {
     iscorrect ? (iscorrect = 1) : (iscorrect = 0);
 
     answers.push({
-        description: answertext,
-        correct: iscorrect,
-        explanation: "",
-      });
+      description: answertext,
+      correct: iscorrect,
+      explanation: "",
+    });
   }
 
   let savedQuestion = {
@@ -157,7 +162,10 @@ function question_button(quizid, lecturerid) {
 
       // Deal with this exception (Using core/notify exception function is recommended).
       .catch((error) => displayException(error));
+    rerender_take_quiz_button(take_quiz_url, true);
   });
+
+  
   let modal_div = document.querySelector(".Modal_div");
   modal_div.remove();
 }
