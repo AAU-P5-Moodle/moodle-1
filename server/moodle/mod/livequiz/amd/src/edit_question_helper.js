@@ -1,7 +1,6 @@
 import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
 
-let answer_count = 0;
 let IDs = 0;
 let isEditing = false;
 let editingIndex = 0;
@@ -14,20 +13,27 @@ export const add_answer_button_event_listener = ()=> {
     });
 }
 
-function append_answer_input() {
+ function append_answer_input() {
+    let answer_container = create_answer_container(IDs+1);
+    let parent_element = document.querySelector(".all_answers_for_question_div");
+    parent_element.appendChild(answer_container);
+    IDs++;
+}
+
+export function create_answer_container(id){
     let answer_container = document.createElement("div");
     answer_container.className = "container_for_new_answer";
 
     let answer_input = document.createElement("input");
     answer_input.className = "answer_input";
     answer_input.placeholder = "Enter answer";
-    answer_input.id = "answer_input_" + (IDs + 1);
+    answer_input.id = "answer_input_" + (id);
     answer_input.setAttribute("required", true);
 
     let answer_checkbox = document.createElement("input");
     answer_checkbox.setAttribute("type", "checkbox");
     answer_checkbox.className = "answer_checkbox";
-    answer_checkbox.id = "answer_checkbox_" + (IDs + 1);
+    answer_checkbox.id = "answer_checkbox_" + (id);
 
     let delete_answer_button = create_element(
         "delete_answer_button",
@@ -35,7 +41,7 @@ function append_answer_input() {
         "delete_answer_button",
         "X"
     );
-    delete_answer_button.id = "delete_answer_button_" + (IDs + 1);
+    delete_answer_button.id = "delete_answer_button_" + (id);
 
     answer_container.appendChild(answer_checkbox);
     answer_container.appendChild(answer_input);
@@ -43,13 +49,8 @@ function append_answer_input() {
 
     delete_answer_button.addEventListener("click", () => {
         answer_container.remove();
-        answer_count--;
     });
-
-    let parent_element = document.querySelector(".all_answers_for_question_div");
-    parent_element.appendChild(answer_container);
-    answer_count++;
-    IDs++;
+    return answer_container;
 }
 
 export const add_discard_question_button_listener = () => {

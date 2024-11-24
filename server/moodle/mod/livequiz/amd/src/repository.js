@@ -48,3 +48,14 @@ export const delete_question = (questionid, lecturerid, quizid) => fetchMany([
     }
 ])[0];
 
+
+// Function to retrieve a question.
+export const get_question = (quizid, questionid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_get_question',
+        args: {
+            quizid,
+            questionid
+        },
+    }
+])[0];

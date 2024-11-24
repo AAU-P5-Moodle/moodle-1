@@ -101,7 +101,7 @@ function question_button(quizid, lecturerid) {
     return;
   }
   if(!questionTitle){
-    questionTitle = "Question"
+    questionTitle = "Question";
   }
   let answers = [];
   let answers_div = document.querySelector(".all_answers_for_question_div");
