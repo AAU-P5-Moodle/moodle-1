@@ -5,6 +5,7 @@ import { add_delete_question_listeners } from "./delete_question";
 import { add_edit_question_listeners } from "./edit_question";
 import {
   rerender_take_quiz_button,
+  rerender_saved_questions_list,
   add_answer_button_event_listener,
   add_discard_question_button_listener,
 } from "./helper";
@@ -75,30 +76,14 @@ function add_save_question_button_listener(quizid, lecturerid) {
 function handle_question_submission(quizid, lecturerid) {
   let savedQuestion = prepare_question(); //Prepare the question object to be sent to DB
 
+  let update_event_listeners = () => {
+    add_edit_question_listeners(quizid, lecturerid);
+    add_delete_question_listeners(quizid, lecturerid);
+  }
+
   save_question(savedQuestion, lecturerid, quizid).then((questions) => {
-    const contextsavedquestions = {
-      questions: questions,
-    };
-    
-    //Remove the saved questions list and take quiz button
-    let questions_list = document.querySelector("#saved_questions_list");
-    questions_list.remove();
-
-    Templates.renderForPromise(
-      "mod_livequiz/saved_questions_list",
-      contextsavedquestions
-    )
-      // It returns a promise that needs to be resoved.
-      .then(({ html, js }) => {
-        // Here we have compiled template.
-        Templates.appendNodeContents("#saved-questions-container", html, js);
-        add_delete_question_listeners(quizid, lecturerid);
-        add_edit_question_listeners(quizid, lecturerid);
-      })
-
-      // Deal with this exception (Using core/notify exception function is recommended).
-      .catch((error) => displayException(error));
-    rerender_take_quiz_button(take_quiz_url, true);
+    rerender_saved_questions_list(questions, update_event_listeners); //Re-render saved questions list
+    rerender_take_quiz_button(take_quiz_url, true); //Re-render take quiz button
   });
 
   let modal_div = document.querySelector(".Modal_div");
