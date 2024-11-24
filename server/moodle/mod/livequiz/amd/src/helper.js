@@ -23,7 +23,7 @@ export const add_answer_button_event_listener = () => {
  * This function creates a new answer container with an incremented ID and appends it to the 
  * element with the class "all_answers_for_question_div".
  */
-function append_answer_input() {
+export function append_answer_input() {
   let answer_container = create_answer_container(IDs + 1);
   let parent_element = document.querySelector(".all_answers_for_question_div");
   parent_element.appendChild(answer_container);
