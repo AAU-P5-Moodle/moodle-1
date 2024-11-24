@@ -1,6 +1,5 @@
 import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
-import { add_delete_question_listeners } from "./delete_question";
 
 let IDs = 0;
 let isEditing = false;
@@ -102,33 +101,4 @@ function create_element(element_name, type, class_name, content) {
     element_name.className = class_name;
     element_name.textContent = content;
     return element_name;
-}
-
-export function rerender_saved_questions_list(questions, callback) {
-    const contextsavedquestions = {
-      questions: questions,
-    };
-  
-    //Remove the saved questions list.
-    let questions_list = document.querySelector("#saved_questions_list");
-    questions_list.remove();
-  
-    //Re-render saved questions list.
-    Templates.renderForPromise(
-      "mod_livequiz/saved_questions_list",
-      contextsavedquestions
-    )
-      .then(({ html, js }) => {
-        Templates.appendNodeContents("#saved-questions-container", html, js);
-        
-        //Call the functions in callback, this allows for custom functions to be called after the rerendering.
-        if (typeof callback === 'function') {
-            callback();
-        }
-      })
-      .catch((error) => displayException(error));
-}
-
-export function rerender_take_quiz_button(){
-    
 }
