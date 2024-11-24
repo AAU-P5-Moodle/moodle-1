@@ -157,28 +157,6 @@ function question_button(quizid, lecturerid) {
 
       // Deal with this exception (Using core/notify exception function is recommended).
       .catch((error) => displayException(error));
-
-    let no_question_paragraph = document.querySelector(".no-question-text");
-
-    if (no_question_paragraph != null) {
-      no_question_paragraph.remove(); //We have just added a question so reomve the no question text
-      Templates.renderForPromise(
-        "mod_livequiz/take_quiz_button",
-        contexttakequiz
-      )
-        // It returns a promise that needs to be resoved.
-        .then(({ html, js }) => {
-          // Here we have compiled template.
-          Templates.appendNodeContents(
-            "#page-mod-livequiz-quizcreator",
-            html,
-            js
-          );
-        })
-
-        // Deal with this exception (Using core/notify exception function is recommended).
-        .catch((error) => displayException(error));
-    }
   });
   let modal_div = document.querySelector(".Modal_div");
   modal_div.remove();
