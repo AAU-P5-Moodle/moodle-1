@@ -13,6 +13,8 @@ export function add_delete_question_listeners(quizid, lecturerid){
             let questionid = item.id;
             questionid = parseInt(questionid.replace("question_list_", ""));
             delete_question(questionid, lecturerid, quizid);
+            let edit_button = item.nextElementSibling; //The edit buttons is always a sibling of the question
+            edit_button.remove();
             item.remove();
         });
     });
