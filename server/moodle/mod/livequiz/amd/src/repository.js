@@ -60,14 +60,12 @@ export const get_question = (quizid, questionid) => fetchMany([
     }
 ])[0];
 
-export const import_questions = (quizid, questionids, url, lecturerid) => fetchMany([
+export const external_reuse_questions = (quizid, questionids) => fetchMany([
     {
         methodname: 'mod_livequiz_reuse_question',
         args: {
             quizid,
-            questionids,
-            url,
-            lecturerid
+            questionids
         },
     }
 ])[0];

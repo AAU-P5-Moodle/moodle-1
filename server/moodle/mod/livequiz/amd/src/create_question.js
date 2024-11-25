@@ -15,7 +15,6 @@ let editingIndex = 0;
 let answer_count = 0;
 let IDs = 0;
 let take_quiz_url = "";
-let lecturerid;
 
 /**
  * Adds an event listener to the "Add Question" button.
@@ -26,9 +25,8 @@ let lecturerid;
  * @param {string} url - The URL to the quiz attempt page.
  * @returns {Promise<void>} A promise that resolves when the initialization is complete.
  */
-export const init = async (quizid, current_lecturerid, url) => {
+export const init = async (quizid, lecturerid, url) => {
   take_quiz_url = url; //Set url to quiz attempt page to global variable
-  lecturerid = current_lecturerid;
   let add_question_button = document.getElementById("id_buttonaddquestion");
   add_question_button.addEventListener("click", () => {
     render_create_question_menu_popup(quizid, lecturerid);
