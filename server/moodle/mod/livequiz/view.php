@@ -25,7 +25,7 @@ require_once('../../config.php');
 require_once($CFG->libdir . '/accesslib.php'); // Include the access library for context_module.
 require_once('readdemodata.php');
 
-use mod_livequiz\services\livequiz_services;
+use mod_livequiz\output\index_page;
 
 global $OUTPUT, $PAGE, $DB, $USER;
 
@@ -50,7 +50,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new \mod_livequiz\output\index_page($instance->id, $USER->id, $cmid);
+$renderable = new index_page($cmid, $instance->id, $USER->id);
 
 unset($_SESSION['completed']);
 
