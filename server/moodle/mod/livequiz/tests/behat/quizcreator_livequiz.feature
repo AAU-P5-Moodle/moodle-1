@@ -1,7 +1,7 @@
 @mod @mod_livequiz @javascript
 
 Feature: View livequiz activity
-  as a student
+  as a studenxt
 
   Background:
     Given the following "users" exist:

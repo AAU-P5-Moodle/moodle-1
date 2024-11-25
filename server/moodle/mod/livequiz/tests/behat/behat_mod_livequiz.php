@@ -62,7 +62,6 @@ class behat_mod_livequiz extends behat_base {
         $this->assertSession()->elementNotExists('css', '#' . $checkboxid);
     }
 
-
     /**
      * Asserts whether the given element is not checked.
      * @Then the :checkbox answer should not be checked
@@ -102,5 +101,22 @@ class behat_mod_livequiz extends behat_base {
         $livequiz = $livequizservice->get_livequiz_instance($instance->id);
         $demodatareader = new demodatareader();
         $demodatareader->insertdemodata($livequiz);
+    }
+
+    /**
+     * @When /^(?:|I )confirm the popup$/
+     */
+    public function confirmPopup()
+    {
+        $this->getSession()->getDriver()->executeScript('window.confirm = function () { return true; };');
+
+    }
+
+    /**
+     * @when /^(?:|I )cancel the popup$/
+     */
+    public function cancelPopup()
+    {
+        $this->getSession()->getDriver()->executeScript('window.confirm = function () { return false; };');
     }
 }
