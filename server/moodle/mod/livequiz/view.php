@@ -53,10 +53,22 @@ $PAGE->requires->js_call_amd('mod_livequiz/websocketscript', 'init', ['ws://loca
 $output = $PAGE->get_renderer('mod_livequiz');
 //$renderable = new \mod_livequiz\output\index_page($instance->id, $USER->id, $cmid);
 
+$context = $PAGE->context;
+
 //unset($_SESSION['completed']);
 
 echo $OUTPUT->header();
 //echo $output->render($renderable);
+
+
+if (has_capability('mod/livequiz:view', $context)) {
+    echo "<h1>You have view capabilities</h1>";
+}
+
+if (has_capability('mod/livequiz:teacherview', $context)) {
+    echo "<h1>You have teacherview capabilities</h1>";
+}
+
 echo $OUTPUT->footer();
 echo html_writer::tag('button', 'Open WebSocket Connection', ['id' => 'openconnection','class' => 'btn btn-primary']);
 

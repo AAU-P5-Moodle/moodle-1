@@ -42,6 +42,16 @@ $capabilities = [
         ],
     ],
 
+    'mod/livequiz:teacherview' => [
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+
     // Functionality to add the activity to course.
     'mod/livequiz:addinstance' => [
         'riskbitmask' => RISK_XSS,
