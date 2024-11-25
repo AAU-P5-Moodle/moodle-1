@@ -524,12 +524,13 @@ final class livequiz_service_test extends \advanced_testcase {
         $testquizfirstquestionanswers = $testquizquestions[0]->get_answers();
         $testquizsubmitted = $service->submit_quiz($testquiz, $lecturerid);
         $testquizsubmittedquestions = $testquizsubmitted->get_questions();
-
-        array_shift($testquizsubmittedquestions[0]->get_answers());
+        $testquizsubmittedanswers = $testquizsubmittedquestions[0]->get_answers();
+        array_shift($testquizsubmittedanswers);
+        $testquizsubmittedquestions[0]->set_answers($testquizsubmittedanswers);
         $testquizsubmitted->set_questions($testquizsubmittedquestions);
 
         $testquizresubmitted = $service->submit_quiz($testquizsubmitted, $lecturerid);
-        $testquizresubmittedquestions = $testquizsubmitted->get_questions();
+        $testquizresubmittedquestions = $testquizresubmitted->get_questions();
         $testquizresubmittedanswers = $testquizresubmittedquestions[0]->get_answers();
 
         // Assert that the amount of questions has changed.
