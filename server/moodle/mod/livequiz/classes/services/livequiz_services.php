@@ -229,7 +229,7 @@ class livequiz_services {
         $deletedanswerids = array_diff($existinganswerids, $updatedanswerids);
 
         foreach ($deletedanswerids as $deletedanswerid) {
-            self::delete_answer($deletedanswerid, $questionid);
+            self::delete_answer($deletedanswerid);
         }
     }
 
@@ -363,12 +363,12 @@ class livequiz_services {
      * @param int $answerid
      * @throws dml_exception
      */
-    private static function delete_answer(int $answerid, int $questionid): void {
+    private static function delete_answer(int $answerid): void {
         $participationcount = student_answers_relation::get_answer_participation_count($answerid);
         if ($participationcount > 0) {
             throw new dml_exception("Cannot delete answer with participations");
         }
-        questions_answers_relation::delete_question_answer_relation($questionid, $answerid);
+        questions_answers_relation::delete_relations_by_answerid($answerid);
         answer::delete_answer($answerid);
     }
 

@@ -204,9 +204,18 @@ class question {
     }
 
     /**
+     * Sets the answers associated with the question.
+     *
+     * @param array $newanswers
+     */
+    public function set_answers(array $newanswers): void {
+        $this->answers = $newanswers;
+    }
+
+    /**
      * Appends an answer to the question object.
      *
-     * @param array $answers The title of the question.
+     * @param array $answers
      */
     public function add_answers(array $answers): void {
         foreach ($answers as $answer) {
