@@ -237,7 +237,7 @@ jobs:
               --fullname="Moodle testing thing" \
               --shortname="mtt" \
               --adminpass="hunter2"
-              
+          echo "\$CFG->socketroot = 'ws://localhost:8001';" >>"$REPO_ROOT"/server/moodle/config.php
           echo 'hi:('
           ss -nltp
 
@@ -267,7 +267,6 @@ jobs:
           sed -i "/^require_once(__DIR__ . '\/lib\/setup.php');/i \$CFG->behat_wwwroot = 'http:\/\/localhost:8000';" config.php
           sed -i "/^require_once(__DIR__ . '\/lib\/setup.php');/i \$CFG->behat_dataroot_parent = \$CFG->dataroot . '\/behat';" config.php
           sed -i "/^require_once(__DIR__ . '\/lib\/setup.php');/i \$CFG->behat_prefix = 'beh_';" config.php
-
           composer install
 
           php admin/tool/behat/cli/init.php
