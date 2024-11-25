@@ -45,19 +45,21 @@ export const init = async (quizid, lecturerid, url) => {
  */
 function render_create_question_menu_popup(quizid, lecturerid) {
   // This will call the function to load and render our template.
-  Templates.renderForPromise("mod_livequiz/question_menu_popup")
+  if(!document.querySelector('.Modal_div')){
+    Templates.renderForPromise("mod_livequiz/question_menu_popup")
 
-    // It returns a promise that needs to be resoved.
-    .then(({ html, js }) => {
-      // Here we have compiled template.
-      Templates.appendNodeContents(".main-container", html, js);
-      add_answer_button_event_listener();
-      add_save_question_button_listener(quizid, lecturerid);
-      add_discard_question_button_listener();
-    })
+      // It returns a promise that needs to be resoved.
+      .then(({ html, js }) => {
+        // Here we have compiled template.
+        Templates.appendNodeContents(".main-container", html, js);
+        add_answer_button_event_listener();
+        add_save_question_button_listener(quizid, lecturerid);
+        add_discard_question_button_listener();
+      })
 
-    // Deal with this exception (Using core/notify exception function is recommended).
-    .catch((error) => displayException(error));
+      // Deal with this exception (Using core/notify exception function is recommended).
+      .catch((error) => displayException(error));
+  }
 }
 
 /**
