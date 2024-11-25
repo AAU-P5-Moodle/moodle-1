@@ -29,6 +29,9 @@
     * fill in later
 
 }}
+{{#js}}
+    require(['mod_livequiz/reuse_question'], (module) => module.importQuestions({{quizid}}, "{{{url}}}", {{lecturerid}}));
+{{/js}}
 <div class="reuse_questions_div">
     <div class="all_questions_for_lecturer_div">
         {{#questions}}
@@ -37,8 +40,7 @@
                 <label for="{{questionid}}">{{questiondescription}}</label>
             </div>
         {{/questions}}
-        <button class="save_button">Import Question(s)</button>
+        <button class="import_btn">Import Question(s)</button>
         <button class="discard_question_button">Discard Changes</button>
     </div>
 </div>
-

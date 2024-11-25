@@ -60,6 +60,7 @@ export const get_question = (quizid, questionid) => fetchMany([
     }
 ])[0];
 
+// Function to reuse questions.
 export const external_reuse_questions = (quizid, questionids) => fetchMany([
     {
         methodname: 'mod_livequiz_reuse_question',

@@ -12,8 +12,7 @@ import {add_discard_question_button_listener} from "./edit_question_helper";
 export const init = async (quizid, lecturerid, url) => {
     let import_question_button = document.getElementById("id_buttonimportquestion");
     import_question_button.addEventListener("click", () => {
-        render_import_question_menu_popup(quizid, lecturerid);
-    });
+           });
 
 };
 
