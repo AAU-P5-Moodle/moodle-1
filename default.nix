@@ -218,7 +218,7 @@ EOF
 
     start_websocket() {
       echo "Starting WebSocket for livequiz"
-      php ./server/moodle/mod/livequiz/classes/websocket/start_websocket.php
+      php ./server/moodle/mod/livequiz/classes/websocket/start_websocket.php &
       WEBSOCKET_PID=$!
     }
     # Function to stop services
@@ -297,6 +297,7 @@ EOF
           echo "adding phpunit to config";
           echo "\$CFG->phpunit_prefix = 'phpu_';" >>"server/moodle/config.php"
           echo "\$CFG->phpunit_dataroot = '$(realpath "server/moodledata/phpunit")';">>"server/moodle/config.php"
+          echo "\$CFG->socketroot = 'ws://localhost:8001';" >>"server/moodle/config.php"
         else 
           echo "phpunit found in config skipping modifying it";
         fi

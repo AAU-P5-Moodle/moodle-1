@@ -38,7 +38,7 @@ $server = IoServer::factory(
             new websocket()
         )
     ),
-    3000
+    8001
 );
 
 $server->run();
