@@ -1,4 +1,5 @@
 import Templates from "core/templates";
+import {add_discard_question_button_listener} from "./edit_question_helper";
 /**
  * Adds an event listener to the "Import Question" button.
  * When the button is clicked, it renders the import question menu popup.
@@ -35,8 +36,23 @@ function render_import_question_menu_popup(quizid, lecturerid) {
         .then(({ html, js }) => {
             // Here we have compiled template.
             Templates.appendNodeContents(".main-container", html, js);
+            add_import_question_button_listener(quizid, lecturerid);
+            add_discard_question_button_listener();
         })
 
         // Deal with this exception (Using core/notify exception function is recommended).
         .catch((error) => displayException(error));
+}
+
+/**
+ * Adds an event listener to the save question button
+ *
+ * @param {number} quizid - The ID of the quiz.
+ * @param {number} lecturerid - The ID of the lecturer.
+ */
+function add_import_question_button_listener(quizid, lecturerid) {
+    let save_question_button = document.querySelector(".save_button");
+    save_question_button.addEventListener("click", () => {
+
+    });
 }
