@@ -18,6 +18,7 @@ namespace mod_livequiz\output;
 
 use core\exception\moodle_exception;
 use mod_livequiz\models\livequiz;
+use mod_livequiz\models\livequiz_questions_lecturer_relation;
 use mod_livequiz\services\livequiz_services;
 use renderable;
 use renderer_base;
