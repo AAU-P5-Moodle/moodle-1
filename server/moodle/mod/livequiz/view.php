@@ -34,7 +34,7 @@ $cmid = required_param('id', PARAM_INT); // Course module ID.
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
 require_login($course, true, $cm); // Ensure the user is logged in and can access this module.
- //Debugging: Check if $USER is defined and contains the id.
+ // Debugging: Check if $USER is defined and contains the id.
 if (!isset($USER->id)) {
     throw new moodle_exception('usernotauthenticated', 'error', '', null, 'User is not logged in or user data is missing.');
 }
@@ -51,7 +51,9 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 $PAGE->requires->js_call_amd('mod_livequiz/websocketscript', 'init', [$CFG->socketroot]);
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$renderable = new index_page($cmid, $instance->id, $USER->id);
+
+$isteacher = has_capability('mod/livequiz:teacherview', $context);
+$renderable = new index_page($cmid, $instance->id, $USER->id, $isteacher);
 
 $context = $PAGE->context;
 
@@ -60,15 +62,14 @@ unset($_SESSION['completed']);
 echo $OUTPUT->header();
 echo $output->render($renderable);
 
-
-if (has_capability('mod/livequiz:view', $context)) {
+// For testing if the user has the correct capabilities
+/* if (has_capability('mod/livequiz:view', $context)) {
     echo "<h1>You have view capabilities</h1>";
 }
 
 if (has_capability('mod/livequiz:teacherview', $context)) {
     echo "<h1>You have teacherview capabilities</h1>";
-}
+} */
 
 echo $OUTPUT->footer();
-echo html_writer::tag('button', 'Open WebSocket Connection', ['id' => 'openconnection','class' => 'btn btn-primary']);
-
+//echo html_writer::tag('button', 'Open WebSocket Connection', ['id' => 'openconnection', 'class' => 'btn btn-primary']);

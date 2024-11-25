@@ -32,6 +32,15 @@
 <div class="main-container">
   <h1>index_page</h1>
   <p>{{sometext}}</p>
+  {{#isteacher}}
+  <button id="startQuiz">Start Quiz</button>
+  <h2>Room Code: <span id="roomCode">something</span></h2>
+  {{/isteacher}}
+  <form>
+    <label for="roomCode">Romm Code</label><br>
+    <input type="text" id="roomCode"><br><br>
+    <input type="submit" value="Connect to Room" class="btn btn-primary"><br>
+  </form><br>
   <a href="{{url}}" type="button" id="takeQuizBtn"> Take Quiz </a>
   {{> mod_livequiz/participations_section}} {{! participations_section import - Context remains the same}}
 </div>

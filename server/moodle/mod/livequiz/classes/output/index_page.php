@@ -37,6 +37,8 @@ class index_page implements renderable, templatable {
     protected int $quizid;
     /** @var int $studentid the student id */
     protected int $studentid;
+    /** @var int $isteacher if user is teacher */
+    protected bool $isteacher;
 
     /**
      * index_page constructor.
@@ -44,10 +46,11 @@ class index_page implements renderable, templatable {
      * @param int $quizid
      * @param int $studentid
      */
-    public function __construct(int $cmid, int $quizid, int $studentid) {
+    public function __construct(int $cmid, int $quizid, int $studentid, bool $isteacher) {
         $this->cmid = $cmid;
         $this->quizid = $quizid;
         $this->studentid = $studentid;
+        $this->isteacher = $isteacher;
     }
 
     /**
@@ -80,6 +83,7 @@ class index_page implements renderable, templatable {
         }
 
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
+        $data->isteacher = $this->isteacher;
         return $data;
     }
 }
