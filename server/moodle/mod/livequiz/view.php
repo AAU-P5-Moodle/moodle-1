@@ -29,22 +29,22 @@ use mod_livequiz\output\index_page;
 
 global $OUTPUT, $PAGE, $DB, $USER;
 
-//$cmid = required_param('id', PARAM_INT); // Course module ID.
-//[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
-//$instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
+$cmid = required_param('id', PARAM_INT); // Course module ID.
+[$course, $cm] = get_course_and_cm_from_cmid($cmid, 'livequiz');
+$instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
 
 require_login($course, true, $cm); // Ensure the user is logged in and can access this module.
-// Debugging: Check if $USER is defined and contains the id.
-//if (!isset($USER->id)) {
-//    throw new moodle_exception('usernotauthenticated', 'error', '', null, 'User is not logged in or user data is missing.');
-//}
+ //Debugging: Check if $USER is defined and contains the id.
+if (!isset($USER->id)) {
+    throw new moodle_exception('usernotauthenticated', 'error', '', null, 'User is not logged in or user data is missing.');
+}
 
 
-//$context = context_module::instance($cm->id); // Set the context for the course module.
+$context = context_module::instance($cm->id); // Set the context for the course module.
 $PAGE->set_cacheable(false);
-//$PAGE->set_context($context); // Make sure to set the page context.
+$PAGE->set_context($context); // Make sure to set the page context.
 
-//$PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
+$PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
@@ -55,10 +55,10 @@ $renderable = new index_page($cmid, $instance->id, $USER->id);
 
 $context = $PAGE->context;
 
-//unset($_SESSION['completed']);
+unset($_SESSION['completed']);
 
 echo $OUTPUT->header();
-//echo $output->render($renderable);
+echo $output->render($renderable);
 
 
 if (has_capability('mod/livequiz:view', $context)) {
