@@ -34,12 +34,12 @@
 {{/js}}
 <div class="reuse_questions_div">
     <div class="all_questions_for_lecturer_div">
-        {{#questions}}
+        {{#oldquestions}}
             <div class="question">
                 <input type="checkbox" id="{{questionid}}" name="question_{{questionid}}" value="{{questionid}}" class="{{quizid}}">
                 <label for="{{questionid}}">{{questiondescription}}</label>
             </div>
-        {{/questions}}
+        {{/oldquestions}}
         <button class="import_btn">Import Question(s)</button>
         <button class="discard_question_button">Discard Changes</button>
     </div>

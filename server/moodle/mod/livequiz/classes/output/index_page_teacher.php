@@ -69,6 +69,12 @@ class index_page_teacher implements renderable, templatable {
         $data->pagename = "Quiz editor page";
         $data->lecturerid = $this->lecturerid;
         $data->quizid = $this->quizid;
+        $data->oldquestions = [];
+        $service = livequiz_services::get_singleton_service_instance();
+        $premadequestions = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_lecturer_id($this->lecturerid);
+        foreach ($premadequestions as $premadequestion) {
+            $data->oldquestions[] = $premadequestion->prepare_for_template();
+        }
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
         $data->islecturer = true;
         return $data;
