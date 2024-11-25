@@ -48,7 +48,7 @@ $PAGE->set_cacheable(false);
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
-$PAGE->requires->js_call_amd('mod_livequiz/websocketscript', 'init', ['ws://localhost:3000']);
+$PAGE->requires->js_call_amd('mod_livequiz/websocketscript', 'init', [$CFG->socketroot]);
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
 //$renderable = new \mod_livequiz\output\index_page($instance->id, $USER->id, $cmid);
