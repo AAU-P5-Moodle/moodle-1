@@ -14,7 +14,7 @@ import {add_delete_question_listeners} from "./delete_question";
 export const init = async (quizid, lecturerid, url) => {
     let import_question_button = document.getElementById("id_buttonimportquestion");
     import_question_button.addEventListener("click", () => {
-        render_import_question_menu_popup(quizid, lecturerid);
+        render_import_question_menu_popup(quizid, lecturerid, url);
     });
 };
 
@@ -65,7 +65,7 @@ function add_import_question_button_listener(quizid, lecturerid, url) {
  * @param {number} lecturerid - The ID of the lecturer.
  * @returns {Promise<void>} A promise that resolves when the questions are imported.
  */
-function importQuestions(quizid, url, lecturerid){
+async function importQuestions(quizid, url, lecturerid){
     quiz_url = url; //Set url to quiz attempt page to global variable
     const importQuestionBtn = document.getElementById("importQuestionBtn");
     $questionids = get_checked_questions();
