@@ -25,23 +25,26 @@ export function add_edit_question_listeners(quizid, lecturerid) {
 }
 
 function render_edit_question_menu_popup(quizid, lecturerid, questionid) {
-  // This will call the function to load and render our template.
-  Templates.renderForPromise("mod_livequiz/question_menu_popup")
 
-    // It returns a promise that needs to be resolved.
-    .then(({ html, js }) => {
-      // Here we have the compiled template.
-      Templates.appendNodeContents(".main-container", html, js);
-      get_question(quizid, questionid).then((question) => {
-        restore_question_data_in_popup(question);
-      });
-      add_answer_button_event_listener();
-      add_save_question_button_listener(quizid, lecturerid, questionid);
-      add_discard_question_button_listener();
-    })
+if(!document.querySelector('.Modal_div')){
+    // This will call the function to load and render our template.
+    Templates.renderForPromise("mod_livequiz/question_menu_popup")
 
-    // Deal with this exception (Using core/notify exception function is recommended).
-    .catch((error) => displayException(error));
+      // It returns a promise that needs to be resolved.
+      .then(({ html, js }) => {
+        // Here we have the compiled template.
+        Templates.appendNodeContents(".main-container", html, js);
+        get_question(quizid, questionid).then((question) => {
+          restore_question_data_in_popup(question);
+        });
+        add_answer_button_event_listener();
+        add_save_question_button_listener(quizid, lecturerid, questionid);
+        add_discard_question_button_listener();
+      })
+
+      // Deal with this exception (Using core/notify exception function is recommended).
+      .catch((error) => displayException(error));
+  }
 }
 
 function add_save_question_button_listener(quizid, lecturerid, questionid) {
