@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ "main", "staging"  ]
   push:
-    branches: [ "Refractor-branch" ]
+    branches: [ "frontend-websocket-branches-merge" ]
 
 jobs:
   build-test:

@@ -1,9 +1,9 @@
 name: codesniffer
 on:
   push:
-    branches: [ "main", "staging" ]
+    branches: [ "frontend-websocket-branches-merge", "staging" ]
   pull_request:
-    branches: [ "main", "staging"  ]
+    branches: [ "", "staging"  ]
 
 permissions:
   contents: read
