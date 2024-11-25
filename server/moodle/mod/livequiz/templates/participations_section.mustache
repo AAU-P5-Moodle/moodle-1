@@ -29,10 +29,17 @@
     * fill in later
 
 }}
-<div class="main-container">
-  <h1>index_page</h1>
-  <p>{{sometext}}</p>
-  <a href="{{url}}" type="button" id="takeQuizBtn"> Take Quiz </a>
-  {{> mod_livequiz/participations_section}} {{! participations_section import - Context remains the same}}
-</div>
 
+<div class="participations-container">
+    <h2 class="Participation-title">Participations</h2>
+    <div class="participations">
+        {{#participations}}
+        <div class="participation">
+        <p></p>
+            <button class="participation-button" onclick="location.href='{{resultsurl}}'">
+                Go to participation {{participationnumber}}
+            </button>
+        </div>
+        {{/participations}}
+    </div>
+</div>

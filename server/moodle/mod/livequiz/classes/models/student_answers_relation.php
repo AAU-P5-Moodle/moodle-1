@@ -24,8 +24,6 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
-use Exception;
-
 /**
  * Class student_answers_relation
  * @package mod_livequiz\student_answers_relation
@@ -37,7 +35,7 @@ class student_answers_relation {
      * @param int $studentid
      * @param int $answerid
      * @param int $participationid
-     * @return void
+     * @return int
      * @throws dml_exception
      */
     public static function insert_student_answer_relation(int $studentid, int $answerid, int $participationid): int {
@@ -66,8 +64,7 @@ class student_answers_relation {
             '',
             'answer_id'
         );
-        $answerids = array_column($answerrecords, 'answer_id');
-        return $answerids;
+        return array_column($answerrecords, 'answer_id');
     }
 
     /**

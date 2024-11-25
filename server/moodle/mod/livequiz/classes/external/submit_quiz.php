@@ -16,9 +16,11 @@
 
 namespace mod_livequiz\external;
 
+use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_value;
 use dml_exception;
+use invalid_parameter_exception;
 use mod_livequiz\services\livequiz_services;
 
 /**
@@ -32,7 +34,7 @@ use mod_livequiz\services\livequiz_services;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class submit_quiz extends \core_external\external_api {
+class submit_quiz extends external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
@@ -50,6 +52,7 @@ class submit_quiz extends \core_external\external_api {
      * @param int $quizid
      * @param int $studentid
      * @return bool
+     * @throws invalid_parameter_exception
      */
     public static function execute(int $quizid, int $studentid): bool {
         self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid, 'studentid' => $studentid]);
@@ -59,6 +62,7 @@ class submit_quiz extends \core_external\external_api {
             $participation = $services->insert_participation($studentid, $quizid);
             // Insert answers from session into the DB.
             self::insert_answers_from_session($quizid, $studentid, $participation->get_id());
+            $_SESSION['quiz_answers'][$quizid] = []; // Remove the current participation from the session.
             return true; // Return true if successful.
         } catch (dml_exception $e) {
             debugging('Error inserting participation: ' . $e->getMessage());

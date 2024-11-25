@@ -17,12 +17,12 @@
 namespace mod_livequiz\output;
 
 use core\exception\moodle_exception;
-use mod_livequiz\models\livequiz;
 use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
 use moodle_url;
+use mod_livequiz\models\student_quiz_relation;
 
 /**
  * Class index_page
@@ -31,37 +31,54 @@ use moodle_url;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class index_page implements renderable, templatable {
-    /** @var int $quizid the livequiz to take or retake*/
-    private int $quizid;
-    /** @var int $studentid the id of the student who is interacting with the quiz.
-     */
-    private $studentid;
     /** @var int $cmid the course module id */
     protected int $cmid;
+    /** @var int $quizid the course module id */
+    protected int $quizid;
+    /** @var int $studentid the student id */
+    protected int $studentid;
 
     /**
      * index_page constructor.
+     * @param int $cmid
      * @param int $quizid
      * @param int $studentid
-     * @param int $courseid
      */
-    public function __construct(int $quizid, int $studentid, int $courseid) {
+    public function __construct(int $cmid, int $quizid, int $studentid) {
+        $this->cmid = $cmid;
         $this->quizid = $quizid;
         $this->studentid = $studentid;
-        $this->cmid = $courseid;
     }
 
     /**
      * Export this data so it can be used as the context for a mustache template.
-     *
+     * Keeps database ID's confidential by not exposing them in the URLs. Instead, the participation number is used (1-based).
      * @param renderer_base $output
      * @return stdClass
      * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
-        $data->studentid = $this->studentid;
-        $data->quizid = $this->quizid;
+        $data->participations = [];
+
+        $participations = student_quiz_relation::get_all_student_participation_for_quiz($this->quizid, $this->studentid);
+        $_SESSION['participations'] = $participations; // Store participations in session.
+
+        foreach ($participations as $index => $participation) {
+            $participationnumber = $index + 1;
+            $data->participations[] = (object) [
+                'participationnumber'   => $participationnumber, // Displayed number to the user, starting from 1.
+                'resultsurl'            => (new moodle_url(
+                    '/mod/livequiz/results.php',
+                    [
+                        'id'                    => $this->cmid, // Course module ID.
+                        'livequizid'            => $participation->get_livequizid(), // Live quiz ID.
+                        'participationnumber'   => $participationnumber, // Pass the participation number to the results page.
+                    ]
+                ))->out(false),
+            ];
+        }
+
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
         return $data;
     }
