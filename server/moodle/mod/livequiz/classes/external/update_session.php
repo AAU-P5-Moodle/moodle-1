@@ -16,11 +16,10 @@
 
 namespace mod_livequiz\external;
 
+use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_value;
-use core_external\external_multiple_structure;
-use core_external\external_single_structure;
-use PhpParser\Node\Param;
+use invalid_parameter_exception;
 
 /**
  * Class update_session
@@ -33,7 +32,7 @@ use PhpParser\Node\Param;
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class update_session extends \core_external\external_api {
+class update_session extends external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
@@ -48,13 +47,13 @@ class update_session extends \core_external\external_api {
 
     /**
      * Summary of execute
+     * @param $quizid
      * @param $questionid
      * @param $answervalue
      * @return bool
-     * @throws \invalid_parameter_exception
+     * @throws invalid_parameter_exception
      */
     public static function execute($quizid, $questionid, $answervalue): bool {
-        global $DB;
         self::validate_parameters(
             self::execute_parameters(),
             ['quizid' => $quizid, 'questionid' => $questionid, 'answers' => $answervalue]
@@ -81,7 +80,7 @@ class update_session extends \core_external\external_api {
     public static function update_answers_in_session($quizid, $questionid, $answervalue): bool {
         $answers = [];
         $decodeanswer = json_decode($answervalue, true);
-        foreach ($decodeanswer as $key => $value) {
+        foreach ($decodeanswer as $value) {
             $answers[] = $value;
         }
         // The array[$quizid][$questionid][answers] will give an array of the answers for that specific question id.

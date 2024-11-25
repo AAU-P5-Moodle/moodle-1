@@ -26,6 +26,7 @@
 namespace mod_livequiz;
 
 use dml_exception;
+use dml_transaction_exception;
 use mod_livequiz\models\livequiz;
 use mod_livequiz\models\student_answers_relation;
 use mod_livequiz\services\livequiz_services;
@@ -167,6 +168,27 @@ final class livequiz_service_test extends \advanced_testcase {
         self::assertSame($singleton, $singleton2);
     }
 
+    /**
+     * Test that get_newest_participation_for_quiz gets the newest participation based on studentid and quizid
+     * @covers \mod_livequiz\services\livequiz_services::get_newest_participation_for_quiz
+     * @throws dml_transaction_exception
+     * @throws dml_exception
+     */
+    public function test_get_newest_participation_for_quiz(): void {
+        $dbservice = livequiz_services::get_singleton_service_instance();
+        $participation1 = $dbservice->insert_participation(1, 1);
+        $participation2 = $dbservice->insert_participation(1, 1);
+
+        $testparticipation = $dbservice->get_newest_participation_for_quiz(1, 1);
+
+        $this->assertEquals($participation2->get_id(), $testparticipation->get_id());
+
+        $participation3 = $dbservice->insert_participation(1, 1);
+
+        $testparticipation2 = $dbservice->get_newest_participation_for_quiz(1, 1);
+
+        $this->assertEquals($participation3->get_id(), $testparticipation2->get_id());
+    }
     /**
      * Test creating a new question instance.
      *
