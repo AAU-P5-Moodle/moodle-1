@@ -33,7 +33,44 @@ Feature: Reuse previously created questions in livequiz activity
     And I log in as "teacher1"
     And I am on "Test Course" course homepage with editing mode on
 
-    Scenario: Reuse questions in livequiz
+    Scenario: Unique questions are filtered
+      # Clicking on the second livequiz activity
+      When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+      Then I should see "Quiz editor page"
+      And "Import Question" "button" should exist
+      # Adding a question to reuse later
+      And "Add Question" "button" should exist
+      And I click on "Add Question" "button"
+      Then I set the field "question_title_id" to "test 1"
+      Then I set the field "question_description_id" to "question text"
+      Then I set the field "question_explanation_id" to "explanation text"
+       # Adding answers to the question
+      Then I click on "Add Answer" "button"
+      And I set the field "answer_input_1" to "answer text 1"
+      And I click on "answer_checkbox_1" "checkbox"
+      Then I click on "Add Answer" "button"
+      And I set the field "answer_input_2" to "answer text 2"
+      And I click on "Save Question" "button"
+      Then I should see "Saved Questions"
+      And "test 1" "list_item" should exist
+      And I click on "Add Question" "button"
+      Then I set the field "question_title_id" to "test 1"
+      Then I set the field "question_description_id" to "question text"
+      Then I set the field "question_explanation_id" to "explanation text"
+       # Adding answers to the question
+      Then I click on "Add Answer" "button"
+      And I set the field with xpath "(//input[@class='answer_input'])[1]" to "answer text 1"
+      And I set the field with xpath "(//input[@class='answer_checkbox'])[1]" to "checked"
+      Then I click on "Add Answer" "button"
+      And I set the field with xpath "(//input[@class='answer_input'])[2]" to "answer text 2"
+      And I set the field with xpath "(//input[@class='answer_checkbox'])[2]" to ""
+      And I click on "Save Question" "button"
+      Then I should see "Saved Questions"
+      Then I click on "Import Question" "button"
+      And "test 1" "checkbox" should exist
+
+
+  Scenario: Reuse questions in livequiz
       # Clicking on the second livequiz activity
       When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
       Then I should see "Quiz editor page"
