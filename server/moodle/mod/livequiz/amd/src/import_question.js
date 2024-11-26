@@ -80,10 +80,8 @@ async function importQuestions(quizid, url, lecturerid) {
     const importQuestionBtn = document.querySelector(".import_btn");
 
     importQuestionBtn.addEventListener("click", async() => {
-        console.log("Importing questions");
         try {
             let questionids = get_checked_questions();
-            console.log("Checked questions: ", questionids);
             call_reuse_questions(quizid, questionids, lecturerid, quiz_url);
         } catch (error) {
             window.console.error("Error in import of questions");

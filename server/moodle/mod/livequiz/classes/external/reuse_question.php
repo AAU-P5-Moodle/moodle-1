@@ -16,6 +16,7 @@
 
 namespace mod_livequiz\external;
 
+use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
 use core_external\external_value;
@@ -38,7 +39,7 @@ use stdClass;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class reuse_question extends \core_external\external_api {
+class reuse_question extends external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
