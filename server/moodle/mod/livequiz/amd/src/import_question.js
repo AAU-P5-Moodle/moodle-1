@@ -60,7 +60,7 @@ function add_old_questions_to_popup(lecturerid) {
         oldquestions.forEach((question) => {
             let question_div = document.createElement("div");
             question_div.innerHTML = `
-                <input type="checkbox" value="${question.questionid}" id="question_${question.questionid} ">
+                <input type="checkbox" value="${question.questionid}" id="${question.questiontitle}" name ="${question.questiontitle}">
                 <label for="question_${question.questionid}">${question.questiontitle}</label>
                 `;
             document.querySelector(".oldQuestions").appendChild(question_div);
