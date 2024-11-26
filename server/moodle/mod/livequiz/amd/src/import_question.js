@@ -105,22 +105,16 @@ async function importQuestions(quizid, url, lecturerid) {
 }
 
 function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
-    console.log("Inside call_reuse_questions");
     external_reuse_questions(quizid, questionids, lecturerid).then((questions) => {
-        console.log("Inside external_reuse_questions then");
         let update_event_listeners = () => {
-            console.log("updating event");
             add_edit_question_listeners(quizid, lecturerid);
-            console.log("added edit question listeners");
             add_delete_question_listeners(quizid, lecturerid);
-            console.log("added delete question listeners");
         };
-        console.log("updated event listeners");
         rerender_saved_questions_list(questions, update_event_listeners); // Re-render saved questions list.
-        console.log("rerendered saved questions list");
         rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button.
-        console.log("rerendered take quiz button");
-    }). catch((error) => console.log(error));
+    }). catch((error) => displayException(error));
+    let modal_div = document.querySelector(".Modal_div");
+    modal_div.remove();
 }
 
 /**
