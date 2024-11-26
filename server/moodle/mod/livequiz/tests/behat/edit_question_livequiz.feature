@@ -89,6 +89,27 @@ Feature: Edit questions in livequiz activity
     And the field with xpath "(//input[@class='answer_input'])[4]" matches value "Marseille"
     And the field with xpath "(//input[@class='answer_checkbox'])[3]" matches value "checked"
 
-  
+  Scenario: Edit question in a livequiz for take quiz
+    And I click on "//span[@class='question-title' and text()='Question 1'][1]" "xpath_element"
+    Then I set the field "question_title_id" to "Question 1 - Edited"
+    And I set the field "question_description_id" to "Which of the following cities is in France? - Edited"
+    And I set the field "question_explanation_id" to "Paris is a city in France, Nice is a city in France - Edited"
+    # Use Xpath since the fields are dynamically generated
+    And I set the field with xpath "(//input[@class='answer_input'])[1]" to "Paris - Edited"
+    And I set the field with xpath "(//input[@class='answer_input'])[2]" to "Champagne - Edited"
+    And I set the field with xpath "(//input[@class='answer_input'])[3]" to "Nice - Edited"
+    # Close editing menu
+    And I click on "Save Question" "button"
+    # Check if title was changed in list
+    And "Question 1 - Edited" "list_item" should exist
+    And "Question 2" "list_item" should exist
+    And "Question 3" "list_item" should exist
+    And I click on "Take Quiz" "link"
+    And I should see "Question 1 - Edited"
+    And I should see "Which of the following cities is in France? - Edited"
+    And I should see "Paris - Edited"
+    And I should see "Champagne - Edited"
+    And I should see "Nice - Edited"
+
 
 
