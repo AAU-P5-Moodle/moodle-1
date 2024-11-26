@@ -2,9 +2,8 @@ import Templates from "core/templates";
 import {add_discard_question_button_listener, rerender_saved_questions_list} from "./edit_question_helper";
 import {add_edit_question_listeners} from "./edit_question";
 import {add_delete_question_listeners} from "./delete_question";
-import {displayException} from "core/notification";
 import {external_reuse_questions} from "./repository";
-import {rerender_take_quiz_button} from "./take_quiz";
+import {rerender_take_quiz_button} from "./edit_question_helper";
 
 /**
  * Adds an event listener to the "Import Question" button.
@@ -15,7 +14,7 @@ import {rerender_take_quiz_button} from "./take_quiz";
  * @param {string} url - The URL to the quiz attempt page.
  * @returns {Promise<void>} A promise that resolves when the initialization is complete.
  */
-export const init = async (quizid, lecturerid, url) => {
+export const init = async(quizid, lecturerid, url) => {
     let import_question_button = document.getElementById("id_buttonimportquestion");
     import_question_button.addEventListener("click", () => {
         render_import_question_menu_popup(quizid, lecturerid, url);
@@ -82,8 +81,8 @@ async function importQuestions(quizid, url, lecturerid){
                     add_edit_question_listeners(quizid, lecturerid);
                     add_delete_question_listeners(quizid, lecturerid);
                 };
-                rerender_saved_questions_list(questions, update_event_listeners); //Re-render saved questions list
-                rerender_take_quiz_button(quiz_url, true); //Re-render take quiz button
+                rerender_saved_questions_list(questions, update_event_listeners); // Re-render saved questions list.
+                rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button.
             });
         } catch (error) {
             window.console.error("Error in import of questions");
