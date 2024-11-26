@@ -245,20 +245,19 @@ class livequiz {
     public function get_question_by_id(int $questionid): question {
         $questions = $this->get_questions();
         $questionwithid = null;
-        $count = 0;
         foreach ($questions as $question) {
             if ($question->get_id() === $questionid) {
+                // If we already found a question, it means that there are questions with duplicate id.
+                if ($questionwithid !== null) {
+                    throw new \RuntimeException("Something is wrong. Multiple questions found with id {$questionid}");
+                }
                 $questionwithid = $question;
-                $count++;
             }
         }
-        if ($count === 0) {
-            throw new Exception("Could not find question with id {$questionid}");
-        } else if ($count > 1) {
-            throw new Exception("Something is wrong. Multiple questions found with id {$questionid}");
-        } else {
-            return $questionwithid;
+        if ($questionwithid === null) {
+            throw new \InvalidArgumentException("Could not find question with id {$questionid}");
         }
+        return $questionwithid;
     }
 
     /**
