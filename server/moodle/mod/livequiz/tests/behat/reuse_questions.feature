@@ -77,3 +77,17 @@ Feature: Reuse previously created questions in livequiz activity
       # Checking if the answers are correctly checked
       And the field with xpath "(//input[@class='answer_checkbox'])[1]" matches value "checked"
       And the field with xpath "(//input[@class='answer_checkbox'])[2]" matches value ""
+      # Testing that changes to one question does not affect the same questions from another livequiz
+      Then I click on "Add Answer" "button"
+      And I set the field with xpath "(//input[@class='answer_input'])[3]" to "answer text 3"
+      And I set the field with xpath "(//input[@class='answer_checkbox'])[1]" to ""
+      And I set the field with xpath "(//input[@class='answer_checkbox'])[2]" to "checked"
+      And I click on "Save Question" "button"
+      And I am on "Test Course" course homepage with editing mode on
+      Then I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+      And I should see "Quiz editor page"
+      And I should see "Saved Questions"
+      And I click on "(//li[.//span[text()='test 1']])[1]//button[contains(@class, 'edit-question-btn')]" "xpath_element"
+      And the field with xpath "(//input[@class='answer_checkbox'])[1]" matches value "checked"
+      And the field with xpath "(//input[@class='answer_checkbox'])[2]" matches value ""
+      And I should not see "answer text 3"
