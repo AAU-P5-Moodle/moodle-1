@@ -22,76 +22,52 @@ use core_external\external_value;
 use core_external\external_single_structure;
 use dml_exception;
 use exception;
-use mod_livequiz\models\answer;
+use mod_livequiz\models\livequiz_questions_lecturer_relation;
 use mod_livequiz\models\question;
 use mod_livequiz\services\livequiz_services;
 use stdClass;
 
 /**
- * Class reuse_question
+ * Class get_lecturer_questions
  *
  * This class extends the core_external\external_api and is used to handle
- * the external API for reusing(importing) into an exiting livequiz.
+ * the external API for saving questions to a livequiz.
  *
  * @return     external_function_parameters The parameters required for the execute function.
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class reuse_question extends \core_external\external_api {
+class get_lecturer_questions extends \core_external\external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-            'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
-            'questionids' => new external_multiple_structure(
-                new external_value(PARAM_INT, 'Question ID'),
-            ),
             'lecturerid' => new external_value(PARAM_INT, 'Lecturer ID'),
         ]);
     }
 
     /**
-     *
-     * @param int $quizid
-     * @param array $questionids
+     * Summary of execute
+     * Retrieves a question by its ID
      * @param int $lecturerid
      * @return array
-     * @throws \PhpXmlRpc\Exception
      * @throws \invalid_parameter_exception
+     * @throws dml_exception
      */
-    public static function execute(int $quizid, array $questionids, int $lecturerid): array {
+    public static function execute(int $lecturerid): array {
         self::validate_parameters(self::execute_parameters(), [
-            'quizid' => $quizid,
-            'questionids' => $questionids,
             'lecturerid' => $lecturerid,
         ]);
-        $services = livequiz_services::get_singleton_service_instance();
-        try {
-            $livequiz = $services->get_livequiz_instance($quizid);
-            $questionstoadd = [];
-            foreach ($questionids as $id) {
-                $tempquestion = question::get_question_with_answers_from_id($id);
-                $tempquestion->reset_id();
-                foreach ($tempquestion->get_answers() as $answer) {
-                    $answer->reset_id();
-                }
-                $questionstoadd[] = $tempquestion;
-            }
-            $livequiz->add_questions($questionstoadd);
-            $livequiz = $services->submit_quiz($livequiz, $lecturerid); // Refresh the livequiz object.
-            $returnquestions = [];
-            $rawquestions = $livequiz->get_questions();
-            foreach ($rawquestions as $rawquestion) {
-                $returnquestions[] = $rawquestion->prepare_for_template(new stdClass());
-            }
-            return $returnquestions;
-        } catch (dml_exception $e) {
-            debugging('Error reusing question(s): ' . $e->getMessage());
+        $rawquestions = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_lecturer_id($lecturerid);
+        $questions = [];
+        foreach ($rawquestions as $rawquestion) {
+            $question = question::get_question_from_id($rawquestion->question_id);
+            $questions[] = $question->prepare_for_template(new stdClass());
         }
-        return []; // Return empty array if an error occurs.
+        return $questions;
     }
 
     /**
