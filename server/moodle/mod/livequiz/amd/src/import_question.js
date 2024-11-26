@@ -56,6 +56,7 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
  */
 function add_old_questions_to_popup(lecturerid) {
     get_lecturer_questions(lecturerid).then((oldquestions) => {
+        console.log(oldquestions);
         oldquestions.forEach((question) => {
             let question_div = document.createElement("div");
             question_div.innerHTML = `

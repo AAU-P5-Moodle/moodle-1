@@ -61,11 +61,10 @@ class get_lecturer_questions extends external_api {
             'lecturerid' => $lecturerid,
         ]);
         $rawquestions = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_lecturer_id($lecturerid);
-        $rawquestions = self::filter_unique_questions($rawquestions);
+        //$rawquestions = self::filter_unique_questions($rawquestions);
         $questions = [];
         foreach ($rawquestions as $rawquestion) {
-            $question = question::get_question_from_id($rawquestion->question_id);
-            $questions[] = $question;
+            $questions[] = $rawquestion->question_id;
         }
         return self::filter_unique_questions($questions);
     }
@@ -86,30 +85,31 @@ class get_lecturer_questions extends external_api {
      */
     private static function filter_unique_questions(array $questions): array {
         $uniquequestions = [];
-        foreach ($questions as $question) {
+        foreach ($questions as $questionid) {
+            $question = question::get_question_with_answers_from_id($questionid);
             $unique = true;
             foreach ($uniquequestions as $uniquequestion) {
                 // Check if the questions are identical.
                 if (
-                    $question->title == $uniquequestion->title
-                    && $question->description == $uniquequestion->description
-                    && $question->timelimit == $uniquequestion->timelimit
-                    && $question->explanation == $uniquequestion->explanation
-                    && count($question->answers) == count($uniquequestion->answers)
+                    $question->get_title() == $uniquequestion->get_title()
+                    && $question->get_description() == $uniquequestion->get_description()
+                    && $question->get_timelimit() == $uniquequestion->get_timelimit()
+                    && $question->get_explanation() == $uniquequestion->get_explanation()
+                    && count($question->get_answers()) == count($uniquequestion->get_answers())
                 ) {
                     // If the questions are identical, then we check the answers to see if they are identical.
                     $identicalanswercount = 0;
                     foreach ($uniquequestion->get_answers() as $uniqueanswer) {
                         foreach ($question->get_answers() as $answer) {
                             if (
-                                $answer->correct == $uniqueanswer->correct
-                                && $answer->description == $uniqueanswer->description
-                                && $answer->explanation == $uniqueanswer->explanation
+                                $answer->get_correct() == $uniqueanswer->get_correct()
+                                && $answer->get_description() == $uniqueanswer->get_description()
+                                && $answer->get_explanation() == $uniqueanswer->get_explanation()
                             ) {
                                 $identicalanswercount++;
                                 // If there are as many identical answers as there are answers.
                                 // Then we won't include it in the list, as it is identical to another question.
-                                if ($identicalanswercount == count($question->answers)) {
+                                if ($identicalanswercount == count($question->get_answers())) {
                                     $unique = false;
                                     break 3;
                                 }
@@ -122,6 +122,10 @@ class get_lecturer_questions extends external_api {
                 $uniquequestions[] = $question;
             }
         }
-        return $uniquequestions;
+        $returningquestions = [];
+        foreach ($uniquequestions as $uniquequestion) {
+            $returningquestions[] = $uniquequestion->prepare_for_template(new stdClass());
+        }
+        return $returningquestions;
     }
 }
