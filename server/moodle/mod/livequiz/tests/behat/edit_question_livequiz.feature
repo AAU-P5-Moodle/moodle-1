@@ -111,5 +111,7 @@ Feature: Edit questions in livequiz activity
     And I should see "Champagne - Edited"
     And I should see "Nice - Edited"
 
+    And I should see course listing "TC" before "RW"
+
 
 
