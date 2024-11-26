@@ -27,65 +27,67 @@ Feature: Edit questions in livequiz activity
     And "Question 1" "list_item" should exist
 
   Scenario: Edit question in a livequiz
-    #Enter editing menu by clicking list element
-    And I click on "//span[@class='question-title' and text()='Question 1']" "xpath_element"
-    #Check if fields are filled with correct values from demo data
+    # Enter editing menu by clicking list element
+    And I click on "//span[@class='question-title' and text()='Question 1'][1]" "xpath_element"
+    # Check if fields are filled with correct values from demo data
     And the field "question_title_id" matches value "Question 1"
     And the field "question_description_id" matches value "Which of the following cities is in France?"
     And the field "question_explanation_id" matches value "Paris is a city in France, Nice is a city in France"
-    And the field "answer_input_314000" matches value "Paris"
-    And the field "answer_input_314001" matches value "Champagne"
-    And the field "answer_input_314002" matches value "Nice"
+    And the field with xpath "(//input[@class='answer_input'])[1]" matches value "Paris"
+    And the field with xpath "(//input[@class='answer_input'])[2]" matches value "Champagne"
+    And the field with xpath "(//input[@class='answer_input'])[3]" matches value "Nice"
     # Edit the question
     Then I set the field "question_title_id" to "Question 1 - Edited"
     And I set the field "question_description_id" to "Which of the following cities is in France? - Edited"
     And I set the field "question_explanation_id" to "Paris is a city in France, Nice is a city in France - Edited"
-    And I set the field "answer_input_314000" to "Paris - Edited"
-    And I set the field "answer_input_314001" to "Champagne - Edited"
-    And I set the field "answer_input_314002" to "Nice - Edited"
-    #Close editing menu
+    # Use Xpath since the fields are dynamically generated
+    And I set the field with xpath "(//input[@class='answer_input'])[1]" to "Paris - Edited"
+    And I set the field with xpath "(//input[@class='answer_input'])[2]" to "Champagne - Edited"
+    And I set the field with xpath "(//input[@class='answer_input'])[3]" to "Nice - Edited"
+    # Close editing menu
     And "Save Question" "button" should exist
     And I click on "Save Question" "button"
-    #Check if title was changed in list
+    # Check if title was changed in list
     And "Question 1 - Edited" "list_item" should exist
-    And I click on "//span[@class='question-title' and text()='Question 1 - Edited']" "xpath_element"
-    #Check if other fields still remain changed in editing menu
+    And I click on "//span[@class='question-title' and text()='Question 1 - Edited'][1]" "xpath_element"
+    # Check if other fields still remain changed in editing menu
     And the field "question_title_id" matches value "Question 1 - Edited"
     And the field "question_description_id" matches value "Which of the following cities is in France? - Edited"
     And the field "question_explanation_id" matches value "Paris is a city in France, Nice is a city in France - Edited"
-    And the field "answer_input_314008" matches value "Paris - Edited"
-    And the field "answer_input_314009" matches value "Champagne - Edited"
-    And the field "answer_input_314010" matches value "Nice - Edited"
+    And the field with xpath "(//input[@class='answer_input'])[1]" matches value "Paris - Edited"
+    And the field with xpath "(//input[@class='answer_input'])[2]" matches value "Champagne - Edited"
+    And the field with xpath "(//input[@class='answer_input'])[3]" matches value "Nice - Edited"
 
   Scenario: Edit question in a livequiz adding additional answers
-    #Enter editing menu by clicking icon
-    And I click on "//button[@data-id='316000']" "xpath_element"
-    #Check if fields are filled with correct values from demo data
-    And the field "answer_input_314000" matches value "Paris"
-    And the checkbox with id "answer_checkbox_314000" should be checked
-    And the field "answer_input_314001" matches value "Champagne"
-    And the checkbox with id "answer_checkbox_314001" should not be checked
-    And the field "answer_input_314002" matches value "Nice"
-    And the checkbox with id "answer_checkbox_314002" should be checked
+    # Enter editing menu by clicking icon
+    And I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'edit-question-btn')]" "xpath_element"
+    # Check if fields are filled with correct values from demo data
+    And the field with xpath "(//input[@class='answer_input'])[1]" matches value "Paris"
+    And the field with xpath "(//input[@class='answer_checkbox'])[1]" matches value "checked"
+    And the field with xpath "(//input[@class='answer_input'])[2]" matches value "Champagne"
+    # The checkbox should not be checked, hence empty
+    And the field with xpath "(//input[@class='answer_checkbox'])[2]" matches value ""
+    And the field with xpath "(//input[@class='answer_input'])[3]" matches value "Nice"
+    And the field with xpath "(//input[@class='answer_checkbox'])[3]" matches value "checked"
     # Edit the question
     And I click on "Add Answer" "button"
-    And the field "answer_input_1" matches value ""
-    And I set the field "answer_input_1" to "Marseille"
-    And I click on "answer_checkbox_1" "checkbox"
-    And the checkbox with id "answer_checkbox_1" should be checked
-    #Close editing menu and save changes
+    And the field with xpath "(//input[@class='answer_input'])[4]" matches value ""
+    And I set the field with xpath "(//input[@class='answer_input'])[4]" to "Marseille"
+    And I set the field with xpath "(//input[@class='answer_checkbox'])[4]" to "checked"
+    And the field with xpath "(//input[@class='answer_checkbox'])[4]" matches value "checked"
+    # Close editing menu and save changes
     And "Save Question" "button" should exist
     And I click on "Save Question" "button"
-    #Check if changes remain in editing menu
-    And I click on "//button[@data-id='316000']" "xpath_element"
-    And the field "answer_input_314008" matches value "Paris"
-    And the checkbox with id "answer_checkbox_314008" should be checked
-    And the field "answer_input_314009" matches value "Champagne"
-    And the checkbox with id "answer_checkbox_314009" should not be checked
-    And the field "answer_input_314010" matches value "Nice"
-    And the checkbox with id "answer_checkbox_314010" should be checked
-    And the field "answer_input_314011" matches value "Marseille"
-    And the checkbox with id "answer_checkbox_314011" should be checked
+    # Check if changes remain in editing menu
+    And I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'edit-question-btn')]" "xpath_element"
+    And the field with xpath "(//input[@class='answer_input'])[1]" matches value "Paris"
+    And the field with xpath "(//input[@class='answer_checkbox'])[1]" matches value "checked"
+    And the field with xpath "(//input[@class='answer_input'])[2]" matches value "Champagne"
+    And the field with xpath "(//input[@class='answer_checkbox'])[2]" matches value ""
+    And the field with xpath "(//input[@class='answer_input'])[3]" matches value "Nice"
+    And the field with xpath "(//input[@class='answer_checkbox'])[3]" matches value "checked"
+    And the field with xpath "(//input[@class='answer_input'])[4]" matches value "Marseille"
+    And the field with xpath "(//input[@class='answer_checkbox'])[3]" matches value "checked"
 
   
 
