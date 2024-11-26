@@ -90,11 +90,9 @@ Feature: Delete questions in a livequiz activity
     And "//li[//span[//@class='question-title' and text()='Question 1']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
     And "//li[//span[//@class='question-title' and text()='Question 2']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
     And "//li[//span[//@class='question-title' and text()='Question 3']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
-     # See comment in the step definition
-    And I confirm the popup
-    When I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element"
-    When I click on "(//li[.//span[text()='Question 2']])[1]//button[contains(@class, 'delete-question')]" "xpath_element"
-    When I click on "(//li[.//span[text()='Question 3']])[1]//button[contains(@class, 'delete-question')]" "xpath_element"
+    When I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element" confirming the dialogue
+    When I click on "(//li[.//span[text()='Question 2']])[1]//button[contains(@class, 'delete-question')]" "xpath_element" confirming the dialogue
+    When I click on "(//li[.//span[text()='Question 3']])[1]//button[contains(@class, 'delete-question')]" "xpath_element" confirming the dialogue
     Then "Question 1" "list_item" should not exist
     And "Question 2" "list_item" should not exist
     And "Question 3" "list_item" should not exist
@@ -107,8 +105,7 @@ Feature: Delete questions in a livequiz activity
     Then "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
-    And I confirm the popup
-    And I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element"
+    And I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element" confirming the dialogue
     And I log out
     And I log in as "student1"
     And I am on "Test Course" course homepage with editing mode off
