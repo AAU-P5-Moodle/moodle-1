@@ -106,11 +106,11 @@ class websocket implements MessageComponentInterface {
                 $this->handle_quiz_connect($conn, (int)$userid, $room);
                 break;
             case 'openRoom':
-
-                break;
-            case 'startQuiz':
                 $roomcode = $this->rand_room();
                 $this->create_room($roomcode, $userid, $conn);
+                break;
+            case 'startQuiz':
+                $roomcode = $queryparams['room'] ?? null;
                 $this->handle_start_quiz($roomcode);
                 break;
             default:
@@ -221,7 +221,7 @@ class websocket implements MessageComponentInterface {
 
         foreach ($this->clients as $client) {
             $clientdata = $this->clients[$client];
-            if ($clientdata['roomid'] !== $roomid) {
+            if ($clientdata['roomid'] == $roomid) {
                 $client->send("Quiz started.");
             }
         }
