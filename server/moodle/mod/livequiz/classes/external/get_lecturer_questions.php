@@ -61,12 +61,13 @@ class get_lecturer_questions extends external_api {
             'lecturerid' => $lecturerid,
         ]);
         $rawquestions = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_lecturer_id($lecturerid);
+        $rawquestions = self::filter_unique_questions($rawquestions);
         $questions = [];
         foreach ($rawquestions as $rawquestion) {
             $question = question::get_question_from_id($rawquestion->question_id);
-            $questions[] = $question->prepare_for_template(new stdClass());
+            $questions[] = $question;
         }
-        return $questions;
+        return self::filter_unique_questions($questions);
     }
 
     /**
@@ -76,5 +77,51 @@ class get_lecturer_questions extends external_api {
      */
     public static function execute_returns(): external_multiple_structure {
         return new external_multiple_structure(data_structure_helper::get_question_structure(), 'List of questions');
+    }
+
+    /**
+     * Filters an array of questions, such that only one copy of each question is kept
+     * @param array $questions the questions you want to filter for unique
+     * @return array
+     */
+    private static function filter_unique_questions(array $questions): array {
+        $uniquequestions = [];
+        foreach ($questions as $question) {
+            $unique = true;
+            foreach ($uniquequestions as $uniquequestion) {
+                // Check if the questions are identical.
+                if (
+                    $question->title == $uniquequestion->title
+                    && $question->description == $uniquequestion->description
+                    && $question->timelimit == $uniquequestion->timelimit
+                    && $question->explanation == $uniquequestion->explanation
+                    && count($question->answers) == count($uniquequestion->answers)
+                ) {
+                    // If the questions are identical, then we check the answers to see if they are identical.
+                    $identicalanswercount = 0;
+                    foreach ($uniquequestion->get_answers() as $uniqueanswer) {
+                        foreach ($question->get_answers() as $answer) {
+                            if (
+                                $answer->correct == $uniqueanswer->correct
+                                && $answer->description == $uniqueanswer->description
+                                && $answer->explanation == $uniqueanswer->explanation
+                            ) {
+                                $identicalanswercount++;
+                                // If there are as many identical answers as there are answers.
+                                // Then we won't include it in the list, as it is identical to another question.
+                                if ($identicalanswercount == count($question->answers)) {
+                                    $unique = false;
+                                    break 3;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if ($unique) {
+                $uniquequestions[] = $question;
+            }
+        }
+        return $uniquequestions;
     }
 }
