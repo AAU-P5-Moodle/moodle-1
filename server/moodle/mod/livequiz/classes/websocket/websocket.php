@@ -84,6 +84,7 @@ class websocket implements MessageComponentInterface {
     public function onopen(ConnectionInterface $conn) {
         $queryparams = [];
         $params = $conn->httpRequest->getUri()->getQuery();
+        parse_str($params, $queryparams);
 
         $requesttype = $queryparams['requesttype'];
         $userid = $queryparams['userid'] ?? null;
@@ -103,6 +104,9 @@ class websocket implements MessageComponentInterface {
                 }
 
                 $this->handle_quiz_connect($conn, (int)$userid, $room);
+                break;
+            case 'openRoom':
+
                 break;
             case 'startQuiz':
                 $roomcode = $this->rand_room();
