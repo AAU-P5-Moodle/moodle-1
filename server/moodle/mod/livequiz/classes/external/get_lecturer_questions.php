@@ -61,7 +61,6 @@ class get_lecturer_questions extends external_api {
             'lecturerid' => $lecturerid,
         ]);
         $rawquestions = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_lecturer_id($lecturerid);
-        //$rawquestions = self::filter_unique_questions($rawquestions);
         $questions = [];
         foreach ($rawquestions as $rawquestion) {
             $questions[] = $rawquestion->question_id;
@@ -118,14 +117,14 @@ class get_lecturer_questions extends external_api {
                     }
                 }
             }
-            if ($unique) {
+            if ($unique) { // If the question is unique, then we add it to the list.
                 $uniquequestions[] = $question;
             }
         }
         $returningquestions = [];
-        foreach ($uniquequestions as $uniquequestion) {
+        foreach ($uniquequestions as $uniquequestion) { // Prepare the questions for the template.
             $returningquestions[] = $uniquequestion->prepare_for_template(new stdClass());
         }
-        return $returningquestions;
+        return $returningquestions; // Return the prepared questions.
     }
 }
