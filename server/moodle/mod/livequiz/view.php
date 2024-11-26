@@ -48,6 +48,11 @@ $PAGE->set_url(new moodle_url('/mod/livequiz/view.php', ['cmid' => $cmid]));
 $PAGE->set_title(get_string('modulename', 'mod_livequiz'));
 $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
+if (has_capability('mod/livequiz:teacherview', $context)) {
+    echo "<h1>You have teacherview capabilities</h1>";
+}
+
+// Js for opening sockets to connect to quiz room
 $PAGE->requires->js_call_amd('mod_livequiz/websocketscript', 'init', [$CFG->socketroot]);
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
@@ -65,11 +70,8 @@ echo $output->render($renderable);
 // For testing if the user has the correct capabilities
 /* if (has_capability('mod/livequiz:view', $context)) {
     echo "<h1>You have view capabilities</h1>";
-}
-
-if (has_capability('mod/livequiz:teacherview', $context)) {
-    echo "<h1>You have teacherview capabilities</h1>";
 } */
+
 
 echo $OUTPUT->footer();
 //echo html_writer::tag('button', 'Open WebSocket Connection', ['id' => 'openconnection', 'class' => 'btn btn-primary']);
