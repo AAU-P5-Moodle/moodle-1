@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 // Define and export the init function
 export const init = (url, studentid) => {
-    console.log("Teacher Script is loaded and attempting to attach event listener.");
+    console.log("Student Script is loaded and attempting to attach event listener.");
     const startQuizBtn = document.getElementById("room_connection_button");
     if (!startQuizBtn) {
         console.error("Button with id 'startQuiz' not found!");
@@ -11,7 +11,7 @@ export const init = (url, studentid) => {
     startQuizBtn.addEventListener("click", () => {
         console.log("sending message"); // eslint-disable-line no-console
         connect_to_socket(url).then((socket) => {
-            socket.send(`"Testing some stuff for teachers" ${studentid}`);
+            socket.send("Testing some stuff for students" + ' ' + `${studentid}`);
         });
     });
 };

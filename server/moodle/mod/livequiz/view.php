@@ -53,17 +53,25 @@ if (has_capability('mod/livequiz:teacherview', $context)) {
 }
 
 // Js for opening sockets to connect to quiz room
-$PAGE->requires->js_call_amd('mod_livequiz/websocketscript', 'init', [$CFG->socketroot]);
+//$PAGE->requires->js_call_amd('mod_livequiz/websocketscript', 'init', [$CFG->socketroot]);
+
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
 
 $isteacher = has_capability('mod/livequiz:teacherview', $context);
+
 $renderable = new index_page($cmid, $instance->id, $USER->id, $isteacher);
 
 $context = $PAGE->context;
 
 unset($_SESSION['completed']);
 
+if($isteacher){
+    $PAGE->requires->js_call_amd('mod_livequiz/teacher_start_quiz', 'init', [$CFG->socketroot, $USER->id]);
+} else {
+    echo "cfg socketroot here".$CFG->socketroot;
+    $PAGE->requires->js_call_amd('mod_livequiz/student_join_quiz', 'init', [$CFG->socketroot, $USER->id]);
+}
 echo $OUTPUT->header();
 echo $output->render($renderable);
 
