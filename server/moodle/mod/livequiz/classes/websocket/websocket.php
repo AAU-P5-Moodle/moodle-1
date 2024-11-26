@@ -37,23 +37,81 @@ class websocket implements MessageComponentInterface {
     protected $clients;
 
     /**
+     * @var array $quizrooms
+     */
+    protected $quizrooms;
+
+    /**
      * Constructor for the websocket class
      */
     public function __construct() {
         $this->clients = new \SplObjectStorage();
+        $this->quizrooms = [];
+
+        // This is testing and needs to be removed asap.
+        $this->quizrooms[] = "abcdef";
 
         echo "server running!";
         return $this;
     }
 
     /**
-     * When a client connects, it is stored in the clients SplObjectStorage data type
+     * creates a random string for the room id
+     *
+     * @return string
+     */
+    private function rand_room(): string {
+        $alphabet = str_split("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        $characterslength = count($alphabet);
+        $codelength = 6;
+
+        $randomstring = "";
+
+        for ($i = 0; $i < $codelength; $i++) {
+            $index = random_int(0, $characterslength - 1);
+            $randomstring .= $alphabet[$index];
+        }
+
+        return $randomstring;
+    }
+
+    /**
+     * When a client connects, it is stored in the clients SplObjectStorage data type.
      *
      * @param ConnectionInterface $conn
      * @return void
      */
     public function onopen(ConnectionInterface $conn) {
-        $this->clients->attach($conn);
+        $queryparams = [];
+        $params = $conn->httpRequest->getUri()->getQuery();
+
+        $requesttype = $queryparams['requesttype'];
+        $userid = $queryparams['userid'] ?? null;
+
+        if ($userid == null) {
+            echo "userid was null!";
+            return;
+        }
+
+        switch ($requesttype) {
+            case 'connect':
+                $room = $queryparams['room'] ?? null;
+
+                if ($room == null) {
+                    echo "Roomcode was null!";
+                    return;
+                }
+
+                $this->handle_quiz_connect($conn, (int)$userid, $room);
+                break;
+            case 'startQuiz':
+                $roomcode = $this->rand_room();
+                $this->create_room($roomcode, $userid, $conn);
+                $this->handle_start_quiz($roomcode);
+                break;
+            default:
+                print("Invalid request type");
+        }
 
         echo "New connection! ({$conn->resourceId})\n";
     }
@@ -79,6 +137,7 @@ class websocket implements MessageComponentInterface {
         // Send to all clients except sender.
         foreach ($this->clients as $client) {
             if ($from !== $client) {
+                $clientdata = $this->clients[$client];
                 $client->send($msg);
             }
         }
@@ -93,7 +152,6 @@ class websocket implements MessageComponentInterface {
      */
     public function onclose(ConnectionInterface $conn) {
         $this->clients->detach($conn);
-
         echo "Connection {$conn->resourceId} has disconnected\n";
     }
 
@@ -107,6 +165,109 @@ class websocket implements MessageComponentInterface {
     public function onerror(ConnectionInterface $conn, \Exception $e) {
         echo "An error has occurred: {$e->getMessage()}\n";
 
+        $this->clients->detach($conn);
         $conn->close();
+    }
+
+    /**
+     * Handles connect requests
+     *
+     * @param ConnectionInterface $conn
+     * @param int $studentid
+     * @param string $roomcode
+     * @return void
+     */
+    private function handle_quiz_connect(ConnectionInterface $conn, int $studentid, string $roomcode) {
+        if ($this->room_exists($roomcode) == false) {
+            echo "Room does not exist";
+        }
+
+        $clientinfo = [
+            'studentid' => $studentid,
+            'roomid' => $roomcode,
+        ];
+
+        $this->clients->attach($conn, $clientinfo);
+
+        $conn->send("You have joined room: {$roomcode}");
+    }
+
+    /**
+     * Returns true if roomid already exists in quizrooms
+     *
+     * @param int $roomid
+     * @return bool
+     */
+    private function room_exists(string $roomid): bool {
+        return in_array($roomid, $this->quizrooms);
+    }
+
+
+    /**
+     * Sends a messsage to all clients that is connected to a specific room on quiz start
+     *
+     * @param string $roomid
+     * @return void
+     */
+    private function handle_start_quiz(string $roomid) {
+        if ($this->room_exists($roomid) == false) {
+            echo "Room does not exists.";
+            return;
+        }
+
+        foreach ($this->clients as $client) {
+            $clientdata = $this->clients[$client];
+            if ($clientdata['roomid'] !== $roomid) {
+                $client->send("Quiz started.");
+            }
+        }
+    }
+
+    /**
+     * Checks if room exists and then creates and saves it in the quizrooms array
+     *
+     * @param string $roomid
+     * @param string $teacherid
+     * @param ConnectionInterface $conn
+     * @return array
+     */
+    private function create_room(string $roomid, string $teacherid, ConnectionInterface $from): array {
+        if ($teacherid == null) {
+            echo "Teacher id does not exists.";
+            return [];
+        }
+
+        $quizinfo = [
+            'roomid' => $roomid,
+            'teacherid' => $teacherid,
+        ];
+
+        $this->quizrooms[] = $roomid;
+        echo "Room {$roomid} generated.";
+
+
+        $this->clients->attach($from, $quizinfo);
+        $from->send($roomid);
+
+        return $quizinfo;
+    }
+
+    /**
+     * When teacher presses next question, clients in a specific room recieves message
+     *
+     * @param string $roomid
+     * @return void
+     */
+    private function next_question($roomid) {
+        if (!room_exists($roomid)) {
+            echo "Room does not exists.";
+        }
+
+        foreach ($this->clients as $client) {
+            $clientdata = $this->clients[$client];
+            if ($clientdata['roomid'] !== $roomid) {
+                $client->send("Next question started.");
+            }
+        }
     }
 }

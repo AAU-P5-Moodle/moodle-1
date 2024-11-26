@@ -5,18 +5,6 @@ export const init = (url) => {
     // Connects to socket when script loads
     let socket = connect_to_socket(url);
 
-    /* const startQuizBtn = document.getElementById("startQuiz");
-    if (!startQuizBtn) {
-        console.error("Button with id 'startQuiz' not found!"); // eslint-disable-line no-console
-        return;
-    }
-
-    // Sends message to socket when startQuiz button is pressed
-    startQuizBtn.addEventListener("click", () => {
-        console.log("sending message"); // eslint-disable-line no-console
-        socket.send("Testing some stuff");
-    }); */
-    
     // This html element can be used to display the room code received once,
     // the teacher opens room and the websocket has responded
     const roomcodespan = document.getElementById("roomCode");
