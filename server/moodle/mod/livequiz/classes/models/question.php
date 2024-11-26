@@ -331,7 +331,7 @@ class question {
     /**
      * Resets the id of the question such that it can be reused.
      */
-    public function reset_id(): void{
+    public function reset_id(): void {
         $this->set_id(0);
     }
 

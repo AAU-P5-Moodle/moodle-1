@@ -25,8 +25,10 @@
 namespace mod_livequiz;
 
 use advanced_testcase;
+use dml_exception;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\question;
+use mod_livequiz\models\questions_answers_relation;
 use ReflectionClass;
 use ReflectionException;
 use stdClass;
@@ -112,6 +114,51 @@ final class question_test extends advanced_testcase {
         }
         $this->question->add_answers($mockanswers);
         $this->assertnotTrue($this->question->get_hasmultiplecorrectanswers());
+    }
+
+    /**
+     * Test of get_question_with_answers_from_id for question class.
+     * @covers       \mod_livequiz\models\question::get_question_with_answers_from_id
+     * @throws dml_exception
+     */
+    public function test_get_question_with_answers_from_id(): void {
+        $questionid = question::insert_question($this->question);
+
+        $answer1 = new answer(1, "This is the description for answer 1", "This is the explanation for answer 1");
+        $answer2 = new answer(0, "This is the description for answer 2", "This is the explanation for answer 2");
+        $answer3 = new answer(0, "This is the description for answer 3", "This is the explanation for answer 3");
+
+        $answerid1 = answer::insert_answer($answer1);
+        $answerid2 = answer::insert_answer($answer2);
+        $answerid3 = answer::insert_answer($answer3);
+
+        questions_answers_relation::insert_question_answer_relation($questionid, $answerid1);
+        questions_answers_relation::insert_question_answer_relation($questionid, $answerid2);
+        questions_answers_relation::insert_question_answer_relation($questionid, $answerid3);
+
+        $question = question::get_question_with_answers_from_id($questionid);
+
+        self::assertEquals(3, count($question->get_answers()));
+
+        // Check that the ids are all correct.
+        self::assertEquals($answerid1, $question->get_answers()[0]->get_id());
+        self::assertEquals($answerid2, $question->get_answers()[1]->get_id());
+        self::assertEquals($answerid3, $question->get_answers()[2]->get_id());
+
+        // Check that all correct are correct.
+        self::assertEquals($answer1->get_correct(), $question->get_answers()[0]->get_correct());
+        self::assertEquals($answer2->get_correct(), $question->get_answers()[1]->get_correct());
+        self::assertEquals($answer3->get_correct(), $question->get_answers()[2]->get_correct());
+
+        // Check that all descriptions are correct.
+        self::assertEquals($answer1->get_description(), $question->get_answers()[0]->get_description());
+        self::assertEquals($answer2->get_description(), $question->get_answers()[1]->get_description());
+        self::assertEquals($answer3->get_description(), $question->get_answers()[2]->get_description());
+
+        // Check that all explanations are correct.
+        self::assertEquals($answer1->get_explanation(), $question->get_answers()[0]->get_explanation());
+        self::assertEquals($answer2->get_explanation(), $question->get_answers()[1]->get_explanation());
+        self::assertEquals($answer3->get_explanation(), $question->get_answers()[2]->get_explanation());
     }
 
     /**
