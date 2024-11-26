@@ -41,28 +41,32 @@ Feature: View livequiz activity
     And "Save Question" "button" should exist
     And "Discard" "button" should exist
     Then I set the field "question_title_id" to "Geography 1"
-    Then I set the field "question_description_id" to "What is the Capital of Sweden?"
-    Then I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
+    And I set the field "question_description_id" to "What is the Capital of Sweden?"
+    And I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
+    And I click on "Add Answer" "button"
+    Then the field with xpath "(//input[@class='answer_input'])[1]" matches value ""
+    And the field with xpath "(//input[@class='answer_checkbox'])[1]" matches value ""
+    # Button value is empty because a value is not set in the mustache template
+    And the field with xpath "(//button[@class='delete_answer_button'])[1]" matches value ""
+    And I set the field with xpath "(//input[@class='answer_input'])[1]" to "Stockholm"
+    And I set the field with xpath "(//input[@class='answer_checkbox'])[1]" to "checked"
     Then I click on "Add Answer" "button"
-    Then the "button" with id "delete_answer_button_1" should exist
-    Then the "field" with id "answer_input_1" should exist
-    Then the "checkbox" with id "answer_checkbox_1" should exist
-    And I set the field "answer_input_1" to "Stockholm"
-    And I click on "answer_checkbox_1" "checkbox"
-    Then I click on "Add Answer" "button"
-    Then the "field" with id "answer_input_2" should exist
-    Then the "button" with id "delete_answer_button_2" should exist
-    Then the checkbox with id "answer_checkbox_2" should exist
+    Then the field with xpath "(//input[@class='answer_input'])[2]" matches value ""
+    And the field with xpath "(//input[@class='answer_checkbox'])[2]" matches value ""
+    And the field with xpath "(//button[@class='delete_answer_button'])[2]" matches value ""
     # Next step should be deleted when css is fixed
     And I click on "Close block drawer" "button"
-    And I click on "delete_answer_button_2" "button"
+    And I click on "(//button[@class='delete_answer_button'])[2]" "xpath_element"
     Then the "field" with id "answer_input_2" should not exist
     And I click on "Add Answer" "button"
-    # The id of answers are just counted up thus the id is 3
+    # The id of answers are just counted up thus the id is
+    # XPath renders dynamically, so the XPath's value is only 2, since we only have 2 occurrences
+    # That is why we check that the field have the id 3, and not the previous id 2
     Then the "field" with id "answer_input_3" should exist
-    Then the "button" with id "delete_answer_button_3" should exist
-    Then the checkbox with id "answer_checkbox_3" should exist
-    And I set the field "answer_input_3" to "Malmö"
+    Then the field with xpath "(//input[@class='answer_input'])[2]" matches value ""
+    And the field with xpath "(//input[@class='answer_checkbox'])[2]" matches value ""
+    And the field with xpath "(//button[@class='delete_answer_button'])[2]" matches value ""
+    And I set the field with xpath "(//input[@class='answer_input'])[2]" to "Malmö"
     And I click on "Save Question" "button"
     Then "Geography 1" "list_item" should exist
 
@@ -97,4 +101,4 @@ Feature: View livequiz activity
     Then "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
-    And "What is the Capital of Sweden?" "list_item" should not exist
+    And "Geography 1" "list_item" should not exist
