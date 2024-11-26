@@ -7,12 +7,14 @@ Feature: Delete questions in a livequiz activity
     Given the following "users" exist:
       | username | firstname | lastname | email                |
       | teacher1 | Teacher   | 1        | teacher1@example.com |
+      | student1 | Student   | 1        | student1@example.com |
     And the following "courses" exist:
       | fullname    | shortname |
       | Test Course | TC        |
     And the following "course enrolments" exist:
       | user | course | role |
       | teacher1 | TC | editingteacher |
+      | student1 | TC | student |
     And the following "activity" exists:
     # Create a livequiz activity before the test
       | activity | livequiz         |
@@ -33,12 +35,13 @@ Feature: Delete questions in a livequiz activity
     And "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
-    And "//button[@id='316000-delete-btn']" "xpath_element" should exist
-    And "//button[@id='316001-delete-btn']" "xpath_element" should exist
-    And "//button[@id='316002-delete-btn']" "xpath_element" should exist
+    And "//li[//span[//@class='question-title' and text()='Question 1']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question-title' and text()='Question 2']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question-title' and text()='Question 3']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
     # See comment in the step definition
     And I confirm the popup
-    When I click on "//button[@id='316000-delete-btn']" "xpath_element"
+    # Click on the delete btn for the first appereance of a span element with the title "Question 1"
+    When I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element"
     Then "Question 1" "list_item" should not exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
@@ -59,12 +62,13 @@ Feature: Delete questions in a livequiz activity
     And "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
-    And "//button[@id='316000-delete-btn']" "xpath_element" should exist
-    And "//button[@id='316001-delete-btn']" "xpath_element" should exist
-    And "//button[@id='316002-delete-btn']" "xpath_element" should exist
+    And "//li[//span[//@class='question-title' and text()='Question 1']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question-title' and text()='Question 2']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question-title' and text()='Question 3']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
     # See comment in the step definition
     When I cancel the popup
-    When I click on "//button[@id='316000-delete-btn']" "xpath_element"
+    # Click on the delete btn for the first appereance of a span element with the title "Question 1"
+    When I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element"
     Then "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
@@ -75,4 +79,54 @@ Feature: Delete questions in a livequiz activity
     And "Paris" "checkbox" should exist
     And "Champagne" "checkbox" should exist
     And "Nice" "checkbox" should exist
+
+  Scenario: Delete the last question in a livequiz
+    When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    Then I should see "Quiz editor page"
+    And "Add Question" "button" should exist
+    And I should see "Saved Questions"
+    And "Question 1" "list_item" should exist
+    And "Question 2" "list_item" should exist
+    And "Question 3" "list_item" should exist
+    And "Take Quiz" "link" should exist
+    And "//li[//span[//@class='question-title' and text()='Question 1']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question-title' and text()='Question 2']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question-title' and text()='Question 3']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+     # See comment in the step definition
+    And I confirm the popup
+    When I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element"
+    When I click on "(//li[.//span[text()='Question 2']])[1]//button[contains(@class, 'delete-question')]" "xpath_element"
+    When I click on "(//li[.//span[text()='Question 3']])[1]//button[contains(@class, 'delete-question')]" "xpath_element"
+    Then "Question 1" "list_item" should not exist
+    And "Question 2" "list_item" should not exist
+    And "Question 3" "list_item" should not exist
+    And "Take Quiz" "link" should not exist
+    And I should see "There are no questions present in this quiz"
+
+  Scenario: Delete question is deleted from students quiz
+    # Checks if the teacher have deleted a question from a quiz, the students quiz is also updated
+    When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    Then "Question 1" "list_item" should exist
+    And "Question 2" "list_item" should exist
+    And "Question 3" "list_item" should exist
+    And I confirm the popup
+    And I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element"
+    And I log out
+    And I log in as "student1"
+    And I am on "Test Course" course homepage with editing mode off
+    And I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    And I should see "Take Quiz"
+    And I click on "Take Quiz" "link"
+    # Checks the first question is "Question 2"
+    And I should see "What is the Capital of Denmark?"
+    And "Aarhus" "radio" should exist
+    And "Aalborg" "radio" should exist
+    And "Copenhagen" "radio" should exist
+    And I should not see "Question 1"
+    And I should not see "Which of the following cities is in France?"
+    And "Paris" "checkbox" should not exist
+    And "Champagne" "checkbox" should not exist
+    And "Nice" "checkbox" should not exist
+
+
 
