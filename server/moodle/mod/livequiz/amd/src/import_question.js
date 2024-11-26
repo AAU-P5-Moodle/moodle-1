@@ -2,6 +2,10 @@ import Templates from "core/templates";
 import {add_discard_question_button_listener, rerender_saved_questions_list} from "./edit_question_helper";
 import {add_edit_question_listeners} from "./edit_question";
 import {add_delete_question_listeners} from "./delete_question";
+import {displayException} from "core/notification";
+import {external_reuse_questions} from "./repository";
+import {rerender_take_quiz_button} from "./take_quiz";
+
 /**
  * Adds an event listener to the "Import Question" button.
  * When the button is clicked, it renders the import question menu popup.
@@ -27,6 +31,7 @@ export const init = async (quizid, lecturerid, url) => {
  *
  * @param {number} quizid - The ID of the quiz.
  * @param {number} lecturerid - The ID of the lecturer.
+ * @param {string} url - The URL to the quiz attempt page.
  * @returns {void}
  */
 function render_import_question_menu_popup(quizid, lecturerid, url) {
@@ -50,7 +55,7 @@ function render_import_question_menu_popup(quizid, lecturerid, url) {
  *
  * @param {number} quizid - The ID of the quiz.
  * @param {number} lecturerid - The ID of the lecturer.
- * @param url
+ * @param {string} url - THE URL of the quiz page.
  */
 function add_import_question_button_listener(quizid, lecturerid, url) {
     let save_question_button = document.querySelector(".save_button");
@@ -66,9 +71,9 @@ function add_import_question_button_listener(quizid, lecturerid, url) {
  * @returns {Promise<void>} A promise that resolves when the questions are imported.
  */
 async function importQuestions(quizid, url, lecturerid){
-    quiz_url = url; //Set url to quiz attempt page to global variable
+    let quiz_url = url;
     const importQuestionBtn = document.getElementById("importQuestionBtn");
-    $questionids = get_checked_questions();
+    let questionids = get_checked_questions();
 
     importQuestionBtn.addEventListener("click", async() => {
         try {
@@ -76,7 +81,7 @@ async function importQuestions(quizid, url, lecturerid){
                 let update_event_listeners = () => {
                     add_edit_question_listeners(quizid, lecturerid);
                     add_delete_question_listeners(quizid, lecturerid);
-                }
+                };
                 rerender_saved_questions_list(questions, update_event_listeners); //Re-render saved questions list
                 rerender_take_quiz_button(quiz_url, true); //Re-render take quiz button
             });
@@ -84,7 +89,7 @@ async function importQuestions(quizid, url, lecturerid){
             window.console.error("Error in import of questions");
         }
     });
-};
+}
 
 /**
  * Retrieves the values of all checked questions from the lecturer's question list.
