@@ -35,15 +35,14 @@ class_alias('mod_livequiz\tests\behat\behat_mod_livequiz', 'behat_mod_livequiz')
  * @copyright Software AAU 2024
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class behat_mod_livequiz extends behat_base
-{
+class behat_mod_livequiz extends behat_base {
     /**
      * Asserts whether the given element is checked.
      * @Then the :checkbox answer should be checked
      * @param $element (radio button or checkbox)
      * @throws ExpectationException
      */
-    public function assertischecked($element): void{
+    public function assertischecked($element) {
         $this->assertSession()->checkboxChecked(field: $element);
     }
 
@@ -83,8 +82,7 @@ class behat_mod_livequiz extends behat_base
      * Asserts the id for a checkbox or radio button.
      * @Then the :selectorType with id :checkboxid should exist
      */
-    public function assertelementidexists($checkboxid)
-    {
+    public function assertelementidexists($checkboxid) {
         $this->assertSession()->elementExists('css', '#' . $checkboxid);
     }
 
@@ -92,8 +90,7 @@ class behat_mod_livequiz extends behat_base
      * Asserts the id for a checkbox or radio button.
      * @Then the :selectorType with id :checkboxid should not exist
      */
-    public function assertelemtenidnotexists($checkboxid)
-    {
+    public function assertelemtenidnotexists($checkboxid) {
         $this->assertSession()->elementNotExists('css', '#' . $checkboxid);
     }
 
@@ -103,8 +100,7 @@ class behat_mod_livequiz extends behat_base
      * @param $element (radio button or checkbox)
      * @throws ExpectationException
      */
-    public function assertisnotchecked($element): void
-    {
+    public function assertisnotchecked($element) {
         $this->assertSession()->checkboxNotChecked($element);
     }
 
@@ -113,8 +109,7 @@ class behat_mod_livequiz extends behat_base
      *
      * @Given I use demodata for the course :coursename and activity :activityname
      */
-    public function i_use_demodata($coursename, $activityname): void
-    {
+    public function i_use_demodata($coursename, $activityname): void {
         global $DB;
 
         // Get the course ID.
