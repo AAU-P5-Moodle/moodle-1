@@ -7,12 +7,14 @@ Feature: View livequiz activity
     Given the following "users" exist:
       | username | firstname | lastname | email                |
       | teacher1 | Teacher   | 1        | teacher1@example.com |
+      | student1 | Student   | 1        | student1@example.com |
     And the following "courses" exist:
       | fullname    | shortname |
       | Test Course | TC        |
     And the following "course enrolments" exist:
       | user | course | role |
       | teacher1 | TC | editingteacher |
+      | student1 | TC | student |
     And the following "activity" exists:
     # Create a livequiz activity before the test
       | activity | livequiz         |
@@ -102,3 +104,47 @@ Feature: View livequiz activity
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
     And "Geography 1" "list_item" should not exist
+
+  Scenario: Questions added to a livequiz reaches students
+    When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    Then I should see "Quiz editor page"
+    And I click on "Add Question" "button"
+    # Add a question to the livequiz
+    Then I set the field "question_title_id" to "Geography 1"
+    And I set the field "question_description_id" to "What is the Capital of Sweden?"
+    And I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
+    And I click on "Add Answer" "button"
+    And I set the field with xpath "(//input[@class='answer_input'])[1]" to "Stockholm"
+    And I set the field with xpath "(//input[@class='answer_checkbox'])[1]" to "checked"
+    And I click on "Add Answer" "button"
+    And I set the field with xpath "(//input[@class='answer_input'])[2]" to "Malmö"
+    And I click on "Add Answer" "button"
+    And I set the field with xpath "(//input[@class='answer_input'])[3]" to "Gothenburg"
+    And I click on "Save Question" "button"
+    Then "Geography 1" "list_item" should exist
+    And I click on "Take Quiz" "link"
+    # Runs through the quiz from teacher perspective to see if the questions are displayed
+    And I should see "Which of the following cities is in France?"
+    And I click on "Next Question" "link"
+    And I should see "What is the Capital of Denmark?"
+    And I click on "Next Question" "link"
+    And I should see "Is Hamburg in Germany?"
+    And I click on "Next Question" "link"
+    And I should see "What is the Capital of Sweden?"
+    And I log out
+    And I log in as "student1"
+    And I am on "Test Course" course homepage with editing mode off
+    And I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    And I should see "Take Quiz"
+    And I click on "Take Quiz" "link"
+    # Runs through the quiz from student perspective to see if the questions are displayed
+    And I should see "Which of the following cities is in France?"
+    And I click on "Next Question" "link"
+    And I should see "What is the Capital of Denmark?"
+    And I click on "Next Question" "link"
+    And I should see "Is Hamburg in Germany?"
+    And I click on "Next Question" "link"
+    And I should see "What is the Capital of Sweden?"
+    And "Stockholm" "radio" should exist
+    And "Malmö" "radio" should exist
+    And "Gothenburg" "radio" should exist
