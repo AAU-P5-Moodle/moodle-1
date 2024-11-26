@@ -52,9 +52,6 @@ if (has_capability('mod/livequiz:teacherview', $context)) {
     echo "<h1>You have teacherview capabilities</h1>";
 }
 
-// Js for opening sockets to connect to quiz room
-//$PAGE->requires->js_call_amd('mod_livequiz/websocketscript', 'init', [$CFG->socketroot]);
-
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
 
@@ -66,20 +63,13 @@ $context = $PAGE->context;
 
 unset($_SESSION['completed']);
 
-if($isteacher){
+if ($isteacher) {
     $PAGE->requires->js_call_amd('mod_livequiz/teacher_start_quiz', 'init', [$CFG->socketroot, $USER->id]);
 } else {
-    echo "cfg socketroot here".$CFG->socketroot;
+    echo "cfg socketroot here" . $CFG->socketroot;
     $PAGE->requires->js_call_amd('mod_livequiz/student_join_quiz', 'init', [$CFG->socketroot, $USER->id]);
 }
 echo $OUTPUT->header();
 echo $output->render($renderable);
 
-// For testing if the user has the correct capabilities
-/* if (has_capability('mod/livequiz:view', $context)) {
-    echo "<h1>You have view capabilities</h1>";
-} */
-
-
 echo $OUTPUT->footer();
-//echo html_writer::tag('button', 'Open WebSocket Connection', ['id' => 'openconnection', 'class' => 'btn btn-primary']);
