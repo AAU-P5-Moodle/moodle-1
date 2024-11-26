@@ -68,18 +68,6 @@ function add_old_questions_to_popup(lecturerid) {
 }
 
 /**
- * Adds an event listener to the save question button
- *
- * @param {number} quizid - The ID of the quiz.
- * @param {number} lecturerid - The ID of the lecturer.
- * @param {string} url - THE URL of the quiz page.
- */
-function add_import_question_button_listener(quizid, lecturerid, url) {
-    let import_button = document.querySelector(".import_btn");
-    import_button.addEventListener("click", importQuestions(quizid, url, lecturerid));
-}
-
-/**
  * Imports questions into a quiz.
  *
  * @param {number} quizid - The ID of the quiz.
@@ -104,6 +92,13 @@ async function importQuestions(quizid, url, lecturerid) {
     });
 }
 
+/**
+ * Calls the external function to reuse questions.
+ * @param {number} quizid - The ID of the quiz.
+ * @param {number} questionids - The IDs of the questions to reuse.
+ * @param {number} lecturerid - The ID of the lecturer.
+ * @param {string} quiz_url - The URL of the quiz page.
+ */
 function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
     external_reuse_questions(quizid, questionids, lecturerid).then((questions) => {
         let update_event_listeners = () => {
