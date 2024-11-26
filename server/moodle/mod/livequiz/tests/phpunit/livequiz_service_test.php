@@ -639,4 +639,43 @@ final class livequiz_service_test extends \advanced_testcase {
             $this->assertEquals(1, student_answers_relation::get_answer_participation_count($answerid));
         }
     }
+
+
+    /**
+     * Tests the get_student_answers_for_question method.
+     *
+     * @covers \mod_livequiz\services\livequiz_services::get_student_answers_for_question
+     * @throws Exception
+     * @throws dml_exception
+     */
+    public function test_get_student_answers_for_question(): void {
+        // MOCK.
+        // Create & submit a livequiz with questions and answers.
+        $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
+        $service = livequiz_services::get_singleton_service_instance();
+        $service->submit_quiz($livequiz, 1);
+        $submittedlivequizinstance = $service->get_livequiz_instance($livequiz->get_id());
+
+        // ACT.
+        // Participate in the quiz.
+        $studentid = 1;
+        $participationid = $service->insert_participation($studentid, $livequiz->get_id())->get_id();
+
+        // Insert student answers.
+        $quizquestions = $submittedlivequizinstance->get_questions();
+        foreach ($quizquestions as $question) {
+            $answers = $question->get_answers();
+            $answerid = $answers[0]->get_id();
+            $service->insert_answer_choice($studentid, $answerid, $participationid);
+        }
+
+        // ASSERT.
+        foreach ($quizquestions as $question) {
+            $answers = $service->get_student_answers_for_question($question->get_id(), $submittedlivequizinstance->get_id());
+            $this->assertEquals(1, count($answers));
+            $this->assertEquals($answers[0]['studentid'], $studentid);
+            $this->assertEquals($question->get_answers()[0]->get_correct(), $answers[0]['correct']);
+            $this->assertEquals(!$question->get_answers()[0]->get_correct(), $answers[0]['incorrect']);
+        }
+    }
 }

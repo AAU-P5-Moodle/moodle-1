@@ -64,4 +64,30 @@ class student_quiz_relation {
         }
         return $participations;
     }
+
+    /**
+     * Get all participations for a quiz
+     * @param int $quizid
+     * @return array
+     * @throws dml_exception
+     */
+    public static function get_participations_from_quizid(int $quizid): array {
+        global $DB;
+        $participationrecords =
+            $DB->get_records(
+                'livequiz_quiz_student',
+                ['livequiz_id' => $quizid],
+                'id DESC',
+                '*'
+            );
+
+        $participations = [];
+        foreach ($participationrecords as $participation) {
+            $newparticipation = new participation($participation->student_id, $participation->livequiz_id);
+            $newparticipation->set_id($participation->id);
+            $participations[] = $newparticipation;
+        }
+
+        return $participations;
+    }
 }
