@@ -84,7 +84,7 @@ class results_page implements renderable, templatable {
         foreach ($data->questions as $qindex => $question) {
             // Get the student's answer for this question.
             foreach ($question->answers as $aindex => $answer) {
-                // Check if the answer is correct
+                // Check if the answer is correct.
                 $correct = $data->questions[$qindex]->answers[$aindex]['answercorrect'];
 
                 // Check if the answer was selected by the student.
@@ -99,7 +99,6 @@ class results_page implements renderable, templatable {
                 $data->questions[$qindex]->answers[$aindex]['correctnotchosen'] =
                     !$data->questions[$qindex]->answers[$aindex]['chosen'] && $correct;
             }
-
         }
         return $data;
     }
