@@ -66,3 +66,14 @@ Feature: Reuse previously created questions in livequiz activity
       And I click on "Import Question(s)" "button"
       And I should see "Saved Questions"
       And "test 1" "list_item" should exist
+      # Clicking on the question to see if the answers are correct
+      And I click on "(//li[.//span[text()='test 1']])[1]//button[contains(@class, 'edit-question-btn')]" "xpath_element"
+      And the field "question_title_id" matches value "test 1"
+      And the field "question_description_id" matches value "question text"
+      And the field "question_explanation_id" matches value "explanation text"
+      # Accessing the answers to see if they are correct
+      And the field with xpath "(//input[@class='answer_input'])[1]" matches value "answer text 1"
+      And the field with xpath "(//input[@class='answer_input'])[2]" matches value "answer text 2"
+      # Checking if the answers are correctly checked
+      And the field with xpath "(//input[@class='answer_checkbox'])[1]" matches value "checked"
+      And the field with xpath "(//input[@class='answer_checkbox'])[2]" matches value ""
