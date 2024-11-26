@@ -25,7 +25,7 @@ Feature: Delete questions in a livequiz activity
     And I log in as "teacher1"
     And I am on "Test Course" course homepage with editing mode on
 
-  Scenario: delete questions in a livequiz
+  Scenario: Accept confirm to delete questions in a livequiz
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
     Then I should see "Quiz editor page"
     And "Add Question" "button" should exist
@@ -33,9 +33,46 @@ Feature: Delete questions in a livequiz activity
     And "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
-    And "//button[@id='Question 1-delete-btn']" "xpath_element" should exist
-    And "//button[@id='Question 2-delete-btn']" "xpath_element" should exist
-    And "//button[@id='Question 3-delete-btn']" "xpath_element" should exist
-    When I accept the confirmation dialog
-    When I click on "//button[@id='Question 1-delete-btn']" "xpath_element"
+    And "//button[@id='316000-delete-btn']" "xpath_element" should exist
+    And "//button[@id='316001-delete-btn']" "xpath_element" should exist
+    And "//button[@id='316002-delete-btn']" "xpath_element" should exist
+    # See comment in the step definition
+    And I confirm the popup
+    When I click on "//button[@id='316000-delete-btn']" "xpath_element"
+    Then "Question 1" "list_item" should not exist
+    And "Question 2" "list_item" should exist
+    And "Question 3" "list_item" should exist
+    And I click on "Take Quiz" "link"
+    # Checks that the new first question is "Question 2"
+    And I should see "Question 2"
+    And I should see "What is the Capital of Denmark?"
+    And "Aarhus" "radio" should exist
+    And "Aalborg" "radio" should exist
+    And "Copenhagen" "radio" should exist
+
+
+  Scenario: Cancel confirm to delete questions in a livequiz
+    When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    Then I should see "Quiz editor page"
+    And "Add Question" "button" should exist
+    And I should see "Saved Questions"
+    And "Question 1" "list_item" should exist
+    And "Question 2" "list_item" should exist
+    And "Question 3" "list_item" should exist
+    And "//button[@id='316000-delete-btn']" "xpath_element" should exist
+    And "//button[@id='316001-delete-btn']" "xpath_element" should exist
+    And "//button[@id='316002-delete-btn']" "xpath_element" should exist
+    # See comment in the step definition
+    When I cancel the popup
+    When I click on "//button[@id='316000-delete-btn']" "xpath_element"
+    Then "Question 1" "list_item" should exist
+    And "Question 2" "list_item" should exist
+    And "Question 3" "list_item" should exist
+    And I click on "Take Quiz" "link"
+    # Checks that the new first question is "Question 2"
+    And I should see "Question 1"
+    And I should see "Which of the following cities is in France?"
+    And "Paris" "checkbox" should exist
+    And "Champagne" "checkbox" should exist
+    And "Nice" "checkbox" should exist
 

@@ -141,6 +141,10 @@ class behat_mod_livequiz extends behat_base
     }
 
     /**
+     * Selenium is by default blocking the confirm popup. We need to allow it.
+     * Hence, we need to override the confirm popup.
+     * This step allways confirms the popup, however the popup won't appear in the browser.
+     * This is useful when we want to test the behavior of the application when the user confirms the popup.
      * @When /^(?:|I )confirm the popup$/
      */
     public function confirmPopup()
@@ -150,7 +154,11 @@ class behat_mod_livequiz extends behat_base
     }
 
     /**
-     * @when /^(?:|I )cancel the popup$/
+     * Selenium is by default blocking the confirm popup. We need to allow it.
+     * Hence, we need to override the confirm popup.
+     * This step allways cancel the popup, however the popup won't appear in the browser.
+     * This is useful when we want to test the behavior of the application when the user cancels the popup.
+     * @When /^(?:|I )cancel the popup$/
      */
     public function cancelPopup()
     {
