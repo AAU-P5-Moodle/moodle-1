@@ -18,6 +18,7 @@ namespace mod_livequiz\classes\websocket;
 
 require(dirname(__DIR__) . '/../../../vendor/autoload.php');
 
+use core\oauth2\client;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
@@ -50,8 +51,6 @@ class websocket implements MessageComponentInterface {
 
         // This is testing and needs to be removed asap.
         $this->quizrooms[] = "abcdef";
-
-        echo "server running!";
         return $this;
     }
 
@@ -82,32 +81,41 @@ class websocket implements MessageComponentInterface {
      * @return void
      */
     public function onopen(ConnectionInterface $conn) {
-        $queryparams = [];
         $params = $conn->httpRequest->getUri()->getQuery();
+        $queryparams = [];
+        parse_str($params, $queryparams);
 
         $requesttype = $queryparams['requesttype'];
         $userid = $queryparams['userid'] ?? null;
+        $room = $queryparams['room'] ?? null;
 
+        // Should be in the specific function calls that needs them otherwise they will cause issues.
         if ($userid == null) {
             echo "userid was null!";
             return;
         }
 
+        if ($room == null) {
+            echo "Roomcode was null!";
+            return;
+        }
+
         switch ($requesttype) {
             case 'connect':
-                $room = $queryparams['room'] ?? null;
-
-                if ($room == null) {
-                    echo "Roomcode was null!";
-                    return;
-                }
-
                 $this->handle_quiz_connect($conn, (int)$userid, $room);
                 break;
-            case 'startQuiz':
+            case 'createroom':
                 $roomcode = $this->rand_room();
                 $this->create_room($roomcode, $userid, $conn);
-                $this->handle_start_quiz($roomcode);
+                break;
+            case 'startquiz':
+                $this->handle_start_quiz($room);
+                break;
+            case 'nextquiz':
+                $this->next_question($room);
+                break;
+            case 'leaveroom':
+                $this->leave_room($room, $conn, $userid);
                 break;
             default:
                 print("Invalid request type");
@@ -177,8 +185,8 @@ class websocket implements MessageComponentInterface {
      * @param string $roomcode
      * @return void
      */
-    private function handle_quiz_connect(ConnectionInterface $conn, int $studentid, string $roomcode) {
-        if ($this->room_exists($roomcode) == false) {
+    private function handle_quiz_connect(ConnectionInterface $conn, int $studentid, string $roomcode): void {
+        if (!$this->room_exists($roomcode)) {
             echo "Room does not exist";
         }
 
@@ -209,18 +217,8 @@ class websocket implements MessageComponentInterface {
      * @param string $roomid
      * @return void
      */
-    private function handle_start_quiz(string $roomid) {
-        if ($this->room_exists($roomid) == false) {
-            echo "Room does not exists.";
-            return;
-        }
-
-        foreach ($this->clients as $client) {
-            $clientdata = $this->clients[$client];
-            if ($clientdata['roomid'] !== $roomid) {
-                $client->send("Quiz started.");
-            }
-        }
+    private function handle_start_quiz(string $roomid): void {
+        $this->handle_messaging_for_specific_room($roomid, "Quiz started.");
     }
 
     /**
@@ -253,20 +251,50 @@ class websocket implements MessageComponentInterface {
     }
 
     /**
-     * When teacher presses next question, clients in a specific room recieves message
+     * Handles leaving room requests
+     *
+     * @param string $roomid
+     * @param ConnectionInterface $conn
+     * @param string $userid
+     * @return void
+     */
+    private function leave_room(string $roomid, ConnectionInterface $conn, string $userid): void {
+        foreach ($this->clients as $client) {
+            $clientdata = $this->clients[$client];
+            if ($clientdata['studentid'] == $userid && $clientdata['roomid'] == $roomid) {
+                $this->clients->detach($conn);
+            }
+        }
+        echo "Connection {$conn->resourceId} has disconnected from room {$roomid}\n";
+    }
+
+    /**
+     * When teacher presses next question, clients in a specific room receives message
      *
      * @param string $roomid
      * @return void
      */
-    private function next_question($roomid) {
-        if (!room_exists($roomid)) {
+    private function next_question(string $roomid): void {
+        $this->handle_messaging_for_specific_room($roomid, "next question.");
+    }
+
+    /**
+     * Handles when sending message to users within a specific room
+     *
+     * @param string $roomid
+     * @param string $msg
+     * @return void
+     */
+    private function handle_messaging_for_specific_room(string $roomid, string $msg): void {
+        if (!$this->room_exists($roomid)) {
             echo "Room does not exists.";
+            return;
         }
 
         foreach ($this->clients as $client) {
             $clientdata = $this->clients[$client];
-            if ($clientdata['roomid'] !== $roomid) {
-                $client->send("Next question started.");
+            if ($clientdata['roomid'] == $roomid) {
+                $client->send($msg);
             }
         }
     }

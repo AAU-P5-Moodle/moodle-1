@@ -220,6 +220,7 @@ EOF
       echo "Starting WebSocket for livequiz"
       php ./server/moodle/mod/livequiz/classes/websocket/start_websocket.php &
       WEBSOCKET_PID=$!
+      echo "Started websocket!"
     }
     # Function to stop services
     stop_services() {
