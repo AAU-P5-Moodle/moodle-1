@@ -316,4 +316,18 @@ class question {
         }
         return $data;
     }
+
+    /**
+     * Checks if an answer is in the question.
+     * @param $answerid
+     * @return bool
+     */
+    public function is_answer_in_question($answerid): bool {
+        foreach ($this->answers as $answer) {
+            if ($answer->get_id() == $answerid) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
