@@ -240,7 +240,7 @@ class livequiz {
     /**
      * Gets a question from the livequiz
      * @param int $questionid
-     * @return bool was a question with the specified id found and removed form the questions.
+     * @return question was a question with the specified id found and removed form the questions.
      */
     public function get_question_by_id(int $questionid): question {
         $questions = $this->get_questions();
