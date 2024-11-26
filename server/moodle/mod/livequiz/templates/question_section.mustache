@@ -40,16 +40,26 @@
       </div>
     <p class="question-description">{{questiondescription}}</p>
   </div>
-  <div class="answer-container">
-  <fieldset>
-  {{#answers}}
-    <div class="answer">
-      <label for="{{answerid}}">{{answerdescription}}</label>
-        <input type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}" {{#chosen}} checked {{/chosen}}
-        {{^isattempting}} disabled {{/isattempting}} />
-    </div>
-  {{/answers}}
-  </fieldset>
+    <div class="answer-container">
+        <fieldset>
+            {{#answers}}
+                <div class="answer
+                {{^isattempting}}
+                    {{#chosen}}
+                        {{#correct}}correct{{/correct}}
+                        {{^correct}}incorrect{{/correct}}
+                    {{/chosen}}
+                    {{^chosen}}
+                        {{#correctnotchosen}}correctnotchosen{{/correctnotchosen}}
+                    {{/chosen}}
+                {{/isattempting}}">
+                    <label for="{{answerid}}">{{answerdescription}}</label>
+                    <input type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
+                        {{#chosen}} checked {{/chosen}}
+                        {{^isattempting}} disabled {{/isattempting}} />
+                </div>
+            {{/answers}}
+        </fieldset>
   </div>
   {{#isattempting}}
       <!-- Hidden inputs to pass to the next question -->

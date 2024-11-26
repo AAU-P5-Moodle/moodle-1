@@ -12,6 +12,17 @@
     
 }
 
+.correct {
+    background-color: rgba(0, 128, 0);
+}
+.incorrect {
+    background-color: rgba(255, 0, 0);
+}
+
+.correctnotchosen {
+    background-color: rgba(255, 200, 12);
+}
+
 .sidebar {
     
 }

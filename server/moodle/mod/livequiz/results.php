@@ -39,6 +39,7 @@ $participationnumber = optional_param('participationnumber', 0, PARAM_INT);
 $index = $participationnumber - 1; // Index is 0-based.
 
 $instance = $DB->get_record('livequiz', ['id' => $cm->instance], '*', MUST_EXIST);
+$PAGE->requires->css('/mod/livequiz/style.css'); // Adds styling to the page.
 
 // Read demo data - REMOVE WHEN PUSHING TO STAGING.
 $livequizservice = livequiz_services::get_singleton_service_instance();
