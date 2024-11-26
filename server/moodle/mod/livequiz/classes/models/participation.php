@@ -78,7 +78,7 @@ class participation {
      * @return false|mixed|stdClass
      * @throws dml_exception
      */
-    public static function get_participation_by_studentid($studentid) {
+    public static function get_participation_by_studentid($studentid): mixed {
         global $DB;
         return $DB->get_record('participation', ['studentid' => $studentid]);
     }

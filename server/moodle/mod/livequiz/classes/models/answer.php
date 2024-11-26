@@ -194,7 +194,7 @@ class answer {
     /**
      * Resets the id of the answer to 0, such that it can be reused.
      */
-    public function reset_id(): void{
+    public function reset_id(): void {
         $this->set_id(0);
     }
     /**

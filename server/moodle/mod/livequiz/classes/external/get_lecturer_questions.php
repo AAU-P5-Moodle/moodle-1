@@ -16,15 +16,14 @@
 
 namespace mod_livequiz\external;
 
+use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
 use core_external\external_value;
-use core_external\external_single_structure;
 use dml_exception;
-use exception;
+use invalid_parameter_exception;
 use mod_livequiz\models\livequiz_questions_lecturer_relation;
 use mod_livequiz\models\question;
-use mod_livequiz\services\livequiz_services;
 use stdClass;
 
 /**
@@ -38,7 +37,7 @@ use stdClass;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class get_lecturer_questions extends \core_external\external_api {
+class get_lecturer_questions extends external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
@@ -54,7 +53,7 @@ class get_lecturer_questions extends \core_external\external_api {
      * Retrieves a question by its ID
      * @param int $lecturerid
      * @return array
-     * @throws \invalid_parameter_exception
+     * @throws invalid_parameter_exception
      * @throws dml_exception
      */
     public static function execute(int $lecturerid): array {

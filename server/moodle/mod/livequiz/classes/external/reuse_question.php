@@ -20,12 +20,11 @@ use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
 use core_external\external_value;
-use core_external\external_single_structure;
 use dml_exception;
-use exception;
-use mod_livequiz\models\answer;
+use invalid_parameter_exception;
 use mod_livequiz\models\question;
 use mod_livequiz\services\livequiz_services;
+use PhpXmlRpc\Exception;
 use stdClass;
 
 /**
@@ -60,8 +59,8 @@ class reuse_question extends external_api {
      * @param array $questionids
      * @param int $lecturerid
      * @return array
-     * @throws \PhpXmlRpc\Exception
-     * @throws \invalid_parameter_exception
+     * @throws Exception
+     * @throws invalid_parameter_exception
      */
     public static function execute(int $quizid, array $questionids, int $lecturerid): array {
         self::validate_parameters(self::execute_parameters(), [

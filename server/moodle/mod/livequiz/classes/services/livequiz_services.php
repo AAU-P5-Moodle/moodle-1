@@ -185,7 +185,6 @@ class livequiz_services {
      *
      * @throws dml_transaction_exception
      * @throws dml_exception
-     * @throws Exception
      */
     private function insert_question_with_relations(question $question, int $lecturerid, int $quizid): int {
         $questionid = question::insert_question($question);
@@ -327,6 +326,7 @@ class livequiz_services {
      * @param int $quizid
      * @param int $studentid
      * @return participation
+     * @throws dml_exception
      */
     public function get_newest_participation_for_quiz(int $quizid, int $studentid): participation {
         global $DB;
