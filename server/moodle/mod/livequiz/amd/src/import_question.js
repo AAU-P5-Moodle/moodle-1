@@ -192,7 +192,7 @@ function get_checked_questions() {
 function add_quiz_checkbox_listener(checkbox, questioncheckboxes){
     checkbox.addEventListener("change", () => {
         questioncheckboxes.forEach((questioncheckbox) => {
-            questioncheckbox.checked = checkbox.checked;
+            questioncheckbox.checked = checkbox.checked; // Set all questions to checked if the quiz is checked.
         });
     });
 }
@@ -205,13 +205,13 @@ function add_quiz_checkbox_listener(checkbox, questioncheckboxes){
 function add_question_checkbox_listener(checkbox, questioncheckboxes){
     questioncheckboxes.forEach((questioncheckbox) => {
         questioncheckbox.addEventListener("change", () => {
-            if(questioncheckbox.checked) {
+            if(questioncheckbox.checked) { // If the question is checked, check if all questions are checked.
                 let checkboxes_same = false;
                 checkboxes_same = check_questions_checked(questioncheckboxes);
-                if (checkboxes_same) {
+                if (checkboxes_same) { // If all questions are checked, check the quiz checkbox.
                     checkbox.checked = questioncheckbox.checked;
                 }
-            } else {
+            } else { // If the question is unchecked, uncheck the quiz checkbox.
                 checkbox.checked = questioncheckbox.checked;
             }
         });
