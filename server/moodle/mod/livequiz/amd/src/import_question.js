@@ -3,7 +3,7 @@ import {add_discard_question_button_listener, rerender_saved_questions_list} fro
 import {add_edit_question_listeners} from "./edit_question";
 import {add_delete_question_listeners} from "./delete_question";
 import {displayException} from "core/notification";
-import {external_reuse_questions, get_lecturer_questions} from "./repository";
+import {external_reuse_questions, get_lecturer_quiz} from "./repository";
 import {rerender_take_quiz_button} from "./edit_question_helper";
 
 /**
@@ -47,7 +47,7 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
         })
 
         // Deal with this exception (Using core/notify exception function is recommended).
-        .catch((error) => displayException(error));
+        .catch((error) => console.log(error));
 }
 
 /**
@@ -55,42 +55,49 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
  * @param {number} lecturerid - The ID of the lecturer.
  */
 function add_old_questions_to_popup(lecturerid) {
-    console.log("is in add old questions");
-    get_lecturer_questions(lecturerid).then((oldquizzes) => {
-        console.log("got after then");
+    get_lecturer_quiz(lecturerid).then((oldquizzes) => {
         let oldQuizzesContainer = document.querySelector(".oldQuizzes");
-        console.log("Old quizzes: ", oldquizzes);
-        //oldQuizzesContainer.innerHTML = ""; // Clear content.
-        
+        if (oldquizzes.length === 0) {
+            let noQuestions = document.createElement("p");
+            noQuestions.textContent = "No questions available.";
+            oldQuizzesContainer.appendChild(noQuestions);
+            return;
+        }
         oldquizzes.forEach((quiz) => {
+            let question_checkboxes = [];
             let quiz_div = document.createElement('div');
-            //Create quiz checkbox
+            //Create quiz checkbox.
             let quiz_checkbox = document.createElement('input');
             quiz_checkbox.type = "checkbox";
             quiz_checkbox.value = quiz.quizid;
             quiz_checkbox.id = quiz.quizid;
-            quiz_checkbox.name = quiz.quizname;
-            // Create quiz Label
+            quiz_checkbox.name = quiz.quiztitle;
+            // Create quiz Label.
             let quiz_label = document.createElement('label');
             quiz_label.htmlFor = `quiz_${quiz.quizid}`;
-            quiz_label.textContent = quiz.quizname;
+            quiz_label.textContent = quiz.quiztitle;
             quiz_div.class = "oldquiz"; // Might be used for styling.
+
             // Append the checkbox and label to the div.
             quiz_div.appendChild(quiz_checkbox);
             quiz_div.appendChild(quiz_label);
-            
+            // Set the border style
+            quiz_div.style.border = "2px solid black";
             // Create container for questions.
             let questions_div = document.createElement("div");
+            questions_div.style.marginBottom = "20px";
+            questions_div.id = "questionsdiv";
             // Loop through each question and add it to the container.
             quiz.questions.forEach((question) => {
-                //Create question checkbox
+                //Create question checkbox.
                 let question_div = document.createElement('div');
                 let question_checkbox = document.createElement('input');
                 question_checkbox.type = "checkbox";
                 question_checkbox.value = `question_${question.questionid}`;
                 question_checkbox.id = question.questionid;
                 question_checkbox.name = question.questiontitle;
-                // Create question Label
+                question_checkboxes.push(question_checkbox);
+                // Create question Label.
                 let question_label = document.createElement('label');
                 question_label.htmlFor = `question_${question.questionid}`;
                 question_label.textContent = question.questiontitle;
@@ -98,6 +105,8 @@ function add_old_questions_to_popup(lecturerid) {
                 question_div.appendChild(question_label);
                 questions_div.appendChild(question_div);
             });
+            add_quiz_checkbox_listener(quiz_checkbox, question_checkboxes);
+            add_question_checkbox_listener(quiz_checkbox, question_checkboxes);
             quiz_div.appendChild(questions_div);
             oldQuizzesContainer.appendChild(quiz_div);
         });
@@ -142,7 +151,7 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
         };
         rerender_saved_questions_list(questions, update_event_listeners); // Re-render saved questions list.
         rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button.
-    }). catch((error) => displayException(error));
+    }). catch((error) => console.log(error));
     let modal_div = document.querySelector(".Modal_div");
     modal_div.remove();
 }
@@ -154,14 +163,67 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
  */
 function get_checked_questions() {
     let checkedquestions = [];
-    let questions_div = document.querySelector(".oldQuestions");
+    let questions_div = document.querySelector(".oldQuizzes");
 
-    // Loop through all questions and add the value of the checked questions to the array.
-    for (let question of questions_div.children) {
-        let checkbox = question.querySelector('input[type="checkbox"]');
-        if (checkbox.checked) {
-            checkedquestions.push(parseInt(checkbox.value));
+    // Loop through all quizzes and get the checked questions.
+    for (let quiz_div of questions_div.children) { // Loop through all quizzes.
+        for (let content of quiz_div.children) { // Loop through all content of the quiz.
+            if (content.tagName === "DIV") { // Only look in div elements
+                for (let question_div of content.children) { // Loop through all questions.
+                    for (let children of question_div.children) { // Loop through all children of the question.
+                        if (children.tagName === "INPUT") { // Only look in input elements.
+                            let checkbox = children;
+                            if (checkbox.checked) { // If the checkbox is checked, add the id to the array.
+                                checkedquestions.push(parseInt(checkbox.id));
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     return checkedquestions; // Returns the checked questions.
+}
+
+/**
+ * Adds an event listener to the quiz checkboxes.
+ * @param checkbox - The checkbox to add the event listener to.
+ * @param questioncheckboxes - The question checkboxes that are manipulated when event is triggered.
+ */
+function add_quiz_checkbox_listener(checkbox, questioncheckboxes){
+    checkbox.addEventListener("change", () => {
+        questioncheckboxes.forEach((questioncheckbox) => {
+            questioncheckbox.checked = checkbox.checked; // Set all questions to checked if the quiz is checked.
+        });
+    });
+}
+
+/**
+ * Adds an event listener to the question checkboxes.
+ * @param checkbox - The checkbox that is manipulated when all questions are checked.
+ * @param questioncheckboxes - The question checkboxes to add the event listener to.
+ */
+function add_question_checkbox_listener(checkbox, questioncheckboxes){
+    questioncheckboxes.forEach((questioncheckbox) => {
+        questioncheckbox.addEventListener("change", () => {
+            if(questioncheckbox.checked) { // If the question is checked, check if all questions are checked.
+                let checkboxes_same = false;
+                checkboxes_same = check_questions_checked(questioncheckboxes);
+                if (checkboxes_same) { // If all questions are checked, check the quiz checkbox.
+                    checkbox.checked = questioncheckbox.checked;
+                }
+            } else { // If the question is unchecked, uncheck the quiz checkbox.
+                checkbox.checked = questioncheckbox.checked;
+            }
+        });
+    });
+}
+
+/**
+ * Checks if all questions are checked.
+ * @param questions
+ * @returns {bool} - True if all questions are checked, false otherwise.
+ */
+function check_questions_checked(questions) {
+    return questions.every((question) => question.checked); // Returns true only if all are checked
 }

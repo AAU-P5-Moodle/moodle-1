@@ -185,7 +185,7 @@ export function rerender_saved_questions_list(questions, callback) {
         callback();
       }
     })
-    .catch((error) => displayException(error));
+    .catch((error) => console.log(error));
 }
 
 /**
@@ -209,11 +209,15 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
   if (hasquestions) {
     //Remove no question paragraph if there are questions.
     let no_question_paragraph = document.querySelector(".no-question-text");
-    no_question_paragraph.remove(); //We have just added a question so remove the no question text
+    if (no_question_paragraph) {
+      no_question_paragraph.remove(); //We have just added a question so remove the no question text
+    } else {
+      let take_quiz_button = document.querySelector("#takeQuizBtn");
+      take_quiz_button.remove();
+    }
   } else {
     //Remove take quiz link if there are no questions
     let take_quiz_button = document.querySelector("#takeQuizBtn");
-    console.log(take_quiz_button);
     take_quiz_button.remove();
   }
 
