@@ -269,7 +269,7 @@ class question {
      * @param $id
      * @return void The ID of the question.
      */
-    private function set_id($id): void {
+    public function set_id($id): void {
         $this->id = $id;
     }
 
