@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 // Define and export the init function
-export const init = (url, studentid) => {
+export const init = (url, teacherid) => {
     console.log("Teacher Script is loaded and attempting to attach event listener.");
+
     const startQuizBtn = document.getElementById("room_connection_button");
     if (!startQuizBtn) {
         console.error("Button with id 'startQuiz' not found!");
@@ -10,8 +11,8 @@ export const init = (url, studentid) => {
     // Sends message to socket when startQuiz button is pressed
     startQuizBtn.addEventListener("click", () => {
         console.log("sending message"); // eslint-disable-line no-console
-        connect_to_socket(url).then((socket) => {
-            socket.send(`"Testing some stuff for teachers" ${studentid}`);
+        connect_to_socket(`${url}?requesttype=createroom&userid=${teacherid}`).then((socket) => {
+            socket.send(`"Testing some stuff for teachers" ${teacherid}`);
         });
     });
 };
@@ -29,6 +30,7 @@ async function connect_to_socket(url) {
     socket = new WebSocket(url);
 
     let myPromise = new Promise(function(myResolve, myReject) {
+        // Handle successful connection
         socket.onopen = () => {
             console.log("WebSocket connection established successfully!"); // eslint-disable-line no-console
             myResolve(socket);
@@ -44,15 +46,17 @@ async function connect_to_socket(url) {
 
     try {
         console.log("WebSocket object created, awaiting connection."); // eslint-disable-line no-console
-
-        // Handle successful connection
-
-
         // Handle incoming messages
         socket.onmessage = (event) => {
             console.log("WebSocket message received:", event.data); // eslint-disable-line no-console
-        };
+            const roomCodeElem = document.getElementById("roomCode");
+            if (!roomCodeElem) {
+                console.error("Button with id 'roomCode' not found!");
+                return;
+            }
 
+            roomCodeElem.innerHTML = event.data;
+        };
 
         // Handle connection close
         socket.onclose = () => {

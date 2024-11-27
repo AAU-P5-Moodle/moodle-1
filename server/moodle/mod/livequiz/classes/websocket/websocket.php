@@ -87,7 +87,7 @@ class websocket implements MessageComponentInterface {
 
         $requesttype = $queryparams['requesttype'];
         $userid = $queryparams['userid'] ?? null;
-        $room = $queryparams['room'] ?? null;
+        $room = $queryparams['room'] ?? "test";
 
         // Should be in the specific function calls that needs them otherwise they will cause issues.
         if ($userid == null) {
@@ -106,6 +106,11 @@ class websocket implements MessageComponentInterface {
                 break;
             case 'createroom':
                 $roomcode = $this->rand_room();
+                // Keep trying new codes if it already exists.
+                while ($this->room_exists($roomcode)) {
+                    $roomcode = $this->rand_room();
+                }
+                
                 $this->create_room($roomcode, $userid, $conn);
                 break;
             case 'startquiz':
@@ -133,7 +138,8 @@ class websocket implements MessageComponentInterface {
      */
     public function onmessage(ConnectionInterface $from, $msg) {
         $receivercount = count($this->clients) - 1;
-
+        //$jsonobjectforurl = {"requesttype": leave_room, "userid": 1, "roomid": abcdef};
+        //$anwer = {"questionid": 1, "answers": []};
         echo sprintf(
             'Connection %d sending message "%s" to %d other connection%s' . "\n",
             $from->resourceId,
@@ -142,6 +148,21 @@ class websocket implements MessageComponentInterface {
             $receivercount == 1 ? '' : 's'
         );
 
+        $requestobject = json_decode($msg);
+        print_r($requestobject);
+
+        switch ($requestobject->requesttype) {
+            case 'test':
+                echo "yay!";
+                break;
+            case 'startquiz':
+                break;
+            case 'nextquestion':
+                break;
+            case 'leaveroom':
+                break;
+            default:
+        }
         // Send to all clients except sender.
         foreach ($this->clients as $client) {
             if ($from !== $client) {
@@ -243,8 +264,8 @@ class websocket implements MessageComponentInterface {
         $this->quizrooms[] = $roomid;
         echo "Room {$roomid} generated.";
 
-
         $this->clients->attach($from, $quizinfo);
+        echo 'This is the room code: {$roomid}';
         $from->send($roomid);
 
         return $quizinfo;

@@ -10,7 +10,7 @@ export const init = (url, studentid) => {
     // Sends message to socket when startQuiz button is pressed
     startQuizBtn.addEventListener("click", () => {
         console.log("sending message"); // eslint-disable-line no-console
-        connect_to_socket(url).then((socket) => {
+        connect_to_socket(`${url}?requesttype=connect&userid=${studentid}&room=abcdef`).then((socket) => {
             socket.send("Testing some stuff for students" + ' ' + `${studentid}`);
         });
     });
