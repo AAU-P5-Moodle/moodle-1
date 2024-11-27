@@ -160,6 +160,7 @@ EOF
     kill_existing "php"
     # kill_port_user ${toString adminer_port}
 
+
     # Start MariaDB
     start_mariadb() {
       echo "Starting MariaDB..."
@@ -211,6 +212,8 @@ EOF
     }
     # Start PHP built-in server for Moodle
     start_php_server() {
+      create_config
+      install_ratchet
       echo "Starting PHP built-in server for Moodle..."
       php -S 127.0.0.1:8000 -t ./server/moodle &
       PHP_SERVER_PID=$!
