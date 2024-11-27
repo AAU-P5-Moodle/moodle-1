@@ -66,13 +66,13 @@ function add_old_questions_to_popup(lecturerid) {
         oldquizzes.forEach((quiz) => {
             let question_checkboxes = [];
             let quiz_div = document.createElement('div');
-            //Create quiz checkbox
+            //Create quiz checkbox.
             let quiz_checkbox = document.createElement('input');
             quiz_checkbox.type = "checkbox";
             quiz_checkbox.value = quiz.quizid;
             quiz_checkbox.id = quiz.quizid;
             quiz_checkbox.name = quiz.quiztitle;
-            // Create quiz Label
+            // Create quiz Label.
             let quiz_label = document.createElement('label');
             quiz_label.htmlFor = `quiz_${quiz.quizid}`;
             quiz_label.textContent = quiz.quiztitle;
@@ -86,10 +86,10 @@ function add_old_questions_to_popup(lecturerid) {
             // Create container for questions.
             let questions_div = document.createElement("div");
             questions_div.style.marginBottom = "20px";
-            questions_div.id = "questionsdiv"
+            questions_div.id = "questionsdiv";
             // Loop through each question and add it to the container.
             quiz.questions.forEach((question) => {
-                //Create question checkbox
+                //Create question checkbox.
                 let question_div = document.createElement('div');
                 let question_checkbox = document.createElement('input');
                 question_checkbox.type = "checkbox";
@@ -97,7 +97,7 @@ function add_old_questions_to_popup(lecturerid) {
                 question_checkbox.id = question.questionid;
                 question_checkbox.name = question.questiontitle;
                 question_checkboxes.push(question_checkbox);
-                // Create question Label
+                // Create question Label.
                 let question_label = document.createElement('label');
                 question_label.htmlFor = `question_${question.questionid}`;
                 question_label.textContent = question.questiontitle;
@@ -165,11 +165,22 @@ function get_checked_questions() {
     let questions_div = document.querySelector(".oldQuizzes");
 
     // Loop through all quizzes and get the checked questions.
-    // This selects all the checked checkboxes that are nested three levels deep of divs.
-    let quizDivs = questions_div.querySelectorAll('div > div > div > input[type="checkbox"]:checked');
-    quizDivs.forEach(checkbox => { // Loop through each checked checkbox and add it to the array.
-        checkedquestions.push(parseInt(checkbox.id));
-    });
+    for (let quiz_div of questions_div.children) {
+        for (let content of quiz_div.children) {
+            if (content.tagName === "DIV") {
+                for (let question_div of content.children) {
+                    for (let children of question_div.children) {
+                        if (children.tagName === "INPUT") {
+                            let checkbox = children;
+                            if (checkbox.checked) {
+                                checkedquestions.push(parseInt(checkbox.id));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     return checkedquestions; // Returns the checked questions.
 }
 
