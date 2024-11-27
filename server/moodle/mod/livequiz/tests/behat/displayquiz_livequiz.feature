@@ -142,17 +142,17 @@ Scenario: Submitted quiz has the correct classes
   And I click on "Submit Quiz" "button"
   And I should see "Results for attempt"
   And "Paris" "checkbox" should exist
-  Then the "#314000" should have class "answer correct"
+  Then "Paris" should have a parent div with class "answer correct"
   And "Champagne" "checkbox" should exist
-  Then the "#314001" should have class "answer incorrect"
+  Then "Champagne" should have a parent div with class "answer incorrect"
   And "Nice" "checkbox" should exist
-  Then the "#314002" should have class "answer correctnotchosen"
+  Then "Nice" should have a parent div with class "answer correctnotchosen"
   And "Aarhus" "radio" should exist
   And "Aalborg" "radio" should exist
   And "Copenhagen" "radio" should exist
-  Then the "#314005" should have class "answer correct"
+  Then "Copenhagen" should have a parent div with class "answer correct"
   And "Yes" "radio" should exist
-  Then the "#314006" should have class "answer correctnotchosen"
+  Then "Yes" should have a parent div with class "answer correctnotchosen"
   And "No" "radio" should exist
-  Then the "#314007" should have class "answer incorrect"
+  Then "No" should have a parent div with class "answer incorrect"
 

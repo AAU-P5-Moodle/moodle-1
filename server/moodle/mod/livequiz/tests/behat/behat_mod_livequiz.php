@@ -90,25 +90,26 @@ class behat_mod_livequiz extends behat_base {
     /**
      * Tests if an element has a given class (whitespaces are removed).
      *
-     * @Then the :selector should have class :class
+     * @Then :selector should have a parent div with class :class
      */
     public function elementshouldhaveclass($selector, $class) {
-        // Get an element via id.
-        $element = $this->getSession()->getPage()->find('css', $selector);
 
-        if (null === $element) {
-            throw new \Exception("Could not find element with selector '$selector'.");
+        $label = $this->getSession()->getPage()->findAll('css', 'label');
+        foreach ($label as $lbl) {
+            if ($lbl->getText() === $selector) {
+                // Get the parent element of the label (which should be the div)
+                $parentDiv = $lbl->find('xpath', 'ancestor::div[1]');
+                $divclass = $parentDiv->getAttribute('class');
+                break; // Stop once the correct label is found
+            }
         }
-
-        // Get the class of the div.
-        $classes = $element->getAttribute('class');
 
         /* The class in the code contains multiple line ends and spaces (uncountable amount), therefore
          * we remove all line ends and spaces from the class given in the test and
          * the class gotten in the test.
          */
         $class = preg_replace('/\s+/', '', $class);
-        $classes = preg_replace('/\s+/', '', $classes);
+        $classes = preg_replace('/\s+/', '', $divclass);
 
         // Check if the class given is not the same as the class gotten.
         if (!str_contains($classes, $class)) {
