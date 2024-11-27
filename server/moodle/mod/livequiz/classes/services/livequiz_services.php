@@ -120,8 +120,9 @@ class livequiz_services {
             $livequiz->update_quiz();
 
             $quizid = $livequiz->get_id();
-
-            livequiz_quiz_lecturer_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
+            if (!livequiz_quiz_lecturer_relation::check_lecturer_quiz_relation_exists($quizid, $lecturerid)) {
+                livequiz_quiz_lecturer_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
+            }
             $this->submit_questions($livequiz, $lecturerid);
 
 

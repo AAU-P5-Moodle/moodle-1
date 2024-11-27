@@ -65,6 +65,7 @@ class get_lecturer_questions extends external_api {
         ]);
         // Get all quizzes from the lecturer.
         $rawquizzes = livequiz_quiz_lecturer_relation::get_lecturer_quiz_relations_by_lecturer_id($lecturerid);
+        //error_log(print_r($rawquizzes));
         $quizzes = [];
         // Loop through all quizzes from the lecturer and find the corresponding questions.
         foreach ($rawquizzes as $rawquiz) {
