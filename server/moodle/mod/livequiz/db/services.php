@@ -42,6 +42,13 @@ $functions = [
         'ajax'        => true,
         'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
     ],
+    'mod_livequiz_save_question' => [
+        'classname'   => 'mod_livequiz\external\save_question',
+        'description' => 'Save a question.',
+        'type'        => 'write',
+        'ajax'        => true,
+        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
 ];
 
 $services = [];

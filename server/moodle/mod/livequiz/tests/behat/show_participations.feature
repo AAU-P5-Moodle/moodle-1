@@ -30,7 +30,7 @@ Feature: View livequiz activity
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
     And I should see "Take Quiz"
     And I click on "Take Quiz" "link"
-    And I should see "This is about France"
+    And I should see "Which of the following cities is in France?"
     And "Paris" "checkbox" should exist
     And I click on "Paris" "checkbox"
     And "Next Question" "link" should exist
@@ -44,7 +44,7 @@ Feature: View livequiz activity
     And "Submit Quiz" "button" should exist
     And I click on "Submit Quiz" "button"
     Then I should see "Results for attempt"
-    Then I should see "This is about France"
+    Then I should see "Which of the following cities is in France?"
     Then the "Paris" answer should be checked
     Then the "Copenhagen" answer should be checked
     Then the "Yes" answer should be checked
@@ -54,7 +54,7 @@ Feature: View livequiz activity
     #Making another participation to test multiple can be shown
     And I should see "Take Quiz"
     And I click on "Take Quiz" "link"
-    And I should see "This is about France"
+    And I should see "Which of the following cities is in France?"
     And "Paris" "checkbox" should exist
     Then the "Paris" answer should not be checked
     And "Nice" "checkbox" should exist
@@ -79,7 +79,7 @@ Feature: View livequiz activity
     Then "Go to participation 1" "button" should exist
     And "Go to participation 2" "button" should exist
     And I press "Go to participation 1"
-    Then I should see "This is about France"
+    Then I should see "Which of the following cities is in France?"
     Then the "Nice" answer should be checked
     Then the "Aalborg" answer should be checked
     Then the "No" answer should be checked

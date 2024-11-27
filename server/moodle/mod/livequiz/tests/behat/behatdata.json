@@ -10,8 +10,8 @@
     "questions": [
       {
         "id": "1",
-        "title": "Which of the following cities is in France?",
-        "description": "This is about France",
+        "title": "Question 1",
+        "description": "Which of the following cities is in France?",
         "explanation": "Paris is a city in France, Nice is a city in France",
         "timelimit": "60",
         "answers": [
@@ -37,9 +37,9 @@
       },
       {
         "id": "2",
-        "title": "What is the Capital of Denmark?",
-        "description": "This is about Denmark",
-        "explanation": "The Capital of Denmark is Copenhagen",
+        "title": "Question 2",
+        "description": "What is the Capital of Denmark?",
+        "explanation": "Danish capital",
         "timelimit": "60",
         "answers": [
           {
@@ -64,8 +64,8 @@
       },
       {
         "id": "3",
-        "title": "Is Hamburg in Germany?",
-        "description": "German cities",
+        "title": "Question 3",
+        "description": "Is Hamburg in Germany?",
         "explanation": "Hamburg is a city in Northern Germany",
         "timelimit": "60",
         "answers": [
