@@ -81,6 +81,7 @@ class get_lecturer_questions extends external_api {
      * Filters an array of questions, such that only one copy of each question is kept
      * @param array $questions the questions you want to filter for unique
      * @return array
+     * @throws dml_exception
      */
     private static function filter_unique_questions(array $questions): array {
         $uniquequestions = [];
