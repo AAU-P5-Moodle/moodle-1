@@ -24,6 +24,7 @@ use dml_exception;
 use invalid_parameter_exception;
 use mod_livequiz\models\livequiz_questions_lecturer_relation;
 use mod_livequiz\models\livequiz_quiz_lecturer_relation;
+use mod_livequiz\models\livequiz;
 use mod_livequiz\models\quiz_questions_relation;
 use mod_livequiz\models\question;
 use stdClass;
@@ -46,7 +47,7 @@ class get_lecturer_questions extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-            'lecturerid' => new external_value(PARAM_INT, 'Lecturer ID')
+            'lecturerid' => new external_value(PARAM_INT, 'Lecturer ID'),
         ]);
     }
 
@@ -64,23 +65,18 @@ class get_lecturer_questions extends external_api {
         ]);
         // Get all quizzes from the lecturer.
         $rawquizzes = livequiz_quiz_lecturer_relation::get_lecturer_quiz_relations_by_lecturer_id($lecturerid);
-        error_log(print_r("rawquzzes:------------"));
         $quizzes = [];
         // Loop through all quizzes from the lecturer and find the corresponding questions.
         foreach ($rawquizzes as $rawquiz) {
-            $questions = [];
+            $quizobject = livequiz::get_livequiz_instance($rawquiz->quiz_id);
             $rawquestions = quiz_questions_relation::get_questions_from_quiz_id($rawquiz->quiz_id);
             foreach ($rawquestions as $rawquestion) {
-                error_log(print_r("rawqiestio:------------"));
-                $question = question::get_question_from_id($rawquestion->question_id);
-                $questions[] = $question->prepare_for_template(new stdClass());
+                $question = question::get_question_from_id($rawquestion->get_id());
+                $quizobject->add_question($question);
             }
-            $quizzes[] = [
-                'livequiz' => $rawquiz,
-                'questions' => $questions,
-            ];
+            $preparedquiz = $quizobject->prepare_for_template();
+            $quizzes[] = $preparedquiz;
         }
-
         return $quizzes;
     }
     /**

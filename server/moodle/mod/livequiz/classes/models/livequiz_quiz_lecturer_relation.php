@@ -71,10 +71,7 @@ class livequiz_quiz_lecturer_relation {
      */
     public static function get_lecturer_quiz_relations_by_lecturer_id(int $lecturerid): array {
         global $DB;
-
-        $printable = $DB->get_records('livequiz_quiz_lecturer', ['lecturer_id' => $lecturerid]);
-        error_log(print_r($printable));
-        return $printable;
+        return $DB->get_records('livequiz_quiz_lecturer', ['lecturer_id' => $lecturerid]);
     }
 
     /**
