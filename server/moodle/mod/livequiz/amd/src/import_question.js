@@ -64,14 +64,15 @@ function add_old_questions_to_popup(lecturerid) {
             return;
         }
         oldquizzes.forEach((quiz) => {
+            let question_checkboxes = [];
             let quiz_div = document.createElement('div');
-            //Create quiz checkbox
+            //Create quiz checkbox.
             let quiz_checkbox = document.createElement('input');
             quiz_checkbox.type = "checkbox";
             quiz_checkbox.value = quiz.quizid;
             quiz_checkbox.id = quiz.quizid;
             quiz_checkbox.name = quiz.quiztitle;
-            // Create quiz Label
+            // Create quiz Label.
             let quiz_label = document.createElement('label');
             quiz_label.htmlFor = `quiz_${quiz.quizid}`;
             quiz_label.textContent = quiz.quiztitle;
@@ -85,17 +86,18 @@ function add_old_questions_to_popup(lecturerid) {
             // Create container for questions.
             let questions_div = document.createElement("div");
             questions_div.style.marginBottom = "20px";
-            questions_div.id = "questionsdiv"
+            questions_div.id = "questionsdiv";
             // Loop through each question and add it to the container.
             quiz.questions.forEach((question) => {
-                //Create question checkbox
+                //Create question checkbox.
                 let question_div = document.createElement('div');
                 let question_checkbox = document.createElement('input');
                 question_checkbox.type = "checkbox";
                 question_checkbox.value = `question_${question.questionid}`;
                 question_checkbox.id = question.questionid;
                 question_checkbox.name = question.questiontitle;
-                // Create question Label
+                question_checkboxes.push(question_checkbox);
+                // Create question Label.
                 let question_label = document.createElement('label');
                 question_label.htmlFor = `question_${question.questionid}`;
                 question_label.textContent = question.questiontitle;
@@ -103,11 +105,14 @@ function add_old_questions_to_popup(lecturerid) {
                 question_div.appendChild(question_label);
                 questions_div.appendChild(question_div);
             });
+            add_quiz_checkbox_listener(quiz_checkbox, question_checkboxes);
+            add_question_checkbox_listener(quiz_checkbox, question_checkboxes);
             quiz_div.appendChild(questions_div);
             oldQuizzesContainer.appendChild(quiz_div);
         });
     }).catch((error) => console.log(error));
 }
+
 /**
  * Imports questions into a quiz.
  *
@@ -161,10 +166,64 @@ function get_checked_questions() {
     let questions_div = document.querySelector(".oldQuizzes");
 
     // Loop through all quizzes and get the checked questions.
-    // This selects all the checked checkboxes that are nested three levels deep of divs.
-    let quizDivs = questions_div.querySelectorAll('div > div > div > input[type="checkbox"]:checked');
-    quizDivs.forEach(checkbox => { // Loop through each checked checkbox and add it to the array.
-        checkedquestions.push(parseInt(checkbox.id));
-    });
+    for (let quiz_div of questions_div.children) { // Loop through all quizzes.
+        for (let content of quiz_div.children) { // Loop through all content of the quiz.
+            if (content.tagName === "DIV") { // Only look in div elements
+                for (let question_div of content.children) { // Loop through all questions.
+                    for (let children of question_div.children) { // Loop through all children of the question.
+                        if (children.tagName === "INPUT") { // Only look in input elements.
+                            let checkbox = children;
+                            if (checkbox.checked) { // If the checkbox is checked, add the id to the array.
+                                checkedquestions.push(parseInt(checkbox.id));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     return checkedquestions; // Returns the checked questions.
+}
+
+/**
+ * Adds an event listener to the quiz checkboxes.
+ * @param checkbox - The checkbox to add the event listener to.
+ * @param questioncheckboxes - The question checkboxes that are manipulated when event is triggered.
+ */
+function add_quiz_checkbox_listener(checkbox, questioncheckboxes){
+    checkbox.addEventListener("change", () => {
+        questioncheckboxes.forEach((questioncheckbox) => {
+            questioncheckbox.checked = checkbox.checked; // Set all questions to checked if the quiz is checked.
+        });
+    });
+}
+
+/**
+ * Adds an event listener to the question checkboxes.
+ * @param checkbox - The checkbox that is manipulated when all questions are checked.
+ * @param questioncheckboxes - The question checkboxes to add the event listener to.
+ */
+function add_question_checkbox_listener(checkbox, questioncheckboxes){
+    questioncheckboxes.forEach((questioncheckbox) => {
+        questioncheckbox.addEventListener("change", () => {
+            if(questioncheckbox.checked) { // If the question is checked, check if all questions are checked.
+                let checkboxes_same = false;
+                checkboxes_same = check_questions_checked(questioncheckboxes);
+                if (checkboxes_same) { // If all questions are checked, check the quiz checkbox.
+                    checkbox.checked = questioncheckbox.checked;
+                }
+            } else { // If the question is unchecked, uncheck the quiz checkbox.
+                checkbox.checked = questioncheckbox.checked;
+            }
+        });
+    });
+}
+
+/**
+ * Checks if all questions are checked.
+ * @param questions
+ * @returns {bool} - True if all questions are checked, false otherwise.
+ */
+function check_questions_checked(questions) {
+    return questions.every((question) => question.checked); // Returns true only if all are checked
 }
