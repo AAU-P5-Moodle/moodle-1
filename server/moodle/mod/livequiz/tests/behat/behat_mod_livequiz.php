@@ -86,4 +86,33 @@ class behat_mod_livequiz extends behat_base {
         $demodatareader = new demodatareader();
         $demodatareader->insertdemodata($livequiz);
     }
+
+    /**
+     * Tests if an element has a given class (whitespaces are removed).
+     *
+     * @Then the :selector should have class :class
+     */
+    public function elementshouldhaveclass($selector, $class) {
+        // Get an element via id.
+        $element = $this->getSession()->getPage()->find('css', $selector);
+
+        if (null === $element) {
+            throw new \Exception("Could not find element with selector '$selector'.");
+        }
+
+        // Get the class of the div.
+        $classes = $element->getAttribute('class');
+
+        /* The class in the code contains multiple line ends and spaces (uncountable amount), therefore
+         * we remove all line ends and spaces from the class given in the test and
+         * the class gotten in the test.
+         */
+        $class = preg_replace('/\s+/', '', $class);
+        $classes = preg_replace('/\s+/', '', $classes);
+
+        // Check if the class given is not the same as the class gotten.
+        if (!str_contains($classes, $class)) {
+            throw new \Exception("Element with selector '$selector' does not contain class '$class'.  Actual class: $classes");
+        }
+    }
 }

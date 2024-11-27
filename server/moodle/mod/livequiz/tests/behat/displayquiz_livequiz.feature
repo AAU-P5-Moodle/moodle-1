@@ -128,3 +128,31 @@ Scenario: Chosen answers to question are preserved in radio button
   And I click on "Next Question" "link"
   And "Aarhus" "radio" should exist
   And the "Aarhus" answer should be checked
+
+Scenario: Submitted quiz has the correct classes
+  When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+  And I click on "Take Quiz" "link"
+  And I click on "Paris" "checkbox"
+  And I click on "Champagne" "checkbox"
+  And I click on "Next Question" "link"
+  And I click on "Copenhagen" "radio"
+  And I click on "Next Question" "link"
+  And "Submit Quiz" "button" should exist
+  And I click on "No" "radio"
+  And I click on "Submit Quiz" "button"
+  And I should see "Results for attempt"
+  And "Paris" "checkbox" should exist
+  Then the "#314000" should have class "answer correct"
+  And "Champagne" "checkbox" should exist
+  Then the "#314001" should have class "answer incorrect"
+  And "Nice" "checkbox" should exist
+  Then the "#314002" should have class "answer correctnotchosen"
+  And "Aarhus" "radio" should exist
+  And "Aalborg" "radio" should exist
+  And "Copenhagen" "radio" should exist
+  Then the "#314005" should have class "answer correct"
+  And "Yes" "radio" should exist
+  Then the "#314006" should have class "answer correctnotchosen"
+  And "No" "radio" should exist
+  Then the "#314007" should have class "answer incorrect"
+
