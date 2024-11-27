@@ -30,13 +30,11 @@ class demodatareader {
      * Reads the demo data and creates objects from it
      * @return livequiz object
      */
-    public static function insertdemodata(livequiz $livequiz): livequiz {
-        global $USER;
-        $userid = $USER->id;
+    public static function insertdemodata(livequiz $livequiz, string $relativePath, int $userid): livequiz {
         $livequizservice = livequiz_services::get_singleton_service_instance();
 
         // Read the JSON file.
-        $json = file_get_contents(__DIR__ . '/behatdata.json');
+        $json = file_get_contents(__DIR__ . $relativePath);
 
         // Check if the file was read successfully.
         if ($json === false) {
@@ -51,7 +49,7 @@ class demodatareader {
             die('Error decoding the JSON file');
         }
 
-        $jsondata = $jsondata["quiz1"];
+        $jsondata = $jsondata["quiz"];
         $questions = [];
 
         // Prepare questions.

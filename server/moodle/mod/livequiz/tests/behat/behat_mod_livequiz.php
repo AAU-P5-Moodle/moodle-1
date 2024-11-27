@@ -107,13 +107,14 @@ class behat_mod_livequiz extends behat_base {
     /**
      * Reads the demo data and creates objects from it.
      *
-     * @Given I use demodata for the course :coursename and activity :activityname
+     * @Given I use demodata :datanumber for the course :coursename and activity :activityname and lecturer :teachername
      */
-    public function i_use_demodata($coursename, $activityname): void {
+    public function i_use_demodata($datanumber, $coursename, $activityname, $teachername): void {
         global $DB;
 
         // Get the course ID.
         $course = $DB->get_record('course', ['shortname' => $coursename], '*', MUST_EXIST);
+
 
         // Get the module information (like 'livequiz').
         $module = $DB->get_record('modules', ['name' => $activityname], '*', MUST_EXIST);
@@ -122,8 +123,12 @@ class behat_mod_livequiz extends behat_base {
         $coursemodule = $DB->get_record('course_modules', [
             'course' => $course->id,
             'module' => $module->id,
-            'idnumber' => 1,
         ], '*', MUST_EXIST);
+
+        // Get the user record.
+        $user = $DB->get_record('user',[
+            'username' => $teachername,
+        ], 'id', MUST_EXIST);
 
         // Get the instance of the module.
         $instance = $DB->get_record('livequiz', ['id' => $coursemodule->instance], '*', MUST_EXIST);
@@ -132,6 +137,15 @@ class behat_mod_livequiz extends behat_base {
         $livequizservice = livequiz_services::get_singleton_service_instance();
         $livequiz = $livequizservice->get_livequiz_instance($instance->id);
         $demodatareader = new demodatareader();
-        $demodatareader->insertdemodata($livequiz);
+        $demodatareader->insertdemodata($livequiz, '/behatdata' . $datanumber . '.json', $user->id);
+    }
+
+    /**
+     * Reads the demo data and creates objects from it.
+     *
+     * @Given I use demodata for the course :coursename and activity :activityname
+     */
+    public function i_use_demodata_one($coursename, $activityname): void {
+        $this->i_use_demodata(1, $coursename, $activityname, "admin");
     }
 }
