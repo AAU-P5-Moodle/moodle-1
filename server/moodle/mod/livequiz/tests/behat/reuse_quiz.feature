@@ -36,4 +36,20 @@ Feature: Reuse previously created quiz in livequiz activity
     And I am on "Test Course" course homepage with editing mode on
 
     Scenario: Reuse quiz in livequiz
-       
+      When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+      Then I should see "Quiz editor page"
+      And I should see "Import Question"
+      And I click on "Import Question" "button"
+      And I should see "livequiz_africa_quiz"
+      And I should see "African cities: Question 1"
+      And I should see "African cities: Question 2"
+      And I should see "African cities: Question 3"
+      And I click on "livequiz_africa_quiz" "checkbox"
+      And the field "livequiz_africa_quiz" matches value "selected"
+      And the field "African cities: Question 1" matches value "selected"
+      And the field "African cities: Question 2" matches value "selected"
+      And the field "African cities: Question 3" matches value "selected"
+      And I click on "Import Question(s)" "button"
+      And "African cities: Question 1" "list_item" should exist
+      And "African cities: Question 2" "list_item" should exist
+      And "African cities: Question 3" "list_item" should exist
