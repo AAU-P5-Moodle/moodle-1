@@ -3,7 +3,7 @@ import {add_discard_question_button_listener, rerender_saved_questions_list} fro
 import {add_edit_question_listeners} from "./edit_question";
 import {add_delete_question_listeners} from "./delete_question";
 import {displayException} from "core/notification";
-import {external_reuse_questions, get_lecturer_questions} from "./repository";
+import {external_reuse_questions, get_lecturer_quiz} from "./repository";
 import {rerender_take_quiz_button} from "./edit_question_helper";
 
 /**
@@ -47,7 +47,7 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
         })
 
         // Deal with this exception (Using core/notify exception function is recommended).
-        .catch((error) => displayException(error));
+        .catch((error) => console.log(error));
 }
 
 /**
@@ -55,7 +55,7 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
  * @param {number} lecturerid - The ID of the lecturer.
  */
 function add_old_questions_to_popup(lecturerid) {
-    get_lecturer_questions(lecturerid).then((oldquizzes) => {
+    get_lecturer_quiz(lecturerid).then((oldquizzes) => {
         let oldQuizzesContainer = document.querySelector(".oldQuizzes");
         if (oldquizzes.length === 0) {
             let noQuestions = document.createElement("p");
@@ -76,9 +76,6 @@ function add_old_questions_to_popup(lecturerid) {
             quiz_label.htmlFor = `quiz_${quiz.quizid}`;
             quiz_label.textContent = quiz.quiztitle;
             quiz_div.class = "oldquiz"; // Might be used for styling.
-
-            // Add event listeners to the checkboxes.
-            quiz_checkbox.addEventListener("click", click_on_quiz_checkbox());
 
             // Append the checkbox and label to the div.
             quiz_div.appendChild(quiz_checkbox);
@@ -111,15 +108,6 @@ function add_old_questions_to_popup(lecturerid) {
         });
     }).catch((error) => console.log(error));
 }
-
-function click_on_quiz_checkbox() {
-    // If clicked, then check all children checkboxes.
-    console.log(EventTarget.parentElement);
-    if (EventTarget.value) {
-        
-    }
-}
-
 /**
  * Imports questions into a quiz.
  *
@@ -158,7 +146,7 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
         };
         rerender_saved_questions_list(questions, update_event_listeners); // Re-render saved questions list.
         rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button.
-    }). catch((error) => displayException(error));
+    }). catch((error) => console.log(error));
     let modal_div = document.querySelector(".Modal_div");
     modal_div.remove();
 }

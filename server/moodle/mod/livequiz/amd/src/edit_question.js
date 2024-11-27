@@ -27,7 +27,7 @@ function render_edit_question_menu_popup(quizid, lecturerid, questionid) {
         .then(({ html, js }) => {
             // Here we have the compiled template.
             Templates.appendNodeContents(".main-container", html, js);
-            get_question(quizid, questionid).then((question)=> {restore_question_data_in_popup(question)});
+            get_question(quizid, questionid).then((question)=> {restore_question_data_in_popup(question);});
             add_answer_button_event_listener();
             add_save_question_button_listener(quizid, lecturerid, questionid);
             add_discard_question_button_listener();
