@@ -26,7 +26,7 @@ namespace mod_livequiz;
 
 use advanced_testcase;
 use dml_exception;
-use mod_livequiz\external\get_lecturer_questions;
+use mod_livequiz\external\get_lecturer_quiz;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
@@ -99,7 +99,7 @@ final class filter_unique_questions_test extends advanced_testcase {
             $this->question3->get_id(),
         ];
         // Use reflection to access the private static method.
-        $object = new get_lecturer_questions(); // Create an object of the class to test.
+        $object = new get_lecturer_quiz(); // Create an object of the class to test.
         $reflectionclass = new ReflectionClass($object);
         $method = $reflectionclass->getMethod('filter_unique_questions');
         // Invoke the method with the questions as argument.
@@ -126,7 +126,7 @@ final class filter_unique_questions_test extends advanced_testcase {
             $this->question9->get_id(),
         ];
         // Use reflection to access the private static method.
-        $object = new get_lecturer_questions(); // Create an object of the class to test.
+        $object = new get_lecturer_quiz(); // Create an object of the class to test.
         $reflectionclass = new ReflectionClass($object);
         $method = $reflectionclass->getMethod('filter_unique_questions');
         // Invoke the method with the questions as argument.
@@ -150,7 +150,7 @@ final class filter_unique_questions_test extends advanced_testcase {
         $questions = [
         ];
         // Use reflection to access the private static method.
-        $object = new get_lecturer_questions(); // Create an object of the class to test.
+        $object = new get_lecturer_quiz(); // Create an object of the class to test.
         $reflectionclass = new ReflectionClass($object);
         $method = $reflectionclass->getMethod('filter_unique_questions');
         // Invoke the method with the questions as argument.
