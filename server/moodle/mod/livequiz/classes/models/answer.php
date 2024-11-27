@@ -18,6 +18,7 @@ namespace mod_livequiz\models;
 
 use dml_exception;
 use Exception;
+use stdClass;
 
 /**
  * Class answer.
@@ -153,6 +154,22 @@ class answer {
      */
     public function get_explanation(): string {
         return $this->explanation;
+    }
+
+
+    /**
+     * Gets the sanitized answer object.
+     *
+     * @return stdClass
+     */
+    public function get_sanitized_answer(): stdClass {
+        $sanitizedanswer = new stdClass();
+
+        $sanitizedanswer->id = $this->id;
+        $sanitizedanswer->description = $this->description;
+        $sanitizedanswer->explanation = $this->explanation;
+
+        return $sanitizedanswer;
     }
 
     /**

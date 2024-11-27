@@ -352,6 +352,7 @@ class livequiz_services {
         $lecturer = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_questions_id($questionid);
         return $lecturer;
     }
+
     /**
      * Deletes an answer from the database.
      *
@@ -383,5 +384,128 @@ class livequiz_services {
 
         quiz_questions_relation::delete_question_quiz_relation($questionid);
         question::delete_question($questionid);
+    }
+
+
+    /**
+     * A method for fetching the relevant data for the quiz initiation.
+     *
+     * @param int $quizid
+     * @return array
+     * @throws dml_exception
+     */
+    public static function initiate_livequiz(int $quizid): array {
+        $livequiz = livequiz::get_livequiz_instance($quizid);
+
+        return [$livequiz->get_name(), $livequiz->get_intro()];
+    }
+
+    /**
+     * Gets a question by index. Returns the question and the index.
+     *
+     * @param int $quizid
+     * @param int $index
+     * @return array
+     * @throws dml_exception
+     */
+    public function get_question_by_index(int $quizid, int $index): array {
+        $livequiz = $this->get_livequiz_instance($quizid);
+        $question = $livequiz->get_question_by_index($index);
+
+        return [$question, $index];
+    }
+
+    /**
+     * Gets answers for a question, without correct status.
+     *
+     * @param int $questionid
+     * @return array
+     * @throws dml_exception
+     */
+    public static function get_sanitized_answers(int $questionid): array {
+        $answers = questions_answers_relation::get_answers_from_question($questionid);
+        $sanitizedanswers = [];
+        foreach ($answers as $answer) {
+            $sanitizedanswers[] = $answer->get_sanitized_answer();
+        }
+        return $sanitizedanswers;
+    }
+
+
+    /**
+     * Gets the correct answer for a question.
+     *
+     * @param int $studentid
+     * @param int $answerid
+     * @param int $participationid
+     * @return void
+     * @throws dml_exception
+     * @throws dml_transaction_exception
+     */
+    public static function student_answer_submission(int $studentid, int $answerid, int $participationid): void {
+        global $DB;
+        $transaction = $DB->start_delegated_transaction();
+        try {
+            student_answers_relation::insert_student_answer_relation($studentid, $answerid, $participationid);
+            $transaction->allow_commit();
+        } catch (dml_exception $e) {
+            $transaction->rollback($e);
+            throw $e;
+        }
+    }
+
+    /**
+     * Gets the answers a student has selected for a specific question.
+     *
+     * Be aware: If the student has multiple participations in the same quiz,
+     * with answers to the specific question, this will all be added to the same array.
+     *
+     * @throws dml_exception
+     */
+    public function get_student_answers_for_question(int $questionid, int $quizid): array {
+        $participations = student_quiz_relation::get_participations_from_quizid($quizid);
+        $livequiz = $this->get_livequiz_instance($quizid);
+        $livequizquestions = $livequiz->get_questions();
+
+        /* @var question $question Type specification for the PHPstorm IDE */
+        $question = null;
+
+        foreach ($livequizquestions as $livequizquestion) {
+            if ($livequizquestion->get_id() == $questionid) {
+                $question = $livequizquestion;
+            }
+        }
+
+        if ($question == null) {
+            throw new dml_exception("Question not found in quiz");
+        }
+
+        $submissions = [];
+
+        foreach ($participations as $participation) {
+            $participationid = $participation->get_id();
+            $allanswers = student_answers_relation::get_answers_from_participation($participationid);
+
+            $correct = 0;
+            $incorrect = 0;
+
+            foreach ($allanswers as $answer) {
+                if ($question->is_answer_in_question($answer->get_id())) {
+                    if ($answer->get_correct()) {
+                        $correct++;
+                    } else {
+                        $incorrect++;
+                    }
+
+                    $submissions[] = [
+                        'studentid' => $participation->get_studentid(),
+                        'correct' => $correct,
+                        'incorrect' => $incorrect,
+                    ];
+                }
+            }
+        }
+
+        return $submissions;
     }
 }
