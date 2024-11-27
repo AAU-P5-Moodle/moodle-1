@@ -30,11 +30,11 @@ class demodatareader {
      * Reads the demo data and creates objects from it
      * @return livequiz object
      */
-    public static function insertdemodata(livequiz $livequiz, string $relativePath, int $userid): livequiz {
+    public static function insertdemodata(livequiz $livequiz, string $relativepath, int $userid): livequiz {
         $livequizservice = livequiz_services::get_singleton_service_instance();
 
         // Read the JSON file.
-        $json = file_get_contents(__DIR__ . $relativePath);
+        $json = file_get_contents(__DIR__ . $relativepath);
 
         // Check if the file was read successfully.
         if ($json === false) {

@@ -126,7 +126,7 @@ class behat_mod_livequiz extends behat_base {
         ], '*', MUST_EXIST);
 
         // Get the user record.
-        $user = $DB->get_record('user',[
+        $user = $DB->get_record('user', [
             'username' => $teachername,
         ], 'id', MUST_EXIST);
 

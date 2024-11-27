@@ -60,7 +60,7 @@ class quiz_questions_relation {
 
         foreach ($questionids as $questionid) {
             $questions[] = question::get_question_from_id($questionid);
-        } 
+        }
 
         return $questions;
     }
