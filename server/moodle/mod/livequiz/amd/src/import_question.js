@@ -47,7 +47,7 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
         })
 
         // Deal with this exception (Using core/notify exception function is recommended).
-        .catch((error) => displayException(error));
+        .catch((error) => console.log(error));
 }
 
 /**
@@ -110,7 +110,7 @@ function add_old_questions_to_popup(lecturerid) {
             quiz_div.appendChild(questions_div);
             oldQuizzesContainer.appendChild(quiz_div);
         });
-    }).catch((error) => displayException(error));
+    }).catch((error) => console.log(error));
 }
 
 /**
@@ -131,7 +131,7 @@ async function importQuestions(quizid, url, lecturerid) {
             call_reuse_questions(quizid, questionids, lecturerid, quiz_url);
         } catch (error) {
             window.console.error("Error in import of questions");
-            displayException(error);
+            console.log(error);
         }
     });
 }
@@ -151,7 +151,7 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
         };
         rerender_saved_questions_list(questions, update_event_listeners); // Re-render saved questions list.
         rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button.
-    }). catch((error) => displayException(error));
+    }). catch((error) => console.log(error));
     let modal_div = document.querySelector(".Modal_div");
     modal_div.remove();
 }
