@@ -165,14 +165,14 @@ function get_checked_questions() {
     let questions_div = document.querySelector(".oldQuizzes");
 
     // Loop through all quizzes and get the checked questions.
-    for (let quiz_div of questions_div.children) {
-        for (let content of quiz_div.children) {
-            if (content.tagName === "DIV") {
-                for (let question_div of content.children) {
-                    for (let children of question_div.children) {
-                        if (children.tagName === "INPUT") {
+    for (let quiz_div of questions_div.children) { // Loop through all quizzes.
+        for (let content of quiz_div.children) { // Loop through all content of the quiz.
+            if (content.tagName === "DIV") { // Only look in div elements
+                for (let question_div of content.children) { // Loop through all questions.
+                    for (let children of question_div.children) { // Loop through all children of the question.
+                        if (children.tagName === "INPUT") { // Only look in input elements.
                             let checkbox = children;
-                            if (checkbox.checked) {
+                            if (checkbox.checked) { // If the checkbox is checked, add the id to the array.
                                 checkedquestions.push(parseInt(checkbox.id));
                             }
                         }
