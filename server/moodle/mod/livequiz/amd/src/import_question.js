@@ -158,7 +158,7 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
 /**
  * Retrieves the values of all checked questions from the lecturer's question list.
  *
- * @returns {Array<number>} An array containing the values of the checked questions.
+ * @returns {Array<number>} An array containing the ids of the checked questions.
  */
 function get_checked_questions() {
     let checkedquestions = [];

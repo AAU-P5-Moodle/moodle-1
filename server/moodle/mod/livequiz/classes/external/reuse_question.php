@@ -70,6 +70,7 @@ class reuse_question extends external_api {
         ]);
         $services = livequiz_services::get_singleton_service_instance();
         try {
+            $questionids = self::filter_unique_questions($questionids);
             $livequiz = $services->get_livequiz_instance($quizid);
             $questionstoadd = [];
             foreach ($questionids as $id) {
@@ -101,5 +102,56 @@ class reuse_question extends external_api {
      */
     public static function execute_returns(): external_multiple_structure {
         return new external_multiple_structure(data_structure_helper::get_question_structure(), 'List of questions');
+    }
+    /**
+     * Filters an array of questions, such that only one copy of each question is kept
+     * @param array $questions the questions you want to filter for unique
+     * @return array
+     * @throws dml_exception
+     */
+    private static function filter_unique_questions(array $questions): array {
+        $uniquequestions = [];
+        foreach ($questions as $questionid) {
+            $question = question::get_question_with_answers_from_id($questionid);
+            $unique = true;
+            foreach ($uniquequestions as $uniquequestion) {
+                // Check if the questions are identical.
+                if (
+                    $question->get_title() == $uniquequestion->get_title()
+                    && $question->get_description() == $uniquequestion->get_description()
+                    && $question->get_timelimit() == $uniquequestion->get_timelimit()
+                    && $question->get_explanation() == $uniquequestion->get_explanation()
+                    && count($question->get_answers()) == count($uniquequestion->get_answers())
+                ) {
+                    // If the questions are identical, then we check the answers to see if they are identical.
+                    $identicalanswercount = 0;
+                    foreach ($uniquequestion->get_answers() as $uniqueanswer) {
+                        foreach ($question->get_answers() as $answer) {
+                            if (
+                                $answer->get_correct() == $uniqueanswer->get_correct()
+                                && $answer->get_description() == $uniqueanswer->get_description()
+                                && $answer->get_explanation() == $uniqueanswer->get_explanation()
+                            ) {
+                                $identicalanswercount++;
+                                // If there are as many identical answers as there are answers.
+                                // Then we won't include it in the list, as it is identical to another question.
+                                if ($identicalanswercount == count($question->get_answers())) {
+                                    $unique = false;
+                                    break 3;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if ($unique) { // If the question is unique, then we add it to the list.
+                $uniquequestions[] = $question;
+            }
+        }
+        $returningquestions = [];
+        foreach ($uniquequestions as $uniquequestion) { // Prepare the questions for the template.
+            $returningquestions[] = $uniquequestion->get_id();
+        }
+        return $returningquestions; // Return the prepared questions.
     }
 }
