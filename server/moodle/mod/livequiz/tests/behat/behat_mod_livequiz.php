@@ -114,10 +114,10 @@ class behat_mod_livequiz extends behat_base {
         $label = $this->getSession()->getPage()->findAll('css', 'label');
         foreach ($label as $lbl) {
             if ($lbl->getText() === $selector) {
-                // Get the parent element of the label (which should be the div)
-                $parentDiv = $lbl->find('xpath', 'ancestor::div[1]');
-                $divclass = $parentDiv->getAttribute('class');
-                break; // Stop once the correct label is found
+                // Get the parent element of the label (which should be the div).
+                $parentdiv = $lbl->find('xpath', 'ancestor::div[1]');
+                $divclass = $parentdiv->getAttribute('class');
+                break; // Stop once the correct label is found.
             }
         }
 
