@@ -170,6 +170,7 @@ class livequiz_services {
                 $newquestion->update_question();
                 $updatedquestionids[] = $questionid;
             }
+
             $answers = $newquestion->get_answers();
             $this->submit_answers($questionid, $answers);
         }
@@ -373,6 +374,7 @@ class livequiz_services {
         if ($participationcount > 0) {
             throw new dml_exception("Cannot delete answer with participations");
         }
+        questions_answers_relation::delete_relations_by_answerid($answerid);
         answer::delete_answer($answerid);
     }
 
