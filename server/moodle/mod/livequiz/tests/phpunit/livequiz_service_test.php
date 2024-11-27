@@ -518,7 +518,7 @@ final class livequiz_service_test extends \advanced_testcase {
      * @throws dml_exception
      * @throws Exception
      */
-    public function delete_answer(): void {
+    public function test_delete_answer(): void {
         $lecturerid = "2";
         $service = livequiz_services::get_singleton_service_instance();
         $testquiz = $this->create_livequiz_with_questions_and_answers_for_test();
@@ -527,12 +527,13 @@ final class livequiz_service_test extends \advanced_testcase {
         $testquizfirstquestionanswers = $testquizquestions[0]->get_answers();
         $testquizsubmitted = $service->submit_quiz($testquiz, $lecturerid);
         $testquizsubmittedquestions = $testquizsubmitted->get_questions();
-
-        array_shift($testquizsubmittedquestions[0]->get_answers());
+        $testquizsubmittedanswers = $testquizsubmittedquestions[0]->get_answers();
+        array_shift($testquizsubmittedanswers);
+        $testquizsubmittedquestions[0]->set_answers($testquizsubmittedanswers);
         $testquizsubmitted->set_questions($testquizsubmittedquestions);
 
         $testquizresubmitted = $service->submit_quiz($testquizsubmitted, $lecturerid);
-        $testquizresubmittedquestions = $testquizsubmitted->get_questions();
+        $testquizresubmittedquestions = $testquizresubmitted->get_questions();
         $testquizresubmittedanswers = $testquizresubmittedquestions[0]->get_answers();
 
         // Assert that the amount of questions has changed.
@@ -551,5 +552,131 @@ final class livequiz_service_test extends \advanced_testcase {
             'Neither af female nor a male Polar Bear weighs this much.',
             $testquizresubmittedanswers[1]->get_explanation()
         );
+    }
+
+    /**
+     * tests that initate_livequiz returns a correct name and intro for a livequiz
+     *
+     * @covers \mod_livequiz\services\livequiz_services::initiate_livequiz
+     * @throws dml_exception
+     * @throws Exception
+     */
+    public function test_initiate_livequiz(): void {
+        $service = livequiz_services::get_singleton_service_instance();
+        $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
+        $livequiz = $service->submit_quiz($livequiz, 1);
+
+        [$title, $description] = $service->initiate_livequiz($livequiz->get_id());
+        $this->assertEquals($title, $livequiz->get_name());
+        $this->assertEquals($description, $livequiz->get_intro());
+    }
+
+    /**
+     * Tests retrieving a question by its index.
+     *
+     * @covers \mod_livequiz\services\livequiz_services::get_question_by_index
+     * @throws Exception
+     * @throws dml_exception
+     */
+    public function test_get_question_by_index(): void {
+        $service = livequiz_services::get_singleton_service_instance();
+        $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
+        $livequiz = $service->submit_quiz($livequiz, 1);
+
+        [$question, $index] = $service->get_question_by_index($livequiz->get_id(), 0);
+        $this->assertEquals(0, $index);
+        $this->assertEquals('Test question 1', $question->get_title());
+        $this->assertEquals('How much does a Polar Bear weigh?.', $question->get_description());
+        $this->assertEquals(45, $question->get_timelimit());
+        $this->assertEquals("Come on a Polar bear has a weight.", $question->get_explanation());
+    }
+
+    /**
+     * Tests the get_sanitized_answer method, with the correct values, and no correct status.
+     *
+     * @covers \mod_livequiz\services\livequiz_services::get_sanitized_answers
+     * @throws Exception
+     * @throws dml_exception
+     */
+    public function test_get_sanitized_answer(): void {
+        $service = livequiz_services::get_singleton_service_instance();
+        $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
+        $livequiz = $service->submit_quiz($livequiz, 1);
+
+        $answers = $livequiz->get_questions()[0]->get_answers();
+        $questions = $livequiz->get_questions();
+
+        foreach ($questions as $question) {
+            $sanitizedanswers = $service->get_sanitized_answers($question->get_id());
+            foreach ($sanitizedanswers as $sanitizedanswer) {
+                $this->assertEquals($answers[0]->get_description(), $sanitizedanswer->description);
+                $this->assertEquals($answers[0]->get_explanation(), $sanitizedanswer->explanation);
+                $this->expectException(\Error::class);
+                $this->expectExceptionMessage('Call to undefined method stdClass::get_correct()');
+                $sanitizedanswer->get_correct();
+            }
+        }
+    }
+
+    /**
+     * Tests the student answer submission.
+     *
+     * @covers \mod_livequiz\services\livequiz_services::student_answer_submission
+     * @throws Exception
+     * @throws dml_exception
+     */
+    public function test_student_answer_submission(): void {
+        $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
+        $service = livequiz_services::get_singleton_service_instance();
+        $livequiz = $service->submit_quiz($livequiz, 1);
+
+        $studentid = 1;
+        $participationid = 1;
+
+        foreach ($livequiz->get_questions() as $question) {
+            $answers = $question->get_answers();
+            $answerid = $answers[0]->get_id();
+            $service->student_answer_submission($studentid, $answerid, $participationid);
+            $this->assertEquals(1, student_answers_relation::get_answer_participation_count($answerid));
+        }
+    }
+
+
+    /**
+     * Tests the get_student_answers_for_question method.
+     *
+     * @covers \mod_livequiz\services\livequiz_services::get_student_answers_for_question
+     * @throws Exception
+     * @throws dml_exception
+     */
+    public function test_get_student_answers_for_question(): void {
+        // MOCK.
+        // Create & submit a livequiz with questions and answers.
+        $livequiz = $this->create_livequiz_with_questions_and_answers_for_test();
+        $service = livequiz_services::get_singleton_service_instance();
+        $service->submit_quiz($livequiz, 1);
+        $submittedlivequizinstance = $service->get_livequiz_instance($livequiz->get_id());
+
+        // ACT.
+        // Participate in the quiz.
+        $studentid = 1;
+        $participationid = $service->insert_participation($studentid, $livequiz->get_id())->get_id();
+
+        // Insert student answers.
+        $quizquestions = $submittedlivequizinstance->get_questions();
+        foreach ($quizquestions as $question) {
+            $answers = $question->get_answers();
+            $answerid = $answers[0]->get_id();
+            $service->insert_answer_choice($studentid, $answerid, $participationid);
+        }
+
+        // ASSERT.
+        foreach ($quizquestions as $question) {
+            $answers = $service->get_student_answers_for_question($question->get_id(), $submittedlivequizinstance->get_id());
+            $this->assertEquals(1, count($answers));
+            $this->assertEquals($answers[0]['studentid'], $studentid);
+            $this->assertEquals($question->get_answers()[0]->get_correct(), $answers[0]['correct']);
+            $this->assertEquals(!$question->get_answers()[0]->get_correct(), $answers[0]['incorrect']);
+        }
     }
 }

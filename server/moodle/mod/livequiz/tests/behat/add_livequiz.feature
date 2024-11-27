@@ -39,5 +39,5 @@ Scenario: Add a livequiz to a course
   And I should see "livequiz"
   When I click on "livequiz" "link" in the "livequiz" activity
   And I should see "livequiz"
-  And I should see "index_page"
+  And I should see "Quiz editor page"
 

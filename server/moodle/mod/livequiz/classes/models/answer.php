@@ -18,6 +18,7 @@ namespace mod_livequiz\models;
 
 use dml_exception;
 use Exception;
+use stdClass;
 
 /**
  * Class answer.
@@ -155,6 +156,22 @@ class answer {
         return $this->explanation;
     }
 
+
+    /**
+     * Gets the sanitized answer object.
+     *
+     * @return stdClass
+     */
+    public function get_sanitized_answer(): stdClass {
+        $sanitizedanswer = new stdClass();
+
+        $sanitizedanswer->id = $this->id;
+        $sanitizedanswer->description = $this->description;
+        $sanitizedanswer->explanation = $this->explanation;
+
+        return $sanitizedanswer;
+    }
+
     /**
      * Sets the ID of the answer.
      *
@@ -200,6 +217,8 @@ class answer {
      */
     public static function delete_answer(int $answerid): bool {
         global $DB;
+
+
         return $DB->delete_records('livequiz_answers', ['id' => $answerid]);
     }
 }
