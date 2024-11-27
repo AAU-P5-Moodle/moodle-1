@@ -134,7 +134,7 @@ function prepare_answers() {
 
     let iscorrect =
       answers_div.children[i].querySelector(".answer_checkbox").checked;
-    iscorrect ? (iscorrect = 1) : (iscorrect = 0);
+    iscorrect = iscorrect ? 1 : 0;
 
     answers.push({
       description: answertext,
