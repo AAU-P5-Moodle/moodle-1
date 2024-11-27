@@ -55,13 +55,14 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
  * @param {number} lecturerid - The ID of the lecturer.
  */
 function add_old_questions_to_popup(lecturerid) {
-    console.log("is in add old questions");
     get_lecturer_questions(lecturerid).then((oldquizzes) => {
-        console.log("got after then");
         let oldQuizzesContainer = document.querySelector(".oldQuizzes");
-        console.log("Old quizzes: ", oldquizzes);
-        //oldQuizzesContainer.innerHTML = ""; // Clear content.
-        
+        if (oldquizzes.length === 0) {
+            let noQuestions = document.createElement("p");
+            noQuestions.textContent = "No questions available.";
+            oldQuizzesContainer.appendChild(noQuestions);
+            return;
+        }
         oldquizzes.forEach((quiz) => {
             let quiz_div = document.createElement('div');
             //Create quiz checkbox
@@ -69,18 +70,25 @@ function add_old_questions_to_popup(lecturerid) {
             quiz_checkbox.type = "checkbox";
             quiz_checkbox.value = quiz.quizid;
             quiz_checkbox.id = quiz.quizid;
-            quiz_checkbox.name = quiz.quizname;
+            quiz_checkbox.name = quiz.quiztitle;
             // Create quiz Label
             let quiz_label = document.createElement('label');
             quiz_label.htmlFor = `quiz_${quiz.quizid}`;
-            quiz_label.textContent = quiz.quizname;
+            quiz_label.textContent = quiz.quiztitle;
             quiz_div.class = "oldquiz"; // Might be used for styling.
+
+            // Add event listeners to the checkboxes.
+            quiz_checkbox.addEventListener("click", click_on_quiz_checkbox());
+
             // Append the checkbox and label to the div.
             quiz_div.appendChild(quiz_checkbox);
             quiz_div.appendChild(quiz_label);
-            
+            // Set the border style
+            quiz_div.style.border = "2px solid black";
             // Create container for questions.
             let questions_div = document.createElement("div");
+            questions_div.style.marginBottom = "20px";
+            questions_div.id = "questionsdiv"
             // Loop through each question and add it to the container.
             quiz.questions.forEach((question) => {
                 //Create question checkbox
@@ -102,6 +110,14 @@ function add_old_questions_to_popup(lecturerid) {
             oldQuizzesContainer.appendChild(quiz_div);
         });
     }).catch((error) => console.log(error));
+}
+
+function click_on_quiz_checkbox() {
+    // If clicked, then check all children checkboxes.
+    console.log(EventTarget.parentElement);
+    if (EventTarget.value) {
+        
+    }
 }
 
 /**
@@ -154,14 +170,13 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
  */
 function get_checked_questions() {
     let checkedquestions = [];
-    let questions_div = document.querySelector(".oldQuestions");
+    let questions_div = document.querySelector(".oldQuizzes");
 
-    // Loop through all questions and add the value of the checked questions to the array.
-    for (let question of questions_div.children) {
-        let checkbox = question.querySelector('input[type="checkbox"]');
-        if (checkbox.checked) {
-            checkedquestions.push(parseInt(checkbox.value));
-        }
-    }
+    // Loop through all quizzes and get the checked questions.
+    // This selects all the checked checkboxes that are nested three levels deep of divs.
+    let quizDivs = questions_div.querySelectorAll('div > div > div > input[type="checkbox"]:checked');
+    quizDivs.forEach(checkbox => { // Loop through each checked checkbox and add it to the array.
+        checkedquestions.push(parseInt(checkbox.id));
+    });
     return checkedquestions; // Returns the checked questions.
 }
