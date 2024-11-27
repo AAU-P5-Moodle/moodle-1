@@ -229,9 +229,8 @@ class livequiz_services {
         $existinganswerids = array_keys($existinganswersmap);
         $deletedanswerids = array_diff($existinganswerids, $updatedanswerids);
 
-        /* @var answer $deletedanswer // Type specification for $deletedanswer, for PHPStorm IDE */
-        foreach ($deletedanswers as $deletedanswer) {
-            self::delete_answer($deletedanswer);
+        foreach ($deletedanswerids as $deletedanswerid) {
+            self::delete_answer($deletedanswerid);
         }
     }
 
