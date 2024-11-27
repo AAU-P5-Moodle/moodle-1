@@ -27,6 +27,7 @@ namespace mod_livequiz;
 use advanced_testcase;
 use dml_exception;
 use mod_livequiz\external\get_lecturer_quiz;
+use mod_livequiz\external\reuse_question;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
@@ -99,13 +100,13 @@ final class filter_unique_questions_test extends advanced_testcase {
             $this->question3->get_id(),
         ];
         // Use reflection to access the private static method.
-        $object = new get_lecturer_quiz(); // Create an object of the class to test.
+        $object = new reuse_question(); // Create an object of the class to test.
         $reflectionclass = new ReflectionClass($object);
         $method = $reflectionclass->getMethod('filter_unique_questions');
         // Invoke the method with the questions as argument.
         $filteredquestions = $method->invokeArgs($object, [$questions]);
         assertEquals(1, count($filteredquestions));
-        assertEquals($this->question1->get_id(), $filteredquestions[0]->questionid);
+        assertEquals($this->question1->get_id(), $filteredquestions[0]);
     }
 
     /**
@@ -126,17 +127,17 @@ final class filter_unique_questions_test extends advanced_testcase {
             $this->question9->get_id(),
         ];
         // Use reflection to access the private static method.
-        $object = new get_lecturer_quiz(); // Create an object of the class to test.
+        $object = new reuse_question(); // Create an object of the class to test.
         $reflectionclass = new ReflectionClass($object);
         $method = $reflectionclass->getMethod('filter_unique_questions');
         // Invoke the method with the questions as argument.
         $filteredquestions = $method->invokeArgs($object, [$questions]);
         assertEquals(5, count($filteredquestions));
-        assertEquals($this->question4->get_id(), $filteredquestions[0]->questionid);
-        assertEquals($this->question6->get_id(), $filteredquestions[1]->questionid);
-        assertEquals($this->question7->get_id(), $filteredquestions[2]->questionid);
-        assertEquals($this->question8->get_id(), $filteredquestions[3]->questionid);
-        assertEquals($this->question9->get_id(), $filteredquestions[4]->questionid);
+        assertEquals($this->question4->get_id(), $filteredquestions[0]);
+        assertEquals($this->question6->get_id(), $filteredquestions[1]);
+        assertEquals($this->question7->get_id(), $filteredquestions[2]);
+        assertEquals($this->question8->get_id(), $filteredquestions[3]);
+        assertEquals($this->question9->get_id(), $filteredquestions[4]);
     }
 
     /**
@@ -150,7 +151,7 @@ final class filter_unique_questions_test extends advanced_testcase {
         $questions = [
         ];
         // Use reflection to access the private static method.
-        $object = new get_lecturer_quiz(); // Create an object of the class to test.
+        $object = new reuse_question(); // Create an object of the class to test.
         $reflectionclass = new ReflectionClass($object);
         $method = $reflectionclass->getMethod('filter_unique_questions');
         // Invoke the method with the questions as argument.
