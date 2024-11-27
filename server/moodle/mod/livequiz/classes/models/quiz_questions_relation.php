@@ -56,11 +56,12 @@ class quiz_questions_relation {
 
         $questionrecords = $DB->get_records('livequiz_quiz_questions', ['quiz_id' => $quizid], '', 'question_id');
         $questionids = array_column($questionrecords, 'question_id');
+        error_log("question id:". print_r($questionids));
         $questions = [];
 
         foreach ($questionids as $questionid) {
             $questions[] = question::get_question_from_id($questionid);
-        }
+        } 
 
         return $questions;
     }

@@ -382,6 +382,7 @@ class livequiz_services {
         $answers = questions_answers_relation::get_answers_from_question($questionid);
         foreach ($answers as $answer) {
             $currentanswerid = $answer->get_id();
+            livequiz_questions_lecturer_relation::delete_lecturer_questions_relation_by_id($questionid);
             self::delete_answer($currentanswerid, $questionid);
         }
 

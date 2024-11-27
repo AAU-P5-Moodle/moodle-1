@@ -30,6 +30,18 @@ use core_external\external_value;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class data_structure_helper {
+    public static function get_quiz_structure(): external_single_structure {
+        return new external_single_structure([
+            'quizid' => new external_value(PARAM_INT,'The ID of the livequiz'),
+            'name' => new external_value(PARAM_TEXT, 'The name of the livequiz'),
+            'course' => new external_value(PARAM_TEXT,'The course the livequiz is created under'),
+            'intro' => new external_value(PARAM_TEXT, 'The intro for the livequiz'),
+            'introformat' => new external_value(PARAM_INT,'The intro format for the livequiz'),
+            'timecreated' => new external_value(PARAM_INT, 'The time created for the livequiz'),
+            'timemodified' => new external_value(PARAM_INT, 'The time modified for the livequiz.'),
+            'questions' => self::get_question_structure(),
+        ]);
+    }
     /**
      * retrieves the question structure used in the front-end.
      *
