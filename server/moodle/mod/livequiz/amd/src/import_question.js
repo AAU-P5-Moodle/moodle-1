@@ -3,7 +3,7 @@ import {add_discard_question_button_listener, rerender_saved_questions_list} fro
 import {add_edit_question_listeners} from "./edit_question";
 import {add_delete_question_listeners} from "./delete_question";
 import {displayException} from "core/notification";
-import {external_reuse_questions, get_lecturer_questions} from "./repository";
+import {external_reuse_questions, get_lecturer_quiz} from "./repository";
 import {rerender_take_quiz_button} from "./edit_question_helper";
 
 /**
@@ -55,7 +55,7 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
  * @param {number} lecturerid - The ID of the lecturer.
  */
 function add_old_questions_to_popup(lecturerid) {
-    get_lecturer_questions(lecturerid).then((oldquizzes) => {
+    get_lecturer_quiz(lecturerid).then((oldquizzes) => {
         let oldQuizzesContainer = document.querySelector(".oldQuizzes");
         if (oldquizzes.length === 0) {
             let noQuestions = document.createElement("p");

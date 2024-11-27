@@ -63,8 +63,8 @@ $functions = [
         'ajax'        => true,
         'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
     ],
-    'mod_livequiz_get_lecturer_questions' => [
-        'classname'   => 'mod_livequiz\external\get_lecturer_questions',
+    'mod_livequiz_get_lecturer_quiz' => [
+        'classname'   => 'mod_livequiz\external\get_lecturer_quiz',
         'description' => 'Retrieves all questions of a lecturer.',
         'type'        => 'read',
         'ajax'        => true,

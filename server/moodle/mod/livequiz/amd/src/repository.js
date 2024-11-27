@@ -73,9 +73,9 @@ export const external_reuse_questions = (quizid, questionids, lecturerid) => fet
 ])[0];
 
 // Function to get lecturer questions.
-export const get_lecturer_questions = (lecturerid) => fetchMany([
+export const get_lecturer_quiz = (lecturerid) => fetchMany([
     {
-        methodname: 'mod_livequiz_get_lecturer_questions',
+        methodname: 'mod_livequiz_get_lecturer_quiz',
         args: {
             lecturerid
         },

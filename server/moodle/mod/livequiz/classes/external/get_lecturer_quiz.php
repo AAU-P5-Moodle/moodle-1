@@ -30,7 +30,7 @@ use mod_livequiz\models\question;
 use stdClass;
 
 /**
- * Class get_lecturer_questions
+ * Class get_lecturer_quiz
  *
  * This class extends the core_external\external_api and is used to handle
  * the external API for saving questions to a livequiz.
@@ -40,7 +40,7 @@ use stdClass;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class get_lecturer_questions extends external_api {
+class get_lecturer_quiz extends external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
