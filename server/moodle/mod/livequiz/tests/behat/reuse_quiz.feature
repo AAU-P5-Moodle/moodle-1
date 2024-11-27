@@ -36,3 +36,4 @@ Feature: Reuse previously created quiz in livequiz activity
     And I am on "Test Course" course homepage with editing mode on
 
     Scenario: Reuse quiz in livequiz
+       
