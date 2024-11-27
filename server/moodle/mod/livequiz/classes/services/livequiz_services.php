@@ -163,16 +163,14 @@ class livequiz_services {
 
             if ($questionid == 0) {
                 // Insert new question if ID is 0 (new question).
-                $questionid = question::insert_question($newquestion);
-
-                quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
-                livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
+                $questionid = $this->insert_question_with_relations($newquestion, $lecturerid, $quizid);
                 $updatedquestionids[] = $questionid;
             } else if (isset($existingquestionmap[$questionid])) {
                 // Update existing question if found in the map.
                 $newquestion->update_question();
                 $updatedquestionids[] = $questionid;
             }
+
             $answers = $newquestion->get_answers();
             $this->submit_answers($questionid, $answers);
         }
@@ -185,6 +183,20 @@ class livequiz_services {
         foreach ($deletedquestions as $questionid) {
             self::delete_question($questionid);
         }
+    }
+
+    /**
+     * inserts a question into the database
+     *
+     * @throws dml_transaction_exception
+     * @throws dml_exception
+     * @throws Exception
+     */
+    private function insert_question_with_relations(question $question, int $lecturerid, int $quizid): int {
+        $questionid = question::insert_question($question);
+        quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
+        livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
+        return $questionid;
     }
 
     /**
@@ -221,9 +233,8 @@ class livequiz_services {
         $existinganswerids = array_keys($existinganswersmap);
         $deletedanswers = array_diff($existinganswerids, $updatedanswerids);
 
-        /* @var answer $deletedanswer // Type specification for $deletedanswer, for PHPStorm IDE */
         foreach ($deletedanswers as $deletedanswer) {
-            self::delete_answer($deletedanswer->get_id());
+            self::delete_answer($deletedanswer);
         }
     }
 
@@ -363,6 +374,7 @@ class livequiz_services {
         if ($participationcount > 0) {
             throw new dml_exception("Cannot delete answer with participations");
         }
+        questions_answers_relation::delete_relations_by_answerid($answerid);
         answer::delete_answer($answerid);
     }
 
