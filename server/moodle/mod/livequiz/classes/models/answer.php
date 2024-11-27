@@ -223,6 +223,8 @@ class answer {
      */
     public static function delete_answer(int $answerid): bool {
         global $DB;
+
+
         return $DB->delete_records('livequiz_answers', ['id' => $answerid]);
     }
 }
