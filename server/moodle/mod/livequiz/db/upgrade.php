@@ -33,7 +33,7 @@ function xmldb_livequiz_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2024072538) {
+    if ($oldversion < 2024072539) {
         // Define table livequiz to be created.
         $livequiztable = new xmldb_table('livequiz');
         $courseid = new xmldb_field('course', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');

@@ -58,6 +58,24 @@ class livequiz_quiz_lecturer_relation {
         global $DB;
         return $DB->get_record('livequiz_quiz_lecturer', ['lecturer_id' => $lecturerid]);
     }
+    /**
+     *
+     * Gets lecturer relations by lecturer id. Will be used to get all the quizes that relates to that teacher
+     *
+     *
+     * @param int $lecturerid
+     * @return array
+     * @throws dml_exception
+     * @throws dml_transaction_exception
+     *
+     */
+    public static function get_lecturer_quiz_relations_by_lecturer_id(int $lecturerid): array {
+        global $DB;
+
+        $printable = $DB->get_records('livequiz_quiz_lecturer', ['lecturer_id' => $lecturerid]);
+        error_log(print_r($printable));
+        return $printable;
+    }
 
     /**
      *

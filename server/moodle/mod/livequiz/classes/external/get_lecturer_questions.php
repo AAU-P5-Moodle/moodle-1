@@ -23,6 +23,8 @@ use core_external\external_value;
 use dml_exception;
 use invalid_parameter_exception;
 use mod_livequiz\models\livequiz_questions_lecturer_relation;
+use mod_livequiz\models\livequiz_quiz_lecturer_relation;
+use mod_livequiz\models\quiz_questions_relation;
 use mod_livequiz\models\question;
 use stdClass;
 
@@ -60,12 +62,25 @@ class get_lecturer_questions extends external_api {
         self::validate_parameters(self::execute_parameters(), [
             'lecturerid' => $lecturerid,
         ]);
-        $rawquestions = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_lecturer_id($lecturerid);
-        $questions = [];
-        foreach ($rawquestions as $rawquestion) {
-            $questions[] = $rawquestion->question_id;
+        // Get all quizzes from the lecturer.
+        $rawquizzes = livequiz_quiz_lecturer_relation::get_lecturer_quiz_relations_by_lecturer_id($lecturerid);
+        error_log(print_r("rawquzzes:------------"));
+        $quizzes = [];
+        // Loop through all quizzes from the lecturer and find the corresponding questions.
+        foreach ($rawquizzes as $rawquiz) {
+            $questions = [];
+            $rawquestions = quiz_questions_relation::get_questions_from_quiz_id($rawquiz->quiz_id);
+            foreach ($rawquestions as $rawquestion) {
+                error_log(print_r("rawqiestio:------------"));
+                $question = question::get_question_from_id($rawquestion->question_id);
+                $questions[] = $question->prepare_for_template(new stdClass());
+            }
+            $quizzes[] = [
+                'livequiz' => $rawquiz,
+                'questions' => $questions,
+            ];
         }
-        return self::filter_unique_questions($questions);
+        return $quizzes;
     }
 
     /**
@@ -74,7 +89,7 @@ class get_lecturer_questions extends external_api {
      * @return external_multiple_structure
      */
     public static function execute_returns(): external_multiple_structure {
-        return new external_multiple_structure(data_structure_helper::get_question_structure(), 'List of questions');
+        return new external_multiple_structure(data_structure_helper::get_quiz_structure(), 'List of quizzes');
     }
 
     /**
