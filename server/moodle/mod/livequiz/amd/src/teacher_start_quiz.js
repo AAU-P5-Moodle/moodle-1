@@ -9,7 +9,7 @@ export const init = (url, studentid) => {
     }
     // Sends message to socket when startQuiz button is pressed
     startQuizBtn.addEventListener("click", () => {
-        console.log("sending message"); // eslint-disable-line no-console
+        console.log("sending message");
         connect_to_socket(url).then((socket) => {
             socket.send(`"Testing some stuff for teachers" ${studentid}`);
         });
@@ -25,43 +25,27 @@ export const init = (url, studentid) => {
  */
 async function connect_to_socket(url) {
     console.log(url);
-    let socket; // WebSocket reference
+    let socket;
     socket = new WebSocket(url);
-
-    let myPromise = new Promise(function(myResolve, myReject) {
+    let myPromise = new Promise(function (myResolve, myReject) {
         socket.onopen = () => {
-            console.log("WebSocket connection established successfully!"); // eslint-disable-line no-console
+            console.log("WebSocket connection established successfully!");
             myResolve(socket);
         };
-
-
         // Handle errors
         socket.onerror = (error) => {
-            console.error("WebSocket encountered an error:", error); // eslint-disable-line no-console
+            console.error("WebSocket encountered an error:", error);
             myReject();
         };
-    });
-
-    try {
-        console.log("WebSocket object created, awaiting connection."); // eslint-disable-line no-console
-
-        // Handle successful connection
-
-
+        console.log("WebSocket object created, awaiting connection.");
         // Handle incoming messages
         socket.onmessage = (event) => {
-            console.log("WebSocket message received:", event.data); // eslint-disable-line no-console
+            console.log("WebSocket message received:", event.data);
         };
-
-
         // Handle connection close
         socket.onclose = () => {
-            console.log("WebSocket connection closed."); // eslint-disable-line no-console
+            console.log("WebSocket connection closed.");
         };
-
-    } catch (error) {
-        console.error("Error initializing WebSocket connection:", error); // eslint-disable-line no-console
-    }
-
+    });
     return myPromise;
 }
