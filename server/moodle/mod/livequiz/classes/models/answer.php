@@ -177,7 +177,7 @@ class answer {
      *
      * @param int $id
      */
-    private function set_id(int $id): void {
+    public function set_id(int $id): void {
         $this->id = $id;
     }
 
