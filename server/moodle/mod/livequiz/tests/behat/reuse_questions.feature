@@ -65,7 +65,6 @@ Feature: Reuse previously created questions in livequiz activity
       And I click on "test 1" "checkbox"
       And I click on "Import Question(s)" "button"
       And I should see "Saved Questions"
-      And I wait "300" seconds
       And "test 1" "list_item" should exist
       # Clicking on the question to see if the answers are correct
       And I click on "(//li[.//span[text()='test 1']])[1]//button[contains(@class, 'edit-question-btn')]" "xpath_element"
