@@ -80,14 +80,15 @@ class get_lecturer_quiz extends external_api {
         }
         return $quizzes;
     }
+    /**
+     */
 
     /**
      * Part of the webservice processing flow. Not called directly here,
      * but is in moodle's web service framework.
      * @return external_multiple_structure
      */
-    public static function execute_returns(): external_multiple_structure
-    {
+    public static function execute_returns(): external_multiple_structure {
         return new external_multiple_structure(data_structure_helper::get_quiz_structure(), 'List of quizzes');
     }
 }

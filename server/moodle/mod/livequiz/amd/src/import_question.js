@@ -47,7 +47,7 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
         })
 
         // Deal with this exception (Using core/notify exception function is recommended).
-        .catch((error) => console.log(error));
+        .catch((error) => displayException(error));
 }
 
 /**
@@ -112,6 +112,7 @@ function add_old_questions_to_popup(lecturerid) {
         });
     }).catch((error) => console.log(error));
 }
+
 /**
  * Imports questions into a quiz.
  *
