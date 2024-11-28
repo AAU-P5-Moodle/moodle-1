@@ -42,8 +42,7 @@ class behat_mod_livequiz extends behat_base {
      * @param $element (radio button or checkbox)
      * @throws ExpectationException
      */
-    public function assertischecked($element)
-    {
+    public function assertischecked($element) {
         $this->assertSession()->checkboxChecked(field: $element);
     }
 
@@ -51,8 +50,7 @@ class behat_mod_livequiz extends behat_base {
      * Asserts whether the given element with a specific id is checked
      * @Then the checkbox with id :checkboxid should be checked
      */
-    public function checkbox_with_id_should_be_checked($checkboxid)
-    {
+    public function checkbox_with_id_should_be_checked($checkboxid) {
         $checkbox = $this->getSession()->getPage()->findField($checkboxid);
 
         if (null === $checkbox) {
@@ -68,8 +66,7 @@ class behat_mod_livequiz extends behat_base {
      * Asserts whether the given element with a specific id is NOT checked
      * @Then the checkbox with id :checkboxid should not be checked
      */
-    public function checkbox_with_id_should_not_be_checked($checkboxid)
-    {
+    public function checkbox_with_id_should_not_be_checked($checkboxid) {
         $checkbox = $this->getSession()->getPage()->findField($checkboxid);
 
         if (null === $checkbox) {
@@ -85,8 +82,7 @@ class behat_mod_livequiz extends behat_base {
      * Asserts the id for a checkbox or radio button.
      * @Then the :selectorType with id :checkboxid should exist
      */
-    public function assertelementidexists($checkboxid)
-    {
+    public function assertelementidexists($checkboxid) {
         $this->assertSession()->elementExists('css', '#' . $checkboxid);
     }
 
@@ -94,8 +90,7 @@ class behat_mod_livequiz extends behat_base {
      * Asserts the id for a checkbox or radio button.
      * @Then the :selectorType with id :checkboxid should not exist
      */
-    public function assertelemtenidnotexists($checkboxid)
-    {
+    public function assertelemtenidnotexists($checkboxid) {
         $this->assertSession()->elementNotExists('css', '#' . $checkboxid);
     }
 
@@ -105,8 +100,7 @@ class behat_mod_livequiz extends behat_base {
      * @param $element (radio button or checkbox)
      * @throws ExpectationException
      */
-    public function assertisnotchecked($element)
-    {
+    public function assertisnotchecked($element) {
         $this->assertSession()->checkboxNotChecked($element);
     }
 
@@ -115,8 +109,7 @@ class behat_mod_livequiz extends behat_base {
      *
      * @Given I use demodata :datanumber for the course :coursename and activity :activityname and lecturer :teachername
      */
-    public function i_use_demodata($datanumber, $coursename, $activityname, $teachername): void
-    {
+    public function i_use_demodata($datanumber, $coursename, $activityname, $teachername): void {
         global $DB;
 
         // Get the course ID.
@@ -152,8 +145,7 @@ class behat_mod_livequiz extends behat_base {
      *
      * @Given I use demodata for the course :coursename and activity :activityname
      */
-    public function i_use_demodata_one($coursename, $activityname): void
-    {
+    public function i_use_demodata_one($coursename, $activityname): void {
         $this->i_use_demodata(1, $coursename, $activityname, "admin");
     }
 
