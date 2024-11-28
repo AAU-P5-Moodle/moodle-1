@@ -42,7 +42,8 @@ class behat_mod_livequiz extends behat_base {
      * @param $element (radio button or checkbox)
      * @throws ExpectationException
      */
-    public function assertischecked($element) {
+    public function assertischecked($element)
+    {
         $this->assertSession()->checkboxChecked(field: $element);
     }
 
@@ -50,7 +51,8 @@ class behat_mod_livequiz extends behat_base {
      * Asserts whether the given element with a specific id is checked
      * @Then the checkbox with id :checkboxid should be checked
      */
-    public function checkbox_with_id_should_be_checked($checkboxid) {
+    public function checkbox_with_id_should_be_checked($checkboxid)
+    {
         $checkbox = $this->getSession()->getPage()->findField($checkboxid);
 
         if (null === $checkbox) {
@@ -62,11 +64,12 @@ class behat_mod_livequiz extends behat_base {
         }
     }
 
-     /**
-      * Asserts whether the given element with a specific id is NOT checked
-      * @Then the checkbox with id :checkboxid should not be checked
-      */
-    public function checkbox_with_id_should_not_be_checked($checkboxid) {
+    /**
+     * Asserts whether the given element with a specific id is NOT checked
+     * @Then the checkbox with id :checkboxid should not be checked
+     */
+    public function checkbox_with_id_should_not_be_checked($checkboxid)
+    {
         $checkbox = $this->getSession()->getPage()->findField($checkboxid);
 
         if (null === $checkbox) {
@@ -82,7 +85,8 @@ class behat_mod_livequiz extends behat_base {
      * Asserts the id for a checkbox or radio button.
      * @Then the :selectorType with id :checkboxid should exist
      */
-    public function assertelementidexists($checkboxid) {
+    public function assertelementidexists($checkboxid)
+    {
         $this->assertSession()->elementExists('css', '#' . $checkboxid);
     }
 
@@ -90,7 +94,8 @@ class behat_mod_livequiz extends behat_base {
      * Asserts the id for a checkbox or radio button.
      * @Then the :selectorType with id :checkboxid should not exist
      */
-    public function assertelemtenidnotexists($checkboxid) {
+    public function assertelemtenidnotexists($checkboxid)
+    {
         $this->assertSession()->elementNotExists('css', '#' . $checkboxid);
     }
 
@@ -100,7 +105,8 @@ class behat_mod_livequiz extends behat_base {
      * @param $element (radio button or checkbox)
      * @throws ExpectationException
      */
-    public function assertisnotchecked($element) {
+    public function assertisnotchecked($element)
+    {
         $this->assertSession()->checkboxNotChecked($element);
     }
 
@@ -109,7 +115,8 @@ class behat_mod_livequiz extends behat_base {
      *
      * @Given I use demodata :datanumber for the course :coursename and activity :activityname and lecturer :teachername
      */
-    public function i_use_demodata($datanumber, $coursename, $activityname, $teachername): void {
+    public function i_use_demodata($datanumber, $coursename, $activityname, $teachername): void
+    {
         global $DB;
 
         // Get the course ID.
@@ -145,7 +152,8 @@ class behat_mod_livequiz extends behat_base {
      *
      * @Given I use demodata for the course :coursename and activity :activityname
      */
-    public function i_use_demodata_one($coursename, $activityname): void {
+    public function i_use_demodata_one($coursename, $activityname): void
+    {
         $this->i_use_demodata(1, $coursename, $activityname, "admin");
     }
 
@@ -154,37 +162,8 @@ class behat_mod_livequiz extends behat_base {
      *
      * @Then :selector should have a parent div with class :class
      */
-    public function elementshouldhaveclass($selector, $class) {
-
-        $label = $this->getSession()->getPage()->findAll('css', 'label');
-        foreach ($label as $lbl) {
-            if ($lbl->getText() === $selector) {
-                // Get the parent element of the label (which should be the div).
-                $parentdiv = $lbl->find('xpath', 'ancestor::div[1]');
-                $divclass = $parentdiv->getAttribute('class');
-                break; // Stop once the correct label is found.
-            }
-        }
-
-        /* The class in the code contains multiple line ends and spaces (uncountable amount), therefore
-         * we remove all line ends and spaces from the class given in the test and
-         * the class gotten in the test.
-         */
-        $class = preg_replace('/\s+/', '', $class);
-        $classes = preg_replace('/\s+/', '', $divclass);
-
-        // Check if the class given is not the same as the class gotten.
-        if (!str_contains($classes, $class)) {
-            throw new \Exception("Element with selector '$selector' does not contain class '$class'.  Actual class: $classes");
-        }
-    }
-
-    /**
-     * Tests if an element has a given class (whitespaces are removed).
-     *
-     * @Then :selector should have a parent div with class :class
-     */
-    public function elementshouldhaveclass($selector, $class) {
+    public function elementshouldhaveclass($selector, $class)
+    {
 
         $label = $this->getSession()->getPage()->findAll('css', 'label');
         foreach ($label as $lbl) {
@@ -209,3 +188,4 @@ class behat_mod_livequiz extends behat_base {
         }
     }
 }
+
