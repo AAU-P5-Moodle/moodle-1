@@ -26,7 +26,6 @@ namespace mod_livequiz;
 
 use advanced_testcase;
 use dml_exception;
-use mod_livequiz\external\get_lecturer_quiz;
 use mod_livequiz\external\reuse_question;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\question;
@@ -89,7 +88,7 @@ final class filter_unique_questions_test extends advanced_testcase {
     /**
      * Test the filter_unique_questions external function.
      * This function tests if the filter_unique_questions function filters out duplicate questions.
-     * @covers      \mod_livequiz\external\filter_unique_questions::filter_unique_questions
+     * @covers      \mod_livequiz\external\reuse_question::filter_unique_questions
      * @throws ReflectionException|dml_exception
      */
     public function test_filter_unique_questions(): void {
@@ -143,7 +142,7 @@ final class filter_unique_questions_test extends advanced_testcase {
     /**
      * Test the filter_unique_questions external function.
      * This function tests if the filter_unique_questions returns empty array when given empty array.
-     * @covers      \mod_livequiz\external\filter_unique_questions::filter_unique_questions
+     * @covers      \mod_livequiz\external\reuse_question::filter_unique_questions
      * @throws ReflectionException|dml_exception
      */
     public function test_filter_unique_questions_0(): void {
