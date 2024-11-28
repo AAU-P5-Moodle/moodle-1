@@ -75,7 +75,6 @@ class index_page_teacher implements renderable, templatable {
         $data->quizid = $this->quizid;
         $data->oldquestions = [];
         $premadequestions = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_lecturer_id($this->lecturerid);
-
         foreach ($premadequestions as $premadequestion) {
             $question = question::get_question_from_id(intval($premadequestion->question_id));
             $data->oldquestions[] = $question->prepare_for_template(new stdClass());

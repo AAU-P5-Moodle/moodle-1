@@ -68,6 +68,9 @@
       <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
       <input type="hidden" name="nextquestionindex" value="{{nextquestionindex}}" />
   {{/isattempting }}
+  {{^isattempting}}
+      <p class="question-explanation">{{questionexplanation}}</p>
+  {{/isattempting}}
 </div>
 
 
