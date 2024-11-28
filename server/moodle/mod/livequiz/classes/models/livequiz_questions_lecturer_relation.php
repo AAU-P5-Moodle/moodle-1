@@ -87,7 +87,7 @@ class livequiz_questions_lecturer_relation {
 
     /**
      *
-     * Deletes  lecturer_questions_relation by the relation id
+     * Deletes  lecturer_questions_relation by the question id
      *
      *
      * @param int $id
@@ -96,8 +96,8 @@ class livequiz_questions_lecturer_relation {
      * @throws dml_transaction_exception
      *
      */
-    public static function delete_lecturer_questions_relation_by_id(int $id): void {
+    public static function delete_lecturer_questions_relation_by_question_id(int $id): void {
         global $DB;
-        $DB->delete_records('livequiz_questions_lecturer', ['id' => $id]);
+        $DB->delete_records('livequiz_questions_lecturer', ['question_id' => $id]);
     }
 }

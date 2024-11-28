@@ -384,10 +384,10 @@ class livequiz_services {
         $answers = questions_answers_relation::get_answers_from_question($questionid);
         foreach ($answers as $answer) {
             $currentanswerid = $answer->get_id();
-            self::delete_answer($currentanswerid, $questionid);
+            self::delete_answer($currentanswerid);
         }
         quiz_questions_relation::delete_question_quiz_relation($questionid);
-        livequiz_questions_lecturer_relation::delete_lecturer_questions_relation_by_id($questionid);
+        livequiz_questions_lecturer_relation::delete_lecturer_questions_relation_by_question_id($questionid);
         question::delete_question($questionid);
     }
 
