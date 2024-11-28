@@ -2,17 +2,28 @@
 // Define and export the init function
 export const init = (url, studentid) => {
     console.log("Student Script is loaded and attempting to attach event listener.");
-    const startQuizBtn = document.getElementById("room_connection_button");
-    if (!startQuizBtn) {
-        console.error("Button with id 'startQuiz' not found!");
+
+    const roomConnectionBtn = document.getElementById("room_connection_button");
+    if (!roomConnectionBtn) {
+        console.error("Button with id 'room_connection_button' not found!");
         return;
     }
+
+    const roomCodeInput = document.getElementById("roomCode");
+    if (!roomCodeInput) {
+        console.error("Field with id 'roomCodeInput' not found!");
+        return;
+    }
+
     // Sends message to socket when startQuiz button is pressed
-    startQuizBtn.addEventListener("click", () => {
-        console.log("sending message"); // eslint-disable-line no-console
-        connect_to_socket(`${url}?requesttype=connect&userid=${studentid}&room=abcdef`).then((socket) => {
+    roomConnectionBtn.addEventListener("click", async () => {
+        try {
+            console.log("sending message"); // eslint-disable-line no-console
+            const socket = await connect_to_socket(`${url}?requesttype=connect&userid=${studentid}&room=${roomCodeInput.value}`);
             socket.send("Testing some stuff for students" + ' ' + `${studentid}`);
-        });
+        } catch (e) {
+            console.error(`Student failed to join room, ${e}`);
+        }
     });
 };
 
@@ -24,7 +35,6 @@ export const init = (url, studentid) => {
  * @returns websocket reference
  */
 async function connect_to_socket(url) {
-    console.log(url);
     let socket;
     socket = new WebSocket(url);
     let myPromise = new Promise(function (myResolve, myReject) {

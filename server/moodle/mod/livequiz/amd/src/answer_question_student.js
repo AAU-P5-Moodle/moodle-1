@@ -1,52 +1,52 @@
 /* eslint-disable no-console */
 // Define and export the init function
 export const init = (url, studentid) => {
-    console.log("Script is loaded and attempting to attach event listener.");
+    console.log("Initializing quiz interaction.");
 
     const nextQuestionBtn = document.getElementById("nextButton");
     if (!nextQuestionBtn) {
-        console.error(`Button with id ${nextQuestionBtn.value} not found!`);
+        console.error(`Next button not found!`);
         return;
     }
-    let quizid = document.getElementsByName("quizid")[0].value;
-    let cmid = document.getElementsByName("cmid")[0].value;
-    let questionid = document.getElementsByName("questionid")[0].value;
+
+    const quizid = document.getElementsByName("quizid")[0].value;
+    const cmid = document.getElementsByName("cmid")[0].value;
+    const questionid = document.getElementsByName("questionid")[0].value;
 
     if (!quizid || !cmid || !questionid) {
         console.error(`Button with id ${quizid} not found!`);
         return;
-    } else {
-        console.log(quizid.value);
-        console.log(cmid.value);
-        console.log(questionid.value);
     }
-    let answerId = [];
 
-    // document.getElementsByName('answer').forEach((answer) => {
-        let answer = document.getElementById("answerid");
-        console.log(answer);
-        // if (answer.checked) {
-        //     console.log(answer.value);
-        //     answerId.push(answer.value);
-        // }
-    // });
+    nextQuestionBtn.addEventListener("mouseover", async () => {
+        const socket = await connect_to_socket(`${url}?requesttype=nextquestion&userid=${studentid}`);
+        console.log("Preparing to send data.");
 
-    // Sends message to socket when startQuiz button is pressed
-    nextQuestionBtn.addEventListener("mouseover", () => {
+        const answerElement = document.querySelectorAll(".answer input");
+        if (!answerElement) {
+            console.log("Answer id does not exists");
+        }
+
+        let idOfAnswers = Array.from(answerElement).filter((answer) => answer.checked).map((answer) => answer.value);
 
         const questiondata = {
-            quizid: quizid,
-            cmid: cmid,
-            questionid: questionid,
-            answers: answerId,
+            quizid,
+            cmid,
+            questionid,
+            idOfAnswers,
         };
-        console.log("sending message"); // eslint-disable-line no-console
-        connect_to_socket(`${url}?requesttype=nextquestion&userid=${studentid}`).then((socket) => {
+
+        try {
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                console.log("Not ready to send data.");
+            }
+            console.log("sending message"); // eslint-disable-line no-console
             const message = JSON.stringify(questiondata);
-            console.log("Sending message:", message);
+            console.log(message);
             socket.send(message);
-            socket.send(`"Testing some stuff for teachers and students" ${studentid}`);
-        });
+        } catch (e) {
+            console.error(`Failed to send data of answer, ${e}`);
+        }
     });
 };
 
@@ -63,8 +63,7 @@ export const init = (url, studentid) => {
  * @param {string} url
  * @returns websocket reference
  */
-async function connect_to_socket(url) {
-    console.log(url);
+function connect_to_socket(url) {
     let socket;
     socket = new WebSocket(url);
     let myPromise = new Promise(function (myResolve, myReject) {

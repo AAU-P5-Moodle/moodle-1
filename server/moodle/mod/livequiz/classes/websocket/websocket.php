@@ -18,9 +18,10 @@ namespace mod_livequiz\classes\websocket;
 
 require(dirname(__DIR__) . '/../../../vendor/autoload.php');
 
-use core\oauth2\client;
+use Exception;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
+use SplObjectStorage;
 
 /**
  * Class websocket.
@@ -33,24 +34,21 @@ use Ratchet\MessageComponentInterface;
  */
 class websocket implements MessageComponentInterface {
     /**
-     * @var \SplObjectStorage $clients
+     * @var SplObjectStorage $clients
      */
-    protected $clients;
+    protected SplObjectStorage $clients;
 
     /**
      * @var array $quizrooms
      */
-    protected $quizrooms;
+    protected array $quizrooms;
 
     /**
      * Constructor for the websocket class
      */
     public function __construct() {
-        $this->clients = new \SplObjectStorage();
+        $this->clients = new SplObjectStorage();
         $this->quizrooms = [];
-
-        // This is testing and needs to be removed asap.
-        $this->quizrooms[] = "abcdef";
         return $this;
     }
 
@@ -60,18 +58,9 @@ class websocket implements MessageComponentInterface {
      * @return string
      */
     private function rand_room(): string {
-        $alphabet = str_split("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        $characterslength = count($alphabet);
-        $codelength = 6;
-
-        $randomstring = "";
-
-        for ($i = 0; $i < $codelength; $i++) {
-            $index = random_int(0, $characterslength - 1);
-            $randomstring .= $alphabet[$index];
-        }
-
-        return $randomstring;
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $str = str_shuffle($characters);
+        return substr($str, 0, 6);
     }
 
     /**
@@ -86,23 +75,17 @@ class websocket implements MessageComponentInterface {
         parse_str($params, $queryparams);
 
         $requesttype = $queryparams['requesttype'];
+
         $userid = $queryparams['userid'] ?? null;
-        $room = $queryparams['room'] ?? "test";
-
-        // Should be in the specific function calls that needs them otherwise they will cause issues.
-        if ($userid == null) {
-            echo "userid was null!";
-            return;
-        }
-
-        if ($room == null) {
-            echo "Roomcode was null!";
-            return;
-        }
+        $room = $queryparams['room'] ?? null;
 
         switch ($requesttype) {
             case 'connect':
+                if (!$this->validate_requested_parameters($queryparams, ['room', 'userid'])) {
+                    return;
+                }
                 $this->handle_quiz_connect($conn, (int)$userid, $room);
+                echo "New connection! ($conn->resourceId)\n";
                 break;
             case 'createroom':
                 $roomcode = $this->rand_room();
@@ -110,23 +93,11 @@ class websocket implements MessageComponentInterface {
                 while ($this->room_exists($roomcode)) {
                     $roomcode = $this->rand_room();
                 }
-                
                 $this->create_room($roomcode, $userid, $conn);
                 break;
-            case 'startquiz':
-                $this->handle_start_quiz($room);
-                break;
-            case 'nextquiz':
-                $this->next_question($room);
-                break;
-            case 'leaveroom':
-                $this->leave_room($room, $conn, $userid);
-                break;
             default:
-                print("Invalid request type");
+                print("Invalid request type.\n");
         }
-
-        echo "New connection! ({$conn->resourceId})\n";
     }
 
     /**
@@ -137,31 +108,40 @@ class websocket implements MessageComponentInterface {
      * @return void
      */
     public function onmessage(ConnectionInterface $from, $msg) {
-        $receivercount = count($this->clients) - 1;
-        //$jsonobjectforurl = {"requesttype": leave_room, "userid": 1, "roomid": abcdef};
-        //$anwer = {"questionid": 1, "answers": []};
-        echo sprintf(
-            'Connection %d sending message "%s" to %d other connection%s' . "\n",
-            $from->resourceId,
-            $msg,
-            $receivercount,
-            $receivercount == 1 ? '' : 's'
-        );
 
-        $requestobject = json_decode($msg);
-        print_r($requestobject);
+        $params = $from->httpRequest->getUri()->getQuery();
+        $queryparams = [];
+        parse_str($params, $queryparams);
+        $requesttype = $queryparams['requesttype'];
 
-        switch ($requestobject->requesttype) {
-            case 'test':
-                echo "yay!";
-                break;
+        $requestobject = json_decode($msg, true);
+        if (!isset($requesttype)) {
+            $from->send("Missing request format.\n");
+            return;
+        }
+
+        switch ($requesttype) {
             case 'startquiz':
+                if (!$this->validate_requested_parameters($queryparams, ['room'])) {
+                    return;
+                }
+                $this->handle_start_quiz($queryparams['room']);
                 break;
             case 'nextquestion':
+                if ((!$this->validate_requested_parameters(['room' => 'abcde'], ['room'])) || !$requestobject) {
+                    return;
+                }
+                $this->next_question('abcde');
+                $from->send($msg);
                 break;
             case 'leaveroom':
+                if (!$this->validate_requested_parameters($queryparams, ['room', 'userid'])) {
+                    return;
+                }
+                $this->leave_room($queryparams['room'], $from, $queryparams['userid']);
                 break;
             default:
+                print("Invalid request type.\n");
         }
         // Send to all clients except sender.
         foreach ($this->clients as $client) {
@@ -181,21 +161,61 @@ class websocket implements MessageComponentInterface {
      */
     public function onclose(ConnectionInterface $conn) {
         $this->clients->detach($conn);
-        echo "Connection {$conn->resourceId} has disconnected\n";
+        $count = $conn->countClient;
+        echo "Connection $conn->resourceId has disconnected. $count connections left\n";
     }
 
     /**
      * If an error is received from a client the connection is closed
      *
      * @param ConnectionInterface $conn
-     * @param \Exception $e
+     * @param Exception $e
      * @return void
      */
-    public function onerror(ConnectionInterface $conn, \Exception $e) {
+    public function onerror(ConnectionInterface $conn, Exception $e) {
         echo "An error has occurred: {$e->getMessage()}\n";
 
         $this->clients->detach($conn);
         $conn->close();
+    }
+
+    /**
+     * Checks if room exists and then creates and saves it in the quizrooms array
+     *
+     * @param string $roomid
+     * @param string $teacherid
+     * @param ConnectionInterface $from
+     * @return array
+     */
+    private function create_room(string $roomid, string $teacherid, ConnectionInterface $from): array {
+        if ($teacherid == null) {
+            echo "Teacher id does not exists.\n";
+            return [];
+        }
+
+        $quizinfo = [
+            'roomid' => $roomid,
+            'teacherid' => $teacherid,
+        ];
+
+        $this->quizrooms[] = $roomid;
+        echo "Room $roomid generated.\n";
+
+        $this->clients->attach($from, $quizinfo);
+        echo "This is the room code: $roomid\n";
+        $from->send($roomid);
+
+        return $quizinfo;
+    }
+
+    /**
+     * Returns true if roomid already exists in quizrooms
+     *
+     * @param string $roomid
+     * @return bool
+     */
+    private function room_exists(string $roomid): bool {
+        return in_array($roomid, $this->quizrooms);
     }
 
     /**
@@ -208,7 +228,7 @@ class websocket implements MessageComponentInterface {
      */
     private function handle_quiz_connect(ConnectionInterface $conn, int $studentid, string $roomcode): void {
         if (!$this->room_exists($roomcode)) {
-            echo "Room does not exist";
+            echo "Room does not exist.\n";
         }
 
         $clientinfo = [
@@ -218,57 +238,8 @@ class websocket implements MessageComponentInterface {
 
         $this->clients->attach($conn, $clientinfo);
 
-        $conn->send("You have joined room: {$roomcode}");
-    }
-
-    /**
-     * Returns true if roomid already exists in quizrooms
-     *
-     * @param int $roomid
-     * @return bool
-     */
-    private function room_exists(string $roomid): bool {
-        return in_array($roomid, $this->quizrooms);
-    }
-
-
-    /**
-     * Sends a messsage to all clients that is connected to a specific room on quiz start
-     *
-     * @param string $roomid
-     * @return void
-     */
-    private function handle_start_quiz(string $roomid): void {
-        $this->handle_messaging_for_specific_room($roomid, "Quiz started.");
-    }
-
-    /**
-     * Checks if room exists and then creates and saves it in the quizrooms array
-     *
-     * @param string $roomid
-     * @param string $teacherid
-     * @param ConnectionInterface $conn
-     * @return array
-     */
-    private function create_room(string $roomid, string $teacherid, ConnectionInterface $from): array {
-        if ($teacherid == null) {
-            echo "Teacher id does not exists.";
-            return [];
-        }
-
-        $quizinfo = [
-            'roomid' => $roomid,
-            'teacherid' => $teacherid,
-        ];
-
-        $this->quizrooms[] = $roomid;
-        echo "Room {$roomid} generated.";
-
-        $this->clients->attach($from, $quizinfo);
-        echo 'This is the room code: {$roomid}';
-        $from->send($roomid);
-
-        return $quizinfo;
+        $conn->send("You have joined room: $roomcode.\n");
+        $this->handle_messaging_for_specific_room($roomcode, "$conn->resourceId connected to room: $roomcode.\n");
     }
 
     /**
@@ -280,13 +251,25 @@ class websocket implements MessageComponentInterface {
      * @return void
      */
     private function leave_room(string $roomid, ConnectionInterface $conn, string $userid): void {
+        echo "Leaving room $roomid.\n";
         foreach ($this->clients as $client) {
-            $clientdata = $this->clients[$client];
-            if ($clientdata['studentid'] == $userid && $clientdata['roomid'] == $roomid) {
+            if ($client == $conn) {
                 $this->clients->detach($conn);
+                echo "Connection $client->resourceId has disconnected from room $roomid\n";
+                return;
             }
         }
-        echo "Connection {$conn->resourceId} has disconnected from room {$roomid}\n";
+        echo "Connection $conn->resourceId has disconnected from room $roomid\n";
+    }
+
+    /**
+     * Sends a messsage to all clients that is connected to a specific room on quiz start
+     *
+     * @param string $roomid
+     * @return void
+     */
+    private function handle_start_quiz(string $roomid): void {
+        $this->handle_messaging_for_specific_room($roomid, "Quiz started.\n");
     }
 
     /**
@@ -296,7 +279,7 @@ class websocket implements MessageComponentInterface {
      * @return void
      */
     private function next_question(string $roomid): void {
-        $this->handle_messaging_for_specific_room($roomid, "next question.");
+        $this->handle_messaging_for_specific_room($roomid, "next question.\n");
     }
 
     /**
@@ -308,7 +291,7 @@ class websocket implements MessageComponentInterface {
      */
     private function handle_messaging_for_specific_room(string $roomid, string $msg): void {
         if (!$this->room_exists($roomid)) {
-            echo "Room does not exists.";
+            echo "Room does not exists.\n";
             return;
         }
 
@@ -318,5 +301,22 @@ class websocket implements MessageComponentInterface {
                 $client->send($msg);
             }
         }
+    }
+
+    /**
+     * Used to validate the existence of requested parameters
+     *
+     * @param array $currentparams
+     * @param array $requestedparams
+     * @return bool
+     */
+    private function validate_requested_parameters(array $currentparams, array $requestedparams): bool {
+        foreach ($requestedparams as $param) {
+            if (!array_key_exists($param, $currentparams)) {
+                echo "Missing required parameter.\n";
+                return false;
+            }
+        }
+        return true;
     }
 }

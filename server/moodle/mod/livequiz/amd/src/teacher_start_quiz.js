@@ -3,17 +3,20 @@
 export const init = (url, teacherid) => {
     console.log("Teacher Script is loaded and attempting to attach event listener.");
 
-    const startQuizBtn = document.getElementById("room_connection_button");
-    if (!startQuizBtn) {
-        console.error("Button with id 'startQuiz' not found!");
+    const roomConnectionBtn = document.getElementById("room_connection_button");
+    if (!roomConnectionBtn) {
+        console.error("Button with id 'room_connection_button' not found!");
         return;
     }
     // Sends message to socket when startQuiz button is pressed
-    startQuizBtn.addEventListener("click", () => {
-        console.log("sending message"); // eslint-disable-line no-console
-        connect_to_socket(`${url}?requesttype=createroom&userid=${teacherid}`).then((socket) => {
+    roomConnectionBtn.addEventListener("click", async () => {
+        try {
+            console.log("sending message"); // eslint-disable-line no-console
+            const socket = await connect_to_socket(`${url}?requesttype=createroom&userid=${teacherid}`);
             socket.send(`"Testing some stuff for teachers" ${teacherid}`);
-        });
+        } catch (e) {
+            console.error(`Teacher failed to create room, ${e}`);
+        }
     });
 };
 
