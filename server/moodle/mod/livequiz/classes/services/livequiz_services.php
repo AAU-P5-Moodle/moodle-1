@@ -393,6 +393,7 @@ class livequiz_services {
         }
 
         quiz_questions_relation::delete_question_quiz_relation($questionid);
+        livequiz_questions_lecturer_relation::delete_lecturer_questions_relation_by_id($questionid);
         question::delete_question($questionid);
     }
 
