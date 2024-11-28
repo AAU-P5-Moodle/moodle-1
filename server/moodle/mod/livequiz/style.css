@@ -22,7 +22,7 @@
     padding: 20px;
     z-index: 1000;
  }
- 
+
  .question_input_large {
     width: 100%;
     height: 100px;
@@ -33,7 +33,7 @@
     border: 2px solid #ccc;
     box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
  }
- 
+
  .all_answers_for_question_div {
     display: flex;
     flex-wrap: wrap;
@@ -46,12 +46,12 @@
     align-items: center;
     margin-bottom: 20px;
  }
- 
+
  .container_for_new_answer {
     display: flex;
     width: 49%;
     align-items: center;
-    gap: 10px;         
+    gap: 10px;
     padding: 10px;
     border-radius: 8px;
     border: 2px solid #ccc;
@@ -59,13 +59,13 @@
     position: relative;
     margin-bottom: 10px;
  }
- 
+
  .answer_checkbox {
-    margin-right: 10px; 
+    margin-right: 10px;
  }
  .answer_input {
-    flex-grow: 1;      
-    padding: 10px;     
+    flex-grow: 1;
+    padding: 10px;
     border: 2px solid #ccc;
     background: transparent;
     font-size: 1.2em;
@@ -100,11 +100,11 @@
      outline: none;
      box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.5); /* A focus ring for accessibility */
  }
- 
+
  .add_new_answer_to_question:hover {
     background-color: #004edf;
  }
- 
+
  /* File upload section */
  .file_upload_section img {
     margin-top: 10px;
@@ -133,7 +133,7 @@
     font-weight: bold;
     text-align: center;
  }
- 
+
  /* Time limit for question styling */
  .time_limit_container {
     display: flex;
@@ -147,24 +147,24 @@
  }
  .timer_input_container {
     display: flex;
-    align-items: center;    
-    gap: 10px;             
+    align-items: center;
+    gap: 10px;
  }
  .time_limit_checkbox {
-    margin-right: 10px;    
+    margin-right: 10px;
  }
  .set_timer_input {
-    width: 150px;            
-    padding: 5px 10px;     
-    border: 2px solid #ccc; 
-    border-radius: 10px;   
-    font-size: 1.1em;       
-    text-align: center;     
+    width: 150px;
+    padding: 5px 10px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    font-size: 1.1em;
+    text-align: center;
     outline: none;
  }
- 
+
  .add_new_answer_to_question {
-    background-color: #0059ff; 
+    background-color: #0059ff;
     color: white;
     padding: 10px 15px;
     font-size: 1em;
@@ -174,25 +174,25 @@
     align-self: flex-end;
     z-index: 100;
  }
- 
+
  .save_button:hover {
     background-color: #4cae4c;
  }
  .discard_question_button:hover {
     background-color: #c10600;
  }
- 
+
  .file_upload_container {
     margin-bottom: 20px;
  }
- 
+
  .file_upload_input {
     border: 1px solid #ccc;
     padding: 8px;
     border-radius: 5px;
     font-size: 1rem;
  }
- 
+
  .file_upload_preview {
     display: block;
     margin-top: 10px;
@@ -224,7 +224,7 @@
  }
  /* Styling the cancel button to always appear at the bottom-right of the window */
  .cancel_button {
-    position: fixed;      
+    position: fixed;
     bottom: 10px;
     right: 100px;
     background-color: blue;
@@ -235,7 +235,7 @@
     cursor: pointer;
     z-index: 1000;
  }
- 
+
  .toast_promise_deletion_div {
     position: absolute;
     top: 50%;
@@ -249,152 +249,152 @@
     text-align: center;
     width: 60%;
  }
- 
+
  .toast_promise_deletion_div button {
     margin: 10px;
     padding: 10px 20px;
     font-size: 1.1em;
     cursor: pointer;
  }
- 
+
  #id_buttonaddquestion {
-    background-color: green; 
-    color: white; 
-    padding: 10px 20px; 
-    font-size: large;  
-    border-radius: 5px; 
-    cursor: pointer; 
+    background-color: green;
+    color: white;
+    padding: 10px 20px;
+    font-size: large;
+    border-radius: 5px;
+    cursor: pointer;
  }
- 
+
  .div_for_question {
     margin-top: 25px;
-    display: flex; 
-    flex-direction: column; 
-    gap: 10px; 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
  }
- 
+
  .question_for_main_page {
     cursor: pointer;
-    background-color: #0000ff; 
-    color: white; 
-    padding: 10px; 
-    font-size: large; 
-    border-radius: 5px; 
+    background-color: #0000ff;
+    color: white;
+    padding: 10px;
+    font-size: large;
+    border-radius: 5px;
  }
- 
+
  .quiz_form_container {
-    flex-direction: column;    
-    padding: 20px; 
-    box-sizing: border-box;  
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
  }
- 
+
  .quiz_form_container .fitem {
     display: flex;
-    flex-direction: column; 
-    margin-bottom: 15px; 
+    flex-direction: column;
+    margin-bottom: 15px;
  }
- 
+
  .quiz_form_container label {
-    margin-bottom: 5px; 
-    font-weight: bold;  
+    margin-bottom: 5px;
+    font-weight: bold;
  }
- 
+
  .quiz_form_container input,
  .quiz_form_container textarea {
-    width: 100%; 
-    padding: 10px; 
-    border: 1px solid #ccc; 
-    border-radius: 5px; 
-    font-size: 1rem; 
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
  }
- 
+
  .image_upload_container {
-    position: relative;  
-    margin-top: 20px; 
-    width: 100%; 
-    padding: 10px 0; 
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px 0;
  }
- 
+
  #imagePreviewContainer {
-    width: 300px; 
-    height: 200px; 
-    border: 2px solid #ccc; 
-    border-radius: 10px; 
-    margin-bottom: 15px; 
-    overflow: hidden; 
-    display: flex; 
+    width: 300px;
+    height: 200px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    display: flex;
     justify-content: center;
     align-items: center;
  }
- 
+
  #imagePreview {
-    max-width: 100%; 
-    max-height: 100%; 
+    max-width: 100%;
+    max-height: 100%;
     display: none; /* Initially hidden until an image is uploaded */
  }
- 
+
  .custom-file-upload {
     display: inline-block;
-    padding: 10px 20px; 
-    cursor: pointer; 
-    background-color: #007bff; 
-    color: white; 
-    border: 2px solid #007bff; 
-    border-radius: 10px; 
-    font-size: 1rem; 
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    font-size: 1rem;
     text-align: center;
  }
- 
+
  .custom-file-upload:hover {
-    background-color: #0056b3; 
+    background-color: #0056b3;
  }
- 
+
  #imageUpload {
     display: none; /* Hide the default file input */
  }
- 
+
  #saved_questions_container {
-    width: 40%; 
-    background-color: lightgray; 
-    padding: 20px; 
-    border-radius: 15px; 
-    margin-top: 20px; 
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3); 
+    width: 40%;
+    background-color: lightgray;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
  }
  #saved_questions_list {
-    list-style-type: decimal; 
-    padding-left: 0; 
-    margin: 0; 
+    list-style-type: decimal;
+    padding-left: 0;
+    margin: 0;
  }
  #saved_questions_list li {
-    margin-bottom: 5px; 
-    color: blue; 
-    cursor: pointer; 
+    margin-bottom: 5px;
+    color: blue;
+    cursor: pointer;
     transition: background-color 0.3s;
  }
  #saved_questions_list li:hover {
     background-color: #f0f0f0;
  }
- 
- 
+
+
  /**
   * Navbar.
   */
- 
+
  .nav-tabs {
     display: flex;
     margin-bottom: 20px;
   }
    .nav-tabs .tab-button {
-   
+
     padding: 0px 10px;
     margin: 0px;
     border: none;
-   
+
     border-radius: 4px;
-    text-align: center;    
-    text-decoration: none;  
-    cursor: pointer;       
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
     transition: background-color 0.3s;
   }
    /* Styles for active button */
@@ -406,26 +406,26 @@
   .nav-tabs .tab-button:hover {
     background-color: var(--button-hover-bg, #9da6b0);
   }
- 
+
   /**
   * Quizrunner Styles.
   */
- 
- 
+
+
   .main-container {
- 
+
   }
-  
+
   .title-container {
-      
+
   }
-  
+
   .sidebar {
-      
+
   }
-  
+
   .navbar{
-      
+
   }
 
   .delete_question_button {
@@ -438,7 +438,7 @@
     cursor: pointer;
     margin-right: 10px;
  }
- 
+
  .question-container {
     display: flex;
     flex-direction: column;
@@ -446,12 +446,12 @@
     align-items: center;
     text-align: center;
  }
- 
+
  .question-container img {
     max-width: 100%;
     height: auto;
  }
- 
+
  /*multichoice Button Styling */
  .answer.multichoice {
     display: grid;
@@ -459,7 +459,7 @@
     column-gap: 20px;
     justify-items: center;
  }
- 
+
  /* Ensure all buttons have the same size */
  .answer.multichoice button {
     width: 200px;
@@ -477,19 +477,19 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
  }
- 
+
  /* Hover effect */
  .answer.multichoice button:hover {
     background-color: #005bb5;
  }
- 
+
  /* Responsive Grid Adjustments */
  @media (max-width: 600px) {
     .answer.multichoice {
         grid-template-columns: 1fr;
     }
  }
- 
+
  /* Slider Styles */
  .answer.slider input[type="range"] {
     width: 100%;
@@ -499,7 +499,7 @@
     outline: none;
     transition: background 0.3s;
  }
- 
+
  .answer.slider input[type="range"]::-webkit-slider-thumb {
     width: 25px;
     height: 25px;
@@ -507,14 +507,14 @@
     border-radius: 50%;
     cursor: pointer;
  }
- 
+
  /* Slider Value Display */
  .answer.slider output {
     font-size: 20px;
     margin-top: 10px;
     display: block;
  }
- 
+
  /* Progress Bar Styling */
  .progress-bar {
     background-color: #e0e0e0;
@@ -525,7 +525,7 @@
     max-width: 600px;
     height: 20px;
  }
- 
+
  /* Progress Indicator (inner div) */
  .progress-bar div {
     height: 100%;
@@ -536,17 +536,17 @@
     line-height: 20px;
     padding: 0 5px;
  }
- 
+
  /* Progress Text (if placed outside the bar) */
  .progress-text {
     position: absolute;
     width: 100%;
     text-align: center;
     line-height: 20px;
-    color: #333; 
-    z-index: 1; 
+    color: #333;
+    z-index: 1;
  }
- 
+
  /* Styling for the quiz prompt */
  .prompt {
     width: 420px;
@@ -560,14 +560,14 @@
     color: #333;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
  }
- 
+
  /* Form Styling */
  form {
     display: flex;
     flex-direction: column;
     align-items: center;
  }
- 
+
  form button {
     background-color: #0073e6; /* Moodle's primary button color */
     color: white;
@@ -578,7 +578,22 @@
     cursor: pointer;
     margin-top: 20px;
  }
- 
+
  form button:hover {
     background-color: #005bb5;
  }
+
+ /*
+  * Quiz results page
+  */
+
+.correct {
+    background-color: rgba(0, 128, 0);
+}
+.incorrect {
+    background-color: rgba(255, 0, 0);
+}
+
+.correctnotchosen {
+    background-color: rgba(255, 200, 12);
+}
