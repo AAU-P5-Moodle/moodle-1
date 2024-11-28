@@ -18,12 +18,11 @@ export function add_delete_question_listeners(quizid, lecturerid) {
       let questionid = parseInt(element.dataset.id, 10);
             if(!confirm("Are you sure you want to delete this question?")){
                 return;
+            } else{
+                delete_question(questionid, lecturerid, quizid);
+                list_item.remove(); // Remove the question from the list.
+                element.remove(); // Remove the delete button.
             }
-            else{
-          delete_question(questionid, lecturerid, quizid);
-          list_item.remove(); // Remove the question from the list.
-          element.remove(); // Remove the delete button.
-      }
       
       let updated_list_length = question_list.querySelectorAll("li").length;
       if(updated_list_length === 0) {
