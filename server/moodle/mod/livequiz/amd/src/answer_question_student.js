@@ -14,7 +14,7 @@ export const init = (url, studentid) => {
     const questionid = document.getElementsByName("questionid")[0].value;
 
     if (!quizid || !cmid || !questionid) {
-        console.error(`Button with id ${quizid} not found!`);
+        console.error(`Buttons with id 'quizid', 'cmid', 'questionid' not found!`);
         return;
     }
 
@@ -24,7 +24,7 @@ export const init = (url, studentid) => {
 
         const answerElement = document.querySelectorAll(".answer input");
         if (!answerElement) {
-            console.log("Answer id does not exists");
+            console.error("Answer id does not exists");
         }
 
         let idOfAnswers = Array.from(answerElement).filter((answer) => answer.checked).map((answer) => answer.value);
@@ -42,7 +42,6 @@ export const init = (url, studentid) => {
             }
             console.log("sending message"); // eslint-disable-line no-console
             const message = JSON.stringify(questiondata);
-            console.log(message);
             socket.send(message);
         } catch (e) {
             console.error(`Failed to send data of answer, ${e}`);

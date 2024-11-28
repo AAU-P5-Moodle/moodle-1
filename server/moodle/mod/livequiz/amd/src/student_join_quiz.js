@@ -15,7 +15,7 @@ export const init = (url, studentid) => {
         return;
     }
 
-    if (roomCodeInput.value == null || roomCodeInput.value === "") {
+    if (roomCodeInput.value === null || roomCodeInput.trim().value == "") {
         console.error("No room code found.");
         return;
     }
