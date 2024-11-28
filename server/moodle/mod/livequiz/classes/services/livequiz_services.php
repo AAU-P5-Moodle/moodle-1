@@ -227,9 +227,9 @@ class livequiz_services {
         }
 
         $existinganswerids = array_keys($existinganswersmap);
-        $deletedanswerids = array_diff($existinganswerids, $updatedanswerids);
+        $deletedanswersids = array_diff($existinganswerids, $updatedanswerids);
 
-        foreach ($deletedanswerids as $deletedanswerid) {
+        foreach ($deletedanswersids as $deletedanswerid) {
             self::delete_answer($deletedanswerid);
         }
     }
