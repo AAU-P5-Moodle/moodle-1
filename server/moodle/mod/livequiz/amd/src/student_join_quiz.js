@@ -15,6 +15,11 @@ export const init = (url, studentid) => {
         return;
     }
 
+    if (roomCodeInput.value == null || roomCodeInput.value === "") {
+        console.error("No room code found.");
+        return;
+    }
+
     // Sends message to socket when startQuiz button is pressed
     roomConnectionBtn.addEventListener("click", async () => {
         try {
