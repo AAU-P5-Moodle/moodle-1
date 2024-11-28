@@ -179,4 +179,3 @@ class behat_mod_livequiz extends behat_base {
         }
     }
 }
-
