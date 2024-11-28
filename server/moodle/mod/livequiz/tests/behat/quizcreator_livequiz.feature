@@ -1,18 +1,20 @@
 @mod @mod_livequiz @javascript
 
 Feature: View livequiz activity
-  as a student
+  as a studenxt
 
   Background:
     Given the following "users" exist:
       | username | firstname | lastname | email                |
       | teacher1 | Teacher   | 1        | teacher1@example.com |
+      | student1 | Student   | 1        | student1@example.com |
     And the following "courses" exist:
       | fullname    | shortname |
       | Test Course | TC        |
     And the following "course enrolments" exist:
       | user | course | role |
       | teacher1 | TC | editingteacher |
+      | student1 | TC | student |
     And the following "activity" exists:
     # Create a livequiz activity before the test
       | activity | livequiz         |
@@ -41,28 +43,32 @@ Feature: View livequiz activity
     And "Save Question" "button" should exist
     And "Discard" "button" should exist
     Then I set the field "question_title_id" to "Geography 1"
-    Then I set the field "question_description_id" to "What is the Capital of Sweden?"
-    Then I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
+    And I set the field "question_description_id" to "What is the Capital of Sweden?"
+    And I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
+    And I click on "Add Answer" "button"
+    Then the field with xpath "(//input[@class='answer_input'])[1]" matches value ""
+    And the field with xpath "(//input[@class='answer_checkbox'])[1]" matches value ""
+    # Button value is empty because a value is not set in the mustache template
+    And the field with xpath "(//button[@class='delete_answer_button'])[1]" matches value ""
+    And I set the field with xpath "(//input[@class='answer_input'])[1]" to "Stockholm"
+    And I set the field with xpath "(//input[@class='answer_checkbox'])[1]" to "checked"
     Then I click on "Add Answer" "button"
-    Then the "button" with id "delete_answer_button_1" should exist
-    Then the "field" with id "answer_input_1" should exist
-    Then the "checkbox" with id "answer_checkbox_1" should exist
-    And I set the field "answer_input_1" to "Stockholm"
-    And I click on "answer_checkbox_1" "checkbox"
-    Then I click on "Add Answer" "button"
-    Then the "field" with id "answer_input_2" should exist
-    Then the "button" with id "delete_answer_button_2" should exist
-    Then the checkbox with id "answer_checkbox_2" should exist
+    Then the field with xpath "(//input[@class='answer_input'])[2]" matches value ""
+    And the field with xpath "(//input[@class='answer_checkbox'])[2]" matches value ""
+    And the field with xpath "(//button[@class='delete_answer_button'])[2]" matches value ""
     # Next step should be deleted when css is fixed
     And I click on "Close block drawer" "button"
-    And I click on "delete_answer_button_2" "button"
+    And I click on "(//button[@class='delete_answer_button'])[2]" "xpath_element"
     Then the "field" with id "answer_input_2" should not exist
     And I click on "Add Answer" "button"
-    # The id of answers are just counted up thus the id is 3
+    # The id of answers are just counted up thus the id is
+    # XPath renders dynamically, so the XPath's value is only 2, since we only have 2 occurrences
+    # That is why we check that the field have the id 3, and not the previous id 2
     Then the "field" with id "answer_input_3" should exist
-    Then the "button" with id "delete_answer_button_3" should exist
-    Then the checkbox with id "answer_checkbox_3" should exist
-    And I set the field "answer_input_3" to "Malmö"
+    Then the field with xpath "(//input[@class='answer_input'])[2]" matches value ""
+    And the field with xpath "(//input[@class='answer_checkbox'])[2]" matches value ""
+    And the field with xpath "(//button[@class='delete_answer_button'])[2]" matches value ""
+    And I set the field with xpath "(//input[@class='answer_input'])[2]" to "Malmö"
     And I click on "Save Question" "button"
     Then "Geography 1" "list_item" should exist
 
@@ -97,4 +103,48 @@ Feature: View livequiz activity
     Then "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
-    And "What is the Capital of Sweden?" "list_item" should not exist
+    And "Geography 1" "list_item" should not exist
+
+  Scenario: Questions added to a livequiz reaches students
+    When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    Then I should see "Quiz editor page"
+    And I click on "Add Question" "button"
+    # Add a question to the livequiz
+    Then I set the field "question_title_id" to "Geography 1"
+    And I set the field "question_description_id" to "What is the Capital of Sweden?"
+    And I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
+    And I click on "Add Answer" "button"
+    And I set the field with xpath "(//input[@class='answer_input'])[1]" to "Stockholm"
+    And I set the field with xpath "(//input[@class='answer_checkbox'])[1]" to "checked"
+    And I click on "Add Answer" "button"
+    And I set the field with xpath "(//input[@class='answer_input'])[2]" to "Malmö"
+    And I click on "Add Answer" "button"
+    And I set the field with xpath "(//input[@class='answer_input'])[3]" to "Gothenburg"
+    And I click on "Save Question" "button"
+    Then "Geography 1" "list_item" should exist
+    And I click on "Take Quiz" "link"
+    # Runs through the quiz from teacher perspective to see if the questions are displayed
+    And I should see "Which of the following cities is in France?"
+    And I click on "Next Question" "link"
+    And I should see "What is the Capital of Denmark?"
+    And I click on "Next Question" "link"
+    And I should see "Is Hamburg in Germany?"
+    And I click on "Next Question" "link"
+    And I should see "What is the Capital of Sweden?"
+    And I log out
+    And I log in as "student1"
+    And I am on "Test Course" course homepage with editing mode off
+    And I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    And I should see "Take Quiz"
+    And I click on "Take Quiz" "link"
+    # Runs through the quiz from student perspective to see if the questions are displayed
+    And I should see "Which of the following cities is in France?"
+    And I click on "Next Question" "link"
+    And I should see "What is the Capital of Denmark?"
+    And I click on "Next Question" "link"
+    And I should see "Is Hamburg in Germany?"
+    And I click on "Next Question" "link"
+    And I should see "What is the Capital of Sweden?"
+    And "Stockholm" "radio" should exist
+    And "Malmö" "radio" should exist
+    And "Gothenburg" "radio" should exist

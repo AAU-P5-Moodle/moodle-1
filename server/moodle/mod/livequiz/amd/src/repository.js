@@ -36,3 +36,26 @@ export const save_question = (question, lecturerid, quizid) => fetchMany([
     }
 ])[0];
 
+// Function to delete a question.
+export const delete_question = (questionid, lecturerid, quizid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_delete_question',
+        args: {
+            questionid,
+            lecturerid,
+            quizid
+        },
+    }
+])[0];
+
+
+// Function to retrieve a question.
+export const get_question = (quizid, questionid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_get_question',
+        args: {
+            quizid,
+            questionid
+        },
+    }
+])[0];

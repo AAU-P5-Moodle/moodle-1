@@ -286,9 +286,6 @@ final class livequiz_service_test extends \advanced_testcase {
         self::assertEquals($getquiz['lecturer_id'], $lecturerid);
 
 
-
-
-
         // The amount of questions remain the same.
         $questionsresult = $livequizresult->get_questions();
         self::assertCount(count($questions), $questionsresult);

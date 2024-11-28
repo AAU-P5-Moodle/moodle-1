@@ -107,10 +107,6 @@ class livequiz_services {
     public function submit_quiz(livequiz $livequiz, int $lecturerid): livequiz {
         $questions = $livequiz->get_questions();
 
-        if (!count($questions)) {
-            throw new Exception("A Livequiz Must have at least 1 Question");
-        }
-
         foreach ($questions as $question) {
             $answers = $question->get_answers();
             if (!count($answers)) {
@@ -177,10 +173,10 @@ class livequiz_services {
 
         // Find deleted questions by comparing existing question IDs with updated ones.
         $existingquestionids = array_keys($existingquestionmap);
-        $deletedquestions = array_diff($existingquestionids, $updatedquestionids);
+        $deletedquestionids = array_diff($existingquestionids, $updatedquestionids);
 
         /* @var question $question // Type specification for $question, for PHPStorm IDE */
-        foreach ($deletedquestions as $questionid) {
+        foreach ($deletedquestionids as $questionid) {
             self::delete_question($questionid);
         }
     }
@@ -231,10 +227,10 @@ class livequiz_services {
         }
 
         $existinganswerids = array_keys($existinganswersmap);
-        $deletedanswers = array_diff($existinganswerids, $updatedanswerids);
+        $deletedanswerids = array_diff($existinganswerids, $updatedanswerids);
 
-        foreach ($deletedanswers as $deletedanswer) {
-            self::delete_answer($deletedanswer);
+        foreach ($deletedanswerids as $deletedanswerid) {
+            self::delete_answer($deletedanswerid);
         }
     }
 
@@ -385,11 +381,9 @@ class livequiz_services {
      */
     private static function delete_question(int $questionid): void {
         $answers = questions_answers_relation::get_answers_from_question($questionid);
-
         foreach ($answers as $answer) {
             $currentanswerid = $answer->get_id();
-            questions_answers_relation::delete_question_answer_relation($questionid, $currentanswerid);
-            self::delete_answer($currentanswerid);
+            self::delete_answer($currentanswerid, $questionid);
         }
 
         quiz_questions_relation::delete_question_quiz_relation($questionid);

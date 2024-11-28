@@ -16,7 +16,6 @@
 
 namespace mod_livequiz;
 
-use advanced_testcase;
 use mod_livequiz\models\livequiz;
 use ReflectionClass;
 use ReflectionException;

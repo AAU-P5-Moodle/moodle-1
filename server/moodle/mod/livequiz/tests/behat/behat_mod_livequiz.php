@@ -42,8 +42,40 @@ class behat_mod_livequiz extends behat_base {
      * @param $element (radio button or checkbox)
      * @throws ExpectationException
      */
-    public function assertischecked($element): void {
-        $this->assertSession()->checkboxChecked($element);
+    public function assertischecked($element) {
+        $this->assertSession()->checkboxChecked(field: $element);
+    }
+
+    /**
+     * Asserts whether the given element with a specific id is checked
+     * @Then the checkbox with id :checkboxid should be checked
+     */
+    public function checkbox_with_id_should_be_checked($checkboxid) {
+        $checkbox = $this->getSession()->getPage()->findField($checkboxid);
+
+        if (null === $checkbox) {
+            throw new \Exception("Checkbox with id '{$checkboxid}' not found.");
+        }
+
+        if (!$checkbox->isChecked()) {
+            throw new \Exception("Checkbox with id '{$checkboxid}' is not checked.");
+        }
+    }
+
+     /**
+      * Asserts whether the given element with a specific id is NOT checked
+      * @Then the checkbox with id :checkboxid should not be checked
+      */
+    public function checkbox_with_id_should_not_be_checked($checkboxid) {
+        $checkbox = $this->getSession()->getPage()->findField($checkboxid);
+
+        if (null === $checkbox) {
+            throw new \Exception("Checkbox with id '{$checkboxid}' not found.");
+        }
+
+        if ($checkbox->isChecked()) {
+            throw new \Exception("Checkbox with id '{$checkboxid}' is not checked.");
+        }
     }
 
     /**
@@ -62,14 +94,13 @@ class behat_mod_livequiz extends behat_base {
         $this->assertSession()->elementNotExists('css', '#' . $checkboxid);
     }
 
-
     /**
      * Asserts whether the given element is not checked.
      * @Then the :checkbox answer should not be checked
      * @param $element (radio button or checkbox)
      * @throws ExpectationException
      */
-    public function assertisnotchecked($element): void {
+    public function assertisnotchecked($element) {
         $this->assertSession()->checkboxNotChecked($element);
     }
 

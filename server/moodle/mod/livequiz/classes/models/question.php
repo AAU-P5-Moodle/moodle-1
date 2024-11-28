@@ -233,6 +233,15 @@ class question {
     }
 
     /**
+     * Removes all answers from the question
+     *
+     */
+    public function remove_answers(): void {
+        $this->answers = [];
+    }
+
+
+    /**
      * Sets the ID of the question.
      *
      * @param $id
@@ -299,6 +308,14 @@ class question {
 
     /**
      * Prepares the template data for mustache.
+     * The data object will hold the following properties:
+     * - questionid
+     * - questiontitle
+     * - questiondescription
+     * - questiontimelimit
+     * - questionexplanation
+     * - answers
+     * - answertype
      * @param stdClass $data
      * @return stdClass
      */
