@@ -162,8 +162,7 @@ class behat_mod_livequiz extends behat_base {
      *
      * @Then :selector should have a parent div with class :class
      */
-    public function elementshouldhaveclass($selector, $class)
-    {
+    public function elementshouldhaveclass($selector, $class) {
 
         $label = $this->getSession()->getPage()->findAll('css', 'label');
         foreach ($label as $lbl) {
