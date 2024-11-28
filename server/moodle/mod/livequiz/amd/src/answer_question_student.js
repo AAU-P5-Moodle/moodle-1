@@ -57,12 +57,6 @@ export const init = (url, studentid) => {
  * @param {string} url
  * @returns websocket reference
  */
-/**
- * Connects a websocket given url
- *
- * @param {string} url
- * @returns websocket reference
- */
 function connect_to_socket(url) {
     let socket;
     socket = new WebSocket(url);

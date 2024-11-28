@@ -85,7 +85,7 @@ class websocket implements MessageComponentInterface {
                     return;
                 }
                 $this->handle_quiz_connect($conn, (int)$userid, $room);
-                echo "New connection! ($conn->resourceId)\n";
+                echo "New connection! ({$conn->resourceId})\n";
                 break;
             case 'createroom':
                 $roomcode = $this->rand_room();
@@ -108,7 +108,6 @@ class websocket implements MessageComponentInterface {
      * @return void
      */
     public function onmessage(ConnectionInterface $from, $msg) {
-
         $params = $from->httpRequest->getUri()->getQuery();
         $queryparams = [];
         parse_str($params, $queryparams);
@@ -120,29 +119,26 @@ class websocket implements MessageComponentInterface {
             return;
         }
 
+        if (!$this->validate_requested_parameters($queryparams, ['room'])) {
+            return;
+        }
+
         switch ($requesttype) {
             case 'startquiz':
-                if (!$this->validate_requested_parameters($queryparams, ['room'])) {
-                    return;
-                }
-                $this->handle_start_quiz($queryparams['room']);
+                $roomid = $queryparams['room'];
+                $this->send_message_to_room($roomid, "Quiz started.\n");
                 break;
             case 'nextquestion':
-                if ((!$this->validate_requested_parameters(['room' => 'abcde'], ['room'])) || !$requestobject) {
-                    return;
-                }
-                $this->next_question('abcde');
+                $this->send_message_to_room('abcde', "next question.\n");
                 $from->send($msg);
                 break;
             case 'leaveroom':
-                if (!$this->validate_requested_parameters($queryparams, ['room', 'userid'])) {
-                    return;
-                }
                 $this->leave_room($queryparams['room'], $from, $queryparams['userid']);
                 break;
             default:
                 print("Invalid request type.\n");
         }
+        
         // Send to all clients except sender.
         foreach ($this->clients as $client) {
             if ($from !== $client) {
@@ -162,7 +158,7 @@ class websocket implements MessageComponentInterface {
     public function onclose(ConnectionInterface $conn) {
         $this->clients->detach($conn);
         $count = $conn->countClient;
-        echo "Connection $conn->resourceId has disconnected. $count connections left\n";
+        echo "Connection {$conn->resourceId} has disconnected. $count connections left\n";
     }
 
     /**
@@ -239,7 +235,7 @@ class websocket implements MessageComponentInterface {
         $this->clients->attach($conn, $clientinfo);
 
         $conn->send("You have joined room: $roomcode.\n");
-        $this->handle_messaging_for_specific_room($roomcode, "$conn->resourceId connected to room: $roomcode.\n");
+        $this->send_message_to_room($roomcode, "{$conn->resourceId} connected to room: $roomcode.\n");
     }
 
     /**
@@ -255,31 +251,11 @@ class websocket implements MessageComponentInterface {
         foreach ($this->clients as $client) {
             if ($client == $conn) {
                 $this->clients->detach($conn);
-                echo "Connection $client->resourceId has disconnected from room $roomid\n";
+                echo "Connection {$client->resourceId} has disconnected from room $roomid\n";
                 return;
             }
         }
-        echo "Connection $conn->resourceId has disconnected from room $roomid\n";
-    }
-
-    /**
-     * Sends a messsage to all clients that is connected to a specific room on quiz start
-     *
-     * @param string $roomid
-     * @return void
-     */
-    private function handle_start_quiz(string $roomid): void {
-        $this->handle_messaging_for_specific_room($roomid, "Quiz started.\n");
-    }
-
-    /**
-     * When teacher presses next question, clients in a specific room receives message
-     *
-     * @param string $roomid
-     * @return void
-     */
-    private function next_question(string $roomid): void {
-        $this->handle_messaging_for_specific_room($roomid, "next question.\n");
+        echo "Connection {$conn->resourceId} has disconnected from room $roomid\n";
     }
 
     /**
@@ -289,7 +265,7 @@ class websocket implements MessageComponentInterface {
      * @param string $msg
      * @return void
      */
-    private function handle_messaging_for_specific_room(string $roomid, string $msg): void {
+    private function send_message_to_room(string $roomid, string $msg): void {
         if (!$this->room_exists($roomid)) {
             echo "Room does not exists.\n";
             return;
