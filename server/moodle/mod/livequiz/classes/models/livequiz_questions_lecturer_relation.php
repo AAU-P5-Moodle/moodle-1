@@ -56,7 +56,7 @@ class livequiz_questions_lecturer_relation {
      */
     public static function get_lecturer_questions_relation_by_lecturer_id(int $lecturerid): array {
         global $DB;
-        return (array) $DB->get_record('livequiz_questions_lecturer', ['lecturer_id' => $lecturerid]);
+        return (array) $DB->get_records('livequiz_questions_lecturer', ['lecturer_id' => $lecturerid]);
     }
 
     /**

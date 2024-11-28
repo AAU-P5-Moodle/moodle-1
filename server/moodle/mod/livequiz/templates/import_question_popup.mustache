@@ -29,19 +29,11 @@
     * fill in later
 
 }}
-{{#js}}
-    require(['mod_livequiz/create_question'], (module) => module.init({{quizid}}, {{lecturerid}}, "{{{url}}}" ));
-    require(['mod_livequiz/import_question'], (module) => module.init({{quizid}}, {{lecturerid}}, "{{{url}}}" ));
-{{/js}}
-
-<div class="main-container">
-    <h1>{{pagename}}</h1>
-    {{#islecturer}}
-       {{> mod_livequiz/quiz_editor_page}}
-    {{/islecturer}}
-       {{> mod_livequiz/take_quiz_button}}
-    {{#studentid}}
-        {{> mod_livequiz/participations_section}} {{! participations_section import - Context remains the same}}
-    {{/studentid}}
+<div class="Modal_div">
+    <div class="all_questions_for_lecturer_div">
+        <h2>Previously made Quizzes and Questions</h2>
+            <div class="oldQuizzes"></div>    
+        <button class="import_btn">Import Question(s)</button>
+        <button class="discard_question_button">Discard Changes</button>
+    </div>
 </div>
-

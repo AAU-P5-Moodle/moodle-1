@@ -17,7 +17,10 @@
 namespace mod_livequiz\output;
 
 use core\exception\moodle_exception;
+use dml_exception;
 use mod_livequiz\models\livequiz;
+use mod_livequiz\models\livequiz_questions_lecturer_relation;
+use mod_livequiz\models\question;
 use mod_livequiz\services\livequiz_services;
 use renderable;
 use renderer_base;
@@ -47,6 +50,7 @@ class index_page_teacher implements renderable, templatable {
      * @param int $quizid
      * @param int $lecturerid
      * @param int $cmid
+     * @throws dml_exception
      */
     public function __construct(int $quizid, int $lecturerid, int $cmid) {
         $this->quizid = $quizid;
@@ -69,6 +73,14 @@ class index_page_teacher implements renderable, templatable {
         $data->pagename = "Quiz editor page";
         $data->lecturerid = $this->lecturerid;
         $data->quizid = $this->quizid;
+        $data->oldquestions = [];
+        $premadequestions = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_lecturer_id($this->lecturerid);
+
+        foreach ($premadequestions as $premadequestion) {
+            $question = question::get_question_from_id(intval($premadequestion->question_id));
+            $data->oldquestions[] = $question->prepare_for_template(new stdClass());
+        }
+
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
         $data->islecturer = true;
         return $data;

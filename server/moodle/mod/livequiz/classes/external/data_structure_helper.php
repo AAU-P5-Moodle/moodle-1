@@ -31,6 +31,19 @@ use core_external\external_value;
  */
 class data_structure_helper {
     /**
+     * Retrieves the quiz structure used in the front-end.
+     *
+     * @return external_single_structure
+     */
+    public static function get_quiz_structure(): external_single_structure {
+        return new external_single_structure([
+            'quizid' => new external_value(PARAM_INT, 'The ID of the livequiz'),
+            'quiztitle' => new external_value(PARAM_TEXT, 'The name of the livequiz'),
+            'numberofquestions' => new external_value(PARAM_TEXT, 'The course the livequiz is created under'),
+            'questions' => new external_multiple_structure(self::get_question_structure(), 'List of questions'),
+        ]);
+    }
+    /**
      * retrieves the question structure used in the front-end.
      *
      * @return external_single_structure

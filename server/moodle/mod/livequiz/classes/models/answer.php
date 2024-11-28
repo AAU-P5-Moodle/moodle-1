@@ -177,7 +177,7 @@ class answer {
      *
      * @param int $id
      */
-    private function set_id(int $id): void {
+    public function set_id(int $id): void {
         $this->id = $id;
     }
 
@@ -208,6 +208,12 @@ class answer {
         $this->explanation = $explanation;
     }
 
+    /**
+     * Resets the id of the answer to 0, such that it can be reused.
+     */
+    public function reset_id(): void {
+        $this->set_id(0);
+    }
     /**
      * Deletes an answer from the database.
      *

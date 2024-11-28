@@ -18,68 +18,76 @@ namespace mod_livequiz\external;
 
 use core_external\external_api;
 use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
 use core_external\external_value;
 use dml_exception;
 use invalid_parameter_exception;
-use mod_livequiz\services\livequiz_services;
-use PhpXmlRpc\Exception;
+use mod_livequiz\models\livequiz_questions_lecturer_relation;
+use mod_livequiz\models\livequiz_quiz_lecturer_relation;
+use mod_livequiz\models\livequiz;
+use mod_livequiz\models\quiz_questions_relation;
+use mod_livequiz\models\question;
+use stdClass;
 
 /**
- * Class delete_question
+ * Class get_lecturer_quiz
  *
  * This class extends the core_external\external_api and is used to handle
- * the external API for deleting questions from a livequiz.
+ * the external API for saving questions to a livequiz.
  *
  * @return     external_function_parameters The parameters required for the execute function.
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class delete_question extends external_api {
+class get_lecturer_quiz extends external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-            'questionid' => new external_value(PARAM_INT, 'Question ID'),
             'lecturerid' => new external_value(PARAM_INT, 'Lecturer ID'),
-            'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
         ]);
     }
 
     /**
      * Summary of execute
-     * Deletes a question from the DB
-     * @param int $questionid
+     * Retrieves a question by its ID
      * @param int $lecturerid
-     * @param int $quizid
-     * @return bool
-     * @throws invalid_parameter_exception|Exception
+     * @return array
+     * @throws invalid_parameter_exception
+     * @throws dml_exception
      */
-    public static function execute(int $questionid, int $lecturerid, int $quizid): bool {
+    public static function execute(int $lecturerid): array {
         self::validate_parameters(self::execute_parameters(), [
-            'questionid' => $questionid,
             'lecturerid' => $lecturerid,
-            'quizid' => $quizid,
         ]);
-        $services = livequiz_services::get_singleton_service_instance();
-        try {
-            $livequiz = $services->get_livequiz_instance($quizid); // Get livequiz object and remove a question from it.
-            $livequiz->remove_question_by_id($questionid);
-            $services->submit_quiz($livequiz, $lecturerid); // Submit the quiz after removing the question.
-            return true; // Return true if successful.
-        } catch (dml_exception $e) {
-            debugging('Error deleting question: ' . $e->getMessage());
-            return false; // Return false if unsuccessful.
+        // Get all quizzes from the lecturer.
+        $rawquizzes = livequiz_quiz_lecturer_relation::get_lecturer_quiz_relations_by_lecturer_id($lecturerid);
+        $quizzes = [];
+        // Loop through all quizzes from the lecturer and find the corresponding questions.
+        foreach ($rawquizzes as $rawquiz) {
+            $quizobject = livequiz::get_livequiz_instance($rawquiz->quiz_id);
+            $rawquestions = quiz_questions_relation::get_questions_from_quiz_id($rawquiz->quiz_id);
+            foreach ($rawquestions as $rawquestion) {
+                $question = question::get_question_from_id($rawquestion->get_id());
+                $quizobject->add_question($question);
+            }
+            $preparedquiz = $quizobject->prepare_for_template();
+            $quizzes[] = $preparedquiz;
         }
+        return $quizzes;
     }
+    /**
+     */
+
     /**
      * Part of the webservice processing flow. Not called directly here,
      * but is in moodle's web service framework.
-     * @return external_value
+     * @return external_multiple_structure
      */
-    public static function execute_returns(): external_value {
-        return new external_value(PARAM_BOOL, 'success');
+    public static function execute_returns(): external_multiple_structure {
+        return new external_multiple_structure(data_structure_helper::get_quiz_structure(), 'List of quizzes');
     }
 }

@@ -120,8 +120,9 @@ class livequiz_services {
             $livequiz->update_quiz();
 
             $quizid = $livequiz->get_id();
-
-            livequiz_quiz_lecturer_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
+            if (!livequiz_quiz_lecturer_relation::check_lecturer_quiz_relation_exists($quizid, $lecturerid)) {
+                livequiz_quiz_lecturer_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
+            }
             $this->submit_questions($livequiz, $lecturerid);
 
 
@@ -186,7 +187,6 @@ class livequiz_services {
      *
      * @throws dml_transaction_exception
      * @throws dml_exception
-     * @throws Exception
      */
     private function insert_question_with_relations(question $question, int $lecturerid, int $quizid): int {
         $questionid = question::insert_question($question);
@@ -328,6 +328,7 @@ class livequiz_services {
      * @param int $quizid
      * @param int $studentid
      * @return participation
+     * @throws dml_exception
      */
     public function get_newest_participation_for_quiz(int $quizid, int $studentid): participation {
         global $DB;
@@ -385,7 +386,6 @@ class livequiz_services {
             $currentanswerid = $answer->get_id();
             self::delete_answer($currentanswerid, $questionid);
         }
-
         quiz_questions_relation::delete_question_quiz_relation($questionid);
         livequiz_questions_lecturer_relation::delete_lecturer_questions_relation_by_id($questionid);
         question::delete_question($questionid);

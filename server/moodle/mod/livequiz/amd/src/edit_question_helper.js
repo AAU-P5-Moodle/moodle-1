@@ -163,16 +163,16 @@ function create_element(element_name, type, class_name, content) {
  * @param {Function} [callback] - An optional callback function to be executed after the list is re-rendered.
  */
 export function rerender_saved_questions_list(questions, callback) {
-  //The template needs to know the questions to render.
+  // The template needs to know the questions to render.
   const contextsavedquestions = {
     questions: questions,
   };
 
-  //Remove the saved questions list.
+  // Remove the saved questions list.
   let questions_list = document.querySelector("#saved_questions_list");
   questions_list.remove();
 
-  //Re-render saved questions list.
+  // Re-render saved questions list.
   Templates.renderForPromise(
     "mod_livequiz/saved_questions_list",
     contextsavedquestions
@@ -180,12 +180,12 @@ export function rerender_saved_questions_list(questions, callback) {
     .then(({ html, js }) => {
       Templates.appendNodeContents("#saved-questions-container", html, js);
 
-      //Call the functions in callback, this allows for custom functions to be called after the rerendering.
+      // Call the functions in callback, this allows for custom functions to be called after the rerendering.
       if (typeof callback === "function") {
         callback();
       }
     })
-    .catch((error) => displayException(error));
+    .catch((error) => console.log(error));
 }
 
 /**
@@ -209,11 +209,15 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
   if (hasquestions) {
     //Remove no question paragraph if there are questions.
     let no_question_paragraph = document.querySelector(".no-question-text");
-    no_question_paragraph.remove(); //We have just added a question so remove the no question text
+    if (no_question_paragraph) {
+      no_question_paragraph.remove(); //We have just added a question so remove the no question text
+    } else {
+      let take_quiz_button = document.querySelector("#takeQuizBtn");
+      take_quiz_button.remove();
+    }
   } else {
     //Remove take quiz link if there are no questions
     let take_quiz_button = document.querySelector("#takeQuizBtn");
-    console.log(take_quiz_button);
     take_quiz_button.remove();
   }
 

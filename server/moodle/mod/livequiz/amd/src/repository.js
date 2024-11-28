@@ -59,3 +59,25 @@ export const get_question = (quizid, questionid) => fetchMany([
         },
     }
 ])[0];
+
+// Function to reuse questions.
+export const external_reuse_questions = (quizid, questionids, lecturerid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_reuse_question',
+        args: {
+            quizid,
+            questionids,
+            lecturerid
+        },
+    }
+])[0];
+
+// Function to get lecturer questions.
+export const get_lecturer_quiz = (lecturerid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_get_lecturer_quiz',
+        args: {
+            lecturerid
+        },
+    }
+])[0];

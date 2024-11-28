@@ -8,11 +8,11 @@ export const init = async (quizid, lecturerid) => {
     add_edit_question_listeners(quizid, lecturerid);
 };
 
-export function add_edit_question_listeners(quizid, lecturerid){
+export function add_edit_question_listeners(quizid, lecturerid) {
     let question_list = document.getElementById("saved_questions_list");
     question_list.addEventListener("click", (event) => {
         let target = event.target;
-        if(target.classList.contains("edit-question-btn") || target.classList.contains("question-title")){
+        if(target.classList.contains("edit-question-btn") || target.classList.contains("question-title")) {
             let questionid = parseInt(target.dataset.id, 10);
             render_edit_question_menu_popup(quizid, lecturerid, questionid);
         }
@@ -27,7 +27,7 @@ function render_edit_question_menu_popup(quizid, lecturerid, questionid) {
         .then(({ html, js }) => {
             // Here we have the compiled template.
             Templates.appendNodeContents(".main-container", html, js);
-            get_question(quizid, questionid).then((question)=> {restore_question_data_in_popup(question)});
+            get_question(quizid, questionid).then((question)=> {restore_question_data_in_popup(question);});
             add_answer_button_event_listener();
             add_save_question_button_listener(quizid, lecturerid, questionid);
             add_discard_question_button_listener();
@@ -68,7 +68,7 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
 
         let iscorrect =
             answers_div.children[i].querySelector(".answer_checkbox").checked;
-        iscorrect ? (iscorrect = 1) : (iscorrect = 0);
+        iscorrect = iscorrect ? 1 : 0;
 
         answers.push({
             description: answertext,

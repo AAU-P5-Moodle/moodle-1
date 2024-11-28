@@ -17,6 +17,7 @@
 namespace mod_livequiz\output;
 
 use core\exception\moodle_exception;
+use dml_exception;
 use mod_livequiz\models\livequiz;
 use mod_livequiz\services\livequiz_services;
 use renderable;
@@ -49,7 +50,7 @@ class index_page_student implements renderable, templatable {
      * @param int $cmid
      * @param int $quizid
      * @param int $studentid
-     * @param livequiz $livequiz
+     * @throws dml_exception
      */
     public function __construct(int $cmid, int $quizid, int $studentid) {
         $this->cmid = $cmid;

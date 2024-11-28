@@ -17,6 +17,7 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
+use mysql_xdevapi\Exception;
 use stdClass;
 
 /**
@@ -239,7 +240,7 @@ class livequiz {
     /**
      * Gets a question from the livequiz
      * @param int $questionid
-     * @return question
+     * @return question was a question with the specified id found and removed form the questions.
      */
     public function get_question_by_id(int $questionid): question {
         $questions = $this->get_questions();
