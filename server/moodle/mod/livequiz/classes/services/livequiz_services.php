@@ -167,6 +167,7 @@ class livequiz_services {
                 $newquestion->update_question();
                 $updatedquestionids[] = $questionid;
             }
+
             $answers = $newquestion->get_answers();
             $this->submit_answers($questionid, $answers);
         }
