@@ -74,7 +74,36 @@ function add_save_question_button_listener(quizid, lecturerid) {
 }
 
 function handle_question_submission(quizid, lecturerid) {
+  let isValid = true;
+  let questionTitle = document.getElementById("question_title_id").value.trim();
+  let questionTitleTextarea = document.getElementById("question_title_id");
+  let questionDesription = document.getElementById("question_description_id").value.trim();
+  let questionDesriptionTextarea = document.getElementById("question_description_id");
+
+  let questionAnswers = document.querySelectorAll(".answer_input");
+
+  const setBorderStyle = (element, isValid) => {
+    element.style.border = isValid ? "1px solid #ccc" : "1px solid red";
+  };
+
+  // Sets the borders of the question title and description to red if they are empty
+  setBorderStyle(questionTitleTextarea, !!questionTitle);
+  isValid = isValid && !!questionTitle;
+  setBorderStyle(questionDesriptionTextarea, !!questionDesription);
+  isValid = isValid && !!questionDesription;
+
   let savedQuestion = prepare_question(); //Prepare the question object to be sent to DB
+
+  if (savedQuestion.answers.length === 0) {
+    alert("Please enter at least one answer.");
+    return;
+  }
+
+
+  if(!isValid) {
+    alert("Please enter all the required fields.");
+    return;
+  }
 
   let update_event_listeners = () => {
     add_edit_question_listeners(quizid, lecturerid);
@@ -102,16 +131,10 @@ function prepare_question() {
   let questionDesription = question_indput_description.value.trim();
   let questionExplanation = question_indput_explanation.value.trim();
 
-  if (!questionDesription) {
-    alert("Please enter a question description.");
-    return;
-  }
-  if (!questionTitle) {
-    questionTitle = "Question";
-  }
 
   let answers = prepare_answers();
 
+  // CHECK HERE IF THE QUESTION IS VALID
   let savedQuestion = {
     id: 0,
     title: questionTitle,
@@ -129,18 +152,18 @@ function prepare_answers() {
 
   for (let i = 0; i < answers_div.children.length; i++) {
     let answertext = answers_div.children[i]
-      .querySelector(".answer_input")
-      .value.trim();
+        .querySelector(".answer_input")
+        .value.trim();
 
     let iscorrect =
-      answers_div.children[i].querySelector(".answer_checkbox").checked;
+        answers_div.children[i].querySelector(".answer_checkbox").checked;
     iscorrect = iscorrect ? 1 : 0;
 
-    answers.push({
-      description: answertext,
-      correct: iscorrect,
-      explanation: "",
-    });
+      answers.push({
+        description: answertext,
+        correct: iscorrect,
+        explanation: "",
+      });
   }
   return answers;
 }
