@@ -472,7 +472,7 @@ final class livequiz_service_test extends \advanced_testcase {
     }
 
     /**
-     * Test that deleting a question, with a relation, throws.
+     * Test that deleting a question, with a relation, throws an exception.
      *
      * @covers \mod_livequiz\services\livequiz_services::submit_quiz
      * @throws dml_exception
@@ -500,9 +500,11 @@ final class livequiz_service_test extends \advanced_testcase {
         array_shift($testquizsubmittedquestions);
         $testquizsubmitted->set_questions($testquizsubmittedquestions);
 
+        // This sets up the test to expect the exception later in the code.
         $this->expectException(dml_exception::class);
         $this->expectExceptionMessage('error/Cannot delete answer with participations');
 
+        // This is the actual test where the exception is thrown.
         $service->submit_quiz($testquizsubmitted, $lecturerid);
         $testquizresubmittedquestions = $testquizsubmitted->get_questions();
     }
