@@ -9,27 +9,49 @@ export const init = (url, studentid) => {
         return;
     }
 
-    const roomCodeInput = document.getElementById("roomCode");
+    let roomCodeInput = document.getElementById("roomCode");
     if (!roomCodeInput) {
         console.error("Field with id 'roomCodeInput' not found!");
         return;
     }
 
-    if (roomCodeInput.value === null || roomCodeInput.trim().value == "") {
-        console.error("No room code found.");
-        return;
-    }
-
     // Sends message to socket when startQuiz button is pressed
     roomConnectionBtn.addEventListener("click", async () => {
+        roomCodeInput = roomCodeInput.value;
+        if (roomCodeInput === null || roomCodeInput.trim() == "") {
+            console.error("No room code found.");
+            return;
+        }
+
         try {
             console.log("sending message"); // eslint-disable-line no-console
-            const socket = await connect_to_socket(`${url}?requesttype=connect&userid=${studentid}&room=${roomCodeInput.value}`);
+            const socket = await connect_to_socket(`${url}?requesttype=connect&userid=${studentid}&room=${roomCodeInput}`);
             socket.send("Testing some stuff for students" + ' ' + `${studentid}`);
         } catch (e) {
             console.error(`Student failed to join room, ${e}`);
         }
     });
+
+    const leaveRoomBtn = document.getElementById("leave_room_button");
+
+    if (!leaveRoomBtn) {
+        console.error("Button with id 'leave_room_button' not found!");
+        return;
+    }
+
+    // Sends message to socket when startQuiz button is pressed
+    leaveRoomBtn.addEventListener("click", async () => {
+
+        try {
+            console.log("sending message"); // eslint-disable-line no-console
+            const socket = await connect_to_socket(`${url}?requesttype=leaveroom&userid=${studentid}&room=${roomCodeInput}`);
+            socket.send("Leave room" + ' ' + `${studentid}`);
+            socket.onclose();
+        } catch (e) {
+            console.error(`Student failed to leave room, ${e}`);
+        }
+    });
+
 };
 
 

@@ -157,7 +157,7 @@ class websocket implements MessageComponentInterface {
      */
     public function onclose(ConnectionInterface $conn) {
         $this->clients->detach($conn);
-        $count = $conn->countClient;
+        $count = $this->clients->count();
         echo "Connection {$conn->resourceId} has disconnected. $count connections left\n";
     }
 
@@ -230,6 +230,7 @@ class websocket implements MessageComponentInterface {
         $clientinfo = [
             'studentid' => $studentid,
             'roomid' => $roomcode,
+            'connid' => $conn->resourceId,
         ];
 
         $this->clients->attach($conn, $clientinfo);
@@ -248,14 +249,19 @@ class websocket implements MessageComponentInterface {
      */
     private function leave_room(string $roomid, ConnectionInterface $conn, string $userid): void {
         echo "Leaving room $roomid.\n";
+        $detached = false;
         foreach ($this->clients as $client) {
-            if ($client == $conn) {
-                $this->clients->detach($conn);
-                echo "Connection {$client->resourceId} has disconnected from room $roomid\n";
-                return;
+            $clientdata = $this->clients[$client];
+            echo "Client data: " . json_encode($clientdata) . "\n";
+            if ($clientdata['roomid'] == $roomid && $clientdata['studentid'] == $userid && $clientdata['connid'] == $conn->resourceId) {
+                $this->clients->detach($client);
+                $detached = true;
+                echo "Room $roomid has one less connection.\n";
             }
         }
-        echo "Connection {$conn->resourceId} has disconnected from room $roomid\n";
+        if (!$detached) {
+            echo "Detachment of client failed";
+        }
     }
 
     /**
