@@ -65,21 +65,33 @@ class reuse_question extends external_api {
     public static function execute(int $quizid, array $questionids, int $lecturerid): array {
         self::validate_parameters(self::execute_parameters(), [
             'quizid' => $quizid,
-            'questionids' => $questionids,
+            'questionids' => $questionids, //These are id's of the questions to be reused, in the new livequiz.
             'lecturerid' => $lecturerid,
         ]);
         $services = livequiz_services::get_singleton_service_instance();
         try {
-            $questionids = self::filter_unique_questions($questionids);
             $livequiz = $services->get_livequiz_instance($quizid);
+            $existingquestions = $livequiz->get_questions(); //These are the questions already present in the livequiz
+            $questionids = self::filter_unique_questions($questionids);
             $questionstoadd = [];
             foreach ($questionids as $id) {
+                $unique = true;
                 $tempquestion = question::get_question_with_answers_from_id($id);
                 $tempquestion->reset_id();
                 foreach ($tempquestion->get_answers() as $answer) {
                     $answer->reset_id();
                 }
-                $questionstoadd[] = $tempquestion;
+                // Check if the question already exists in the livequiz.
+                // If so, do not include the question in the list of questions to add.
+                foreach ($existingquestions as $existingquestion) {
+                    if (self::is_identical_question($tempquestion, $existingquestion)) {
+                        $unique = false;
+                        break;
+                    }
+                }
+                if ($unique) {
+                    $questionstoadd[] = $tempquestion;
+                }
             }
             $livequiz->add_questions($questionstoadd);
             $livequiz = $services->submit_quiz($livequiz, $lecturerid); // Refresh the livequiz object.
@@ -116,32 +128,9 @@ class reuse_question extends external_api {
             $unique = true;
             foreach ($uniquequestions as $uniquequestion) {
                 // Check if the questions are identical.
-                if (
-                    $question->get_title() == $uniquequestion->get_title()
-                    && $question->get_description() == $uniquequestion->get_description()
-                    && $question->get_timelimit() == $uniquequestion->get_timelimit()
-                    && $question->get_explanation() == $uniquequestion->get_explanation()
-                    && count($question->get_answers()) == count($uniquequestion->get_answers())
-                ) {
-                    // If the questions are identical, then we check the answers to see if they are identical.
-                    $identicalanswercount = 0;
-                    foreach ($uniquequestion->get_answers() as $uniqueanswer) {
-                        foreach ($question->get_answers() as $answer) {
-                            if (
-                                $answer->get_correct() == $uniqueanswer->get_correct()
-                                && $answer->get_description() == $uniqueanswer->get_description()
-                                && $answer->get_explanation() == $uniqueanswer->get_explanation()
-                            ) {
-                                $identicalanswercount++;
-                                // If there are as many identical answers as there are answers.
-                                // Then we won't include it in the list, as it is identical to another question.
-                                if ($identicalanswercount == count($question->get_answers())) {
-                                    $unique = false;
-                                    break 3;
-                                }
-                            }
-                        }
-                    }
+                if(self::is_identical_question($question, $uniquequestion)){
+                    $unique = false;
+                    break;
                 }
             }
             if ($unique) { // If the question is unique, then we add it to the list.
@@ -153,5 +142,35 @@ class reuse_question extends external_api {
             $returningquestions[] = $uniquequestion->get_id();
         }
         return $returningquestions; // Return the prepared questions.
+    }
+
+    private static function is_identical_question(question $question1, question $question2): bool {
+        if( $question1->get_title() == $question2->get_title()
+            && $question1->get_description() == $question2->get_description()
+            && $question1->get_timelimit() == $question2->get_timelimit()
+            && $question1->get_explanation() == $question2->get_explanation()
+            && count($question1->get_answers()) == count($question2->get_answers())){
+                // If the questions are identical, then we check the answers to see if they are identical.
+                $identicalanswercount = 0;
+                foreach ($question1->get_answers() as $uniqueanswer) {
+                    foreach ($question2->get_answers() as $answer) {
+                        if (
+                            $answer->get_correct() == $uniqueanswer->get_correct()
+                            && $answer->get_description() == $uniqueanswer->get_description()
+                            && $answer->get_explanation() == $uniqueanswer->get_explanation()
+                        ) {
+                            $identicalanswercount++;
+                            // If there are as many identical answers as there are answers.
+                            // Then we won't include it in the list, as it is identical to another question.
+                            if ($identicalanswercount == count($question1->get_answers())) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false; // If the questions are identical, but the answers are not, then we include it in the list.
+            } else {
+                return false;
+            }
     }
 }
