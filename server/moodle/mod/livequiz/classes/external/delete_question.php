@@ -19,6 +19,7 @@ namespace mod_livequiz\external;
 use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_value;
+use core_external\external_single_structure;
 use dml_exception;
 use invalid_parameter_exception;
 use mod_livequiz\services\livequiz_services;
@@ -54,10 +55,11 @@ class delete_question extends external_api {
      * @param int $questionid
      * @param int $lecturerid
      * @param int $quizid
-     * @return bool
+     * @return array
      * @throws invalid_parameter_exception|Exception
      */
-    public static function execute(int $questionid, int $lecturerid, int $quizid): bool {
+    public static function execute(int $questionid, int $lecturerid, int $quizid): array
+    {
         self::validate_parameters(self::execute_parameters(), [
             'questionid' => $questionid,
             'lecturerid' => $lecturerid,
@@ -68,18 +70,21 @@ class delete_question extends external_api {
             $livequiz = $services->get_livequiz_instance($quizid); // Get livequiz object and remove a question from it.
             $livequiz->remove_question_by_id($questionid);
             $services->submit_quiz($livequiz, $lecturerid); // Submit the quiz after removing the question.
-            return true; // Return true if successful.
+            return ["success" => true, "message" => "Question was deletes"];
         } catch (dml_exception $e) {
             debugging('Error deleting question: ' . $e->getMessage());
-            return false; // Return false if unsuccessful.
+            return ["success" => false, "message" => $e->getMessage()];
         }
     }
     /**
      * Part of the webservice processing flow. Not called directly here,
      * but is in moodle's web service framework.
-     * @return external_value
+     * @return external_single_structure
      */
-    public static function execute_returns(): external_value {
-        return new external_value(PARAM_BOOL, 'success');
+    public static function execute_returns(): external_single_structure {
+        return new external_single_structure([
+            'success' => new external_value(PARAM_BOOL, 'success'),
+            'message' => new external_value(PARAM_TEXT, 'message'),
+        ]);
     }
 }

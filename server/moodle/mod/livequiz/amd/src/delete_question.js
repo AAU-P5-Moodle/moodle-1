@@ -19,15 +19,20 @@ export function add_delete_question_listeners(quizid, lecturerid) {
             if(!confirm("Are you sure you want to delete this question?")){
                 return;
             } else{
-                delete_question(questionid, lecturerid, quizid);
-                list_item.remove(); // Remove the question from the list.
-                element.remove(); // Remove the delete button.
+                delete_question(questionid, lecturerid, quizid)
+                    .then((response) => {
+                        if (response.success) {
+                            list_item.remove(); // Remove the question from the list.
+                            element.remove(); // Remove the delete button.
+                            let updated_list_length = question_list.querySelectorAll("li").length;
+                            if (updated_list_length === 0) {
+                                rerender_take_quiz_button(take_quiz_url, false);
+                            }
+                        } else {
+                            alert("Cannot delete question: " + response.message);
+                        }
+                });
             }
-      
-      let updated_list_length = question_list.querySelectorAll("li").length;
-      if(updated_list_length === 0) {
-        rerender_take_quiz_button(take_quiz_url, false);
-      }
     });
   });
 }
