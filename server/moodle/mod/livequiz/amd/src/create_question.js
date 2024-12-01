@@ -74,36 +74,39 @@ function add_save_question_button_listener(quizid, lecturerid) {
 }
 
 function handle_question_submission(quizid, lecturerid) {
-  let isValid = true;
-  let questionTitle = document.getElementById("question_title_id").value.trim();
-  let questionTitleTextarea = document.getElementById("question_title_id");
-  let questionDesription = document.getElementById("question_description_id").value.trim();
-  let questionDesriptionTextarea = document.getElementById("question_description_id");
+  //let isValid = true;
+  //let alertMessage = [];
+  //let questionTitle = document.getElementById("question_title_id").value.trim();
+  //let questionTitleTextarea = document.getElementById("question_title_id");
+  //let questionDesription = document.getElementById("question_description_id").value.trim();
+  //let questionDesriptionTextarea = document.getElementById("question_description_id");
 
-  let questionAnswers = document.querySelectorAll(".answer_input");
-
+  //let questionAnswers = document.querySelectorAll(".answer_input");
+/*
   const setBorderStyle = (element, isValid) => {
     element.style.border = isValid ? "1px solid #ccc" : "1px solid red";
   };
+
 
   // Sets the borders of the question title and description to red if they are empty
   setBorderStyle(questionTitleTextarea, !!questionTitle);
   isValid = isValid && !!questionTitle;
   setBorderStyle(questionDesriptionTextarea, !!questionDesription);
   isValid = isValid && !!questionDesription;
-
+ */
   let savedQuestion = prepare_question(); //Prepare the question object to be sent to DB
 
-  if (savedQuestion.answers.length === 0) {
-    alert("Please enter at least one answer.");
+  if(!validate_submission(savedQuestion.answers)) {
     return;
   }
 
-
+  /*
   if(!isValid) {
     alert("Please enter all the required fields.");
     return;
   }
+
+   */
 
   let update_event_listeners = () => {
     add_edit_question_listeners(quizid, lecturerid);
@@ -166,4 +169,73 @@ function prepare_answers() {
       });
   }
   return answers;
+}
+
+
+function validate_answers(answers) {
+  if (answers < 2 ) {
+    alert("Please enter at least two answers.");
+    return false;
+  }
+  if (!answers.some(answer => answer.correct === 1)) {
+    alert("Please select at least one correct answer.");
+    return false;
+  }
+  if (answers.some(answer => !answer.description.trim())) {
+    alert("Each answer must have a description.");
+    return false;
+  }
+    return true;
+}
+
+function validate_submission(answers) {
+  let isValid = true;
+  let alertMessage = [];
+  let questionTitle = document.getElementById("question_title_id").value.trim();
+  let questionTitleTextarea = document.getElementById("question_title_id");
+  let questionDesription = document.getElementById("question_description_id").value.trim();
+  let questionDesriptionTextarea = document.getElementById("question_description_id");
+
+  const setBorderStyle = (element, isValid) => {
+    element.style.border = isValid ? "1px solid #ccc" : "1px solid red";
+  };
+
+
+  if(!questionTitle) {
+    setBorderStyle(questionTitleTextarea, !!questionTitle);
+    alertMessage.push("Please enter a question title.");
+    isValid = false;
+  }
+  else {
+    setBorderStyle(questionTitleTextarea, true);
+  }
+  if(!questionDesription) {
+    setBorderStyle(questionDesriptionTextarea, !!questionDesription);
+    alertMessage.push("Please enter a question description.");
+    isValid = false;
+  }
+  else {
+    setBorderStyle(questionDesriptionTextarea, true);
+  }
+
+  if(answers.length < 2) {
+    isValid = false;
+    alertMessage.push("Please enter at least two answers.");
+  }
+
+  if (!answers.some(answer => answer.correct === 1)) {
+    isValid = false;
+    alertMessage.push("Please select at least one correct answer.");
+  }
+
+  if (answers.some(answer => !answer.description.trim())) {
+    isValid = false;
+    alertMessage.push("Each answer must have a description.");
+  }
+
+  if(!isValid) {
+    alert(alertMessage.join("\n"));
+    return false;
+  }
+  return true;
 }
