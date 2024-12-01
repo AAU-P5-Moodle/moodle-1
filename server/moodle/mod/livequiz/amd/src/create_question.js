@@ -145,12 +145,14 @@ function prepare_answers() {
 
 function validate_submission(answers) {
   let isValid = true;
-  let isAnswerValid = true;
   let alertMessage = [];
   let questionTitle = document.getElementById("question_title_id").value.trim();
   let questionTitleTextarea = document.getElementById("question_title_id");
+  let questionTitleAlert = document.getElementById("title_textarea_alert");
   let questionDesription = document.getElementById("question_description_id").value.trim();
   let questionDesriptionTextarea = document.getElementById("question_description_id");
+  let questionDescriptionAlert = document.getElementById("question_textarea_alert");
+
 
   const setBorderStyle = (element, isValid) => {
     element.style.border = isValid ? "1px solid #ccc" : "1px solid red";
@@ -159,15 +161,20 @@ function validate_submission(answers) {
   if (!questionTitle) {
     setBorderStyle(questionTitleTextarea, !!questionTitle);
     alertMessage.push("Please enter a question title.");
+    questionTitleAlert.style.display = "block";
     isValid = false;
   } else {
+    questionTitleAlert.style.display = "none";
     setBorderStyle(questionTitleTextarea, true);
   }
+
   if (!questionDesription) {
     setBorderStyle(questionDesriptionTextarea, !!questionDesription);
     alertMessage.push("Please enter a question description.");
+    questionDescriptionAlert.style.display = "block";
     isValid = false;
   } else {
+    questionDescriptionAlert.style.display = "none";
     setBorderStyle(questionDesriptionTextarea, true);
   }
 
