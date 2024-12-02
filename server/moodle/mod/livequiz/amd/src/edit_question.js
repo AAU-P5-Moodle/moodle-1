@@ -57,13 +57,6 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
     let questionExplanation = question_indput_explanation.value.trim();
     let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
 
-    if (!questionDesription) {
-        alert("Please enter a question description.");
-        return;
-    }
-    if(!questionTitle){
-        questionTitle = "Question";
-    }
     let answers = [];
     let answers_div = document.querySelector(".all_answers_for_question_div");
     for (let i = 0; i < answers_div.children.length; i++) {

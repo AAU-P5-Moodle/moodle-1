@@ -252,6 +252,8 @@ export function validate_submission(answers) {
   let atLeastOneCorrectAnswerAlert = document.getElementById("question_alert_one_correct");
   let answerDescriptionAlert = document.getElementById("question_alert_description");
   let atLeastTwoAnswersAlert = document.getElementById("question_alert_two_answers");
+  let maxOneCorrectAnswerAlert = document.getElementById("question_alert_max_one_correct");
+  let questionType = document.getElementById("question_type_checkbox_id").checked;
   let answersBox = document.getElementById("all_answers");
   let isValidText = document.getElementById("validText");
 
@@ -307,6 +309,23 @@ export function validate_submission(answers) {
     answerDescriptionAlert.style.display = "block";
   } else {
     answerDescriptionAlert.style.display = "none";
+  }
+
+  // Checks if multiple correct answers have been set, when not allowed to. 
+  if (questionType) {
+    let checkedAnswers = 0;
+    answers.forEach(answer => {
+      checkedAnswers += answer.correct;
+    });
+    if (checkedAnswers > 1){
+      isValid = false;
+      answersValid = false;
+      maxOneCorrectAnswerAlert.style.display = "block";
+    } else {
+      maxOneCorrectAnswerAlert.style.display = "none";
+    } 
+  } else {
+    maxOneCorrectAnswerAlert.style.display = "none";
   }
 
   if (!answersValid) { // If not all answers are valid show the box with warnings.
