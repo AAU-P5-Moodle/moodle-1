@@ -213,13 +213,13 @@ EOF
     # Start PHP built-in server for Moodle
     start_php_server() {
       create_config
-      install_ratchet
       echo "Starting PHP built-in server for Moodle..."
       php -S 127.0.0.1:8000 -t ./server/moodle &
       PHP_SERVER_PID=$!
     }
 
     start_websocket() {
+      check_ratchet
       echo "Starting WebSocket for livequiz"
       php ./server/moodle/mod/livequiz/classes/websocket/start_websocket.php &
       WEBSOCKET_PID=$!
@@ -253,11 +253,11 @@ EOF
     }
 
     check_ratchet() {
-      if [ ! -f "$MOODLE_ROOT/vendor/cboden/ratchet" ]; then
+      if [ ! -d "$MOODLE_ROOT/vendor/cboden/ratchet" ]; then
       echo "no ratchet installed installing it now"
       install_ratchet
       fi
-      if [ ! -f "$MOODLE_ROOT/vendor/cboden/ratchet" ]; then
+      if [ ! -d "$MOODLE_ROOT/vendor/cboden/ratchet" ]; then
       echo "installing failed exiting"
       exit 1
       fi

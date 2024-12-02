@@ -114,6 +114,7 @@ class websocket implements MessageComponentInterface {
         $requesttype = $queryparams['requesttype'];
 
         $requestobject = json_decode($msg, true);
+
         if (!isset($requesttype)) {
             $from->send("Missing request format.\n");
             return;
@@ -121,6 +122,10 @@ class websocket implements MessageComponentInterface {
 
         if (!$this->validate_requested_parameters($queryparams, ['room'])) {
             return;
+        }
+
+        if ($requestobject['requesttype'] == 'leaveroom' && $requestobject['roomCodeInput'] !== null) {
+            $this->leave_room($requestobject['roomCodeInput'], $from, $requestobject['studentid']);
         }
 
         switch ($requesttype) {
@@ -132,13 +137,10 @@ class websocket implements MessageComponentInterface {
                 $this->send_message_to_room('abcde', "next question.\n");
                 $from->send($msg);
                 break;
-            case 'leaveroom':
-                $this->leave_room($queryparams['room'], $from, $queryparams['userid']);
-                break;
             default:
                 print("Invalid request type.\n");
         }
-        
+
         // Send to all clients except sender.
         foreach ($this->clients as $client) {
             if ($from !== $client) {
@@ -253,7 +255,10 @@ class websocket implements MessageComponentInterface {
         foreach ($this->clients as $client) {
             $clientdata = $this->clients[$client];
             echo "Client data: " . json_encode($clientdata) . "\n";
-            if ($clientdata['roomid'] == $roomid && $clientdata['studentid'] == $userid && $clientdata['connid'] == $conn->resourceId) {
+            $room = $clientdata['roomid'] == $roomid;
+            $studentid = $clientdata['studentid'] == $userid;
+            $conn = $clientdata['connid'] == $conn->resourceId;
+            if ($room && $studentid && $conn) {
                 $this->clients->detach($client);
                 $detached = true;
                 echo "Room $roomid has one less connection.\n";

@@ -18,7 +18,7 @@ export const init = (url, studentid) => {
         return;
     }
 
-    nextQuestionBtn.addEventListener("mouseover", async () => {
+    nextQuestionBtn.addEventListener("click", async () => {
         const socket = await connect_to_socket(`${url}?requesttype=nextquestion&userid=${studentid}`);
         console.log("Preparing to send data.");
 

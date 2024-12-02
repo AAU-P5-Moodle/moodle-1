@@ -15,6 +15,7 @@ export const init = (url, studentid) => {
         return;
     }
 
+    let socket;
     // Sends message to socket when startQuiz button is pressed
     roomConnectionBtn.addEventListener("click", async () => {
         roomCodeInput = roomCodeInput.value;
@@ -25,7 +26,7 @@ export const init = (url, studentid) => {
 
         try {
             console.log("sending message"); // eslint-disable-line no-console
-            const socket = await connect_to_socket(`${url}?requesttype=connect&userid=${studentid}&room=${roomCodeInput}`);
+            socket = await connect_to_socket(`${url}?requesttype=connect&userid=${studentid}&room=${roomCodeInput}`);
             socket.send("Testing some stuff for students" + ' ' + `${studentid}`);
         } catch (e) {
             console.error(`Student failed to join room, ${e}`);
@@ -41,11 +42,16 @@ export const init = (url, studentid) => {
 
     // Sends message to socket when startQuiz button is pressed
     leaveRoomBtn.addEventListener("click", async () => {
+        const requesttype = "leaveroom";
 
+        let leave_room_request = {
+            roomCodeInput,
+            requesttype,
+            studentid,
+        };
         try {
             console.log("sending message"); // eslint-disable-line no-console
-            const socket = await connect_to_socket(`${url}?requesttype=leaveroom&userid=${studentid}&room=${roomCodeInput}`);
-            socket.send("Leave room" + ' ' + `${studentid}`);
+            socket.send(JSON.stringify(leave_room_request));
             socket.onclose();
         } catch (e) {
             console.error(`Student failed to leave room, ${e}`);
