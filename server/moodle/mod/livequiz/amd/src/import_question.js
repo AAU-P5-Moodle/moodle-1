@@ -150,7 +150,7 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
             add_delete_question_listeners(quizid, lecturerid);
         };
         rerender_saved_questions_list(questions, update_event_listeners); // Re-render saved questions list.
-        rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button.
+        rerender_take_quiz_button(quiz_url, questionids.length > 0); // Re-render take quiz button. If questionids.length == 0, no questions were importet.
     }). catch((error) => console.log(error));
     let modal_div = document.querySelector(".Modal_div");
     modal_div.remove();
