@@ -145,13 +145,18 @@ function prepare_answers() {
 
 function validate_submission(answers) {
   let isValid = true;
-  let alertMessage = [];
   let questionTitle = document.getElementById("question_title_id").value.trim();
   let questionTitleTextarea = document.getElementById("question_title_id");
   let questionTitleAlert = document.getElementById("title_textarea_alert");
   let questionDesription = document.getElementById("question_description_id").value.trim();
   let questionDesriptionTextarea = document.getElementById("question_description_id");
   let questionDescriptionAlert = document.getElementById("question_textarea_alert");
+  let atLeastOneCorrectAnswerAlert = document.getElementById("question_alert_one_correct");
+  let answerDescriptionAlert = document.getElementById("question_alert_description");
+  let atLeastTwoAnswersAlert = document.getElementById("question_alert_two_answers");
+  let answersBox = document.getElementById("all_answers");
+  let isValidText = document.getElementById("validText");
+  let answersValid = true;
 
 
   const setBorderStyle = (element, isValid) => {
@@ -160,7 +165,6 @@ function validate_submission(answers) {
 
   if (!questionTitle) {
     setBorderStyle(questionTitleTextarea, !!questionTitle);
-    alertMessage.push("Please enter a question title.");
     questionTitleAlert.style.display = "block";
     isValid = false;
   } else {
@@ -170,7 +174,6 @@ function validate_submission(answers) {
 
   if (!questionDesription) {
     setBorderStyle(questionDesriptionTextarea, !!questionDesription);
-    alertMessage.push("Please enter a question description.");
     questionDescriptionAlert.style.display = "block";
     isValid = false;
   } else {
@@ -180,21 +183,38 @@ function validate_submission(answers) {
 
   if (answers.length < 2) {
     isValid = false;
-    alertMessage.push("Please enter at least two answers.");
+    answersValid = false;
+    atLeastTwoAnswersAlert.style.display = "block";
+  }
+  else {
+    atLeastTwoAnswersAlert.style.display = "none";
   }
 
   if (!answers.some(answer => answer.correct === 1)) {
     isValid = false;
-    alertMessage.push("Please select at least one correct answer.");
+    answersValid = false;
+    atLeastOneCorrectAnswerAlert.style.display = "block";
   }
+    else {
+        atLeastOneCorrectAnswerAlert.style.display = "none";
+    }
 
   if (answers.some(answer => !answer.description.trim())) {
     isValid = false;
-    alertMessage.push("Each answer must have a description.");
+    answersValid = false;
+    answerDescriptionAlert.style.display = "block";
+  } else {
+        answerDescriptionAlert.style.display = "none";
   }
 
-  if(!isValid) {
-    alert(alertMessage.join("\n"));
+  if (!answersValid) {
+    answersBox.style.display = "block";
+  } else {
+      answersBox.style.display = "none";
+  }
+
+  if (!isValid) {
+    isValidText.style.display = "block";
     return false;
   }
   return true;
