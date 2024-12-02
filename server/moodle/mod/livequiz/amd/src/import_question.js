@@ -128,6 +128,10 @@ async function importQuestions(quizid, url, lecturerid) {
     importQuestionBtn.addEventListener("click", async() => {
         try {
             let questionids = get_checked_questions();
+            if (questionids.length === 0) {
+                alert("No questions selected. Pleas choose at least one question to import.")
+                return;
+            }
             call_reuse_questions(quizid, questionids, lecturerid, quiz_url);
         } catch (error) {
             window.console.error("Error in import of questions");
@@ -139,7 +143,7 @@ async function importQuestions(quizid, url, lecturerid) {
 /**
  * Calls the external function to reuse questions.
  * @param {number} quizid - The ID of the quiz.
- * @param {number} questionids - The IDs of the questions to reuse.
+ * @param {array} questionids - The IDs of the questions to reuse.
  * @param {number} lecturerid - The ID of the lecturer.
  * @param {string} quiz_url - The URL of the quiz page.
  */
@@ -150,7 +154,7 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
             add_delete_question_listeners(quizid, lecturerid);
         };
         rerender_saved_questions_list(questions, update_event_listeners); // Re-render saved questions list.
-        rerender_take_quiz_button(quiz_url, questionids.length > 0); // Re-render take quiz button. If questionids.length == 0, no questions were importet.
+        rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button. Since at least one question was imported, hasquestions is true.
     }). catch((error) => console.log(error));
     let modal_div = document.querySelector(".Modal_div");
     modal_div.remove();
