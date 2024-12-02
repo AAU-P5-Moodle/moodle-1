@@ -24,3 +24,60 @@ export const update_session = (quizid, questionid, answers) => fetchMany([
     }
 ])[0];
 
+// Function to save a question.
+export const save_question = (question, lecturerid, quizid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_save_question',
+        args: {
+            question,
+            lecturerid,
+            quizid
+        },
+    }
+])[0];
+
+// Function to delete a question.
+export const delete_question = (questionid, lecturerid, quizid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_delete_question',
+        args: {
+            questionid,
+            lecturerid,
+            quizid
+        },
+    }
+])[0];
+
+
+// Function to retrieve a question.
+export const get_question = (quizid, questionid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_get_question',
+        args: {
+            quizid,
+            questionid
+        },
+    }
+])[0];
+
+// Function to reuse questions.
+export const external_reuse_questions = (quizid, questionids, lecturerid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_reuse_question',
+        args: {
+            quizid,
+            questionids,
+            lecturerid
+        },
+    }
+])[0];
+
+// Function to get lecturer questions.
+export const get_lecturer_quiz = (lecturerid) => fetchMany([
+    {
+        methodname: 'mod_livequiz_get_lecturer_quiz',
+        args: {
+            lecturerid
+        },
+    }
+])[0];

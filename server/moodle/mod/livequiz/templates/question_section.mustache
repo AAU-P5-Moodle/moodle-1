@@ -30,9 +30,6 @@
 
 }}
 <div class="question-container">
-  <div class="title-container">
-    {{#isattempting}} <h1 class="quiz-title">{{quiztitle}}</h1> {{/isattempting}}
-  </div>
   <div class="question-container">
       <p class="question-title">{{questiontitle}}</p>
       <div class="media-container">
@@ -40,16 +37,26 @@
       </div>
     <p class="question-description">{{questiondescription}}</p>
   </div>
-  <div class="answer-container">
-  <fieldset>
-  {{#answers}}
-    <div class="answer">
-      <label for="{{answerid}}">{{answerdescription}}</label>
-        <input type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}" {{#chosen}} checked {{/chosen}}
-        {{^isattempting}} disabled {{/isattempting}} />
-    </div>
-  {{/answers}}
-  </fieldset>
+    <div class="answer-container">
+        <fieldset>
+            {{#answers}}
+                <div id="{{answerid}}" class="answer
+                {{^isattempting}}
+                    {{#chosen}}
+                        {{#correct}}correct{{/correct}}
+                        {{^correct}}incorrect{{/correct}}
+                    {{/chosen}}
+                    {{^chosen}}
+                        {{#correctnotchosen}}correctnotchosen{{/correctnotchosen}}
+                    {{/chosen}}
+                {{/isattempting}}">
+                    <label for="{{answerid}}">{{answerdescription}}</label>
+                    <input type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
+                        {{#chosen}} checked {{/chosen}}
+                        {{^isattempting}} disabled {{/isattempting}} />
+                </div>
+            {{/answers}}
+        </fieldset>
   </div>
   {{#isattempting}}
       <!-- Hidden inputs to pass to the next question -->
@@ -61,6 +68,9 @@
       <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
       <input type="hidden" name="nextquestionindex" value="{{nextquestionindex}}" />
   {{/isattempting }}
+  {{^isattempting}}
+      <p class="question-explanation">{{questionexplanation}}</p>
+  {{/isattempting}}
 </div>
 
 

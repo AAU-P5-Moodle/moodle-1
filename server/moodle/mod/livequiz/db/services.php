@@ -42,6 +42,41 @@ $functions = [
         'ajax'        => true,
         'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
     ],
+    'mod_livequiz_save_question' => [
+        'classname'   => 'mod_livequiz\external\save_question',
+        'description' => 'Save a question.',
+        'type'        => 'write',
+        'ajax'        => true,
+        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
+    'mod_livequiz_delete_question' => [
+        'classname'   => 'mod_livequiz\external\delete_question',
+        'description' => 'Delete a question.',
+        'type'        => 'write',
+        'ajax'        => true,
+        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
+    'mod_livequiz_get_question' => [
+        'classname'   => 'mod_livequiz\external\get_question',
+        'description' => 'Retrieves a question.',
+        'type'        => 'read',
+        'ajax'        => true,
+        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
+    'mod_livequiz_get_lecturer_quiz' => [
+        'classname'   => 'mod_livequiz\external\get_lecturer_quiz',
+        'description' => 'Retrieves all questions of a lecturer.',
+        'type'        => 'read',
+        'ajax'        => true,
+        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
+    'mod_livequiz_reuse_question' => [
+        'classname'   => 'mod_livequiz\external\reuse_question',
+        'description' => 'Imports existing questions into a quiz',
+        'type'        => 'write',
+        'ajax'        => true,
+        'services'    => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
 ];
 
 $services = [];

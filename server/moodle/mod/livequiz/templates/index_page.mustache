@@ -29,20 +29,28 @@
     * fill in later
 
 }}
+{{#js}}
+    require(['mod_livequiz/create_question'], (module) => module.init({{quizid}}, {{lecturerid}}, "{{{url}}}" ));
+    require(['mod_livequiz/import_question'], (module) => module.init({{quizid}}, {{lecturerid}}, "{{{url}}}" ));
+{{/js}}
+
 <div class="main-container">
-  <h1>index_page</h1>
-  <p>{{sometext}}</p>
-  {{#isteacher}}
-  <button id="startQuiz">Start Quiz</button>
-  <h2>Room Code: <span id="roomCode">something</span></h2>
-  {{/isteacher}}
-  <form onsubmit="event.preventDefault();">
-    <label for="roomCode">Romm Code</label><br>
-    <input type="text" id="roomCode"><br><br>
-    <input type="submit" value="Connect to Room" class="btn btn-primary" id ="room_connection_button"><br>
-      <button class="btn btn-primary" id ="leave_room_button">Leave Room</button>><br>
-  </form><br>
-  <a href="{{url}}" type="button" id="takeQuizBtn"> Take Quiz </a>
-  {{> mod_livequiz/participations_section}} {{! participations_section import - Context remains the same}}
+    {{> mod_livequiz/participations_section}} {{! participations_section import - Context remains the same}}
+    <h1>{{pagename}}</h1>
+    {{#islecturer}}
+        <button id="startQuiz">Start Quiz</button>
+        <h2>Room Code: <span id="roomCode"></span></h2>
+       {{> mod_livequiz/quiz_editor_page}}
+    {{/islecturer}}
+    <form onsubmit="event.preventDefault();">
+        <label for="roomCode">Romm Code</label><br>
+        <input type="text" id="roomCode"><br><br>
+        <input type="submit" value="Connect to Room" class="btn btn-primary" id ="room_connection_button"><br>
+        <button class="btn btn-primary" id ="leave_room_button">Leave Room</button>><br>
+    </form><br>
+       {{> mod_livequiz/take_quiz_button}}
+    {{#studentid}}
+        {{> mod_livequiz/participations_section}} {{! participations_section import - Context remains the same}}
+    {{/studentid}}
 </div>
 

@@ -119,6 +119,28 @@ class question {
     }
 
     /**
+     * Gets a question instance with answers.
+     *
+     * @param $id
+     * @return question
+     * @throws dml_exception
+     */
+    public static function get_question_with_answers_from_id($id): question {
+        global $DB;
+        $questioninstance = $DB->get_record('livequiz_questions', ['id' => $id]);
+        $question = new question(
+            $questioninstance->title,
+            $questioninstance->description,
+            $questioninstance->timelimit,
+            $questioninstance->explanation
+        );
+        $question->set_id($questioninstance->id);
+        $answers = questions_answers_relation::get_answers_from_question($id);
+        $question->set_answers($answers);
+        return $question;
+    }
+
+    /**
      * Updates a question in the database.
      *
      * @throws dml_exception
@@ -204,9 +226,18 @@ class question {
     }
 
     /**
+     * Sets the answers associated with the question.
+     *
+     * @param array $newanswers
+     */
+    public function set_answers(array $newanswers): void {
+        $this->answers = $newanswers;
+    }
+
+    /**
      * Appends an answer to the question object.
      *
-     * @param array $answers The title of the question.
+     * @param array $answers
      */
     public function add_answers(array $answers): void {
         foreach ($answers as $answer) {
@@ -224,12 +255,21 @@ class question {
     }
 
     /**
+     * Removes all answers from the question
+     *
+     */
+    public function remove_answers(): void {
+        $this->answers = [];
+    }
+
+
+    /**
      * Sets the ID of the question.
      *
      * @param $id
      * @return void The ID of the question.
      */
-    private function set_id($id): void {
+    public function set_id($id): void {
         $this->id = $id;
     }
 
@@ -289,7 +329,22 @@ class question {
     }
 
     /**
+     * Resets the id of the question such that it can be reused.
+     */
+    public function reset_id(): void {
+        $this->set_id(0);
+    }
+
+    /**
      * Prepares the template data for mustache.
+     * The data object will hold the following properties:
+     * - questionid
+     * - questiontitle
+     * - questiondescription
+     * - questiontimelimit
+     * - questionexplanation
+     * - answers
+     * - answertype
      * @param stdClass $data
      * @return stdClass
      */
@@ -315,5 +370,19 @@ class question {
             $data->answertype = 'radio';
         }
         return $data;
+    }
+
+    /**
+     * Checks if an answer is in the question.
+     * @param $answerid
+     * @return bool
+     */
+    public function is_answer_in_question($answerid): bool {
+        foreach ($this->answers as $answer) {
+            if ($answer->get_id() == $answerid) {
+                return true;
+            }
+        }
+        return false;
     }
 }

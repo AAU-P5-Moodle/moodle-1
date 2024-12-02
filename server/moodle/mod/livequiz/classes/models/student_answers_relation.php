@@ -83,4 +83,30 @@ class student_answers_relation {
             ['answer_id' => $answerid]
         );
     }
+
+    /**
+     * Get all answers for a given participation
+     *
+     * @param int $participationid
+     * @return array An array of answer objects
+     * @throws dml_exception
+     */
+    public static function get_answers_from_participation(int $participationid): array {
+        global $DB;
+
+        $answerrecords = $DB->get_records(
+            'livequiz_students_answers',
+            ['participation_id' => $participationid],
+            '',
+            'answer_id'
+        );
+
+        $answers = [];
+        foreach ($answerrecords as $record) {
+            $id = $record->answer_id;
+            $answers[] = answer::get_answer_from_id($id);
+        }
+
+        return $answers;
+    }
 }

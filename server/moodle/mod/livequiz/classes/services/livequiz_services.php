@@ -107,10 +107,6 @@ class livequiz_services {
     public function submit_quiz(livequiz $livequiz, int $lecturerid): livequiz {
         $questions = $livequiz->get_questions();
 
-        if (!count($questions)) {
-            throw new Exception("A Livequiz Must have at least 1 Question");
-        }
-
         foreach ($questions as $question) {
             $answers = $question->get_answers();
             if (!count($answers)) {
@@ -124,8 +120,9 @@ class livequiz_services {
             $livequiz->update_quiz();
 
             $quizid = $livequiz->get_id();
-
-            livequiz_quiz_lecturer_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
+            if (!livequiz_quiz_lecturer_relation::check_lecturer_quiz_relation_exists($quizid, $lecturerid)) {
+                livequiz_quiz_lecturer_relation::append_lecturer_quiz_relation($quizid, $lecturerid);
+            }
             $this->submit_questions($livequiz, $lecturerid);
 
 
@@ -163,28 +160,39 @@ class livequiz_services {
 
             if ($questionid == 0) {
                 // Insert new question if ID is 0 (new question).
-                $questionid = question::insert_question($newquestion);
-
-                quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
-                livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
+                $questionid = $this->insert_question_with_relations($newquestion, $lecturerid, $quizid);
                 $updatedquestionids[] = $questionid;
             } else if (isset($existingquestionmap[$questionid])) {
                 // Update existing question if found in the map.
                 $newquestion->update_question();
                 $updatedquestionids[] = $questionid;
             }
+
             $answers = $newquestion->get_answers();
             $this->submit_answers($questionid, $answers);
         }
 
         // Find deleted questions by comparing existing question IDs with updated ones.
         $existingquestionids = array_keys($existingquestionmap);
-        $deletedquestions = array_diff($existingquestionids, $updatedquestionids);
+        $deletedquestionids = array_diff($existingquestionids, $updatedquestionids);
 
         /* @var question $question // Type specification for $question, for PHPStorm IDE */
-        foreach ($deletedquestions as $questionid) {
+        foreach ($deletedquestionids as $questionid) {
             self::delete_question($questionid);
         }
+    }
+
+    /**
+     * inserts a question into the database
+     *
+     * @throws dml_transaction_exception
+     * @throws dml_exception
+     */
+    private function insert_question_with_relations(question $question, int $lecturerid, int $quizid): int {
+        $questionid = question::insert_question($question);
+        quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
+        livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
+        return $questionid;
     }
 
     /**
@@ -219,11 +227,10 @@ class livequiz_services {
         }
 
         $existinganswerids = array_keys($existinganswersmap);
-        $deletedanswers = array_diff($existinganswerids, $updatedanswerids);
+        $deletedanswersids = array_diff($existinganswerids, $updatedanswerids);
 
-        /* @var answer $deletedanswer // Type specification for $deletedanswer, for PHPStorm IDE */
-        foreach ($deletedanswers as $deletedanswer) {
-            self::delete_answer($deletedanswer->get_id());
+        foreach ($deletedanswersids as $deletedanswerid) {
+            self::delete_answer($deletedanswerid);
         }
     }
 
@@ -321,6 +328,7 @@ class livequiz_services {
      * @param int $quizid
      * @param int $studentid
      * @return participation
+     * @throws dml_exception
      */
     public function get_newest_participation_for_quiz(int $quizid, int $studentid): participation {
         global $DB;
@@ -351,6 +359,7 @@ class livequiz_services {
         $lecturer = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_questions_id($questionid);
         return $lecturer;
     }
+
     /**
      * Deletes an answer from the database.
      *
@@ -362,6 +371,7 @@ class livequiz_services {
         if ($participationcount > 0) {
             throw new dml_exception("Cannot delete answer with participations");
         }
+        questions_answers_relation::delete_relations_by_answerid($answerid);
         answer::delete_answer($answerid);
     }
 
@@ -372,14 +382,135 @@ class livequiz_services {
      */
     private static function delete_question(int $questionid): void {
         $answers = questions_answers_relation::get_answers_from_question($questionid);
-
         foreach ($answers as $answer) {
             $currentanswerid = $answer->get_id();
-            questions_answers_relation::delete_question_answer_relation($questionid, $currentanswerid);
             self::delete_answer($currentanswerid);
         }
-
         quiz_questions_relation::delete_question_quiz_relation($questionid);
+        livequiz_questions_lecturer_relation::delete_lecturer_questions_relation_by_question_id($questionid);
         question::delete_question($questionid);
+    }
+
+
+    /**
+     * A method for fetching the relevant data for the quiz initiation.
+     *
+     * @param int $quizid
+     * @return array
+     * @throws dml_exception
+     */
+    public static function initiate_livequiz(int $quizid): array {
+        $livequiz = livequiz::get_livequiz_instance($quizid);
+
+        return [$livequiz->get_name(), $livequiz->get_intro()];
+    }
+
+    /**
+     * Gets a question by index. Returns the question and the index.
+     *
+     * @param int $quizid
+     * @param int $index
+     * @return array
+     * @throws dml_exception
+     */
+    public function get_question_by_index(int $quizid, int $index): array {
+        $livequiz = $this->get_livequiz_instance($quizid);
+        $question = $livequiz->get_question_by_index($index);
+
+        return [$question, $index];
+    }
+
+    /**
+     * Gets answers for a question, without correct status.
+     *
+     * @param int $questionid
+     * @return array
+     * @throws dml_exception
+     */
+    public static function get_sanitized_answers(int $questionid): array {
+        $answers = questions_answers_relation::get_answers_from_question($questionid);
+        $sanitizedanswers = [];
+        foreach ($answers as $answer) {
+            $sanitizedanswers[] = $answer->get_sanitized_answer();
+        }
+        return $sanitizedanswers;
+    }
+
+
+    /**
+     * Gets the correct answer for a question.
+     *
+     * @param int $studentid
+     * @param int $answerid
+     * @param int $participationid
+     * @return void
+     * @throws dml_exception
+     * @throws dml_transaction_exception
+     */
+    public static function student_answer_submission(int $studentid, int $answerid, int $participationid): void {
+        global $DB;
+        $transaction = $DB->start_delegated_transaction();
+        try {
+            student_answers_relation::insert_student_answer_relation($studentid, $answerid, $participationid);
+            $transaction->allow_commit();
+        } catch (dml_exception $e) {
+            $transaction->rollback($e);
+            throw $e;
+        }
+    }
+
+    /**
+     * Gets the answers a student has selected for a specific question.
+     *
+     * Be aware: If the student has multiple participations in the same quiz,
+     * with answers to the specific question, this will all be added to the same array.
+     *
+     * @throws dml_exception
+     */
+    public function get_student_answers_for_question(int $questionid, int $quizid): array {
+        $participations = student_quiz_relation::get_participations_from_quizid($quizid);
+        $livequiz = $this->get_livequiz_instance($quizid);
+        $livequizquestions = $livequiz->get_questions();
+
+        /* @var question $question Type specification for the PHPstorm IDE */
+        $question = null;
+
+        foreach ($livequizquestions as $livequizquestion) {
+            if ($livequizquestion->get_id() == $questionid) {
+                $question = $livequizquestion;
+            }
+        }
+
+        if ($question == null) {
+            throw new dml_exception("Question not found in quiz");
+        }
+
+        $submissions = [];
+
+        foreach ($participations as $participation) {
+            $participationid = $participation->get_id();
+            $allanswers = student_answers_relation::get_answers_from_participation($participationid);
+
+            $correct = 0;
+            $incorrect = 0;
+
+            foreach ($allanswers as $answer) {
+                if ($question->is_answer_in_question($answer->get_id())) {
+                    if ($answer->get_correct()) {
+                        $correct++;
+                    } else {
+                        $incorrect++;
+                    }
+
+                    $submissions[] = [
+                        'studentid' => $participation->get_studentid(),
+                        'correct' => $correct,
+                        'incorrect' => $incorrect,
+                    ];
+                }
+            }
+        }
+
+        return $submissions;
     }
 }

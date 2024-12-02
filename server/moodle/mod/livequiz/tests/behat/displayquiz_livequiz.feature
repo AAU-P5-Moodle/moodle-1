@@ -32,8 +32,8 @@ Feature: View livequiz activity
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
     And I should see "Take Quiz"
     And I click on "Take Quiz" "link"
+    Then I should see "Question 1"
     And I should see "Which of the following cities is in France?"
-    And I should see "This is about France"
     #The answer options are shown as checkboxes
     And "Paris" "checkbox" should exist
     And "Champagne" "checkbox" should exist
@@ -41,8 +41,8 @@ Feature: View livequiz activity
     And "Next Question" "link" should exist
     And I should not see "Previous Question"
     And I click on "Next Question" "link"
-    Then I should see "What is the Capital of Denmark?"
-    And I should see "This is about Denmark"
+    Then I should see "Question 2"
+    And I should see "What is the Capital of Denmark?"
     #The answer options are shown as radio buttons
     And "Aarhus" "radio" should exist
     And "Aalborg" "radio" should exist
@@ -50,15 +50,15 @@ Feature: View livequiz activity
     And "Next Question" "link" should exist
     And "Previous Question" "link" should exist
     And I click on "Next Question" "link"
-    Then I should see "Is Hamburg in Germany?"
-    And I should see "German cities"
+    Then I should see "Question 3"
+    And I should see "Is Hamburg in Germany?"
     And "Yes" "radio" should exist
     And "No" "radio" should exist
     And "Previous Question" "link" should exist
     And I should not see "Next Question"
     And I click on "Previous Question" "link"
-    Then I should see "What is the Capital of Denmark?"
-    And I should see "This is about Denmark"
+    Then I should see "Question 2"
+    And I should see "What is the Capital of Denmark?"
     And "Aarhus" "radio" should exist
     And "Aalborg" "radio" should exist
     And "Copenhagen" "radio" should exist
@@ -128,3 +128,31 @@ Scenario: Chosen answers to question are preserved in radio button
   And I click on "Next Question" "link"
   And "Aarhus" "radio" should exist
   And the "Aarhus" answer should be checked
+
+Scenario: Submitted quiz has the correct classes
+  When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+  And I click on "Take Quiz" "link"
+  And I click on "Paris" "checkbox"
+  And I click on "Champagne" "checkbox"
+  And I click on "Next Question" "link"
+  And I click on "Copenhagen" "radio"
+  And I click on "Next Question" "link"
+  And "Submit Quiz" "button" should exist
+  And I click on "No" "radio"
+  And I click on "Submit Quiz" "button"
+  And I should see "Results for attempt"
+  And "Paris" "checkbox" should exist
+  Then "Paris" should have a parent div with class "answer correct"
+  And "Champagne" "checkbox" should exist
+  Then "Champagne" should have a parent div with class "answer incorrect"
+  And "Nice" "checkbox" should exist
+  Then "Nice" should have a parent div with class "answer correctnotchosen"
+  And "Aarhus" "radio" should exist
+  And "Aalborg" "radio" should exist
+  And "Copenhagen" "radio" should exist
+  Then "Copenhagen" should have a parent div with class "answer correct"
+  And "Yes" "radio" should exist
+  Then "Yes" should have a parent div with class "answer correctnotchosen"
+  And "No" "radio" should exist
+  Then "No" should have a parent div with class "answer incorrect"
+
