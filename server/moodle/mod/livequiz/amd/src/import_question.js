@@ -53,10 +53,11 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
 /**
  * Adds old questions to the import question popup.
  * @param {number} lecturerid - The ID of the lecturer.
+ * @param {number} quizid - The ID of the quiz.
  */
 function add_old_questions_to_popup(lecturerid, quizid) {
     get_lecturer_quiz(lecturerid).then((oldquizzes) => {
-        oldquizzes = oldquizzes.filter(item => item !== quizid);
+        oldquizzes = oldquizzes.filter(currentquiz => currentquiz.quizid !== quizid);
         let oldQuizzesContainer = document.querySelector(".oldQuizzes");
         if (oldquizzes.length === 0) {
             let noQuestions = document.createElement("p");
