@@ -16,9 +16,9 @@ export function add_delete_question_listeners(quizid, lecturerid) {
     element.addEventListener("click", () => {
       let list_item = element.closest("li"); // Get the list item.
       let questionid = parseInt(element.dataset.id, 10);
-            if(!confirm("Are you sure you want to delete this question?")){
+            if (!confirm("Are you sure you want to delete this question?")) {
                 return;
-            } else{
+            } else {
                 delete_question(questionid, lecturerid, quizid)
                     .then((response) => {
                         if (response.success) {
@@ -31,7 +31,7 @@ export function add_delete_question_listeners(quizid, lecturerid) {
                         } else {
                             alert("Cannot delete question: " + response.message);
                         }
-                });
+                    });
             }
     });
   });

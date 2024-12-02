@@ -58,8 +58,7 @@ class delete_question extends external_api {
      * @return array
      * @throws invalid_parameter_exception|Exception
      */
-    public static function execute(int $questionid, int $lecturerid, int $quizid): array
-    {
+    public static function execute(int $questionid, int $lecturerid, int $quizid): array {
         self::validate_parameters(self::execute_parameters(), [
             'questionid' => $questionid,
             'lecturerid' => $lecturerid,
