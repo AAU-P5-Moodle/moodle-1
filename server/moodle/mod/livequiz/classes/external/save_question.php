@@ -157,6 +157,7 @@ class save_question extends external_api {
         $question->set_title($questiondata['title']);
         $question->set_description($questiondata['description']);
         $question->set_explanation($questiondata['explanation']);
+        $question->set_type($questiondata['type']);
         $question->remove_answers();
         self::add_answers_from_questiondata($question, $questiondata);
     }

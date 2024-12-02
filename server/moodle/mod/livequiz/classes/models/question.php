@@ -362,7 +362,6 @@ class question {
         $data->questiontimelimit = $this->timelimit;
         $data->questionexplanation = $this->explanation;
         $data->questiontype = $this->type == 1 ? 'radio': 'checkbox';
-        error_log(print_r($data->questiontype));
         $data->answers = [];
         foreach ($this->answers as $answer) {
             $data->answers[] = [
