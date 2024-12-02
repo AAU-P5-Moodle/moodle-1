@@ -121,6 +121,7 @@ class question {
             $questioninstance->explanation
         );
         $question->set_id($questioninstance->id);
+        $question->set_type($questioninstance->type);
         return $question;
     }
 
@@ -141,6 +142,7 @@ class question {
             $questioninstance->explanation
         );
         $question->set_id($questioninstance->id);
+        $question->set_type($questioninstance->type);
         $answers = questions_answers_relation::get_answers_from_question($id);
         $question->set_answers($answers);
         return $question;
@@ -161,6 +163,7 @@ class question {
             'description' => $this->description,
             'timelimit' => $this->timelimit,
             'explanation' => $this->explanation,
+            'type' => $this->type,
         ];
         $DB->update_record('livequiz_questions', $questiondata);
     }
@@ -316,25 +319,6 @@ class question {
     }
 
     /**
-     * Getter for question hasmultiplecorrectanswers
-     * @return bool
-     */
-    public function get_hasmultiplecorrectanswers(): bool {
-        // This is a simple check to see if the question has multiple correct answers.
-        $numcorrect = 0;
-
-        foreach ($this->answers as $answer) {
-            if ($answer->get_correct()) {
-                $numcorrect++;
-                if ($numcorrect > 1) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Resets the id of the question such that it can be reused.
      */
     public function reset_id(): void {
@@ -377,6 +361,8 @@ class question {
         $data->questiondescription = $this->description;
         $data->questiontimelimit = $this->timelimit;
         $data->questionexplanation = $this->explanation;
+        $data->questiontype = $this->type == 1 ? 'radio': 'checkbox';
+        error_log(print_r($data->questiontype));
         $data->answers = [];
         foreach ($this->answers as $answer) {
             $data->answers[] = [
@@ -385,11 +371,6 @@ class question {
                 'answerexplanation' => $answer->get_explanation(),
                 'answercorrect' => $answer->get_correct(),
             ];
-        }
-        if ($this->get_hasmultiplecorrectanswers()) {
-            $data->answertype = 'checkbox';
-        } else {
-            $data->answertype = 'radio';
         }
         return $data;
     }

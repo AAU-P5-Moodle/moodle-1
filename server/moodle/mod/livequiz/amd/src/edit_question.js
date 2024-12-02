@@ -113,6 +113,7 @@ function restore_question_data_in_popup(questiondata){
     document.getElementById("question_title_id").value = questiondata.questiontitle;
     document.getElementById("question_description_id").value = questiondata.questiondescription;
     document.getElementById("question_explanation_id").value = questiondata.questionexplanation;
+    document.getElementById("question_type_checkbox_id").checked = questiondata.questiontype;
     let answers = questiondata.answers;
     for(let i=0; i < answers.length; i++){
         restore_answer_data_in_popup(answers[i]);

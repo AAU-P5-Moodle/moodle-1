@@ -51,7 +51,7 @@
                     {{/chosen}}
                 {{/isattempting}}">
                     <label for="{{answerid}}">{{answerdescription}}</label>
-                    <input type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
+                    <input type="{{questiontype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
                         {{#chosen}} checked {{/chosen}}
                         {{^isattempting}} disabled {{/isattempting}} />
                 </div>
