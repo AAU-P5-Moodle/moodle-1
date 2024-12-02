@@ -14,6 +14,7 @@
         "description": "Which of the following cities is in France?",
         "explanation": "Paris is a city in France, Nice is a city in France",
         "timelimit": "60",
+        "type": "0",
         "answers": [
           {
             "id": "1",
@@ -41,6 +42,7 @@
         "description": "What is the Capital of Denmark?",
         "explanation": "Danish capital",
         "timelimit": "60",
+        "type": "1",
         "answers": [
           {
             "id": "4",
@@ -68,6 +70,7 @@
         "description": "Is Hamburg in Germany?",
         "explanation": "Hamburg is a city in Northern Germany",
         "timelimit": "60",
+        "type": "1",
         "answers": [
           {
             "id": "7",
