@@ -8,6 +8,7 @@ import {
   rerender_saved_questions_list,
   add_answer_button_event_listener,
   add_discard_question_button_listener,
+  validate_submission
 } from "./edit_question_helper";
 
 let isEditing = false;
@@ -143,79 +144,3 @@ function prepare_answers() {
   return answers;
 }
 
-function validate_submission(answers) {
-  let isValid = true;
-  let questionTitle = document.getElementById("question_title_id").value.trim();
-  let questionTitleTextarea = document.getElementById("question_title_id");
-  let questionTitleAlert = document.getElementById("title_textarea_alert");
-  let questionDesription = document.getElementById("question_description_id").value.trim();
-  let questionDesriptionTextarea = document.getElementById("question_description_id");
-  let questionDescriptionAlert = document.getElementById("question_textarea_alert");
-  let atLeastOneCorrectAnswerAlert = document.getElementById("question_alert_one_correct");
-  let answerDescriptionAlert = document.getElementById("question_alert_description");
-  let atLeastTwoAnswersAlert = document.getElementById("question_alert_two_answers");
-  let answersBox = document.getElementById("all_answers");
-  let isValidText = document.getElementById("validText");
-  let answersValid = true;
-
-
-  const setBorderStyle = (element, isValid) => {
-    element.style.border = isValid ? "1px solid #ccc" : "1px solid red";
-  };
-
-  if (!questionTitle) {
-    setBorderStyle(questionTitleTextarea, !!questionTitle);
-    questionTitleAlert.style.display = "block";
-    isValid = false;
-  } else {
-    questionTitleAlert.style.display = "none";
-    setBorderStyle(questionTitleTextarea, true);
-  }
-
-  if (!questionDesription) {
-    setBorderStyle(questionDesriptionTextarea, !!questionDesription);
-    questionDescriptionAlert.style.display = "block";
-    isValid = false;
-  } else {
-    questionDescriptionAlert.style.display = "none";
-    setBorderStyle(questionDesriptionTextarea, true);
-  }
-
-  if (answers.length < 2) {
-    isValid = false;
-    answersValid = false;
-    atLeastTwoAnswersAlert.style.display = "block";
-  }
-  else {
-    atLeastTwoAnswersAlert.style.display = "none";
-  }
-
-  if (!answers.some(answer => answer.correct === 1)) {
-    isValid = false;
-    answersValid = false;
-    atLeastOneCorrectAnswerAlert.style.display = "block";
-  }
-    else {
-        atLeastOneCorrectAnswerAlert.style.display = "none";
-    }
-
-  if (answers.some(answer => !answer.description.trim())) {
-    isValid = false;
-    answersValid = false;
-    answerDescriptionAlert.style.display = "block";
-  } else {
-        answerDescriptionAlert.style.display = "none";
-  }
-
-  if (!answersValid) {
-    answersBox.style.display = "block";
-  } else {
-      answersBox.style.display = "none";
-  }
-
-  if (!isValid) {
-    isValidText.style.display = "block";
-    return false;
-  }
-  return true;
-}
