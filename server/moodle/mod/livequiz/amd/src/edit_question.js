@@ -1,7 +1,11 @@
 import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
 import { save_question, get_question} from "./repository";
-import {add_answer_button_event_listener, create_answer_container, add_discard_question_button_listener} from "./edit_question_helper";
+import {
+    add_answer_button_event_listener,
+    create_answer_container,
+    add_discard_question_button_listener,
+    validate_submission} from "./edit_question_helper";
 import {add_delete_question_listeners} from "./delete_question";
 
 export const init = async (quizid, lecturerid) => {
@@ -53,7 +57,7 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
     let questionExplanation = question_indput_explanation.value.trim();
     let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
 
-    if (!questionDescription) {
+    if (!questionDesription) {
         alert("Please enter a question description.");
         return;
     }
@@ -86,6 +90,11 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
         explanation: questionExplanation,
         type: questionType,
     };
+
+    if(!validate_submission(savedQuestion.answers)) {
+        return;
+    }
+
     save_question(savedQuestion, lecturerid, quizid).then((questions) => {
         const contextsavedquestions = {
             questions: questions,
