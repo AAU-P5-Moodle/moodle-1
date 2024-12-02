@@ -1,9 +1,12 @@
+/* eslint-disable no-console */
+/* eslint-disable jsdoc/require-jsdoc */
+
 import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
 
+let isEditing; // eslint-disable-line no-unused-vars
+let editingIndex; // eslint-disable-line no-unused-vars
 let IDs = 0;
-let isEditing = false;
-let editingIndex = 0;
 
 /**
  * Adds an event listener to the "Add Answer" button.
@@ -19,8 +22,8 @@ export const add_answer_button_event_listener = () => {
 
 /**
  * Appends a new answer input container to the container holding all answers
- * 
- * This function creates a new answer container with an incremented ID and appends it to the 
+ *
+ * This function creates a new answer container with an incremented ID and appends it to the
  * element with the class "all_answers_for_question_div".
  */
 export function append_answer_input() {
@@ -105,11 +108,11 @@ function render_question_confirmation() {
 
 /**
  * Handles the confirmation process for deleting a question.
- * 
+ *
  * This function sets up event listeners for the yes and no buttons when discarding a question.
  * When yes is clicked, the editing menu is removed
  * When no is clicked, the confirmation pop-up is removed
- * 
+ *
  * @function question_confirmation
  */
 function question_confirmation() {

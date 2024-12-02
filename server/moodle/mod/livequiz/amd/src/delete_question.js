@@ -1,3 +1,6 @@
+/* eslint-disable jsdoc/require-jsdoc */
+// The above should be removed ASAP
+
 import { delete_question } from "./repository";
 import { rerender_take_quiz_button } from "./edit_question_helper";
 
@@ -23,7 +26,7 @@ export function add_delete_question_listeners(quizid, lecturerid) {
                 list_item.remove(); // Remove the question from the list.
                 element.remove(); // Remove the delete button.
             }
-      
+
       let updated_list_length = question_list.querySelectorAll("li").length;
       if(updated_list_length === 0) {
         rerender_take_quiz_button(take_quiz_url, false);

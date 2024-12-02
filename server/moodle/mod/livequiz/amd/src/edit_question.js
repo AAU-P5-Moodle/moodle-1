@@ -1,7 +1,15 @@
+/* eslint-disable jsdoc/require-jsdoc */
+// The above should be removed ASAP
+/* eslint-disable no-console */
+
 import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
 import { save_question, get_question} from "./repository";
-import {add_answer_button_event_listener, create_answer_container, add_discard_question_button_listener} from "./edit_question_helper";
+import {
+    add_answer_button_event_listener,
+    create_answer_container,
+    add_discard_question_button_listener
+} from "./edit_question_helper";
 import {add_delete_question_listeners} from "./delete_question";
 
 export const init = async (quizid, lecturerid) => {
@@ -128,11 +136,3 @@ function restore_answer_data_in_popup(answer) {
     let parent_element = document.querySelector(".all_answers_for_question_div");
     parent_element.appendChild(answer_container);
 }
-
-
-
-
-
-
-
-

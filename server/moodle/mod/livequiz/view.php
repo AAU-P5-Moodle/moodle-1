@@ -54,7 +54,7 @@ if (has_capability('mod/livequiz:teacherview', $context)) {
 
 
 $isteacher = has_capability('mod/livequiz:teacherview', $context);
-$renderable = new index_page($cmid, $instance->id, $USER->id, $isteacher);
+// $renderable = new index_page($cmid, $instance->id, $USER->id, $isteacher);
 
 $context = $PAGE->context;
 $output = "";

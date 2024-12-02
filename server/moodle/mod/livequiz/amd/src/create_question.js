@@ -1,3 +1,6 @@
+/* eslint-disable jsdoc/require-jsdoc */
+// The above should be temporary
+
 import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
 import { save_question } from "./repository";
@@ -10,10 +13,6 @@ import {
   add_discard_question_button_listener,
 } from "./edit_question_helper";
 
-let isEditing = false;
-let editingIndex = 0;
-let answer_count = 0;
-let IDs = 0;
 let take_quiz_url = "";
 
 /**
@@ -79,7 +78,7 @@ function handle_question_submission(quizid, lecturerid) {
   let update_event_listeners = () => {
     add_edit_question_listeners(quizid, lecturerid);
     add_delete_question_listeners(quizid, lecturerid);
-  }
+  };
 
   save_question(savedQuestion, lecturerid, quizid).then((questions) => {
     rerender_saved_questions_list(questions, update_event_listeners); //Re-render saved questions list
