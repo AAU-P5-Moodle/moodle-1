@@ -16,10 +16,12 @@
 
 namespace mod_livequiz\tests\behat;
 
+use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Exception\ExpectationException;
 use behat_base;
 use demodatareader;
 use mod_livequiz\services\livequiz_services;
+use Behat\Mink\Exception\UnsupportedDriverActionException;
 
 // Include the demodatareader file(THIS IS NECESSARY).
 require_once(dirname(__DIR__) . '/behat/demodatareader.php');
@@ -177,5 +179,17 @@ class behat_mod_livequiz extends behat_base {
         if (!str_contains($classes, $class)) {
             throw new \Exception("Element with selector '$selector' does not contain class '$class'.  Actual class: $classes");
         }
+    }
+
+    /**
+     * Enables automatic dismissal of alerts.
+     *
+     * @When /^I enable automatic dismissal of alerts$/
+     * @throws UnsupportedDriverActionException
+     * @throws DriverException
+     */
+    public function idismissalerts(): void {
+        $driver = $this->getSession()->getDriver();
+        $driver->evaluateScript('window.confirm = function() { return true; };'); // Auto-accept confirms.
     }
 }
