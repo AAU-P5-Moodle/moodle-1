@@ -24,6 +24,8 @@ export function add_edit_question_listeners(quizid, lecturerid) {
 }
 
 function render_edit_question_menu_popup(quizid, lecturerid, questionid) {
+
+if(!document.querySelector('.Modal_div')){
     // This will call the function to load and render our template.
     Templates.renderForPromise("mod_livequiz/question_menu_popup")
 
@@ -37,8 +39,9 @@ function render_edit_question_menu_popup(quizid, lecturerid, questionid) {
             add_discard_question_button_listener();
         })
 
-        // Deal with this exception (Using core/notify exception function is recommended).
-        .catch((error) => displayException(error));
+      // Deal with this exception (Using core/notify exception function is recommended).
+      .catch((error) => displayException(error));
+  }
 }
 
 function add_save_question_button_listener(quizid, lecturerid, questionid) {
