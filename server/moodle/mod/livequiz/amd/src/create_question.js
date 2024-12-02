@@ -102,6 +102,8 @@ function prepare_question() {
   let questionDesription = question_indput_description.value.trim();
   let questionExplanation = question_indput_explanation.value.trim();
 
+  let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
+
   if (!questionDesription) {
     alert("Please enter a question description.");
     return;
@@ -118,6 +120,7 @@ function prepare_question() {
     answers: answers,
     description: questionDesription,
     explanation: questionExplanation,
+    type: questionType,
   };
 
   return savedQuestion;

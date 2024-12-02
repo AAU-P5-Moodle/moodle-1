@@ -62,6 +62,11 @@ class question {
     private array $answers = [];
 
     /**
+     * @var int $type Defines the type of the question.
+     */
+    private int $type = 0;
+
+    /**
      * Constructor for the question class.
      *
      * @param string $title
@@ -93,6 +98,7 @@ class question {
                 'description' => $question->description,
                 'timelimit' => $question->timelimit,
                 'explanation' => $question->explanation,
+                'type' => $question->type,
             ];
 
         return $DB->insert_record('livequiz_questions', $questiondata);
@@ -333,6 +339,22 @@ class question {
      */
     public function reset_id(): void {
         $this->set_id(0);
+    }
+
+    /**
+     * Sets the type of the questiona.
+     */
+    public function set_type(int $type): void {
+        $this->type = $type;
+    }
+
+    /**
+     * Gets the type of the question.
+     * 0 is checkbox, 1 is radiobutton
+     * @return int|0 // Returns the type of the question, if it has one. 0 if it does not.
+     */
+    public function get_type(): int {
+        return $this->type ?? 0;
     }
 
     /**

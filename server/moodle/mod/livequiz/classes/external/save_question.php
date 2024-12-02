@@ -51,6 +51,7 @@ class save_question extends external_api {
                 'title' => new external_value(PARAM_TEXT, 'Title'),
                 'description' => new external_value(PARAM_TEXT, 'Description of Question'),
                 'explanation' => new external_value(PARAM_TEXT, 'Explanation of Question'),
+                'type' => new external_value(PARAM_INT, "Type of the question as integer"),
                 'answers' => new external_multiple_structure(
                     new external_single_structure([
                         'description' => new external_value(PARAM_TEXT, 'Description of Answer'),
@@ -120,6 +121,7 @@ class save_question extends external_api {
      */
     private static function new_question(array $questiondata): question {
         $question = new question($questiondata['title'], $questiondata['description'], 0, $questiondata['explanation']);
+        $question->set_type($questiondata['type']);
         self::add_answers_from_questiondata($question, $questiondata);
         return $question;
     }
