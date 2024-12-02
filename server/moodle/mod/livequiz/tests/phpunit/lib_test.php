@@ -77,7 +77,6 @@ final class lib_test extends \advanced_testcase {
         // Execute.
         $result = livequiz_update_instance($quizdata);
         $record = $DB->get_record('livequiz', ['id' => $id]);
-        
         // Assert.
         $this->assertTrue($result);
         $this->assertEquals('Updated Test Quiz', $record->name);
