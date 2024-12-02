@@ -43,7 +43,7 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
             Templates.appendNodeContents(".main-container", html, js);
             await importQuestions(quizid, url, lecturerid);
             add_discard_question_button_listener();
-            add_old_questions_to_popup(lecturerid);
+            add_old_questions_to_popup(lecturerid, quizid);
         })
 
         // Deal with this exception (Using core/notify exception function is recommended).
@@ -54,8 +54,9 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
  * Adds old questions to the import question popup.
  * @param {number} lecturerid - The ID of the lecturer.
  */
-function add_old_questions_to_popup(lecturerid) {
+function add_old_questions_to_popup(lecturerid, quizid) {
     get_lecturer_quiz(lecturerid).then((oldquizzes) => {
+        oldquizzes = oldquizzes.filter(item => item !== quizid);
         let oldQuizzesContainer = document.querySelector(".oldQuizzes");
         if (oldquizzes.length === 0) {
             let noQuestions = document.createElement("p");
