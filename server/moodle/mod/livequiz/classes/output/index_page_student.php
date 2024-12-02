@@ -41,9 +41,6 @@ class index_page_student implements renderable, templatable {
     private int $studentid;
     /** @var int $cmid the course module id */
     protected int $cmid;
-    /** @var int $isteacher if user is teacher */
-    protected bool $isteacher;
-
     /** @var livequiz $livequiz the livequiz instance */
     private livequiz $livequiz;
 
@@ -58,7 +55,6 @@ class index_page_student implements renderable, templatable {
         $this->cmid = $cmid;
         $this->quizid = $quizid;
         $this->studentid = $studentid;
-        // $this->isteacher = $isteacher;
         $service = livequiz_services::get_singleton_service_instance();
         $this->livequiz = $service->get_livequiz_instance($quizid);
     }
@@ -97,7 +93,6 @@ class index_page_student implements renderable, templatable {
         }
 
         $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
-        // $data->isteacher = $this->isteacher;
         return $data;
     }
 }

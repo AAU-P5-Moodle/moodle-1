@@ -221,7 +221,7 @@ EOF
     start_websocket() {
       check_ratchet
       echo "Starting WebSocket for livequiz"
-      php ./server/moodle/mod/livequiz/classes/websocket/start_websocket.php &
+      php ./server/moodle/websocket/start_websocket.php &
       WEBSOCKET_PID=$!
       echo "Started websocket!"
     }

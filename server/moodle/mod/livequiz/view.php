@@ -52,10 +52,6 @@ if (has_capability('mod/livequiz:teacherview', $context)) {
     echo "<h1>You have teacherview capabilities</h1>";
 }
 
-
-$isteacher = has_capability('mod/livequiz:teacherview', $context);
-// $renderable = new index_page($cmid, $instance->id, $USER->id, $isteacher);
-
 $context = $PAGE->context;
 $output = "";
 $renderer = $PAGE->get_renderer('mod_livequiz');
@@ -63,12 +59,10 @@ if (has_capability('moodle/course:manageactivities', $context)) {
     $renderable = new index_page_teacher($instance->id, $USER->id, $cmid);
     $output = $renderer->render_index_page_teacher($renderable);
     $PAGE->requires->js_call_amd('mod_livequiz/teacher_start_quiz', 'init', [$CFG->socketroot, $USER->id]);
-
 } else {
     $renderable = new index_page_student($cmid, $instance->id, $USER->id);
     $output = $renderer->render_index_page_student($renderable);
     $PAGE->requires->js_call_amd('mod_livequiz/student_join_quiz', 'init', [$CFG->socketroot, $USER->id]);
-
 }
 
 unset($_SESSION['completed']);

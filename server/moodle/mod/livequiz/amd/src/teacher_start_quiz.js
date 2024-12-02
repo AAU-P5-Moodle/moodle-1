@@ -8,7 +8,7 @@ export const init = (url, teacherid) => {
         console.error("Button with id 'room_connection_button' not found!");
         return;
     }
-    // Sends message to socket when startQuiz button is pressed
+    // Sends message to socket when roomConnectionBtn button is pressed
     roomConnectionBtn.addEventListener("click", async () => {
         try {
             console.log("sending message"); // eslint-disable-line no-console

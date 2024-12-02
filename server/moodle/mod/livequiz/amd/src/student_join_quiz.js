@@ -14,19 +14,26 @@ export const init = (url, studentid) => {
         console.error("Field with id 'roomCodeInput' not found!");
         return;
     }
+    let roomCodeValue = "";
 
     let socket;
     // Sends message to socket when startQuiz button is pressed
     roomConnectionBtn.addEventListener("click", async () => {
-        roomCodeInput = roomCodeInput.value;
-        if (roomCodeInput === null || roomCodeInput.trim() == "") {
+        if (roomCodeValue === roomCodeInput.value) {
+            console.error("Room code already entered.");
+            return;
+        }
+        roomCodeValue = roomCodeInput.value;
+        if (roomCodeValue === null || roomCodeValue.trim() === "") {
             console.error("No room code found.");
             return;
         }
+        roomCodeInput.disabled = true;
+        roomConnectionBtn.disabled = true;
 
         try {
             console.log("sending message"); // eslint-disable-line no-console
-            socket = await connect_to_socket(`${url}?requesttype=connect&userid=${studentid}&room=${roomCodeInput}`);
+            socket = await connect_to_socket(`${url}?requesttype=connect&userid=${studentid}&room=${roomCodeValue}`);
             socket.send("Testing some stuff for students" + ' ' + `${studentid}`);
         } catch (e) {
             console.error(`Student failed to join room, ${e}`);
@@ -45,7 +52,7 @@ export const init = (url, studentid) => {
         const requesttype = "leaveroom";
 
         let leave_room_request = {
-            roomCodeInput,
+            roomCodeValue,
             requesttype,
             studentid,
         };
@@ -53,6 +60,9 @@ export const init = (url, studentid) => {
             console.log("sending message"); // eslint-disable-line no-console
             socket.send(JSON.stringify(leave_room_request));
             socket.onclose();
+            roomCodeInput.disabled = false;
+            roomConnectionBtn.disabled = false;
+            roomCodeValue = "";
         } catch (e) {
             console.error(`Student failed to leave room, ${e}`);
         }

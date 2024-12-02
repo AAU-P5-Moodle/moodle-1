@@ -72,7 +72,7 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 
 // Rendering.
 $output = $PAGE->get_renderer('mod_livequiz');
-$takelivequiz = new take_livequiz_page($cmid, $demoquiz, $questionindex, $USER->id);
+$takelivequiz = new take_livequiz_page($cmid, $currentquiz, $questionindex, $USER->id);
 $PAGE->requires->js_call_amd('mod_livequiz/answer_question_student', 'init', [$CFG->socketroot, $USER->id]);
 
 // Output.

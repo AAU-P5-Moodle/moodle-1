@@ -26,7 +26,8 @@
 
 require('websocket.php');
 
-use mod_livequiz\classes\websocket\websocket;
+
+use mod_livequiz\websocket\websocket;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;

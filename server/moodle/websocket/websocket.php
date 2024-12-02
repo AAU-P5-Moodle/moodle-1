@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace mod_livequiz\classes\websocket;
+namespace mod_livequiz\websocket;
 
-require(dirname(__DIR__) . '/../../../vendor/autoload.php');
+require(dirname(__DIR__) . '/vendor/autoload.php');
 
 use Exception;
 use Ratchet\ConnectionInterface;
@@ -32,7 +32,8 @@ use SplObjectStorage;
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class websocket implements MessageComponentInterface {
+class websocket implements MessageComponentInterface
+{
     /**
      * @var SplObjectStorage $clients
      */
@@ -46,7 +47,8 @@ class websocket implements MessageComponentInterface {
     /**
      * Constructor for the websocket class
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->clients = new SplObjectStorage();
         $this->quizrooms = [];
         return $this;
@@ -57,7 +59,8 @@ class websocket implements MessageComponentInterface {
      *
      * @return string
      */
-    private function rand_room(): string {
+    private function rand_room(): string
+    {
         $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $str = str_shuffle($characters);
         return substr($str, 0, 6);
@@ -69,7 +72,8 @@ class websocket implements MessageComponentInterface {
      * @param ConnectionInterface $conn
      * @return void
      */
-    public function onopen(ConnectionInterface $conn) {
+    public function onopen(ConnectionInterface $conn)
+    {
         $params = $conn->httpRequest->getUri()->getQuery();
         $queryparams = [];
         parse_str($params, $queryparams);
@@ -107,7 +111,8 @@ class websocket implements MessageComponentInterface {
      * @param $msg
      * @return void
      */
-    public function onmessage(ConnectionInterface $from, $msg) {
+    public function onmessage(ConnectionInterface $from, $msg)
+    {
         $params = $from->httpRequest->getUri()->getQuery();
         $queryparams = [];
         parse_str($params, $queryparams);
@@ -124,8 +129,8 @@ class websocket implements MessageComponentInterface {
             return;
         }
 
-        if ($requestobject['requesttype'] == 'leaveroom' && $requestobject['roomCodeInput'] !== null) {
-            $this->leave_room($requestobject['roomCodeInput'], $from, $requestobject['studentid']);
+        if ($requestobject['requesttype'] == 'leaveroom' && $requestobject['roomCodeValue'] !== null) {
+            $this->leave_room($requestobject['roomCodeValue'], $from, $requestobject['studentid']);
         }
 
         switch ($requesttype) {
@@ -157,7 +162,8 @@ class websocket implements MessageComponentInterface {
      * @param ConnectionInterface $conn
      * @return void
      */
-    public function onclose(ConnectionInterface $conn) {
+    public function onclose(ConnectionInterface $conn)
+    {
         $this->clients->detach($conn);
         $count = $this->clients->count();
         echo "Connection {$conn->resourceId} has disconnected. $count connections left\n";
@@ -170,7 +176,8 @@ class websocket implements MessageComponentInterface {
      * @param Exception $e
      * @return void
      */
-    public function onerror(ConnectionInterface $conn, Exception $e) {
+    public function onerror(ConnectionInterface $conn, Exception $e)
+    {
         echo "An error has occurred: {$e->getMessage()}\n";
 
         $this->clients->detach($conn);
@@ -185,7 +192,8 @@ class websocket implements MessageComponentInterface {
      * @param ConnectionInterface $from
      * @return array
      */
-    private function create_room(string $roomid, string $teacherid, ConnectionInterface $from): array {
+    private function create_room(string $roomid, string $teacherid, ConnectionInterface $from): array
+    {
         if ($teacherid == null) {
             echo "Teacher id does not exists.\n";
             return [];
@@ -212,7 +220,8 @@ class websocket implements MessageComponentInterface {
      * @param string $roomid
      * @return bool
      */
-    private function room_exists(string $roomid): bool {
+    private function room_exists(string $roomid): bool
+    {
         return in_array($roomid, $this->quizrooms);
     }
 
@@ -224,7 +233,8 @@ class websocket implements MessageComponentInterface {
      * @param string $roomcode
      * @return void
      */
-    private function handle_quiz_connect(ConnectionInterface $conn, int $studentid, string $roomcode): void {
+    private function handle_quiz_connect(ConnectionInterface $conn, int $studentid, string $roomcode): void
+    {
         if (!$this->room_exists($roomcode)) {
             echo "Room does not exist.\n";
         }
@@ -232,7 +242,6 @@ class websocket implements MessageComponentInterface {
         $clientinfo = [
             'studentid' => $studentid,
             'roomid' => $roomcode,
-            'connid' => $conn->resourceId,
         ];
 
         $this->clients->attach($conn, $clientinfo);
@@ -249,16 +258,15 @@ class websocket implements MessageComponentInterface {
      * @param string $userid
      * @return void
      */
-    private function leave_room(string $roomid, ConnectionInterface $conn, string $userid): void {
-        echo "Leaving room $roomid.\n";
+    private function leave_room(string $roomid, ConnectionInterface $conn, string $userid): void
+    {
+        echo "Trying to leaving room $roomid.\n";
         $detached = false;
         foreach ($this->clients as $client) {
             $clientdata = $this->clients[$client];
-            echo "Client data: " . json_encode($clientdata) . "\n";
             $room = $clientdata['roomid'] == $roomid;
             $studentid = $clientdata['studentid'] == $userid;
-            $conn = $clientdata['connid'] == $conn->resourceId;
-            if ($room && $studentid && $conn) {
+            if ($room && $studentid) {
                 $this->clients->detach($client);
                 $detached = true;
                 echo "Room $roomid has one less connection.\n";
@@ -276,7 +284,8 @@ class websocket implements MessageComponentInterface {
      * @param string $msg
      * @return void
      */
-    private function send_message_to_room(string $roomid, string $msg): void {
+    private function send_message_to_room(string $roomid, string $msg): void
+    {
         if (!$this->room_exists($roomid)) {
             echo "Room does not exists.\n";
             return;
@@ -297,10 +306,11 @@ class websocket implements MessageComponentInterface {
      * @param array $requestedparams
      * @return bool
      */
-    private function validate_requested_parameters(array $currentparams, array $requestedparams): bool {
+    private function validate_requested_parameters(array $currentparams, array $requestedparams): bool
+    {
         foreach ($requestedparams as $param) {
             if (!array_key_exists($param, $currentparams)) {
-                echo "Missing required parameter.\n";
+                echo "Missing required parameter $param.\n";
                 return false;
             }
         }
