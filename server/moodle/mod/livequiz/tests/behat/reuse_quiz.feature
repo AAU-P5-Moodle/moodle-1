@@ -62,7 +62,7 @@ Feature: Reuse previously created quiz in livequiz activity
       And I click on "Import Question" "button"
       Then I enable automatic dismissal of alerts
       Then I click on "Import Question(s)" "button" confirming the dialogue
-      # The import pop-up should now appear.
+      # The import pop-up should now be visible.
       And I should see "livequiz_africa_quiz"
       And I should see "African cities: Question 1"
       And I should see "African cities: Question 2"
