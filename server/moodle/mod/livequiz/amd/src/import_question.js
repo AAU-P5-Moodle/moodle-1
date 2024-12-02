@@ -73,11 +73,13 @@ function add_old_questions_to_popup(lecturerid, quizid) {
             quiz_checkbox.type = "checkbox";
             quiz_checkbox.value = quiz.quizid;
             quiz_checkbox.id = quiz.quizid;
+            quiz_checkbox.style.marginRight = "5px"; // Add margin so the text is not too close to the checkbox.
             quiz_checkbox.name = quiz.quiztitle;
             // Create quiz Label.
             let quiz_label = document.createElement('label');
             quiz_label.htmlFor = `quiz_${quiz.quizid}`;
             quiz_label.textContent = quiz.quiztitle;
+            quiz_label.style.fontWeight = "bold"; // Make the quiz title bold.
             quiz_div.class = "oldquiz"; // Might be used for styling.
 
             // Append the checkbox and label to the div.
@@ -88,6 +90,7 @@ function add_old_questions_to_popup(lecturerid, quizid) {
             // Create container for questions.
             let questions_div = document.createElement("div");
             questions_div.style.marginBottom = "20px";
+            questions_div.style.marginLeft = "20px"; // Add margin to the left so the questions are indented.
             questions_div.id = "questionsdiv";
             // Loop through each question and add it to the container.
             quiz.questions.forEach((question) => {
@@ -96,6 +99,7 @@ function add_old_questions_to_popup(lecturerid, quizid) {
                 let question_checkbox = document.createElement('input');
                 question_checkbox.type = "checkbox";
                 question_checkbox.value = `question_${question.questionid}`;
+                question_checkbox.style.marginRight = "5px"; // Add margin so the text is not too close to the checkbox.
                 question_checkbox.id = question.questionid;
                 question_checkbox.name = question.questiontitle;
                 question_checkboxes.push(question_checkbox);
@@ -103,6 +107,7 @@ function add_old_questions_to_popup(lecturerid, quizid) {
                 let question_label = document.createElement('label');
                 question_label.htmlFor = `question_${question.questionid}`;
                 question_label.textContent = question.questiontitle;
+
                 question_div.appendChild(question_checkbox);
                 question_div.appendChild(question_label);
                 questions_div.appendChild(question_div);
