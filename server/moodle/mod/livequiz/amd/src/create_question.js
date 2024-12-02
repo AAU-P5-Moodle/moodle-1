@@ -109,10 +109,6 @@ function prepare_question() {
 
   let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
 
-  if (!questionDesription) {
-    alert("Please enter a question description.");
-    return;
-  }
   if (!questionTitle) {
     questionTitle = "Question";
   }
