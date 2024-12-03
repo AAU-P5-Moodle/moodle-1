@@ -1,7 +1,11 @@
 import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
 import { save_question, get_question} from "./repository";
-import {add_answer_button_event_listener, create_answer_container, add_discard_question_button_listener} from "./edit_question_helper";
+import {
+    add_answer_button_event_listener,
+    create_answer_container,
+    add_discard_question_button_listener,
+    validate_submission} from "./edit_question_helper";
 import {add_delete_question_listeners} from "./delete_question";
 
 export const init = async (quizid, lecturerid) => {
@@ -55,13 +59,6 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
     let questionDesription = question_indput_description.value.trim();
     let questionExplanation = question_indput_explanation.value.trim();
 
-    if (!questionDesription) {
-        alert("Please enter a question description.");
-        return;
-    }
-    if(!questionTitle){
-        questionTitle = "Question";
-    }
     let answers = [];
     let answers_div = document.querySelector(".all_answers_for_question_div");
     for (let i = 0; i < answers_div.children.length; i++) {
@@ -87,6 +84,11 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
         description: questionDesription,
         explanation: questionExplanation,
     };
+
+    if(!validate_submission(savedQuestion.answers)) {
+        return;
+    }
+
     save_question(savedQuestion, lecturerid, quizid).then((questions) => {
         const contextsavedquestions = {
             questions: questions,

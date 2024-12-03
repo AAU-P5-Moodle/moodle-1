@@ -8,6 +8,7 @@ import {
   rerender_saved_questions_list,
   add_answer_button_event_listener,
   add_discard_question_button_listener,
+  validate_submission
 } from "./edit_question_helper";
 
 let isEditing = false;
@@ -78,6 +79,10 @@ function add_save_question_button_listener(quizid, lecturerid) {
 function handle_question_submission(quizid, lecturerid) {
   let savedQuestion = prepare_question(); //Prepare the question object to be sent to DB
 
+  if(!validate_submission(savedQuestion.answers)) {
+    return;
+  }
+
   let update_event_listeners = () => {
     add_edit_question_listeners(quizid, lecturerid);
     add_delete_question_listeners(quizid, lecturerid);
@@ -104,16 +109,10 @@ function prepare_question() {
   let questionDesription = question_indput_description.value.trim();
   let questionExplanation = question_indput_explanation.value.trim();
 
-  if (!questionDesription) {
-    alert("Please enter a question description.");
-    return;
-  }
-  if (!questionTitle) {
-    questionTitle = "Question";
-  }
 
   let answers = prepare_answers();
 
+  // CHECK HERE IF THE QUESTION IS VALID
   let savedQuestion = {
     id: 0,
     title: questionTitle,
@@ -131,18 +130,19 @@ function prepare_answers() {
 
   for (let i = 0; i < answers_div.children.length; i++) {
     let answertext = answers_div.children[i]
-      .querySelector(".answer_input")
-      .value.trim();
+        .querySelector(".answer_input")
+        .value.trim();
 
     let iscorrect =
-      answers_div.children[i].querySelector(".answer_checkbox").checked;
+        answers_div.children[i].querySelector(".answer_checkbox").checked;
     iscorrect = iscorrect ? 1 : 0;
 
-    answers.push({
-      description: answertext,
-      correct: iscorrect,
-      explanation: "",
-    });
+      answers.push({
+        description: answertext,
+        correct: iscorrect,
+        explanation: "",
+      });
   }
   return answers;
 }
+
