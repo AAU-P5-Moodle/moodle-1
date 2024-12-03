@@ -1,35 +1,35 @@
 import Templates from "core/templates";
-import { exception as displayException } from "core/notification";
-import { save_question } from "./repository";
-import { add_delete_question_listeners } from "./delete_question";
-import { add_edit_question_listeners } from "./edit_question";
+import {exception as displayException} from "core/notification";
+import {saveQuestion} from "./repository";
+import {addDeleteQuestionListeners} from "./delete_question";
+import {addEditQuestionListeners} from "./edit_question";
 import {
-  rerender_take_quiz_button,
-  rerender_saved_questions_list,
-  add_answer_button_event_listener,
-  add_discard_question_button_listener,
+  rerenderTakeQuizButton,
+  rerenderSavedQuestionsList,
+  addAnswerButtonEventListener,
+  addDiscardQuestionButtonListener,
 } from "./edit_question_helper";
 
 let isEditing = false;
 let editingIndex = 0;
-let answer_count = 0;
+let answerCount = 0;
 let IDs = 0;
-let take_quiz_url = "";
+let takeQuizUrl = "";
 
 /**
  * Adds an event listener to the "Add Question" button.
  * When the button is clicked, it renders the create question menu popup.
  *
- * @param {number} quizid - The ID of the quiz.
- * @param {number} lecturerid - The ID of the lecturer.
+ * @param {number} quizId - The ID of the quiz.
+ * @param {number} lecturerId - The ID of the lecturer.
  * @param {string} url - The URL to the quiz attempt page.
  * @returns {Promise<void>} A promise that resolves when the initialization is complete.
  */
-export const init = async (quizid, lecturerid, url) => {
-  take_quiz_url = url; //Set url to quiz attempt page to global variable
-  let add_question_button = document.getElementById("id_buttonaddquestion");
-  add_question_button.addEventListener("click", () => {
-    render_create_question_menu_popup(quizid, lecturerid);
+export const init = async(quizId, lecturerId, url) => {
+  takeQuizUrl = url; // Set url to quiz attempt page to global variable
+  let addQuestionButton = document.getElementById("id_buttonaddquestion");
+  addQuestionButton.addEventListener("click", () => {
+    renderCreateQuestionMenuPopup(quizId, lecturerId);
   });
 };
 
@@ -39,22 +39,22 @@ export const init = async (quizid, lecturerid, url) => {
  * This function loads and renders the question menu popup template, appends it to the main container,
  * Sets up event listeners for adding answers, saving the question, and discarding the question.
  *
- * @param {number} quizid - The ID of the quiz.
- * @param {number} lecturerid - The ID of the lecturer.
+ * @param {number} quizId - The ID of the quiz.
+ * @param {number} lecturerId - The ID of the lecturer.
  * @returns {void}
  */
-function render_create_question_menu_popup(quizid, lecturerid) {
+function renderCreateQuestionMenuPopup(quizId, lecturerId) {
   // This will call the function to load and render our template.
-  if(!document.querySelector('.Modal_div')){
+  if (!document.querySelector('.Modal_div')) {
     Templates.renderForPromise("mod_livequiz/question_menu_popup")
 
-      // It returns a promise that needs to be resoved.
-      .then(({ html, js }) => {
+      // It returns a promise that needs to be resolved.
+      .then(({html, js}) => {
         // Here we have compiled template.
         Templates.appendNodeContents(".main-container", html, js);
-        add_answer_button_event_listener();
-        add_save_question_button_listener(quizid, lecturerid);
-        add_discard_question_button_listener();
+        addAnswerButtonEventListener();
+        addSaveQuestionButtonListener(quizId, lecturerId);
+        addDiscardQuestionButtonListener();
       })
 
       // Deal with this exception (Using core/notify exception function is recommended).
@@ -65,46 +65,54 @@ function render_create_question_menu_popup(quizid, lecturerid) {
 /**
  * Adds an event listener to the save question button
  *
- * @param {number} quizid - The ID of the quiz.
- * @param {number} lecturerid - The ID of the lecturer.
+ * @param {number} quizId - The ID of the quiz.
+ * @param {number} lecturerId - The ID of the lecturer.
  */
-function add_save_question_button_listener(quizid, lecturerid) {
-  let save_question_button = document.querySelector(".save_button");
-  save_question_button.addEventListener("click", () => {
-    handle_question_submission(quizid, lecturerid);
+function addSaveQuestionButtonListener(quizId, lecturerId) {
+  let saveQuestionButton = document.querySelector(".save_button");
+  saveQuestionButton.addEventListener("click", () => {
+    handleQuestionSubmission(quizId, lecturerId);
   });
 }
 
-function handle_question_submission(quizid, lecturerid) {
-  let savedQuestion = prepare_question(); //Prepare the question object to be sent to DB
+/**
+ *
+ * @param quizId
+ * @param lecturerId
+ */
+function handleQuestionSubmission(quizId, lecturerId) {
+  let savedQuestion = prepareQuestion(); // Prepare the question object to be sent to DB
 
-  let update_event_listeners = () => {
-    add_edit_question_listeners(quizid, lecturerid);
-    add_delete_question_listeners(quizid, lecturerid);
-  }
+  let updateEventListeners = () => {
+    addEditQuestionListeners(quizId, lecturerId);
+    addDeleteQuestionListeners(quizId, lecturerId);
+  };
 
-  save_question(savedQuestion, lecturerid, quizid).then((questions) => {
-    rerender_saved_questions_list(questions, update_event_listeners); //Re-render saved questions list
-    rerender_take_quiz_button(take_quiz_url, true); //Re-render take quiz button
+  saveQuestion(savedQuestion, lecturerId, quizId).then((questions) => {
+    rerenderSavedQuestionsList(questions, updateEventListeners); // Re-render saved questions list
+    rerenderTakeQuizButton(takeQuizUrl, true); // Re-render take quiz button
   });
 
-  let modal_div = document.querySelector(".Modal_div");
-  modal_div.remove();
+  let modalDiv = document.querySelector(".Modal_div");
+  modalDiv.remove();
 }
 
-function prepare_question() {
-  let question_input_title = document.getElementById("question_title_id");
-  let question_indput_description = document.getElementById(
+/**
+ *
+ */
+function prepareQuestion() {
+  let questionInputTitle = document.getElementById("question_title_id");
+  let questionInputDescription = document.getElementById(
     "question_description_id"
   );
-  let question_indput_explanation = document.getElementById(
+  let questionInputExplanation = document.getElementById(
     "question_explanation_id"
   );
-  let questionTitle = question_input_title.value.trim();
-  let questionDesription = question_indput_description.value.trim();
-  let questionExplanation = question_indput_explanation.value.trim();
+  let questionTitle = questionInputTitle.value.trim();
+  let questionDescription = questionInputDescription.value.trim();
+  let questionExplanation = questionInputExplanation.value.trim();
 
-  if (!questionDesription) {
+  if (!questionDescription) {
     alert("Please enter a question description.");
     return;
   }
@@ -112,35 +120,38 @@ function prepare_question() {
     questionTitle = "Question";
   }
 
-  let answers = prepare_answers();
+  let answers = prepareAnswers();
 
   let savedQuestion = {
     id: 0,
     title: questionTitle,
     answers: answers,
-    description: questionDesription,
+    description: questionDescription,
     explanation: questionExplanation,
   };
 
   return savedQuestion;
 }
 
-function prepare_answers() {
+/**
+ *
+ */
+function prepareAnswers() {
   let answers = [];
-  let answers_div = document.querySelector(".all_answers_for_question_div");
+  let answersDiv = document.querySelector(".all_answers_for_question_div");
 
-  for (let i = 0; i < answers_div.children.length; i++) {
-    let answertext = answers_div.children[i]
+  for (let i = 0; i < answersDiv.children.length; i++) {
+    let answerText = answersDiv.children[i]
       .querySelector(".answer_input")
       .value.trim();
 
-    let iscorrect =
-      answers_div.children[i].querySelector(".answer_checkbox").checked;
-    iscorrect = iscorrect ? 1 : 0;
+    let isCorrect =
+      answersDiv.children[i].querySelector(".answer_checkbox").checked;
+    isCorrect = isCorrect ? 1 : 0;
 
     answers.push({
-      description: answertext,
-      correct: iscorrect,
+      description: answerText,
+      correct: isCorrect,
       explanation: "",
     });
   }

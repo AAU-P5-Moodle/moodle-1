@@ -1,7 +1,7 @@
 import {call as fetchMany} from 'core/ajax';
 
 // Function to insert a participation.
-export const submit_quiz = async(quizid, studentid, resultsurl) => fetchMany([
+export const submitQuiz = async(quizid, studentid, resultsurl) => fetchMany([
     {
         methodname: 'mod_livequiz_submit_quiz',
         args: {
@@ -13,7 +13,7 @@ export const submit_quiz = async(quizid, studentid, resultsurl) => fetchMany([
 ])[0];
 
 // A function to update session.
-export const update_session = (quizid, questionid, answers) => fetchMany([
+export const updateSession = (quizid, questionid, answers) => fetchMany([
     {
         methodname: 'mod_livequiz_update_session',
         args: {
@@ -25,7 +25,7 @@ export const update_session = (quizid, questionid, answers) => fetchMany([
 ])[0];
 
 // Function to save a question.
-export const save_question = (question, lecturerid, quizid) => fetchMany([
+export const saveQuestion = (question, lecturerid, quizid) => fetchMany([
     {
         methodname: 'mod_livequiz_save_question',
         args: {
@@ -37,7 +37,7 @@ export const save_question = (question, lecturerid, quizid) => fetchMany([
 ])[0];
 
 // Function to delete a question.
-export const delete_question = (questionid, lecturerid, quizid) => fetchMany([
+export const deleteQuestion = (questionid, lecturerid, quizid) => fetchMany([
     {
         methodname: 'mod_livequiz_delete_question',
         args: {
@@ -50,7 +50,7 @@ export const delete_question = (questionid, lecturerid, quizid) => fetchMany([
 
 
 // Function to retrieve a question.
-export const get_question = (quizid, questionid) => fetchMany([
+export const getQuestion = (quizid, questionid) => fetchMany([
     {
         methodname: 'mod_livequiz_get_question',
         args: {
@@ -61,7 +61,7 @@ export const get_question = (quizid, questionid) => fetchMany([
 ])[0];
 
 // Function to reuse questions.
-export const external_reuse_questions = (quizid, questionids, lecturerid) => fetchMany([
+export const externalReuseQuestions = (quizid, questionids, lecturerid) => fetchMany([
     {
         methodname: 'mod_livequiz_reuse_question',
         args: {
@@ -73,7 +73,7 @@ export const external_reuse_questions = (quizid, questionids, lecturerid) => fet
 ])[0];
 
 // Function to get lecturer questions.
-export const get_lecturer_quiz = (lecturerid) => fetchMany([
+export const getLecturerQuiz = (lecturerid) => fetchMany([
     {
         methodname: 'mod_livequiz_get_lecturer_quiz',
         args: {

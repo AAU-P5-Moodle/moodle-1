@@ -1,32 +1,37 @@
-import { delete_question } from "./repository";
-import { rerender_take_quiz_button } from "./edit_question_helper";
+import {deleteQuestion} from "./repository";
+import {rerenderTakeQuizButton} from "./edit_question_helper";
 
-let take_quiz_url = "";
+let takeQuizUrl = "";
 
-export const init = async (quizid, lecturerid, url) => {
-  take_quiz_url = url; //Set url to quiz attempt page to global variable
-  add_delete_question_listeners(quizid, lecturerid);
+export const init = async(quizId, lecturerId, url) => {
+    takeQuizUrl = url; // Set url to quiz attempt page to global variable
+    addDeleteQuestionListeners(quizId, lecturerId);
 };
 
-export function add_delete_question_listeners(quizid, lecturerid) {
-  let question_list = document.getElementById("saved_questions_list");
-  let delete_question_elements = question_list.querySelectorAll(".delete-question");
+/**
+ *
+ * @param quizId
+ * @param lecturerId
+ */
+export function addDeleteQuestionListeners(quizId, lecturerId) {
+  let questionList = document.getElementById("saved_questions_list");
+  let deleteQuestionElements = questionList.querySelectorAll(".delete-question");
 
-  delete_question_elements.forEach((element) => {
+  deleteQuestionElements.forEach((element) => {
     element.addEventListener("click", () => {
-      let list_item = element.closest("li"); // Get the list item.
-      let questionid = parseInt(element.dataset.id, 10);
-            if(!confirm("Are you sure you want to delete this question?")){
+      let listItem = element.closest("li"); // Get the list item.
+      let questionId = parseInt(element.dataset.id, 10);
+            if (!confirm("Are you sure you want to delete this question?")) {
                 return;
-            } else{
-                delete_question(questionid, lecturerid, quizid);
-                list_item.remove(); // Remove the question from the list.
+            } else {
+                deleteQuestion(questionId, lecturerId, quizId);
+                listItem.remove(); // Remove the question from the list.
                 element.remove(); // Remove the delete button.
             }
-      
-      let updated_list_length = question_list.querySelectorAll("li").length;
-      if(updated_list_length === 0) {
-        rerender_take_quiz_button(take_quiz_url, false);
+
+      let updatedListLength = questionList.querySelectorAll("li").length;
+      if (updatedListLength === 0) {
+        rerenderTakeQuizButton(takeQuizUrl, false);
       }
     });
   });
