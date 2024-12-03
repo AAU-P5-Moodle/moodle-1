@@ -24,6 +24,8 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
+use mod_livequiz\repositories\answer_repository;
+
 /**
  * Class student_answers_relation
  * @package mod_livequiz\student_answers_relation
@@ -93,6 +95,7 @@ class student_answers_relation {
      */
     public static function get_answers_from_participation(int $participationid): array {
         global $DB;
+        $answerrepository = new answer_repository();
 
         $answerrecords = $DB->get_records(
             'livequiz_students_answers',
@@ -104,7 +107,7 @@ class student_answers_relation {
         $answers = [];
         foreach ($answerrecords as $record) {
             $id = $record->answer_id;
-            $answers[] = answer::get_answer_from_id($id);
+            $answers[] = $answerrepository->get_answer_from_id($id);
         }
 
         return $answers;

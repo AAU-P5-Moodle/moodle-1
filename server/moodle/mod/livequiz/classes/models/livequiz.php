@@ -17,7 +17,6 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
-use mysql_xdevapi\Exception;
 use stdClass;
 
 /**
@@ -124,24 +123,6 @@ class livequiz {
             $quizinstance->timecreated,
             $quizinstance->timemodified
         );
-    }
-
-    /**
-     * Updates the livequiz in the database, and updates the timemodified field.
-     *
-     * @return bool
-     * @throws dml_exception
-     */
-    public function update_quiz(): bool {
-        global $DB;
-
-        $this->set_timemodified();
-
-        $record = new stdClass();
-        $record->id = $this->get_id();
-        $record->timemodified = $this->get_timemodified();
-
-        return $DB->update_record('livequiz', $record);
     }
 
     /**

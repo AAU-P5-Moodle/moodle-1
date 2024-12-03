@@ -16,35 +16,21 @@
 
 namespace mod_livequiz\services;
 
-defined('MOODLE_INTERNAL') || die();
-
-require_once(__DIR__ . '/../models/livequiz.php');
-require_once(__DIR__ . '/../models/question.php');
-require_once(__DIR__ . '/../models/answer.php');
-require_once(__DIR__ . '/../models/questions_answers_relation.php');
-require_once(__DIR__ . '/../models/quiz_questions_relation.php');
-
-require_once(__DIR__ . '/../models/livequiz_questions_lecturer_relation.php');
-require_once(__DIR__ . '/../models/livequiz_quiz_lecturer_relation.php');
-
-require_once(__DIR__ . '/../models/student_quiz_relation.php');
-
 use dml_exception;
 use dml_transaction_exception;
-
+use mod_livequiz\repositories\answer_repository;
+use mod_livequiz\repositories\question_repository;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
 use mod_livequiz\models\quiz_questions_relation;
-
 use mod_livequiz\models\livequiz_quiz_lecturer_relation;
 use mod_livequiz\models\livequiz_questions_lecturer_relation;
-
 use mod_livequiz\models\participation;
 use mod_livequiz\models\student_quiz_relation;
-
 use mod_livequiz\models\student_answers_relation;
+use mod_livequiz\repositories\livequiz_repository;
 use PhpXmlRpc\Exception;
 
 /**
@@ -105,6 +91,7 @@ class livequiz_services {
      * @throws dml_exception|Exception
      */
     public function submit_quiz(livequiz $livequiz, int $lecturerid): livequiz {
+        $livequizrepository = new livequiz_repository();
         $questions = $livequiz->get_questions();
 
         foreach ($questions as $question) {
@@ -117,7 +104,7 @@ class livequiz_services {
         global $DB;
         $transaction = $DB->start_delegated_transaction();
         try {
-            $livequiz->update_quiz();
+            $livequizrepository->update_quiz($livequiz);
 
             $quizid = $livequiz->get_id();
             if (!livequiz_quiz_lecturer_relation::check_lecturer_quiz_relation_exists($quizid, $lecturerid)) {
@@ -142,7 +129,7 @@ class livequiz_services {
      * @throws Exception
      */
     private function submit_questions(livequiz $livequiz, int $lecturerid): void {
-
+        $questionrepository = new question_repository();
         $existingquestions = $this->get_questions_with_answers($livequiz->get_id());
         $newquestions = $livequiz->get_questions();
 
@@ -164,7 +151,7 @@ class livequiz_services {
                 $updatedquestionids[] = $questionid;
             } else if (isset($existingquestionmap[$questionid])) {
                 // Update existing question if found in the map.
-                $newquestion->update_question();
+                $questionrepository->update_question($newquestion);
                 $updatedquestionids[] = $questionid;
             }
 
@@ -189,7 +176,8 @@ class livequiz_services {
      * @throws dml_exception
      */
     private function insert_question_with_relations(question $question, int $lecturerid, int $quizid): int {
-        $questionid = question::insert_question($question);
+        $questionrepository = new question_repository();
+        $questionid = $questionrepository->insert_question($question);
         quiz_questions_relation::insert_quiz_question_relation($questionid, $quizid);
         livequiz_questions_lecturer_relation::append_lecturer_questions_relation($questionid, $lecturerid);
         return $questionid;
@@ -203,6 +191,7 @@ class livequiz_services {
      * @throws Exception
      */
     private function submit_answers(int $questionid, array $answers): void {
+        $answerrepository = new answer_repository();
         $existinganswers = questions_answers_relation::get_answers_from_question($questionid);
         $newanswers = $answers;
 
@@ -217,11 +206,11 @@ class livequiz_services {
         foreach ($newanswers as $newanswer) {
             $answerid = $newanswer->get_id();
             if ($answerid == 0) {
-                $answerid = answer::insert_answer($newanswer);
+                $answerid = $answerrepository->insert_answer($newanswer);
                 questions_answers_relation::insert_question_answer_relation($questionid, $answerid);
                 $updatedanswerids[] = $answerid;
             } else if (isset($existinganswersmap[$answerid])) {
-                $newanswer->update_answer();
+                $answerrepository->update_answer($newanswer);
                 $updatedanswerids[] = $answerid;
             }
         }
@@ -304,10 +293,11 @@ class livequiz_services {
      * @throws dml_exception
      */
     public function get_answers_from_student_in_participation(int $studentid, int $participationid): array {
+        $answerrepository = new answer_repository();
         $answers = [];
         $answerids = student_answers_relation::get_answersids_from_student_in_participation($studentid, $participationid);
         foreach ($answerids as $answerid) {
-            $answers[] = answer::get_answer_from_id($answerid);
+            $answers[] = $answerrepository->get_answer_from_id($answerid);
         }
         return $answers;
     }
@@ -331,7 +321,6 @@ class livequiz_services {
      * @throws dml_exception
      */
     public function get_newest_participation_for_quiz(int $quizid, int $studentid): participation {
-        global $DB;
         $participations = student_quiz_relation::get_all_student_participation_for_quiz($quizid, $studentid);
         return $participations[0];
     }
@@ -344,8 +333,7 @@ class livequiz_services {
      * @throws dml_transaction_exception
      */
     public function get_livequiz_quiz_lecturer(int $quizid): array {
-        $lecturer = livequiz_quiz_lecturer_relation::get_lecturer_quiz_relation_by_quiz_id($quizid);
-        return $lecturer;
+        return livequiz_quiz_lecturer_relation::get_lecturer_quiz_relation_by_quiz_id($quizid);
     }
 
     /**
@@ -356,8 +344,7 @@ class livequiz_services {
      * @throws dml_transaction_exception
      */
     public function get_livequiz_question_lecturer(int $questionid): array {
-        $lecturer = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_questions_id($questionid);
-        return $lecturer;
+        return livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_questions_id($questionid);
     }
 
     /**
@@ -367,12 +354,13 @@ class livequiz_services {
      * @throws dml_exception
      */
     private static function delete_answer(int $answerid): void {
+        $answerrepository = new answer_repository();
         $participationcount = student_answers_relation::get_answer_participation_count($answerid);
         if ($participationcount > 0) {
             throw new dml_exception("Cannot delete answer with participations");
         }
         questions_answers_relation::delete_relations_by_answerid($answerid);
-        answer::delete_answer($answerid);
+        $answerrepository->delete_answer($answerid);
     }
 
     /** Deletes a question, it's answers and any relations to other entities.
@@ -381,6 +369,7 @@ class livequiz_services {
      * @throws Exception
      */
     private static function delete_question(int $questionid): void {
+        $questionrepository = new question_repository();
         $answers = questions_answers_relation::get_answers_from_question($questionid);
         foreach ($answers as $answer) {
             $currentanswerid = $answer->get_id();
@@ -388,7 +377,7 @@ class livequiz_services {
         }
         quiz_questions_relation::delete_question_quiz_relation($questionid);
         livequiz_questions_lecturer_relation::delete_lecturer_questions_relation_by_question_id($questionid);
-        question::delete_question($questionid);
+        $questionrepository->delete_question($questionid);
     }
 
 
@@ -510,7 +499,155 @@ class livequiz_services {
                 }
             }
         }
-
         return $submissions;
+    }
+
+    /**
+     * Gets the question from the database by id.
+     *
+     * @param int $questionid
+     * @return question
+     * @throws dml_exception
+     */
+    public function get_question_from_id(int $questionid): question {
+        return question_repository::get_question_from_id($questionid);
+    }
+
+    /**
+     * Adds the question ot the database.
+     *
+     * @param question $question
+     * @return void
+     * @throws dml_exception
+     */
+    public function add_question(question $question): void {
+        question_repository::insert_question($question);
+    }
+
+    /**
+     * Prepares the data for the template.
+     *
+     * @param int $quizid
+     * @return answer
+     * @throws dml_exception
+     */
+    public function prepare_for_template(int $quizid): object {
+        $livequiz = livequiz::get_livequiz_instance($quizid);
+        return $livequiz->prepare_for_template();
+    }
+
+    /**
+     * Gets a question from the database by quiz id
+     *
+     * @param int $quizid
+     * @return array
+     * @throws dml_exception
+     */
+    public function get_questions_from_quiz_id(int $quizid): array {
+        return quiz_questions_relation::get_questions_from_quiz_id($quizid);
+    }
+
+    /**
+     * Gets the lecturer quiz relation by id
+     *
+     * @param int $lecturerid
+     * @return array
+     * @throws dml_exception
+     * @throws dml_transaction_exception
+     */
+    public function get_lecturer_quiz_relations_by_lecturer_id(int $lecturerid): array {
+        return livequiz_quiz_lecturer_relation::get_lecturer_quiz_relations_by_lecturer_id($lecturerid);
+    }
+
+    /**
+     * Gets the lecturer questions relation by id
+     *
+     * @param int $lecturerid
+     * @return array
+     * @throws dml_exception
+     * @throws dml_transaction_exception
+     */
+    public function get_lecturer_questions_relation_by_lecturer_id(int $lecturerid): array {
+        return livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_lecturer_id($lecturerid);
+    }
+
+    /**
+     * Gets all student participations for a quiz
+     *
+     * @param int $quizid
+     * @param int $studentid
+     * @return array
+     * @throws dml_exception
+     */
+    public function get_all_student_participation_for_quiz(int $quizid, int $studentid): array {
+        return student_quiz_relation::get_all_student_participation_for_quiz($quizid, $studentid);
+    }
+
+    /**
+     * Gets the question with answers from id
+     *
+     * @param int $id
+     * @return question
+     */
+    public function get_question_with_answers_from_id(int $id): question {
+        return question::get_question_with_answers_from_id($id);
+    }
+
+    /**
+     * Inserts a question in the database
+     *
+     * @param question $question
+     * @return int
+     * @throws dml_exception
+     */
+    public function insert_question(question $question): int {
+        return question_repository::insert_question($question);
+    }
+
+    /**
+     * Inserts an answer in the database
+     *
+     * @param answer $answer
+     * @return int
+     * @throws dml_exception
+     */
+    public function insert_answer(answer $answer): int {
+        return answer_repository::insert_answer($answer);
+    }
+
+    /**
+     * Inserts a question answer relation in the database
+     *
+     * @param int $questionid
+     * @param int $answerid
+     * @return void
+     * @throws dml_exception
+     */
+    public function insert_question_answer_relation(int $questionid, int $answerid): void {
+        questions_answers_relation::insert_question_answer_relation($questionid, $answerid);
+    }
+
+    /**
+     * Gets the answer from the database by id
+     *
+     * @param int $answerid
+     * @return answer
+     * @throws dml_exception
+     */
+    public function get_answer_from_id(int $answerid): answer {
+        return answer_repository::get_answer_from_id($answerid);
+    }
+
+    /**
+     * Inserts a student answer relation in the database
+     *
+     * @param int $studentid
+     * @param int $answerid
+     * @param int $participationid
+     * @return int
+     * @throws dml_exception
+     */
+    public function insert_student_answer_relation(int $studentid, int $answerid, int $participationid): int {
+        return student_answers_relation::insert_student_answer_relation($studentid, $answerid, $participationid);
     }
 }

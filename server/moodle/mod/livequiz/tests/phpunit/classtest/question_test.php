@@ -29,6 +29,9 @@ use dml_exception;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\question;
 use mod_livequiz\models\questions_answers_relation;
+use mod_livequiz\repositories\answer_repository;
+use mod_livequiz\repositories\question_repository;
+use mod_livequiz\services\livequiz_services;
 use ReflectionClass;
 use ReflectionException;
 use stdClass;
@@ -122,21 +125,22 @@ final class question_test extends advanced_testcase {
      * @throws dml_exception
      */
     public function test_get_question_with_answers_from_id(): void {
-        $questionid = question::insert_question($this->question);
+        $service = livequiz_services::get_singleton_service_instance();
+        $questionid = $service->insert_question($this->question);
 
         $answer1 = new answer(1, "This is the description for answer 1", "This is the explanation for answer 1");
         $answer2 = new answer(0, "This is the description for answer 2", "This is the explanation for answer 2");
         $answer3 = new answer(0, "This is the description for answer 3", "This is the explanation for answer 3");
 
-        $answerid1 = answer::insert_answer($answer1);
-        $answerid2 = answer::insert_answer($answer2);
-        $answerid3 = answer::insert_answer($answer3);
+        $answerid1 = $service->insert_answer($answer1);
+        $answerid2 = $service->insert_answer($answer2);
+        $answerid3 = $service->insert_answer($answer3);
 
-        questions_answers_relation::insert_question_answer_relation($questionid, $answerid1);
-        questions_answers_relation::insert_question_answer_relation($questionid, $answerid2);
-        questions_answers_relation::insert_question_answer_relation($questionid, $answerid3);
+        $service->insert_question_answer_relation($questionid, $answerid1);
+        $service->insert_question_answer_relation($questionid, $answerid2);
+        $service->insert_question_answer_relation($questionid, $answerid3);
 
-        $question = question::get_question_with_answers_from_id($questionid);
+        $question = $service->get_question_with_answers_from_id($questionid);
 
         self::assertEquals(3, count($question->get_answers()));
 

@@ -22,7 +22,6 @@ use core_external\external_multiple_structure;
 use core_external\external_value;
 use dml_exception;
 use invalid_parameter_exception;
-use mod_livequiz\models\question;
 use mod_livequiz\services\livequiz_services;
 use PhpXmlRpc\Exception;
 use stdClass;
@@ -68,13 +67,13 @@ class reuse_question extends external_api {
             'questionids' => $questionids,
             'lecturerid' => $lecturerid,
         ]);
-        $services = livequiz_services::get_singleton_service_instance();
+        $service = livequiz_services::get_singleton_service_instance();
         try {
             $questionids = self::filter_unique_questions($questionids);
-            $livequiz = $services->get_livequiz_instance($quizid);
+            $livequiz = $service->get_livequiz_instance($quizid);
             $questionstoadd = [];
             foreach ($questionids as $id) {
-                $tempquestion = question::get_question_with_answers_from_id($id);
+                $tempquestion = $service->get_question_with_answers_from_id($id);
                 $tempquestion->reset_id();
                 foreach ($tempquestion->get_answers() as $answer) {
                     $answer->reset_id();
@@ -82,7 +81,7 @@ class reuse_question extends external_api {
                 $questionstoadd[] = $tempquestion;
             }
             $livequiz->add_questions($questionstoadd);
-            $livequiz = $services->submit_quiz($livequiz, $lecturerid); // Refresh the livequiz object.
+            $livequiz = $service->submit_quiz($livequiz, $lecturerid); // Refresh the livequiz object.
             $returnquestions = [];
             $rawquestions = $livequiz->get_questions();
             foreach ($rawquestions as $rawquestion) {
@@ -110,9 +109,10 @@ class reuse_question extends external_api {
      * @throws dml_exception
      */
     private static function filter_unique_questions(array $questions): array {
+        $service = livequiz_services::get_singleton_service_instance();
         $uniquequestions = [];
         foreach ($questions as $questionid) {
-            $question = question::get_question_with_answers_from_id($questionid);
+            $question = $service->get_question_with_answers_from_id($questionid);
             $unique = true;
             foreach ($uniquequestions as $uniquequestion) {
                 // Check if the questions are identical.
