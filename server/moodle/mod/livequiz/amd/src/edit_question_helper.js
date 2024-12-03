@@ -171,6 +171,7 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
 
 /**
  * Sets up the event listener for the cancel button
+ * @param {string} context - The context in which the cancel button is being used.
  */
 export function add_cancel_edit_button_listener(context) {
   let discard_question_button = document.querySelector(

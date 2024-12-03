@@ -92,14 +92,9 @@ Feature: View livequiz activity
     Then I set the field "question_title_id" to "Geography 1"
     Then I set the field "question_description_id" to "What is the Capital of Sweden?"
     Then I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
-    And I click on "Cancel" "button"
-    Then I should see "Are you sure you want to cancel the changes?"
-    And "No" "button" should exist
-    And "Yes" "button" should exist
-    And I click on "No" "button"
+    And I click on "Cancel" "button" dismissing the dialogue
     Then the field "question_description_id" matches value "What is the Capital of Sweden?"
-    And I click on "Cancel" "button"
-    And I click on "Yes" "button"
+    And I click on "Cancel" "button" confirming the dialogue
     Then "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
