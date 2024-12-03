@@ -105,6 +105,23 @@ class behat_mod_livequiz extends behat_base {
     }
 
     /**
+     * Asserts whether a given element only occurs once in the list
+     * @Then I check that element :itemName occurs only once in the list
+     */
+    public function icheckthatelementoccursonlyonceinthelist($expectedname) {
+        $elements = $this->getSession()->getPage()->findAll('xpath', "//*[text()='$expectedname']");
+
+        // Check if the count is exactly 1.
+        if (count($elements) !== 1) {
+            throw new \Exception(
+                "The element '$expectedname' occurs " .
+                count($elements) .
+                " times, but it should only occur once."
+            );
+        }
+    }
+
+    /**
      * Reads the demo data and creates objects from it.
      *
      * @Given I use demodata :datanumber for the course :coursename and activity :activityname and lecturer :teachername
