@@ -42,7 +42,7 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
             // Here we have compiled template.
             Templates.appendNodeContents(".main-container", html, js);
             await importQuestions(quizid, url, lecturerid);
-            add_cancel_edit_button_listener();
+            add_cancel_edit_button_listener("import");
             add_old_questions_to_popup(lecturerid, quizid);
         })
 

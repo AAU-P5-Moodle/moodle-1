@@ -70,74 +70,6 @@ export function create_answer_container(id) {
   return answer_container;
 }
 
-//DELETE THIS FUNCTION
-/**
- * Adds an event listener to the discard question button.
- * When the button is clicked, it triggers the render_question_confirmation function.
- */
-export const add_discard_question_button_listener = () => {
-  let discard_question_button = document.querySelector(
-    ".discard_question_button"
-  );
-  discard_question_button.addEventListener("click", () => {
-    render_question_confirmation();
-  });
-};
-
-// DELETE THIS FUNCTION
-/**
- * Renders the question confirmation modal.
- *
- * Renders "mod_livequiz/question_confirmation" template.
- * Appends the HTML and JavaScript to the ".Modal_div" element
- * Calls the `question_confirmation` function
- *
- * @function
- * @returns {void}
- */
-function render_question_confirmation() {
-  Templates.renderForPromise("mod_livequiz/question_confirmation")
-
-    .then(({ html, js }) => {
-      Templates.appendNodeContents(".Modal_div", html, js);
-      add_cancel_edit_button_listener();    })
-    .catch((error) => displayException(error));
-}
-
-// DELETE THIS FUNCTION
-/**
- * Handles the confirmation process for deleting a question.
- * 
- * This function sets up event listeners for the yes and no buttons when discarding a question.
- * When yes is clicked, the editing menu is removed
- * When no is clicked, the confirmation pop-up is removed
- * 
- * @function question_confirmation
- */
-function question_confirmation() {
-  let toast_promise_deletion_div = document.querySelector(
-    ".toast_promise_deletion_div"
-  );
-  let cancel_question_deletion_button = document.querySelector(
-    ".cancel_question_deletion_button"
-  );
-  let continue_question_deletion_button = document.querySelector(
-    ".continue_question_deletion_button"
-  );
-
-  let modal_div = document.querySelector(".Modal_div");
-
-  continue_question_deletion_button.addEventListener("click", () => {
-    isEditing = false;
-    editingIndex = null;
-    modal_div.remove();
-  });
-
-  cancel_question_deletion_button.addEventListener("click", () => {
-    toast_promise_deletion_div.remove();
-  });
-}
-
 /**
  * Creates a new HTML element with the specified type, class, and content.
  *
@@ -240,14 +172,29 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
 /**
  * Sets up the event listener for the cancel button
  */
-export function add_cancel_edit_button_listener() {
+export function add_cancel_edit_button_listener(context) {
   let discard_question_button = document.querySelector(
       ".discard_question_button"
   );
   let modal_div = document.querySelector(".Modal_div");
+  let stringForConfirm = "";
 
+  // Set the string for the confirm box based on the context.
+  switch (context) {
+    case "create":
+      stringForConfirm = "Are you sure you want to cancel creating the question?";
+      break;
+    case "edit":
+      stringForConfirm = "Are you sure you want to cancel editing the question?";
+      break;
+    case "import":
+      stringForConfirm = "Are you sure you want to cancel importing the question?";
+      break;
+    default:
+      stringForConfirm = "Are you sure you want to cancel the changes made?";
+  }
   discard_question_button.addEventListener("click", () => {
-    if(confirm("Are you sure you want to cancel the changes made?")) {
+    if(confirm(stringForConfirm)) {
       isEditing = false;
       editingIndex = null;
       modal_div.remove();

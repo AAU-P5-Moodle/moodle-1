@@ -36,7 +36,7 @@ if(!document.querySelector('.Modal_div')){
             get_question(quizid, questionid).then((question)=> {restore_question_data_in_popup(question);});
             add_answer_button_event_listener();
             add_save_question_button_listener(quizid, lecturerid, questionid);
-            add_cancel_edit_button_listener();
+            add_cancel_edit_button_listener("edit");
         })
 
       // Deal with this exception (Using core/notify exception function is recommended).
