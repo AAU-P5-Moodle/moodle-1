@@ -78,11 +78,34 @@ function livequiz_update_instance(object $quizdata): bool {
  * @param int $id ID of the quiz instance
  * @return bool True on success
  * @throws dml_exception When a database error occurs
+ * @throws dml_exception|\PhpXmlRpc\Exception When a database error occurs
  */
 function livequiz_delete_instance(int $id): bool {
     global $DB;
 
     $DB->delete_records('livequiz', ['id' => $id]);
+    $quizid = livequiz::get_quizid_from_activity_id($id);
+    $DB->delete_records('livequiz', ['id' => $quizid]);
+    $service = livequiz_services::get_singleton_service_instance();
+    $service::delete_quiz($quizid);
+    if (quiz_has_no_participations($quizid)) {
+    }
 
     return true;
+}
+/**
+ * Checks if a quiz has any participations.
+ *
+ * @param int $quizid ID of the quiz
+ * @return bool True if the quiz has no participations, false otherwise
+ * @throws dml_exception When a database error occurs
+ */
+function quiz_has_no_participations(int $quizid): bool {
+    $relation = new student_quiz_relation();
+    $participations = $relation->get_participations_from_quizid($quizid);
+
+    if (empty($participations)) {
+        return true;
+    }
+    return false;
 }
