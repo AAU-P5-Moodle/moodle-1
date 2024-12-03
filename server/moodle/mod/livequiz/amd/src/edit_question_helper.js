@@ -70,6 +70,7 @@ export function create_answer_container(id) {
   return answer_container;
 }
 
+//DELETE THIS FUNCTION
 /**
  * Adds an event listener to the discard question button.
  * When the button is clicked, it triggers the render_question_confirmation function.
@@ -83,6 +84,7 @@ export const add_discard_question_button_listener = () => {
   });
 };
 
+// DELETE THIS FUNCTION
 /**
  * Renders the question confirmation modal.
  *
@@ -98,11 +100,11 @@ function render_question_confirmation() {
 
     .then(({ html, js }) => {
       Templates.appendNodeContents(".Modal_div", html, js);
-      question_confirmation();
-    })
+      add_cancel_edit_button_listener();    })
     .catch((error) => displayException(error));
 }
 
+// DELETE THIS FUNCTION
 /**
  * Handles the confirmation process for deleting a question.
  * 
@@ -234,6 +236,28 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
     // Deal with this exception (Using core/notify exception function is recommended).
     .catch((error) => displayException(error));
 }
+
+/**
+ * Sets up the event listener for the cancel button
+ */
+export function add_cancel_edit_button_listener() {
+  let discard_question_button = document.querySelector(
+      ".discard_question_button"
+  );
+  let modal_div = document.querySelector(".Modal_div");
+
+  discard_question_button.addEventListener("click", () => {
+    if(confirm("Are you sure you want to cancel the changes made?")) {
+      isEditing = false;
+      editingIndex = null;
+      modal_div.remove();
+    }
+    else {
+      return;
+    }
+  });
+}
+
 
 /**
  * This validates that all inputs to create/edit question, if not all inputs are satisfied, it will return false.

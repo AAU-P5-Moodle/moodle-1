@@ -7,8 +7,8 @@ import {
   rerender_take_quiz_button,
   rerender_saved_questions_list,
   add_answer_button_event_listener,
-  add_discard_question_button_listener,
-  validate_submission
+  add_cancel_edit_button_listener,
+  validate_submission,
 } from "./edit_question_helper";
 
 let isEditing = false;
@@ -55,7 +55,7 @@ function render_create_question_menu_popup(quizid, lecturerid) {
         Templates.appendNodeContents(".main-container", html, js);
         add_answer_button_event_listener();
         add_save_question_button_listener(quizid, lecturerid);
-        add_discard_question_button_listener();
+        add_cancel_edit_button_listener();
       })
 
       // Deal with this exception (Using core/notify exception function is recommended).

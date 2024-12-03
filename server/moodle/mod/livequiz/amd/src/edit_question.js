@@ -4,7 +4,7 @@ import { save_question, get_question} from "./repository";
 import {
     add_answer_button_event_listener,
     create_answer_container,
-    add_discard_question_button_listener,
+    add_cancel_edit_button_listener,
     validate_submission} from "./edit_question_helper";
 import {add_delete_question_listeners} from "./delete_question";
 
@@ -36,7 +36,7 @@ if(!document.querySelector('.Modal_div')){
             get_question(quizid, questionid).then((question)=> {restore_question_data_in_popup(question);});
             add_answer_button_event_listener();
             add_save_question_button_listener(quizid, lecturerid, questionid);
-            add_discard_question_button_listener();
+            add_cancel_edit_button_listener();
         })
 
       // Deal with this exception (Using core/notify exception function is recommended).
