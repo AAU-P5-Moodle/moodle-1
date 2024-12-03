@@ -131,4 +131,19 @@ class livequiz_quiz_lecturer_relation {
         global $DB;
         $DB->delete_records('livequiz_quiz_lecturer', ['id' => $id]);
     }
+    /**
+     *
+     * Deletes  lecturer_quiz_relation by the quiz id
+     *
+     *
+     * @param int $id
+     * @return void
+     * @throws dml_exception
+     * @throws dml_transaction_exception
+     *
+     */
+    public static function delete_lecturer_quiz_relation_by_quizid(int $id): void {
+        global $DB;
+        $DB->delete_records('livequiz_quiz_lecturer', ['quiz_id' => $id]);
+    }
 }

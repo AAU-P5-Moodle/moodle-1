@@ -216,6 +216,30 @@ class livequiz {
     public function get_questions(): array {
         return $this->questions;
     }
+    /**
+     * Deletes a livequiz from the database.
+     *
+     * @param int $quizid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_livequiz(int $quizid): bool {
+        global $DB;
+        return $DB->delete_records('livequiz', ['id' => $quizid]);
+    }
+
+    /**
+     * Gets the quizid from the activity id.
+     *
+     * @param int $id
+     * @return int
+     * @throws dml_exception
+     */
+    public static function get_quizid_from_activity_id(int $id): int {
+        global $DB;
+        $quizinstance = $DB->get_record('livequiz', ['activity_id' => $id]);
+        return $quizinstance->id;
+    }
 
     /**
      * Removes a question from the livequiz

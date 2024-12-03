@@ -90,4 +90,14 @@ class student_quiz_relation {
 
         return $participations;
     }
+    /**
+     * Delete a student-quiz relation given the quiz id.
+     * @param int $quizid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_student_quiz_relation_by_quizid(int $quizid): bool {
+        global $DB;
+        return $DB->delete_records('livequiz_quiz_student', ['livequiz_id' => $quizid]);
+    }
 }

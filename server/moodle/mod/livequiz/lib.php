@@ -32,8 +32,22 @@
 function livequiz_add_instance(object $quizdata): bool|int {
     global $DB;
 
+    $modulerecord = $DB->get_records(
+        'course_modules',
+        ['course' => $quizdata->course, 'module' => $quizdata->module, 'section' => $quizdata->section],
+        'id DESC',
+        'id'
+    );
+
     $quizdata->timecreated = time();
     $quizdata->timemodified = time();
+
+    if ($modulerecord) {
+        $firstrecord = reset($modulerecord);
+        $quizdata->activity_id = $firstrecord->id;
+    } else {
+        $quizdata->activity_id = null; // Handle the case where no record is found
+    }
 
     $quizdata->id = $DB->insert_record('livequiz', $quizdata);
 
