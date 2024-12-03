@@ -117,8 +117,8 @@ Feature: View livequiz activity
     And I set the field with xpath "(//input[@class='answer_input'])[1]" to "Stockholm"
     And I set the field with xpath "(//input[@class='answer_checkbox'])[1]" to "checked"
     # Set question type to radio button
-    And "Allow only one answer" "checkbox" should exist
-    And I click on "Allow only one answer" "checkbox"
+    And "Allow only one correct answer" "checkbox" should exist
+    And I click on "Allow only one correct answer" "checkbox"
     And I click on "Add Answer" "button"
     And I set the field with xpath "(//input[@class='answer_input'])[2]" to "Malmö"
     And I click on "Add Answer" "button"
