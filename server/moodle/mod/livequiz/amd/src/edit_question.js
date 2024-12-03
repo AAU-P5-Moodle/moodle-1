@@ -56,8 +56,9 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
     let question_indput_description = document.getElementById("question_description_id");
     let question_indput_explanation = document.getElementById("question_explanation_id");
     let questionTitle = question_input_title.value.trim();
-    let questionDesription = question_indput_description.value.trim();
+    let questionDescription = question_indput_description.value.trim();
     let questionExplanation = question_indput_explanation.value.trim();
+    let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
 
     let answers = [];
     let answers_div = document.querySelector(".all_answers_for_question_div");
@@ -81,8 +82,9 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
         id: questionid,
         title: questionTitle,
         answers: answers,
-        description: questionDesription,
+        description: questionDescription,
         explanation: questionExplanation,
+        type: questionType,
     };
 
     if(!validate_submission(savedQuestion.answers)) {
@@ -118,12 +120,11 @@ function restore_question_data_in_popup(questiondata){
     document.getElementById("question_title_id").value = questiondata.questiontitle;
     document.getElementById("question_description_id").value = questiondata.questiondescription;
     document.getElementById("question_explanation_id").value = questiondata.questionexplanation;
+    document.getElementById("question_type_checkbox_id").checked = questiondata.questiontype === 'radio';
     let answers = questiondata.answers;
     for(let i=0; i < answers.length; i++){
         restore_answer_data_in_popup(answers[i]);
     }
-    console.log("answers: ",answers);
-
 }
 
 function restore_answer_data_in_popup(answer) {

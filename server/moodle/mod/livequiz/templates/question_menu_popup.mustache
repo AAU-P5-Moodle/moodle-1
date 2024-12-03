@@ -64,8 +64,14 @@
       id="file_input"
     /><img />
   </div>
+  <div class="question_type_checkbox">
+  <input type="checkbox" id="question_type_checkbox_id" class="question_type_checkbox">
+  <label for="question_type_checkbox_id" id="question_type_label_id">Allow only one answer</label>
+  </div>
+
     <button class="add_new_answer_to_question">Add Answer</button>
     <div class="all_answers_alert" id="all_answers" style="display: none;">
+        <p class="all_answers_alert_max_one_correct" id="question_alert_max_one_correct" style="color: red">*You selected the option to allow only one correct answer, but multiple correct answers are currently marked.</p>
         <p class="all_answers_alert_one_correct" id="question_alert_one_correct" style="color: red">*You need to add at least one correct answer</p>
         <p class="all_answers_alert_two_answers" id="question_alert_two_answers" style="color: red">*You need to have at least two answers</p>
         <p class="all_answers_alert_description" id="question_alert_description" style="color: red">*Each answer must have a description</p>

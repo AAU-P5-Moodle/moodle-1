@@ -372,6 +372,7 @@ final class livequiz_test extends advanced_testcase {
             'This is the description for question 1',
             5,
             'This is the explanation for question 1',
+            0,
             []
         );
         $question2 = test_utility::createquestionarray(
@@ -380,6 +381,7 @@ final class livequiz_test extends advanced_testcase {
             'This is the description for question 2',
             10,
             'This is the explanation for question 2',
+            0,
             []
         );
 
