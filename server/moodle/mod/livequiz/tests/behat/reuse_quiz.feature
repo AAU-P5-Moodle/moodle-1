@@ -53,3 +53,20 @@ Feature: Reuse previously created quiz in livequiz activity
       And "African cities: Question 1" "list_item" should exist
       And "African cities: Question 2" "list_item" should exist
       And "African cities: Question 3" "list_item" should exist
+
+    Scenario: Not selecting any questions in the import pop-up
+      #Testing that we can get an alert and does not close import pop-up if not questions are selected for import.
+      When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+      Then I should see "Quiz editor page"
+      And I should see "Import Question"
+      And I click on "Import Question" "button"
+      Then I enable automatic dismissal of alerts
+      Then I click on "Import Question(s)" "button" confirming the dialogue
+      # The import pop-up should now be visible.
+      And I should see "livequiz_africa_quiz"
+      And I should see "African cities: Question 1"
+      And I should see "African cities: Question 2"
+      And I should see "African cities: Question 3"
+      And I should see "Import Question(s)"
+
+
