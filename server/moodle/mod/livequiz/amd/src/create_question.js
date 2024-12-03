@@ -111,10 +111,6 @@ function prepare_question() {
 
   let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
 
-  if (!questionTitle) {
-    questionTitle = "Question";
-  }
-
   let answers = prepare_answers();
 
   // CHECK HERE IF THE QUESTION IS VALID
