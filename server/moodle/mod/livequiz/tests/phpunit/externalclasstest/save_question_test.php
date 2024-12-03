@@ -25,11 +25,10 @@
 namespace mod_livequiz;
 
 use advanced_testcase;
-use dml_exception;
 use mod_livequiz\external\save_question;
-use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use ReflectionClass;
+use ReflectionException;
 use function PHPUnit\Framework\assertEquals;
 
 /**
@@ -40,6 +39,7 @@ final class save_question_test extends advanced_testcase {
      * Test the save_question external function.
      * This function tests if a question can be saved to the database.
      * @covers      \mod_livequiz\external\save_question::new_question
+     * @throws ReflectionException
      */
     public function test_new_question(): void {
         $this->resetAfterTest();
@@ -77,9 +77,11 @@ final class save_question_test extends advanced_testcase {
         assertEquals($questiondata['answers'][1]['correct'], $answers[1]->get_correct());
         assertEquals($questiondata['answers'][1]['explanation'], $answers[1]->get_explanation());
     }
+
     /**
      * Allows calling of private function new_question
      * @covers      \mod_livequiz\external\save_question::new_question
+     * @throws ReflectionException
      */
     private static function call_new_question(array $questiondata): question {
         $class = new ReflectionClass(save_question::class);

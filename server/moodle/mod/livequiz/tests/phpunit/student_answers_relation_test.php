@@ -24,13 +24,15 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_livequiz;
+use advanced_testcase;
+use dml_exception;
 use mod_livequiz\models\student_answers_relation;
 use mod_livequiz\models\answer;
 
 /**
  * student_answers_relation
  */
-final class student_answers_relation_test extends \advanced_testcase {
+final class student_answers_relation_test extends advanced_testcase {
     /**
      * Create participation test data. Used in every test.
      * @return array
@@ -46,14 +48,14 @@ final class student_answers_relation_test extends \advanced_testcase {
     /**
      * Create answer test data.
      * @return answer[]
+     * @throws dml_exception
      */
     protected function create_answer_data(): array {
-        global $DB;
         $answers = [];
         for ($i = 0; $i < 10; $i++) {
             $answer = new answer(1, 'Answer Option' . $i, 'Answer Explenation' . $i);
             $answerid = answer::insert_answer($answer);
-            $answers[] = answer::get_answer_from_id($answerid); // This ensures id's are set since set_id() is private.
+            $answers[] = answer::get_answer_from_id($answerid); // This ensures ids are set since set_id() is private.
         }
         return $answers;
     }
@@ -65,10 +67,12 @@ final class student_answers_relation_test extends \advanced_testcase {
         parent::setUp();
         $this->resetAfterTest(true);
     }
+
     /**
      * Test of insert_student_answer_relation
      * @covers \mod_livequiz\models\student_answers_relation::insert_student_answer_relation
      * @return void
+     * @throws dml_exception
      */
     public function test_insert_student_answer_relation(): void {
         $data = $this->create_test_data();
@@ -83,10 +87,12 @@ final class student_answers_relation_test extends \advanced_testcase {
         $this->assertIsNumeric($actual);
         $this->assertGreaterThan(0, $actual);
     }
+
     /**
      * Test of get_answersids_from_student_in_participation
      * @covers \mod_livequiz\models\student_quiz_relation::get_answersids_from_student_in_participation
      * @return void
+     * @throws dml_exception
      */
     public function test_get_answersids_from_student_in_participation(): void {
         $studentanswerdata = $this->create_test_data();
