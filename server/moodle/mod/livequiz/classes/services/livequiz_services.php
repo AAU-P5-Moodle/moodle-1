@@ -525,18 +525,6 @@ class livequiz_services {
     }
 
     /**
-     * Prepares the data for the template.
-     *
-     * @param int $quizid
-     * @return answer
-     * @throws dml_exception
-     */
-    public function prepare_for_template(int $quizid): object {
-        $livequiz = livequiz::get_livequiz_instance($quizid);
-        return $livequiz->prepare_for_template();
-    }
-
-    /**
      * Gets a question from the database by quiz id
      *
      * @param int $quizid
@@ -649,5 +637,17 @@ class livequiz_services {
      */
     public function insert_student_answer_relation(int $studentid, int $answerid, int $participationid): int {
         return student_answers_relation::insert_student_answer_relation($studentid, $answerid, $participationid);
+    }
+
+    /**
+     * Gets an isntance of the livequiz without questions
+     *
+     * @param int $id
+     * @return livequiz
+     * @throws dml_exception
+     */
+    public function get_livequiz_instance_without_questions(int $id): livequiz {
+        $livequiz = livequiz::get_livequiz_instance($id);
+        return $livequiz;
     }
 }

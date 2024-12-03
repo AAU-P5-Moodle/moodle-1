@@ -22,6 +22,8 @@ use core_external\external_multiple_structure;
 use core_external\external_value;
 use dml_exception;
 use invalid_parameter_exception;
+use mod_livequiz\models\livequiz;
+use mod_livequiz\models\question;
 use mod_livequiz\services\livequiz_services;
 
 /**
@@ -65,13 +67,13 @@ class get_lecturer_quiz extends external_api {
         // Loop through all quizzes from the lecturer and find the corresponding questions.
         foreach ($rawquizzes as $rawquiz) {
             $quizid = $rawquiz->quiz_id;
-            $service->get_livequiz_instance($quizid);
-            $rawquestions = $service->get_questions_from_quiz_id($rawquiz->quiz_id);
+            $quizobject = $service->get_livequiz_instance_without_questions($quizid);
+            $rawquestions = $service->get_questions_from_quiz_id($quizid);
             foreach ($rawquestions as $rawquestion) {
                 $question = $service->get_question_from_id($rawquestion->get_id());
-                $service->add_question($question);
+                $quizobject->add_question($question);
             }
-            $preparedquiz = $service->prepare_for_template($quizid);
+            $preparedquiz = $quizobject->prepare_for_template();
             $quizzes[] = $preparedquiz;
         }
         return $quizzes;
