@@ -41,7 +41,7 @@ Feature: View livequiz activity
     Then the "field" with id "question_explanation_id" should exist
     And "Add Answer" "button" should exist
     And "Save Question" "button" should exist
-    And "Discard" "button" should exist
+    And "Cancel" "button" should exist
     Then I set the field "question_title_id" to "Geography 1"
     And I set the field "question_description_id" to "What is the Capital of Sweden?"
     And I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
@@ -86,19 +86,19 @@ Feature: View livequiz activity
     Then the "field" with id "question_explanation_id" should exist
     And "Add Answer" "button" should exist
     And "Save Question" "button" should exist
-    And "Discard" "button" should exist
+    And "Cancel" "button" should exist
     # Next step should be deleted when css is fixed
     And I click on "Close block drawer" "button"
     Then I set the field "question_title_id" to "Geography 1"
     Then I set the field "question_description_id" to "What is the Capital of Sweden?"
     Then I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
-    And I click on "Discard" "button"
-    Then I should see "Are you sure you want to discard changes?"
+    And I click on "Cancel" "button"
+    Then I should see "Are you sure you want to cancel the changes?"
     And "No" "button" should exist
     And "Yes" "button" should exist
     And I click on "No" "button"
     Then the field "question_description_id" matches value "What is the Capital of Sweden?"
-    And I click on "Discard" "button"
+    And I click on "Cancel" "button"
     And I click on "Yes" "button"
     Then "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
