@@ -331,7 +331,6 @@ class livequiz_services {
      * @throws dml_exception
      */
     public function get_newest_participation_for_quiz(int $quizid, int $studentid): participation {
-        global $DB;
         $participations = student_quiz_relation::get_all_student_participation_for_quiz($quizid, $studentid);
         return $participations[0];
     }

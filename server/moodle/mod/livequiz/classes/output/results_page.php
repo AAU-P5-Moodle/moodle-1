@@ -67,7 +67,6 @@ class results_page implements renderable, templatable {
         $data->isattempting = false; // This is the results page, so the user is not attempting the quiz.
         // Get the questions with their answers.
         $livequizservices = livequiz_services::get_singleton_service_instance();
-        $questions = $livequizservices->get_questions_with_answers($this->livequiz->get_id());
 
         // Get the student's answers for the participation.
         $participationanswerids = $livequizservices->get_answersids_from_student_in_participation(
@@ -80,7 +79,7 @@ class results_page implements renderable, templatable {
             ['id' => $this->cmid]
         ))->out(false);
 
-        // Prepare the questions data.
+        // Prepare the questions' data.
         foreach ($data->questions as $qindex => $question) {
             // Get the student's answer for this question.
             foreach ($question->answers as $aindex => $answer) {
