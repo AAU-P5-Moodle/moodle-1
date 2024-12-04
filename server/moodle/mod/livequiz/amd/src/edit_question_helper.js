@@ -112,7 +112,7 @@ export function rerender_saved_questions_list(questions, callback) {
     contextsavedquestions
   )
     .then(({ html, js }) => {
-      Templates.appendNodeContents("#saved-questions-container", html, js);
+      Templates.appendNodeContents("#saved_questions_container", html, js);
 
       // Call the functions in callback, this allows for custom functions to be called after the rerendering.
       if (typeof callback === "function") {
@@ -159,7 +159,7 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
     // It returns a promise that needs to be resoved.
     .then(({ html, js }) => {
       // Here we have compiled template.
-      Templates.appendNodeContents("#page-mod-livequiz-quizcreator", html, js);
+      Templates.appendNodeContents("#page_mod_livequiz_quizcreator", html, js);
       if (typeof callback === "function") {
         callback();
       }

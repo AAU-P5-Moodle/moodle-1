@@ -270,7 +270,7 @@
     cursor: pointer;
  }
 
- #id_buttonaddquestion {
+ #add_question_button {
     background-color: green;
     color: white;
     padding: 10px 20px;

@@ -106,7 +106,7 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
             contextsavedquestions
         )
             .then(({ html, js }) => {
-                Templates.appendNodeContents("#saved-questions-container", html, js);
+                Templates.appendNodeContents("#saved_questions_container", html, js);
                 add_edit_question_listeners(quizid, lecturerid);
                 add_delete_question_listeners(quizid,lecturerid);
             })

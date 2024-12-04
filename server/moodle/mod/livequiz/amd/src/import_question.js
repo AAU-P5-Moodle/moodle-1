@@ -16,7 +16,7 @@ import {rerender_take_quiz_button} from "./edit_question_helper";
  * @returns {Promise<void>} A promise that resolves when the initialization is complete.
  */
 export const init = async(quizid, lecturerid, url) => {
-    let import_question_button = document.getElementById("id_buttonimportquestion");
+    let import_question_button = document.getElementById("import_question_button");
     import_question_button.addEventListener("click", () => {
         render_import_question_menu_popup(quizid, lecturerid, url);
     });

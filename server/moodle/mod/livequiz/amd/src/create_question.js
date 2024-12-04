@@ -28,7 +28,7 @@ let take_quiz_url = "";
  */
 export const init = async (quizid, lecturerid, url) => {
   take_quiz_url = url; //Set url to quiz attempt page to global variable
-  let add_question_button = document.getElementById("id_buttonaddquestion");
+  let add_question_button = document.getElementById("add_question_button");
   add_question_button.addEventListener("click", () => {
     render_create_question_menu_popup(quizid, lecturerid);
   });
