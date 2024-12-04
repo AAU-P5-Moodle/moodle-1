@@ -112,4 +112,18 @@ class student_answers_relation {
 
         return $answers;
     }
+
+    /**
+     * Deletes all records in student_answer_relations by participation id
+     * @param int $participationid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_student_answers_relation_by_participationid(int $participationid): bool {
+        global $DB;
+        return $DB->delete_records(
+            'livequiz_students_answers',
+            ['participation_id' => $participationid],
+        );
+    }
 }

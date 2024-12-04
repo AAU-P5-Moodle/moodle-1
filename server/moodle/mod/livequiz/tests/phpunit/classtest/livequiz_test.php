@@ -25,10 +25,11 @@
 namespace mod_livequiz;
 
 use advanced_testcase;
+use InvalidArgumentException;
 use mod_livequiz\models\question;
+use RuntimeException;
 use stdClass;
 use ReflectionException;
-use Exception;
 use function PHPUnit\Framework\assertEquals;
 
 
@@ -342,7 +343,7 @@ final class livequiz_test extends advanced_testcase {
 
 
         // Test invalid case: No question with the given ID.
-        $this->expectException(\InvalidArgumentException::class); // Expect an InvalidArgumentExceptionException to be thrown.
+        $this->expectException(InvalidArgumentException::class); // Expect an InvalidArgumentExceptionException to be thrown.
         $this->expectExceptionMessage("Could not find question with id 20");
         $livequiz->get_question_by_id(20); // This ID doesn't exist, should throw an exception.
 
@@ -355,7 +356,7 @@ final class livequiz_test extends advanced_testcase {
         $livequiz->add_question($mockquestion4);
 
         // Test invalid case: Multiple questions with the same ID.
-        $this->expectException(\RuntimeException::class); // Expect a RuntimeException to be thrown.
+        $this->expectException(RuntimeException::class); // Expect a RuntimeException to be thrown.
         $this->expectExceptionMessage("Something is wrong. Multiple questions found with id 1");
         $livequiz->get_question_by_id(1);
     }
@@ -372,6 +373,7 @@ final class livequiz_test extends advanced_testcase {
             'This is the description for question 1',
             5,
             'This is the explanation for question 1',
+            0,
             []
         );
         $question2 = test_utility::createquestionarray(
@@ -380,6 +382,7 @@ final class livequiz_test extends advanced_testcase {
             'This is the description for question 2',
             10,
             'This is the explanation for question 2',
+            0,
             []
         );
 

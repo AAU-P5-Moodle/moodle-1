@@ -24,6 +24,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_livequiz;
+use advanced_testcase;
+use dml_exception;
 use mod_livequiz\models\student_answers_relation;
 use mod_livequiz\models\answer;
 use mod_livequiz\services\livequiz_services;
@@ -31,7 +33,7 @@ use mod_livequiz\services\livequiz_services;
 /**
  * student_answers_relation
  */
-final class student_answers_relation_test extends \advanced_testcase {
+final class student_answers_relation_test extends advanced_testcase {
     /**
      * Create participation test data. Used in every test.
      * @return array
@@ -47,9 +49,9 @@ final class student_answers_relation_test extends \advanced_testcase {
     /**
      * Create answer test data.
      * @return answer[]
+     * @throws dml_exception
      */
     protected function create_answer_data(): array {
-        global $DB;
         $service = livequiz_services::get_singleton_service_instance();
         $answers = [];
         for ($i = 0; $i < 10; $i++) {
@@ -67,10 +69,12 @@ final class student_answers_relation_test extends \advanced_testcase {
         parent::setUp();
         $this->resetAfterTest(true);
     }
+
     /**
      * Test of insert_student_answer_relation
      * @covers \mod_livequiz\models\student_answers_relation::insert_student_answer_relation
      * @return void
+     * @throws dml_exception
      */
     public function test_insert_student_answer_relation(): void {
         $service = livequiz_services::get_singleton_service_instance();
@@ -86,10 +90,12 @@ final class student_answers_relation_test extends \advanced_testcase {
         $this->assertIsNumeric($actual);
         $this->assertGreaterThan(0, $actual);
     }
+
     /**
      * Test of get_answersids_from_student_in_participation
      * @covers \mod_livequiz\models\student_quiz_relation::get_answersids_from_student_in_participation
      * @return void
+     * @throws dml_exception
      */
     public function test_get_answersids_from_student_in_participation(): void {
         $studentanswerdata = $this->create_test_data();

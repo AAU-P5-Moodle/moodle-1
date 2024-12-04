@@ -60,6 +60,11 @@ class question {
     private array $answers = [];
 
     /**
+     * @var int $type Defines the type of the question.
+     */
+    private int $type = 0;
+
+    /**
      * Constructor for the question class.
      *
      * @param string $title
@@ -255,6 +260,22 @@ class question {
     }
 
     /**
+     * Sets the type of the questiona.
+     */
+    public function set_type(int $type): void {
+        $this->type = $type;
+    }
+
+    /**
+     * Gets the type of the question.
+     * 0 is checkbox, 1 is radiobutton
+     * @return int|0 // Returns the type of the question, if it has one. 0 if it does not.
+     */
+    public function get_type(): int {
+        return $this->type ?? 0;
+    }
+
+    /**
      * Prepares the template data for mustache.
      * The data object will hold the following properties:
      * - questionid
@@ -274,6 +295,7 @@ class question {
         $data->questiondescription = $this->description;
         $data->questiontimelimit = $this->timelimit;
         $data->questionexplanation = $this->explanation;
+        $data->questiontype = $this->type == 1 ? 'radio' : 'checkbox';
         $data->answers = [];
         foreach ($this->answers as $answer) {
             $data->answers[] = [
@@ -282,11 +304,6 @@ class question {
                 'answerexplanation' => $answer->get_explanation(),
                 'answercorrect' => $answer->get_correct(),
             ];
-        }
-        if ($this->get_hasmultiplecorrectanswers()) {
-            $data->answertype = 'checkbox';
-        } else {
-            $data->answertype = 'radio';
         }
         return $data;
     }

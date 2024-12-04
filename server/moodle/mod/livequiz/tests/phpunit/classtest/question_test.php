@@ -63,61 +63,6 @@ final class question_test extends advanced_testcase {
         );
     }
 
-    /**
-     * Test of get_hasmultipleanswers returns true, when there are more than 1 correct answer.
-     * @covers       \mod_livequiz\models\question::get_hasmultiplecorrectanswers
-     */
-    public function test_question_get_hasmultipleanswers_true(): void {
-        $mockanswers = [];
-        for ($x = 0; $x <= 3; $x++) {
-            // Create a mock object of the answer class.
-            $mock = $this->getMockBuilder(answer::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['get_correct'])
-                ->getMock();
-            // Make the first 2 mock objects return 0 and the last 2 return 1.
-            if ($x < 2) {
-                $mock->expects($this->any())
-                    ->method('get_correct')
-                    ->willReturn(0);
-            } else {
-                $mock->expects($this->any())
-                    ->method('get_correct')
-                    ->willReturn(1);
-            }
-            $mockanswers[] = $mock;
-        }
-        $this->question->add_answers($mockanswers);
-        $this->assertTrue($this->question->get_hasmultiplecorrectanswers());
-    }
-
-    /**
-     * Test of get_hasmultipleanswers returns false, when there is only 1 correct answer.
-     * @covers       \mod_livequiz\models\question::get_hasmultiplecorrectanswers
-     */
-    public function test_question_get_hasmultipleanswers_false(): void {
-        $mockanswers = [];
-        for ($x = 0; $x <= 3; $x++) {
-            // Create a mock object of the answer class.
-            $mock = $this->getMockBuilder(answer::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['get_correct'])
-                ->getMock();
-            // Make the first 3 mock objects return 0 and the last 1 return 1.
-            if ($x < 3) {
-                $mock->expects($this->any())
-                    ->method('get_correct')
-                    ->willReturn(0);
-            } else {
-                $mock->expects($this->any())
-                    ->method('get_correct')
-                    ->willReturn(1);
-            }
-            $mockanswers[] = $mock;
-        }
-        $this->question->add_answers($mockanswers);
-        $this->assertnotTrue($this->question->get_hasmultiplecorrectanswers());
-    }
 
     /**
      * Test of get_question_with_answers_from_id for question class.
@@ -182,6 +127,7 @@ final class question_test extends advanced_testcase {
         string $description,
         int $timelimit,
         string $explanation,
+        int $type,
         array $answers
     ): void {
         $originalquestion = new question($title, $description, $timelimit, $explanation);
@@ -250,12 +196,7 @@ final class question_test extends advanced_testcase {
         $this->assertSameSize($originalquestion->get_answers(), $data->answers);
 
         // Verify correct answer type.
-        $this->assertIsString($data->answertype);
-        if ($originalquestion->get_hasmultiplecorrectanswers()) {
-            $this->assertEquals('checkbox', $data->answertype);
-        } else {
-            $this->assertEquals('radio', $data->answertype);
-        }
+        $this->assertIsString($data->questiontype);
 
         // Verify correct order of answers.
         $counter = 0;
@@ -293,6 +234,7 @@ final class question_test extends advanced_testcase {
                 'This is the description for question 1',
                 5,
                 'This is the explanation for question 1',
+                1,
                 [$answer1, $answer2, $answer3]
             ),
             test_utility::createquestionarray(
@@ -301,6 +243,7 @@ final class question_test extends advanced_testcase {
                 'This is the description for question 2',
                 10,
                 'This is the explanation for question 2',
+                0,
                 [$answer1, $answer2, $answer3, $answer4]
             ),
         ];

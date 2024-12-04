@@ -25,8 +25,10 @@
  */
 namespace mod_livequiz;
 
+use advanced_testcase;
 use dml_exception;
 use dml_transaction_exception;
+use Error;
 use mod_livequiz\models\livequiz;
 use mod_livequiz\models\student_answers_relation;
 use mod_livequiz\repositories\answer_repository;
@@ -34,13 +36,12 @@ use mod_livequiz\services\livequiz_services;
 use mod_livequiz\models\question;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\participation;
-use mod_livequiz\models\student_quiz_relation;
 use PhpXmlRpc\Exception;
 
 /**
  * Testing examples for LiveQuiz service.
  */
-final class livequiz_service_test extends \advanced_testcase {
+final class livequiz_service_test extends advanced_testcase {
     /**
      * Create a LiveQuiz instance for testing.
      *
@@ -217,7 +218,6 @@ final class livequiz_service_test extends \advanced_testcase {
      *
      * @covers \mod_livequiz\models\answer::__construct
      * @return void
-     * @throws dml_exception
      */
     public function test_new_answer(): void {
         $title = 'Test question';
@@ -287,7 +287,7 @@ final class livequiz_service_test extends \advanced_testcase {
         self::assertEquals($getquiz['lecturer_id'], $lecturerid);
 
 
-        // The amount of questions remain the same.
+        // The amount of questions remains the same.
         $questionsresult = $livequizresult->get_questions();
         self::assertCount(count($questions), $questionsresult);
 
@@ -611,7 +611,7 @@ final class livequiz_service_test extends \advanced_testcase {
             foreach ($sanitizedanswers as $sanitizedanswer) {
                 $this->assertEquals($answers[0]->get_description(), $sanitizedanswer->description);
                 $this->assertEquals($answers[0]->get_explanation(), $sanitizedanswer->explanation);
-                $this->expectException(\Error::class);
+                $this->expectException(Error::class);
                 $this->expectExceptionMessage('Call to undefined method stdClass::get_correct()');
                 $sanitizedanswer->get_correct();
             }

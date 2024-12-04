@@ -123,5 +123,45 @@ Feature: Delete questions in a livequiz activity
     And "Champagne" "checkbox" should not exist
     And "Nice" "checkbox" should not exist
 
+  Scenario: Delete question with participation
+    # Checks that deleting a question with a participation causes an alert to appear.
+    And I log out
+    And I log in as "student1"
+    And I am on "Test Course" course homepage with editing mode off
+    And I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    And I should see "Take Quiz"
+    And I click on "Take Quiz" "link"
+    # Answers "Question 1"
+    And I should see "Question 1"
+    And I should see "Which of the following cities is in France?"
+    And "Paris" "checkbox" should exist
+    And "Champagne" "checkbox" should exist
+    And "Nice" "checkbox" should exist
+    And I click on "Paris" "checkbox"
+    And "Submit Quiz" "button" should exist
+    And I click on "Submit Quiz" "button" confirming the dialogue
+    Then I should see "Results for attempt"
+    #Log in as lecturer and attempt to delete "Question 1""
+    Then I log out
+    And I log in as "teacher1"
+    And I am on "Test Course" course homepage with editing mode on
+    And I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    Then "Question 1" "list_item" should exist
+    And "Question 2" "list_item" should exist
+    And "Question 3" "list_item" should exist
+    Then I enable automatic dismissal of alerts
+    When I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element" confirming the dialogue
+    # An alert appears here stating that the question cannot be deleted. Due to "Then I enable automatic dismissal of alerts" above, the alert is dismissed.
+    Then "Question 1" "list_item" should exist
+    And "Question 2" "list_item" should exist
+    And "Question 3" "list_item" should exist
+
+
+
+
+
+
+
+
 
 

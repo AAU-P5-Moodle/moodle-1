@@ -41,7 +41,7 @@ class student_quiz_relation {
     }
 
     /**
-     * Get all participation the student has made for a quiz
+     * Get all participations the student has made for a quiz
      * @param int $quizid
      * @param int $studentid
      * @return array
@@ -89,5 +89,22 @@ class student_quiz_relation {
         }
 
         return $participations;
+    }
+
+    /**
+     * Deletes all participations for a specific quizid
+     * This can also be used to delete all teacher participations in a quiz.
+     * @param int $quizid
+     * @param int $studentid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_all_participations_by_quizid(int $quizid, int $studentid): bool {
+        global $DB;
+        return $DB->delete_records(
+            'livequiz_quiz_student',
+            ['livequiz_id' => $quizid,
+             'student_id' => $studentid],
+        );
     }
 }
