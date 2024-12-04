@@ -35,7 +35,7 @@ export const init = async(quizId, lecturerId, url) => {
  */
 async function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
     // This will call the function to load and render our template.
-    Templates.renderForPromise("mod_livequiz/import_question_popup", null, "boost")
+    Templates.renderForPromise("mod_livequiz/import_question_popup", {}, "boost")
         // It returns a promise that needs to be resolved.
         .then(async({html, js}) => {
             // Here we have compiled template.
@@ -51,8 +51,10 @@ async function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
 
 /**
  * Adds old questions to the import question popup.
+ *
  * @param {number} lecturerId - The ID of the lecturer.
  * @param {number} quizId - The ID of the quiz.
+ * @returns {void}
  */
 function addOldQuestionsToPopup(lecturerId, quizId) {
     getLecturerQuiz(lecturerId).then((oldQuizzes) => {
@@ -150,10 +152,12 @@ async function importQuestions(quizId, url, lecturerId) {
 
 /**
  * Calls the external function to reuse questions.
+ *
  @param {number} quizId - The ID of the quiz.
  @param {Array<number>} questionIds - The IDs of the questions to reuse.
  @param {number} lecturerId - The ID of the lecturer.
  @param {string} quizUrl - The URL of the quiz page.
+ @returns {void}
  */
 function callReuseQuestions(quizId, questionIds, lecturerId, quizUrl) {
     externalReuseQuestions(quizId, questionIds, lecturerId).then((questions) => {
@@ -199,8 +203,10 @@ function getCheckedQuestions() {
 
 /**
  * Adds an event listener to the quiz checkboxes.
+ *
  * @param checkbox - The checkbox to add the event listener to.
  * @param questionCheckboxes - The question checkboxes that are manipulated when event is triggered.
+ * @returns {void}
  */
 function addQuizCheckboxListener(checkbox, questionCheckboxes) {
     checkbox.addEventListener("change", () => {
@@ -212,8 +218,10 @@ function addQuizCheckboxListener(checkbox, questionCheckboxes) {
 
 /**
  * Adds an event listener to the question checkboxes.
+ *
  * @param checkbox - The checkbox that is manipulated when all questions are checked.
  * @param questionCheckboxes - The question checkboxes to add the event listener to.
+ * @returns {void}
  */
 function addQuestionCheckboxListener(checkbox, questionCheckboxes) {
     questionCheckboxes.forEach((questionCheckbox) => {
@@ -233,6 +241,7 @@ function addQuestionCheckboxListener(checkbox, questionCheckboxes) {
 
 /**
  * Checks if all questions are checked.
+ *
  * @param questions
  * @returns {bool} - True if all questions are checked, false otherwise.
  */

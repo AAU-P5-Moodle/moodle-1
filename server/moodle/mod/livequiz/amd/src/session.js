@@ -1,8 +1,12 @@
 import {updateSession} from "./repository";
 
-
-// Update session with selected answers.
-// @module     mod_livequiz/session.
+/**
+ * Update session with selected answers.
+ *
+ * @param quizId
+ * @param questionId
+ * @returns {Promise<void>}
+ */
 export const init = async(quizId, questionId) => {
     // Select all answer options (radio buttons, checkboxes, and dropdowns).
     const answerOptions = document.getElementsByClassName(quizId);

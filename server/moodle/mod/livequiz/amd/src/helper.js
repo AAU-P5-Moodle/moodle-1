@@ -6,6 +6,8 @@ let IDs = 0;
 /**
  * Adds an event listener to the "Add Answer" button.
  * When the button is clicked, it appends a new answer input field.
+ *
+ * @returns {void}
  */
 export const addAnswerButtonEventListener = () => {
   // Adding event listener to add answer button
@@ -16,10 +18,10 @@ export const addAnswerButtonEventListener = () => {
 };
 
 /**
- * Appends a new answer input container to the container holding all answers
- *
  * This function creates a new answer container with an incremented ID and appends it to the
  * element with the class "all_answers_for_question_div".
+ *
+ * @returns {void}
  */
 export function appendAnswerInput() {
   let answerContainer = createAnswerContainer(IDs + 1);
@@ -30,7 +32,6 @@ export function appendAnswerInput() {
 
 /**
  * Creates a new answer container element.
- * THIS SHOULD PROBABLY BE MADE INTO MUSTACHE TEMPLATE INSTEAD OF A FUNCTION
  *
  * @param {int} id - The unique identifier for the answer container.
  * @returns {HTMLDivElement} The created answer container element.
@@ -93,6 +94,7 @@ function createElement(elementName, type, className, content) {
  *
  * @param {Array} questions - An array of question objects to be rendered.
  * @param {Function} [callback] - An optional callback function to be executed after the list is re-rendered.
+ * @returns {void}
  */
 export function rerenderSavedQuestionsList(questions, callback) {
   // The template needs to know the questions to render.
@@ -127,13 +129,7 @@ export function rerenderSavedQuestionsList(questions, callback) {
  * @param {string} url - The URL for the "Take Quiz" button to redirect to.
  * @param {boolean} hasQuestions - Indicates if the quiz has questions.
  * @param {function} [callback] - Optional callback function to execute after re-rendering.
- */
-
-/**
- *
- * @param url
- * @param hasQuestions
- * @param callback
+ * @returns {void}
  */
 export function rerenderTakeQuizButton(url, hasQuestions, callback) {
   // The template needs to know if there are questions in the quiz.
@@ -175,8 +171,10 @@ export function rerenderTakeQuizButton(url, hasQuestions, callback) {
 }
 
 /**
- * Sets up the event listener for the cancel button
+ * Sets up the event listener for the cancel button.
+ *
  * @param {string} context - The context in which the cancel button is being used.
+ * @returns {void}
  */
 export function addCancelEditButtonListener(context) {
   let discardQuestionButton = document.querySelector(
@@ -212,6 +210,7 @@ export function addCancelEditButtonListener(context) {
 
 /**
  * This validates that all inputs to create/edit question, if not all inputs are satisfied, it will return false.
+ *
  * @param answers The answers of the question.
  * @returns {boolean} True if input fields are satisfied, false otherwise.
  */
@@ -316,6 +315,11 @@ export function validateSubmission(answers) {
   return true;
 }
 
+/**
+ * Gets question data inputted in the UI. Used when creating or editing a question.
+ *
+ * @returns {{description: *, title: *, explanation: *, type: (number)}}
+ */
 export function getQuestionData() {
   let questionTitle = document.getElementById("question_title_id").value.trim();
   let questionDescription = document.getElementById("question_description_id").value.trim();
@@ -331,7 +335,9 @@ export function getQuestionData() {
 }
 
 /**
+ * Gets the data for each answer inputted in the UI. Used when creating or editing a question.
  *
+ * @returns {array}
  */
 export function prepareAnswers() {
   let answers = [];

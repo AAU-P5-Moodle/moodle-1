@@ -1,6 +1,13 @@
 import {submitQuiz} from "./repository";
 
-// Setup eventlistener for inserting participation and answer choices upon submitting quiz.
+/**
+ * Setup event listener for inserting participation and answer choices upon submitting quiz.
+ *
+ * @param quizId
+ * @param studentId
+ * @param resultsUrl
+ * @returns {Promise<void>}
+ */
 export const init = async(quizId, studentId, resultsUrl) => {
     const submitQuizButton = document.getElementById("submitQuizBtn");
     submitQuizButton.addEventListener("click", async function() {
@@ -16,7 +23,11 @@ export const init = async(quizId, studentId, resultsUrl) => {
     });
 };
 
-
+/**
+ * Launch confirmation dialogue for submitting a quiz attempt. 
+ *
+ * @returns {boolean}
+ */
 function submitQuizConfirm() {
     return confirm("Are you sure you want to submit the quiz?");
 }

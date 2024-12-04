@@ -3,15 +3,26 @@ import {rerenderTakeQuizButton} from "./helper";
 
 let takeQuizUrl = "";
 
+/**
+ * Adds click-event listeners to the buttons for deleting questions.
+ *
+ * @param quizId
+ * @param lecturerId
+ * @param url
+ * @returns {Promise<void>}
+ */
+
 export const init = async(quizId, lecturerId, url) => {
-    takeQuizUrl = url; // Set url to quiz attempt page to global variable
+    takeQuizUrl = url; // Set global variable holding the url to quiz attempt page. Used for calling rerenderTakeQuizButton when the last question is deleted.
     addDeleteQuestionListeners(quizId, lecturerId);
 };
 
 /**
+ * Helper function for adding click-event listeners to delete buttons.
  *
  * @param quizId
  * @param lecturerId
+ * @returns {void}
  */
 export function addDeleteQuestionListeners(quizId, lecturerId) {
   let questionList = document.getElementById("saved_questions_list");

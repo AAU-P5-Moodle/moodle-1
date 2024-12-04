@@ -10,14 +10,23 @@ import {
 } from "./helper";
 import {addDeleteQuestionListeners} from "./delete_question";
 
+/**
+ * Adds event listeners for when the questions in the list of saved questions are clicked.
+ *
+ * @param quizId
+ * @param lecturerId
+ * @returns {Promise<void>}
+ */
 export const init = async(quizId, lecturerId) => {
     addEditQuestionListeners(quizId, lecturerId);
 };
 
 /**
+ * Helper function for adding click-event listeners on the saved questions.
  *
  * @param quizId
  * @param lecturerId
+ * @returns {void}
  */
 export function addEditQuestionListeners(quizId, lecturerId) {
     let questionList = document.getElementById("saved_questions_list");
@@ -31,16 +40,18 @@ export function addEditQuestionListeners(quizId, lecturerId) {
 }
 
 /**
+ * Render the pop-up for editing a given question.
  *
  * @param quizId
  * @param lecturerId
  * @param questionId
+ * @returns {void}
  */
 function renderEditQuestionMenuPopup(quizId, lecturerId, questionId) {
 
 if (!document.querySelector('.Modal_div')) {
     // This will call the function to load and render our template.
-    Templates.renderForPromise("mod_livequiz/question_menu_popup")
+    Templates.renderForPromise("mod_livequiz/question_menu_popup",{},"boost")
 
         // It returns a promise that needs to be resolved.
         .then(({html, js}) => {
@@ -58,26 +69,30 @@ if (!document.querySelector('.Modal_div')) {
 }
 
 /**
+ * Adds an event listener to the save question button.
  *
  * @param quizId
  * @param lecturerId
  * @param questionId
+ * @returns {void}
  */
 function addSaveQuestionButtonListener(quizId, lecturerId, questionId) {
     let saveQuestionButton = document.querySelector(".save_button");
     saveQuestionButton.addEventListener("click", () => {
-        onSaveQuestionButtonClicked(quizId, lecturerId, questionId);
+        handleSaveQuestion(quizId, lecturerId, questionId);
     });
 }
 
 
 /**
+ * Event handler for when a question is saved.
  *
  * @param quizId
  * @param lecturerId
  * @param questionId
+ * @returns {void}
  */
-function onSaveQuestionButtonClicked(quizId, lecturerId, questionId) {
+function handleSaveQuestion(quizId, lecturerId, questionId) {
     let questionData = getQuestionData();
     let savedQuestion = {
         id: questionId,
@@ -105,7 +120,8 @@ function onSaveQuestionButtonClicked(quizId, lecturerId, questionId) {
         // Re-render saved questions list.
         Templates.renderForPromise(
             "mod_livequiz/saved_questions_list",
-            contextsavedquestions
+            contextsavedquestions,
+            "boost"
         )
             .then(({html, js}) => {
                 Templates.appendNodeContents("#saved-questions-container", html, js);
@@ -120,8 +136,10 @@ function onSaveQuestionButtonClicked(quizId, lecturerId, questionId) {
 }
 
 /**
+ * The data for the question passed as argument is rendered in the edit-question pop-up.
  *
  * @param questionData
+ * @returns {void}
  */
 function restoreQuestionDataInPopup(questionData){
     document.getElementById("question_title_id").value = questionData.questiontitle;
@@ -135,8 +153,10 @@ function restoreQuestionDataInPopup(questionData){
 }
 
 /**
+ * The data for the answer passed as argument is rendered in the edit-question pop-up.
  *
  * @param answer
+ * @returns {void}
  */
 function restoreAnswerDataInPopup(answer) {
     let answerContainer = createAnswerContainer(answer.answerid);

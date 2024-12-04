@@ -45,7 +45,7 @@ export const init = async(quizId, lecturerId, url) => {
 function renderCreateQuestionMenuPopup(quizId, lecturerId) {
   // This will call the function to load and render our template.
   if (!document.querySelector('.Modal_div')) {
-    Templates.renderForPromise("mod_livequiz/question_menu_popup",null,"boost")
+    Templates.renderForPromise("mod_livequiz/question_menu_popup",{},"boost")
 
       // It returns a promise that needs to be resolved.
       .then(({html, js}) => {
@@ -66,6 +66,7 @@ function renderCreateQuestionMenuPopup(quizId, lecturerId) {
  *
  * @param {number} quizId - The ID of the quiz.
  * @param {number} lecturerId - The ID of the lecturer.
+ * @return {void}
  */
 function addSaveQuestionButtonListener(quizId, lecturerId) {
   let saveQuestionButton = document.querySelector(".save_button");
@@ -75,9 +76,11 @@ function addSaveQuestionButtonListener(quizId, lecturerId) {
 }
 
 /**
+ * Event handler for when a question is saved.
  *
  * @param quizId
  * @param lecturerId
+ * @returns {void}
  */
 function handleQuestionSubmission(quizId, lecturerId) {
   let savedQuestion = prepareQuestion(); // Prepare the question object to be sent to DB
@@ -101,7 +104,9 @@ function handleQuestionSubmission(quizId, lecturerId) {
 }
 
 /**
+ * Gets the data for a question inputted in the UI. Used when creating or editing a question.
  *
+ * @returns {{answers: Array, description: *, id: number, title: *, explanation: *, type: number}}
  */
 function prepareQuestion() {
   let questionData = getQuestionData();
