@@ -473,13 +473,13 @@
     margin-right: 10px;
  }
 
- .question-container {
+ .question_container {
     display: flex;
     flex-direction: column;
     justify-content: center;
  }
 
- .question-container img {
+ .question_container img {
     max-width: 100%;
     height: auto;
  }
@@ -626,6 +626,6 @@
     background-color: rgba(255, 0, 0);
 }
 
-.correctnotchosen {
+.correct_not_chosen {
     background-color: rgba(255, 200, 12);
 }

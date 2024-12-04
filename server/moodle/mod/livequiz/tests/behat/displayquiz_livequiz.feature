@@ -164,13 +164,13 @@ Scenario: Submitted quiz has the correct classes
   And "Champagne" "checkbox" should exist
   Then "Champagne" should have a parent div with class "answer incorrect"
   And "Nice" "checkbox" should exist
-  Then "Nice" should have a parent div with class "answer correctnotchosen"
+  Then "Nice" should have a parent div with class "answer correct_not_chosen"
   And "Aarhus" "radio" should exist
   And "Aalborg" "radio" should exist
   And "Copenhagen" "radio" should exist
   Then "Copenhagen" should have a parent div with class "answer correct"
   And "Yes" "radio" should exist
-  Then "Yes" should have a parent div with class "answer correctnotchosen"
+  Then "Yes" should have a parent div with class "answer correct_not_chosen"
   And "No" "radio" should exist
   Then "No" should have a parent div with class "answer incorrect"
 
