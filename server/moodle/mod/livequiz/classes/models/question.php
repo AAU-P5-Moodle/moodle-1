@@ -333,6 +333,24 @@ class question {
     }
 
     /**
+     * getter for question hasmultiplecorrectanswers
+     * @return bool
+     */
+    public function get_hasmultiplecorrectanswers(): bool {
+        // This is a simple check to see if the question has multiple correct answers.
+        $numcorrect = 0;
+        foreach ($this->answers as $answer) {
+            if ($answer->get_correct()) {
+                $numcorrect++;
+                if ($numcorrect > 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Gets the type of the question.
      * 0 is checkbox, 1 is radiobutton
      * @return int|0 // Returns the type of the question, if it has one. 0 if it does not.
@@ -369,7 +387,12 @@ class question {
                 'answerdescription' => $answer->get_description(),
                 'answerexplanation' => $answer->get_explanation(),
                 'answercorrect' => $answer->get_correct(),
-            ];
+            ];   
+        }
+        if ($this->get_hasmultiplecorrectanswers()) {
+            $data->answertype = 'checkbox';
+        } else {
+            $data->answertype = 'radio';
         }
         return $data;
     }
