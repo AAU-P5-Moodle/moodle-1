@@ -52,7 +52,7 @@ function render_create_question_menu_popup(quizid, lecturerid) {
       // It returns a promise that needs to be resoved.
       .then(({ html, js }) => {
         // Here we have compiled template.
-        Templates.appendNodeContents(".main-container", html, js);
+        Templates.appendNodeContents(".main_container", html, js);
         add_answer_button_event_listener();
         add_save_question_button_listener(quizid, lecturerid);
         add_cancel_edit_button_listener("create");

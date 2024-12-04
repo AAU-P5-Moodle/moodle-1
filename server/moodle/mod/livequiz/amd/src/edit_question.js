@@ -32,7 +32,7 @@ if(!document.querySelector('.modal_div')){
         // It returns a promise that needs to be resolved.
         .then(({ html, js }) => {
             // Here we have the compiled template.
-            Templates.appendNodeContents(".main-container", html, js);
+            Templates.appendNodeContents(".main_container", html, js);
             get_question(quizid, questionid).then((question)=> {restore_question_data_in_popup(question);});
             add_answer_button_event_listener();
             add_save_question_button_listener(quizid, lecturerid, questionid);
