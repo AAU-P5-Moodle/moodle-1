@@ -35,9 +35,9 @@ Feature: Delete questions in a livequiz activity
     And "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
-    And "//li[//span[//@class='question-title' and text()='Question 1']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
-    And "//li[//span[//@class='question-title' and text()='Question 2']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
-    And "//li[//span[//@class='question-title' and text()='Question 3']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question_list_text' and text()='Question 1']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question_list_text' and text()='Question 2']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question_list_text' and text()='Question 3']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
     # Click on the delete btn for the first appearance of a span element with the title "Question 1"
     # The confirm popup is not shown on screen but this step confirm it
     When I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element" confirming the dialogue
@@ -61,9 +61,9 @@ Feature: Delete questions in a livequiz activity
     And "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
-    And "//li[//span[//@class='question-title' and text()='Question 1']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
-    And "//li[//span[//@class='question-title' and text()='Question 2']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
-    And "//li[//span[//@class='question-title' and text()='Question 3']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question_list_text' and text()='Question 1']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question_list_text' and text()='Question 2']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question_list_text' and text()='Question 3']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
     # Click on the delete btn for the first appearance of a span element with the title "Question 1"
     # The confirm popup is not shown on screen but this step cancel it
     When I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element" dismissing the dialogue
@@ -87,9 +87,9 @@ Feature: Delete questions in a livequiz activity
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
     And "Take Quiz" "link" should exist
-    And "//li[//span[//@class='question-title' and text()='Question 1']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
-    And "//li[//span[//@class='question-title' and text()='Question 2']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
-    And "//li[//span[//@class='question-title' and text()='Question 3']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question_list_text' and text()='Question 1']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question_list_text' and text()='Question 2']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
+    And "//li[//span[//@class='question_list_text' and text()='Question 3']]//button[contains(@class, 'delete-question')]" "xpath_element" should exist
     When I click on "(//li[.//span[text()='Question 1']])[1]//button[contains(@class, 'delete-question')]" "xpath_element" confirming the dialogue
     When I click on "(//li[.//span[text()='Question 2']])[1]//button[contains(@class, 'delete-question')]" "xpath_element" confirming the dialogue
     When I click on "(//li[.//span[text()='Question 3']])[1]//button[contains(@class, 'delete-question')]" "xpath_element" confirming the dialogue
