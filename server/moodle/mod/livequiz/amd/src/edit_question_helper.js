@@ -177,11 +177,11 @@ export function rerenderTakeQuizButton(url, hasQuestions, callback) {
  * Sets up the event listener for the cancel button
  * @param {string} context - The context in which the cancel button is being used.
  */
-export function add_cancel_edit_button_listener(context) {
-  let discard_question_button = document.querySelector(
+export function addCancelEditButtonListener(context) {
+  let discardQuestionButton = document.querySelector(
       ".discard_question_button"
   );
-  let modal_div = document.querySelector(".Modal_div");
+  let modalDiv = document.querySelector(".Modal_div");
   let stringForConfirm = "";
 
   // Set the string for the confirm box based on the context.
@@ -198,11 +198,9 @@ export function add_cancel_edit_button_listener(context) {
     default:
       stringForConfirm = "Are you sure you want to cancel the changes made?";
   }
-  discard_question_button.addEventListener("click", () => {
+  discardQuestionButton.addEventListener("click", () => {
     if(confirm(stringForConfirm)) {
-      isEditing = false;
-      editingIndex = null;
-      modal_div.remove();
+      modalDiv.remove();
     }
     else {
       return;
@@ -216,7 +214,7 @@ export function add_cancel_edit_button_listener(context) {
  * @param answers The answers of the question.
  * @returns {boolean} True if input fields are satisfied, false otherwise.
  */
-export function validate_submission(answers) {
+export function validateSubmission(answers) {
   let isValid = true; // Is the question valid.
   let answersValid = true; // Are all the answers valid.
   let questionTitle = document.getElementById("question_title_id").value.trim();
