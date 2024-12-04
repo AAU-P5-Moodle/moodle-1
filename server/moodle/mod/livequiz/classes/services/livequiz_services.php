@@ -513,4 +513,17 @@ class livequiz_services {
 
         return $submissions;
     }
+    /**
+     * Deletes lecturer/student participations and their corresponding answers.
+     * @param int quizid
+     * @returns bool
+     * @throws dml_exception
+     */
+    public function delete_student_participations_and_answers_by_quizid_and_studentid(int $quizid, int $studentid): bool {
+        $participations = student_quiz_relation::get_all_student_participation_for_quiz($quizid, $studentid);
+        foreach ($participations as $participation) {
+            student_answers_relation::delete_student_answers_relation_by_participationid($participation->get_id());
+        }
+        return student_quiz_relation::delete_all_participations_by_quizid($quizid);
+    }
 }
