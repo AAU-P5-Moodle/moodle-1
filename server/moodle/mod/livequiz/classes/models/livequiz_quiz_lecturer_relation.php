@@ -70,7 +70,7 @@ class livequiz_quiz_lecturer_relation {
      * @throws dml_transaction_exception
      *
      */
-    public static function check_lecturer_quiz_relation_exists(int $quizid, $lecturerid): bool {
+    public static function check_lecturer_quiz_relation_exists(int $quizid, int $lecturerid): bool {
         global $DB;
         return $DB->record_exists('livequiz_quiz_lecturer', ['lecturer_id' => $lecturerid, 'quiz_id' => $quizid]);
     }
