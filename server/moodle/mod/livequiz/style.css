@@ -446,22 +446,6 @@
   */
 
 
-  .main-container {
-
-  }
-
-  .title-container {
-
-  }
-
-  .sidebar {
-
-  }
-
-  .navbar{
-
-  }
-
   .delete_question_button {
     float: right;
     background-color: red;
@@ -628,4 +612,134 @@
 
 .correctnotchosen {
     background-color: rgba(255, 200, 12);
+}
+
+/* Sidebar Styling */
+/* Layout Styling */
+.main-container-runner {
+   display: flex;
+   flex-wrap: nowrap; /* Ensures sidebar stays beside main content */
+   width: 100%;
+   box-sizing: border-box;
+   gap: 20px; /* Adds spacing between sidebar and main content */
+}
+
+.main-content-runner {
+   width: 80%;
+   padding: 20px;
+   box-sizing: border-box;
+}
+
+.sidebar {
+   width: 20%;
+   background-color: #f9f9f9; /* Light background */
+   border-left: 2px solid #ddd;
+   padding: 20px;
+   box-sizing: border-box;
+   display: flex;
+   flex-direction: column; /* Stack content vertically */
+   justify-content: space-between; /* Push Submit Quiz to the bottom */
+   border-radius: 4px; /* Add rounded corners */
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Add light shadow */
+}
+
+/* Sidebar Button Styling */
+.submit-quiz {
+   width: 100%;
+   padding: 10px;
+   background-color: #28a745;
+   color: white;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   font-size: 1rem;
+   margin-top: auto; /* Ensures button is pushed to the bottom */
+}
+
+.submit-quiz:hover {
+   background-color: #218838;
+}
+
+/* Question Section Styling */
+.question-container {
+   margin-bottom: 20px;
+}
+
+.question-title {
+   font-size: 1.2rem;
+   font-weight: bold;
+   margin-bottom: 10px;
+   color: #333;
+}
+
+.question-description {
+   font-size: 1rem;
+   margin-bottom: 15px;
+   color: #555;
+}
+
+.answer-container {
+   margin-top: 15px;
+}
+
+.answer {
+   border: 1px solid #ccc; /* Adds a border around each answer */
+   background-color: #fff;
+   padding: 10px;
+   border-radius: 4px;
+   display: flex;
+   align-items: center;
+   margin-bottom: 10px;
+   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Adds a light shadow */
+   transition: background-color 0.2s ease;
+}
+
+.answer:hover {
+   background-color: #f5f5f5; /* Slight hover effect for better interactivity */
+}
+
+.answer label {
+   margin-left: 10px;
+   font-size: 1rem;
+   color: #333;
+}
+
+/* Navigation Section */
+.question_navigation {
+   display: flex;
+   justify-content: space-between;
+   margin-top: 20px;
+}
+
+.question_navigation a {
+   text-decoration: none;
+   padding: 10px 20px;
+   font-size: 1rem;
+   background-color: #007bff;
+   color: white;
+   border-radius: 4px;
+   border: 1px solid #007bff;
+   cursor: pointer;
+   transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.question_navigation a:hover {
+   background-color: #0056b3;
+   border-color: #0056b3;
+}
+
+.question_navigation a:first-child {
+   margin-right: auto; /* Push Previous Question to the far left */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+   .main-container-runner {
+       flex-direction: column;
+   }
+
+   .sidebar,
+   .main-content-runner {
+       width: 100%;
+   }
 }
