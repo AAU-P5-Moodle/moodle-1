@@ -22,6 +22,7 @@ use core_external\external_multiple_structure;
 use core_external\external_value;
 use dml_exception;
 use invalid_parameter_exception;
+use mod_livequiz\models\question;
 use mod_livequiz\services\livequiz_services;
 use PhpXmlRpc\Exception;
 use stdClass;
@@ -69,7 +70,7 @@ class reuse_question extends external_api {
         ]);
         $service = livequiz_services::get_singleton_service_instance();
         try {
-            $livequiz = $services->get_livequiz_instance($quizid);
+            $livequiz = $service->get_livequiz_instance($quizid);
             $existingquestions = $livequiz->get_questions(); // These are the questions already present in the livequiz.
             $questionids = self::filter_unique_questions($questionids);
             $questionstoadd = [];
