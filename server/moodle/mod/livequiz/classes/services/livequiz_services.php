@@ -524,6 +524,6 @@ class livequiz_services {
         foreach ($participations as $participation) {
             student_answers_relation::delete_student_answers_relation_by_participationid($participation->get_id());
         }
-        return student_quiz_relation::delete_all_participations_by_quizid($quizid);
+        return student_quiz_relation::delete_all_participations_by_quizid($quizid, $studentid);
     }
 }
