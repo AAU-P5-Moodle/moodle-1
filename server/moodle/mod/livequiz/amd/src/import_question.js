@@ -21,7 +21,6 @@ export const init = async(quizId, lecturerId, url) => {
     });
 };
 
-
 /**
  * Renders the import question menu popup for a live quiz.
  *
@@ -44,9 +43,7 @@ async function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
             addCancelEditButtonListener("import");
             addOldQuestionsToPopup(lecturerId, quizId);
         })
-
-        // Deal with this exception (Using core/notify exception function is recommended).
-        .catch((error) => displayException(error));
+        .catch((error) => displayException(error)); // Deal with this exception (Using core/notify exception function is recommended).
 }
 
 /**
@@ -70,7 +67,7 @@ function addOldQuestionsToPopup(lecturerId, quizId) {
             if (quiz.questions.length > 0) {
                 let questionCheckboxes = [];
                 let quizDiv = document.createElement('div');
-                //Create quiz checkbox.
+                // Create quiz checkbox.
                 let quizCheckbox = document.createElement('input');
                 quizCheckbox.type = "checkbox";
                 quizCheckbox.value = quiz.quizid;
@@ -96,7 +93,7 @@ function addOldQuestionsToPopup(lecturerId, quizId) {
                 questionsDiv.id = "questionsdiv";
                 // Loop through each question and add it to the container.
                 quiz.questions.forEach((question) => {
-                    //Create question checkbox.
+                    // Create question checkbox.
                     let questionDiv = document.createElement('div');
                     let questionCheckbox = document.createElement('input');
                     questionCheckbox.type = "checkbox";
@@ -159,14 +156,17 @@ async function importQuestions(quizId, url, lecturerId) {
  @returns {void}
  */
 function callReuseQuestions(quizId, questionIds, lecturerId, quizUrl) {
-    externalReuseQuestions(quizId, questionIds, lecturerId).then((questions) => {
-        let updateEventListeners = () => {
-            addEditQuestionListeners(quizId, lecturerId);
-            addDeleteQuestionListeners(quizId, lecturerId);
-        };
-        rerenderSavedQuestionsList(questions, updateEventListeners); // Re-render saved questions list.
-        rerenderTakeQuizButton(quizUrl, true); // Re-render take quiz button. Since at least one question was imported, hasquestions is true.
-    }).catch((error) => displayException(error));
+    externalReuseQuestions(quizId, questionIds, lecturerId)
+        .then((questions) => {
+            let updateEventListeners = () => {
+                addEditQuestionListeners(quizId, lecturerId);
+                addDeleteQuestionListeners(quizId, lecturerId);
+            };
+            rerenderSavedQuestionsList(questions, updateEventListeners); // Re-render saved questions list.
+            // Re-render take quiz button. Since at least one question was imported, hasquestions is true.
+            rerenderTakeQuizButton(quizUrl, true);
+        })
+        .catch((error) => displayException(error));
     let modalDiv = document.querySelector(".Modal_div");
     modalDiv.remove();
 }
@@ -226,8 +226,7 @@ function addQuestionCheckboxListener(checkbox, questionCheckboxes) {
     questionCheckboxes.forEach((questionCheckbox) => {
         questionCheckbox.addEventListener("change", () => {
             if (questionCheckbox.checked) { // If the question is checked, check if all questions are checked.
-                let checkboxesSame = false;
-                checkboxesSame = checkQuestionsChecked(questionCheckboxes);
+                let checkboxesSame = checkQuestionsChecked(questionCheckboxes);
                 if (checkboxesSame) { // If all questions are checked, check the quiz checkbox.
                     checkbox.checked = questionCheckbox.checked;
                 }
