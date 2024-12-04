@@ -43,7 +43,7 @@ function livequiz_add_instance(object $quizdata): bool|int {
         $firstrecord = reset($modulerecord); // Get the latest record.
         $quizdata->activity_id = $firstrecord->id; // Set the activity ID.
     } else {
-        $quizdata->activity_id = null; // Handle the case where no record is found.
+        $quizdata->activity_id = 0; // Handle the case where no record is found.
     }
 
     $quizdata->timecreated = time();
