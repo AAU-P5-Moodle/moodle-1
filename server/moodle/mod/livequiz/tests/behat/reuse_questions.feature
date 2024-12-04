@@ -120,7 +120,7 @@ Feature: Reuse previously created questions in livequiz activity
     And "Import Question" "button" should exist
     And I click on "Import Question" "button"
     Then "Import Question(s)" "button" should exist
-    And "Discard Changes" "button" should exist
+    And "Cancel" "button" should exist
     And I should see "Previously made Quizzes and Questions"
     And "livequiz_africa_quiz" "checkbox" should not exist
     And "livequiz_europe_quiz" "checkbox" should exist
