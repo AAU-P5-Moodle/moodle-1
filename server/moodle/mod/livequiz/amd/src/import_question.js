@@ -2,7 +2,7 @@ import Templates from "core/templates";
 import {addCancelEditButtonListener, rerenderSavedQuestionsList, rerenderTakeQuizButton} from "./helper";
 import {addEditQuestionListeners} from "./edit_question";
 import {addDeleteQuestionListeners} from "./delete_question";
-import {displayException} from "core/notification";
+import {exception as displayException} from "core/notification";
 import {externalReuseQuestions, getLecturerQuiz} from "./repository";
 
 /**
@@ -145,7 +145,6 @@ async function importQuestions(quizId, url, lecturerId) {
             callReuseQuestions(quizId, questionIds, lecturerId, quizUrl);
         } catch (error) {
             window.console.error("Error in import of questions");
-            displayException(error);
         }
     });
 }

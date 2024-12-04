@@ -32,9 +32,7 @@ export function addDeleteQuestionListeners(quizId, lecturerId) {
     element.addEventListener("click", () => {
         let listItem = element.closest("li"); // Get the list item.
         let questionId = parseInt(element.dataset.id, 10);
-        if (!confirm("Are you sure you want to delete this question?")) {
-            return;
-        } else {
+        if(confirm("Are you sure you want to delete this question?")){
             deleteQuestion(questionId, lecturerId, quizId)
                 .then((response) => {
                     if (response.success) {

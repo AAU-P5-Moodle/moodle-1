@@ -201,9 +201,6 @@ export function addCancelEditButtonListener(context) {
     if(confirm(stringForConfirm)) {
       modalDiv.remove();
     }
-    else {
-      return;
-    }
   });
 }
 

@@ -24,7 +24,7 @@ export const init = async(quizId, studentId, resultsUrl) => {
 };
 
 /**
- * Launch confirmation dialogue for submitting a quiz attempt. 
+ * Launch confirmation dialogue for submitting a quiz attempt.
  *
  * @returns {boolean}
  */
