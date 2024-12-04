@@ -4,13 +4,13 @@ import {saveQuestion} from "./repository";
 import {addDeleteQuestionListeners} from "./delete_question";
 import {addEditQuestionListeners} from "./edit_question";
 import {
-  addAnswerButtonEventListener,
-  addCancelEditButtonListener,
-  rerenderSavedQuestionsList,
-  rerenderTakeQuizButton,
-  validateSubmission,
-  getQuestionData,
-  prepareAnswers,
+    addAnswerButtonEventListener,
+    addCancelEditButtonListener,
+    rerenderSavedQuestionsList,
+    rerenderTakeQuizButton,
+    validateSubmission,
+    getQuestionData,
+    prepareAnswers,
 } from "./helper";
 
 let takeQuizUrl = "";
@@ -25,11 +25,11 @@ let takeQuizUrl = "";
  * @returns {Promise<void>} A promise that resolves when the initialization is complete.
  */
 export const init = async(quizId, lecturerId, url) => {
-  takeQuizUrl = url; // Set url to quiz attempt page to global variable
-  let addQuestionButton = document.getElementById("id_buttonaddquestion");
-  addQuestionButton.addEventListener("click", () => {
-    renderCreateQuestionMenuPopup(quizId, lecturerId);
-  });
+    takeQuizUrl = url; // Set url to quiz attempt page to global variable.
+    let addQuestionButton = document.getElementById("id_buttonaddquestion");
+    addQuestionButton.addEventListener("click", () => {
+        renderCreateQuestionMenuPopup(quizId, lecturerId);
+    });
 };
 
 /**
@@ -43,22 +43,22 @@ export const init = async(quizId, lecturerId, url) => {
  * @returns {void}
  */
 function renderCreateQuestionMenuPopup(quizId, lecturerId) {
-  // This will call the function to load and render our template.
-  if (!document.querySelector('.Modal_div')) {
-    Templates.renderForPromise("mod_livequiz/question_menu_popup",{},"boost")
+    // This will call the function to load and render our template.
+    if (!document.querySelector('.Modal_div')) {
+        Templates.renderForPromise("mod_livequiz/question_menu_popup", {}, "boost")
 
       // It returns a promise that needs to be resolved.
-      .then(({html, js}) => {
-        // Here we have compiled template.
-        Templates.appendNodeContents(".main-container", html, js);
-        addAnswerButtonEventListener();
-        addSaveQuestionButtonListener(quizId, lecturerId);
-        addCancelEditButtonListener("create");
-      })
+        .then(({html, js}) => {
+          // Here we have compiled template.
+            Templates.appendNodeContents(".main-container", html, js);
+            addAnswerButtonEventListener();
+            addSaveQuestionButtonListener(quizId, lecturerId);
+            addCancelEditButtonListener("create");
+        })
 
       // Deal with this exception (Using core/notify exception function is recommended).
-      .catch((error) => displayException(error));
-  }
+        .catch((error) => displayException(error));
+    }
 }
 
 /**
@@ -69,38 +69,38 @@ function renderCreateQuestionMenuPopup(quizId, lecturerId) {
  * @return {void}
  */
 function addSaveQuestionButtonListener(quizId, lecturerId) {
-  let saveQuestionButton = document.querySelector(".save_button");
-  saveQuestionButton.addEventListener("click", () => {
-    handleQuestionSubmission(quizId, lecturerId);
-  });
+    let saveQuestionButton = document.querySelector(".save_button");
+    saveQuestionButton.addEventListener("click", () => {
+        handleQuestionSubmission(quizId, lecturerId);
+    });
 }
 
 /**
  * Event handler for when a question is saved.
- *
- * @param quizId
- * @param lecturerId
+ * @param {int} quizId
+ * @param {int} lecturerId
  * @returns {void}
  */
 function handleQuestionSubmission(quizId, lecturerId) {
-  let savedQuestion = prepareQuestion(); // Prepare the question object to be sent to DB
+    let savedQuestion = prepareQuestion(); // Prepare the question object to be sent to DB.
 
-    if(!validateSubmission(savedQuestion.answers)) {
-    return;
-  }
+    if (!validateSubmission(savedQuestion.answers)) {
+        return;
+    }
 
-  let updateEventListeners = () => {
-    addEditQuestionListeners(quizId, lecturerId);
-    addDeleteQuestionListeners(quizId, lecturerId);
-  };
+    let updateEventListeners = () => {
+        addEditQuestionListeners(quizId, lecturerId);
+        addDeleteQuestionListeners(quizId, lecturerId);
+    };
 
-  saveQuestion(savedQuestion, lecturerId, quizId).then((questions) => {
-    rerenderSavedQuestionsList(questions, updateEventListeners); // Re-render saved questions list
-    rerenderTakeQuizButton(takeQuizUrl, true); // Re-render take quiz button
-  });
+    saveQuestion(savedQuestion, lecturerId, quizId).then((questions) => {
+        rerenderSavedQuestionsList(questions, updateEventListeners); // Re-render saved questions list.
+        rerenderTakeQuizButton(takeQuizUrl, true); // Re-render take quiz button.
+    })
+    .catch((error) => displayException(error));
 
-  let modalDiv = document.querySelector(".Modal_div");
-  modalDiv.remove();
+    let modalDiv = document.querySelector(".Modal_div");
+    modalDiv.remove();
 }
 
 /**
@@ -109,14 +109,14 @@ function handleQuestionSubmission(quizId, lecturerId) {
  * @returns {{answers: Array, description: *, id: number, title: *, explanation: *, type: number}}
  */
 function prepareQuestion() {
-  let questionData = getQuestionData();
+    let questionData = getQuestionData();
 
-  return {
-    id: 0,
-    title: questionData.title,
-    answers: prepareAnswers(),
-    description: questionData.description,
-    explanation: questionData.explanation,
-    type: questionData.type,
-  };
+    return {
+        id: 0,
+        title: questionData.title,
+        answers: prepareAnswers(),
+        description: questionData.description,
+        explanation: questionData.explanation,
+        type: questionData.type,
+    };
 }
