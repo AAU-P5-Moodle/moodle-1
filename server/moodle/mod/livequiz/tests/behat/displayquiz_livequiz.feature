@@ -31,8 +31,10 @@ Feature: View livequiz activity
     #The questions should be shown in different pages
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
     And I should see "Take Quiz"
+    And I should see "Test description"
     And I click on "Take Quiz" "link"
     Then I should see "Question 1"
+    And I should not see "Test description"
     And I should see "Which of the following cities is in France?"
     #The answer options are shown as checkboxes
     And "Paris" "checkbox" should exist
@@ -42,6 +44,7 @@ Feature: View livequiz activity
     And I should not see "Previous Question"
     And I click on "Next Question" "link"
     Then I should see "Question 2"
+    And I should not see "Test description"
     And I should see "What is the Capital of Denmark?"
     #The answer options are shown as radio buttons
     And "Aarhus" "radio" should exist

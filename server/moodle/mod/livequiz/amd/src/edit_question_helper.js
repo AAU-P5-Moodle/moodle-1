@@ -234,3 +234,109 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
     // Deal with this exception (Using core/notify exception function is recommended).
     .catch((error) => displayException(error));
 }
+
+/**
+ * This validates that all inputs to create/edit question, if not all inputs are satisfied, it will return false.
+ * @param answers The answers of the question.
+ * @returns {boolean} True if input fields are satisfied, false otherwise.
+ */
+export function validate_submission(answers) {
+  let isValid = true; // Is the question valid.
+  let answersValid = true; // Are all the answers valid.
+  let questionTitle = document.getElementById("question_title_id").value.trim();
+  let questionTitleTextarea = document.getElementById("question_title_id");
+  let questionTitleAlert = document.getElementById("title_textarea_alert");
+  let questionDesription = document.getElementById("question_description_id").value.trim();
+  let questionDesriptionTextarea = document.getElementById("question_description_id");
+  let questionDescriptionAlert = document.getElementById("question_textarea_alert");
+  let atLeastOneCorrectAnswerAlert = document.getElementById("question_alert_one_correct");
+  let answerDescriptionAlert = document.getElementById("question_alert_description");
+  let atLeastTwoAnswersAlert = document.getElementById("question_alert_two_answers");
+  let maxOneCorrectAnswerAlert = document.getElementById("question_alert_max_one_correct");
+  let questionType = document.getElementById("question_type_checkbox_id").checked;
+  let answersBox = document.getElementById("all_answers");
+  let isValidText = document.getElementById("validText");
+
+  // Function to set the border style of an element.
+  const setBorderStyle = (element, isValid) => {
+    element.style.border = isValid ? "1px solid #ccc" : "1px solid red";
+  };
+
+  // Checks if the question title is empty.
+  if (!questionTitle) {
+    setBorderStyle(questionTitleTextarea, !!questionTitle);
+    questionTitleAlert.style.display = "block";
+    isValid = false;
+  } else {
+    questionTitleAlert.style.display = "none";
+    setBorderStyle(questionTitleTextarea, true);
+  }
+
+    // Checks if the question description is empty.
+  if (!questionDesription) {
+    setBorderStyle(questionDesriptionTextarea, !!questionDesription);
+    questionDescriptionAlert.style.display = "block";
+    isValid = false;
+  } else {
+    questionDescriptionAlert.style.display = "none";
+    setBorderStyle(questionDesriptionTextarea, true);
+  }
+
+  // Checks if there are at least two answers.
+  if (answers.length < 2) {
+    isValid = false;
+    answersValid = false;
+    atLeastTwoAnswersAlert.style.display = "block";
+  }
+  else {
+    atLeastTwoAnswersAlert.style.display = "none";
+  }
+
+  // Checks if at least one answer is correct.
+  if (!answers.some(answer => answer.correct === 1)) {
+    isValid = false;
+    answersValid = false;
+    atLeastOneCorrectAnswerAlert.style.display = "block";
+  }
+  else {
+    atLeastOneCorrectAnswerAlert.style.display = "none";
+  }
+
+  // Checks if all answers have a description.
+  if (answers.some(answer => !answer.description.trim())) {
+    isValid = false;
+    answersValid = false;
+    answerDescriptionAlert.style.display = "block";
+  } else {
+    answerDescriptionAlert.style.display = "none";
+  }
+
+  // Checks if multiple correct answers have been set, when not allowed to. 
+  if (questionType) {
+    let checkedAnswers = 0;
+    answers.forEach(answer => {
+      checkedAnswers += answer.correct;
+    });
+    if (checkedAnswers > 1){
+      isValid = false;
+      answersValid = false;
+      maxOneCorrectAnswerAlert.style.display = "block";
+    } else {
+      maxOneCorrectAnswerAlert.style.display = "none";
+    } 
+  } else {
+    maxOneCorrectAnswerAlert.style.display = "none";
+  }
+
+  if (!answersValid) { // If not all answers are valid show the box with warnings.
+    answersBox.style.display = "block";
+  } else {
+    answersBox.style.display = "none";
+  }
+
+  if (!isValid) { // If the question is not valid show warning.
+    isValidText.style.display = "block";
+    return false;
+  }
+  return true;
+}

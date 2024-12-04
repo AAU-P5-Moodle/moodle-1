@@ -48,6 +48,11 @@ if ($cm->course !== $course->id) { // Check if the course module matches the cou
 require_login($course, false, $cm);
 $PAGE->set_cacheable(false);
 
+// Suppress the activity description by overriding the module settings.
+$PAGE->set_context(context_module::instance($cmid));
+$PAGE->activityrecord->intro = null;
+$PAGE->activityrecord->introformat = null;
+
 if (!isset($_SESSION['completed'])) { // If the session variable is not set, set it to false.
     $_SESSION['completed'] = false;
 }

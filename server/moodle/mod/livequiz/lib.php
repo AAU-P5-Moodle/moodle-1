@@ -51,8 +51,7 @@ function livequiz_update_instance(object $quizdata): bool {
     global $DB;
 
     $quizdata->timemodified = time();
-    // Uncomment the following line if needed.!
-    // $quizdata->id = $quizdata->instance;!
+    $quizdata->id = $quizdata->instance;
 
     $DB->update_record('livequiz', $quizdata);
 
