@@ -22,10 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_livequiz\models\livequiz;
-use mod_livequiz\models\student_quiz_relation;
-use mod_livequiz\services\livequiz_services;
-
 /**
  * Adds a new instance of the livequiz to the database.
  *
@@ -36,16 +32,16 @@ use mod_livequiz\services\livequiz_services;
 function livequiz_add_instance(object $quizdata): bool|int {
     global $DB;
 
-    $modulerecord = $DB->get_records(
+    $modulerecord = $DB->get_records( // Get the course module records.
         'course_modules',
         ['course' => $quizdata->course, 'module' => $quizdata->module, 'section' => $quizdata->section],
         'id DESC',
         'id'
     );
 
-    if ($modulerecord) {
-        $firstrecord = reset($modulerecord);
-        $quizdata->activity_id = $firstrecord->id;
+    if ($modulerecord) { // Check if a record is found.
+        $firstrecord = reset($modulerecord); // Get the latest record.
+        $quizdata->activity_id = $firstrecord->id; // Set the activity ID.
     } else {
         $quizdata->activity_id = null; // Handle the case where no record is found.
     }
