@@ -11,10 +11,6 @@ import {
   validateSubmission,
 } from "./helper";
 
-let isEditing = false;
-let editingIndex = 0;
-let answerCount = 0;
-let IDs = 0;
 let takeQuizUrl = "";
 
 /**
