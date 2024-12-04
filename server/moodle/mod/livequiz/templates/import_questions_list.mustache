@@ -30,26 +30,24 @@
 
 }}
 
-<div style="border: 2px solid black">
+<div class="quiz_entry">
     <input
         type="checkbox"
         value="{{quizid}}"
         id="{{quizid}}"
         class="quiz_{{quizid}}"
         name="{{quiztitle}}"
-        style="margin-right: 5px"
     />
-    <label for="quiz_{{quizid}}" style="font-weight: bold">{{quiztitle}}</label>
-    <div id="questionsdiv" style="margin-bottom: 20px; margin-left: 20px">
+    <label for="quiz_{{quizid}}" class="quiz_label">{{quiztitle}}</label>
+    <div id="questionsdiv">
         {{#questions}}
-        <div>
+        <div class="question_entry">
             <input
                 type="checkbox"
                 value="question_{{questionid}}"
                 id="{{questionid}}"
-                class="quiz_{{quizid}}_question question"
+                class="quiz_{{quizid}}_question question_checkbox"
                 name="{{questiontitle}}"
-                style="margin-right: 5px"
             />
             <label for="question_{{questionid}}">{{questiontitle}}</label>
         </div>

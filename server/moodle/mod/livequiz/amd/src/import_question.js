@@ -147,7 +147,7 @@ function call_reuse_questions(quizId, questionIds, lecturerId, quizUrl) {
  */
 function getCheckedQuestions() {
     let checkedquestions = [];
-    let questions = document.querySelectorAll(".question");
+    let questions = document.querySelectorAll(".question_checkbox");
     questions.forEach((question) => {
         if (question.checked) {
             // If the checkbox is checked, add the id to the array.
@@ -187,6 +187,8 @@ function addQuestionCheckboxListener(quizId) {
     questionCheckboxes.forEach((questionCheckbox) => {
         questionCheckbox.addEventListener("change", () => {
             if (questionCheckbox.checked) {
+                questionEntry = questionCheckbox.parentElement;
+                questionEntry.classList.add("question_selected");
                 // If the question is checked, check if all questions are checked.
                 let allChecked = false;
                 allChecked = areAllQuestionsChecked(questionCheckboxes);
@@ -196,6 +198,8 @@ function addQuestionCheckboxListener(quizId) {
                 }
             } else {
                 // If the question is unchecked, uncheck the quiz checkbox.
+                questionEntry = questionCheckbox.parentElement;
+                questionEntry.classList.remove("question_selected");
                 quizCheckbox.checked = questionCheckbox.checked;
             }
         });

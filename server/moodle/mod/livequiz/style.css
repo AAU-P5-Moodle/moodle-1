@@ -654,3 +654,35 @@
       cursor: pointer;
 }
 
+.quiz_label{
+   font-size: 20px;
+   font-weight: bold;
+   text-decoration: underline;
+}
+
+.question_entry{
+   border: 2px solid black;
+   border-radius: 5px;
+   margin-left: 2rem;
+   width: 50%;
+   padding: 2px 2px 0px 10px;
+}
+
+.question_selected{
+   background-color: rgb(32, 138, 176, 0.5);
+}
+
+.import_btn{
+	float: left;
+	background-color: rgb(32, 138, 176);
+	color: white;
+	padding: 10px 20px;
+	font-size: large;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.import_buttons_wrapper{
+   padding-top: 2rem;
+}
+
