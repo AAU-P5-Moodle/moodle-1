@@ -72,7 +72,7 @@ Feature: View livequiz activity
     And I click on "Take Quiz" "link"
     And "Submit Quiz" "button" should exist
     And I click on "Paris" "checkbox"
-    And I click on "Submit Quiz" "button"
+    And I click on "Submit Quiz" "button" confirming the dialogue
     And I should see "Results for attempt"
     And "Paris" "checkbox" should exist
     And "Champagne" "checkbox" should exist
@@ -84,6 +84,21 @@ Feature: View livequiz activity
     And "No" "radio" should exist
     And I press the "back" button in the browser
     Then I should see "You are not allowed to go back after submitting the quiz"
+
+  Scenario: Not confirm a livequiz
+    When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    And I click on "Take Quiz" "link"
+    And "Submit Quiz" "button" should exist
+    And "Paris" "checkbox" should exist
+    And "Champagne" "checkbox" should exist
+    And "Nice" "checkbox" should exist
+    And "Next Question" "link" should exist
+    And I click on "Submit Quiz" "button" dismissing the dialogue
+    And "Submit Quiz" "button" should exist
+    And "Paris" "checkbox" should exist
+    And "Champagne" "checkbox" should exist
+    And "Nice" "checkbox" should exist
+    And "Next Question" "link" should exist
 
   Scenario: Choose an answer to question
     #Testing we can choose an answer to a question, both checkboxes and radio buttons
@@ -142,7 +157,7 @@ Scenario: Submitted quiz has the correct classes
   And I click on "Next Question" "link"
   And "Submit Quiz" "button" should exist
   And I click on "No" "radio"
-  And I click on "Submit Quiz" "button"
+  And I click on "Submit Quiz" "button" confirming the dialogue
   And I should see "Results for attempt"
   And "Paris" "checkbox" should exist
   Then "Paris" should have a parent div with class "answer correct"

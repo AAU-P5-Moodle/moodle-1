@@ -139,7 +139,7 @@ Feature: Delete questions in a livequiz activity
     And "Nice" "checkbox" should exist
     And I click on "Paris" "checkbox"
     And "Submit Quiz" "button" should exist
-    And I click on "Submit Quiz" "button"
+    And I click on "Submit Quiz" "button" confirming the dialogue
     Then I should see "Results for attempt"
     #Log in as lecturer and attempt to delete "Question 1""
     Then I log out
