@@ -666,10 +666,11 @@
    margin-left: 2rem;
    width: 50%;
    padding: 2px 2px 0px 10px;
+   cursor: pointer;
 }
 
 .question_selected{
-   background-color: rgb(32, 138, 176, 0.5);
+   background-color: rgba(32, 176, 94, 0.2);
 }
 
 .import_btn{
@@ -684,5 +685,17 @@
 
 .import_buttons_wrapper{
    padding-top: 2rem;
+}
+
+.question_label{
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+.question_checkbox{
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 

@@ -41,7 +41,7 @@
     <label for="quiz_{{quizid}}" class="quiz_label">{{quiztitle}}</label>
     <div id="questionsdiv">
         {{#questions}}
-        <div class="question_entry">
+        <div class="question_entry question_entry_{{quizid}}">
             <input
                 type="checkbox"
                 value="question_{{questionid}}"
@@ -49,7 +49,7 @@
                 class="quiz_{{quizid}}_question question_checkbox"
                 name="{{questiontitle}}"
             />
-            <label for="question_{{questionid}}">{{questiontitle}}</label>
+            <label for="question_{{questionid}}" class="question_label">{{questiontitle}}</label>
         </div>
         {{/questions}}
     </div>

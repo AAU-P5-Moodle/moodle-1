@@ -84,6 +84,7 @@ function addOldQuestionsToPopup(lecturerId, quizId) {
                             Templates.appendNodeContents(".oldQuizzes", html, js);
                             addQuizCheckboxListener(quiz.quizid);
                             addQuestionCheckboxListener(quiz.quizid);
+                            addQquestionEntryListeners(quiz.quizid);
                         })
                         .catch((error) => displayException(error));
                 }
@@ -202,6 +203,18 @@ function addQuestionCheckboxListener(quizId) {
                 questionEntry.classList.remove("question_selected");
                 quizCheckbox.checked = questionCheckbox.checked;
             }
+        });
+    });
+}
+
+function addQquestionEntryListeners(quizId) {
+    questionEntries = document.querySelectorAll(".question_entry_" + quizId);
+    console.log(questionEntries);
+    questionEntries.forEach((questionEntry) => {
+        questionEntry.addEventListener("click", () => {
+            questionCheckbox = questionEntry.querySelector(".question_checkbox");
+            questionCheckbox.checked = !questionCheckbox.checked;
+            questionCheckbox.dispatchEvent(new Event("change"));
         });
     });
 }
