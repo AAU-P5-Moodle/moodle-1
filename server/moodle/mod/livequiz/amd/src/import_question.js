@@ -188,7 +188,7 @@ function addQuestionCheckboxListener(quizId) {
     questionCheckboxes.forEach((questionCheckbox) => {
         questionCheckbox.addEventListener("change", () => {
             if (questionCheckbox.checked) {
-                questionEntry = questionCheckbox.parentElement;
+                let questionEntry = questionCheckbox.parentElement;
                 questionEntry.classList.add("question_selected");
                 // If the question is checked, check if all questions are checked.
                 let allChecked = false;
@@ -199,7 +199,7 @@ function addQuestionCheckboxListener(quizId) {
                 }
             } else {
                 // If the question is unchecked, uncheck the quiz checkbox.
-                questionEntry = questionCheckbox.parentElement;
+                let questionEntry = questionCheckbox.parentElement;
                 questionEntry.classList.remove("question_selected");
                 quizCheckbox.checked = questionCheckbox.checked;
             }
@@ -207,12 +207,16 @@ function addQuestionCheckboxListener(quizId) {
     });
 }
 
+/**
+ * Adds an event listener to the question entries.
+ * If a question entry is clicked, the checkbox is checked.
+ * @param {number} quizId - The ID of the quiz, used to identify the checkboxes.
+ */
 function addQquestionEntryListeners(quizId) {
-    questionEntries = document.querySelectorAll(".question_entry_" + quizId);
-    console.log(questionEntries);
+    let questionEntries = document.querySelectorAll(".question_entry_" + quizId);
     questionEntries.forEach((questionEntry) => {
         questionEntry.addEventListener("click", () => {
-            questionCheckbox = questionEntry.querySelector(".question_checkbox");
+            let questionCheckbox = questionEntry.querySelector(".question_checkbox");
             questionCheckbox.checked = !questionCheckbox.checked;
             questionCheckbox.dispatchEvent(new Event("change"));
         });
