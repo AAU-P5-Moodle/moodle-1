@@ -2,7 +2,7 @@ import {submit_quiz} from "./repository";
 
 // Setup eventlistener for inserting participation and answer choices upon submitting quiz.
 export const init = async(quizid, studentid, resultsurl) => {
-    const submitQuizButton = document.getElementById("submitQuizBtn");
+    const submitQuizButton = document.getElementById("submit_quiz_button");
     submitQuizButton.addEventListener("click", async function () {
         if(submit_quiz_confirm()){
             try {
