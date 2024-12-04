@@ -29,10 +29,12 @@ export function add_delete_question_listeners(quizid, lecturerid) {
                                 rerender_take_quiz_button(take_quiz_url, false);
                             }
                         } else {
-                            alert("Cannot delete question: " + response.message);
+                            throw("Cannot delete question, since it already has participations");
                         }
+                    }).catch((error) => {
+                        alert(error);
                     });
-            }
-    });
+                }
+            });
   });
 }

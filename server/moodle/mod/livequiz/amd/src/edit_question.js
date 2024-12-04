@@ -112,7 +112,7 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
                 add_delete_question_listeners(quizid,lecturerid);
             })
             .catch((error) => displayException(error));
-    }).catch(() => alert("Cannot edit a question with particpations"));
+    }).catch(() => alert("Cannot edit a question, since it already has participations"));
     //Remove edit question pop-up
     let modal_div = document.querySelector(".Modal_div");
     modal_div.remove();
