@@ -174,10 +174,10 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
  * @param {string} context - The context in which the cancel button is being used.
  */
 export function add_cancel_edit_button_listener(context) {
-  let discard_question_button = document.querySelector(
-      ".discard_question_button"
+  let cancel_question_button = document.querySelector(
+      ".cancel_question_button"
   );
-  let modal_div = document.querySelector(".Modal_div");
+  let modal_div = document.querySelector(".modal_div");
   let stringForConfirm = "";
 
   // Set the string for the confirm box based on the context.
@@ -194,7 +194,7 @@ export function add_cancel_edit_button_listener(context) {
     default:
       stringForConfirm = "Are you sure you want to cancel the changes made?";
   }
-  discard_question_button.addEventListener("click", () => {
+  cancel_question_button.addEventListener("click", () => {
     if(confirm(stringForConfirm)) {
       isEditing = false;
       editingIndex = null;

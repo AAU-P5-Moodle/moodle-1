@@ -6,7 +6,7 @@
 /**
  * Quizcreator.
  */
- .Modal_div {
+ .modal_div {
     width: 80%;
     max-height: 80vh;
     overflow-y: auto;
@@ -191,7 +191,7 @@
  .save_button:hover {
     background-color: #4cae4c;
  }
- .discard_question_button:hover {
+ .cancel_question_button:hover {
     background-color: #c10600;
  }
 
@@ -218,7 +218,7 @@
     justify-content: space-between;
     margin-top: 20px;
  }
- .discard_question_button {
+ .cancel_question_button {
     float: right;
     background-color: red;
     color: white;

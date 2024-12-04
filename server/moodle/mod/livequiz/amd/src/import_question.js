@@ -58,7 +58,7 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
 function add_old_questions_to_popup(lecturerid, quizid) {
     get_lecturer_quiz(lecturerid).then((oldquizzes) => {
         oldquizzes = oldquizzes.filter(currentquiz => currentquiz.quizid !== quizid);
-        let oldQuizzesContainer = document.querySelector(".oldQuizzes");
+        let oldQuizzesContainer = document.querySelector(".old_quizzes");
         if (oldquizzes.length === 0) {
             let noQuestions = document.createElement("p");
             noQuestions.textContent = "No questions available.";
@@ -132,7 +132,7 @@ function add_old_questions_to_popup(lecturerid, quizid) {
  */
 async function importQuestions(quizid, url, lecturerid) {
     let quiz_url = url;
-    const importQuestionBtn = document.querySelector(".import_btn");
+    const importQuestionBtn = document.querySelector(".import_question_button");
 
     importQuestionBtn.addEventListener("click", async() => {
         try {
@@ -165,7 +165,7 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
         rerender_saved_questions_list(questions, update_event_listeners); // Re-render saved questions list.
         rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button. Since at least one question was imported, hasquestions is true.
     }). catch((error) => console.log(error));
-    let modal_div = document.querySelector(".Modal_div");
+    let modal_div = document.querySelector(".modal_div");
     modal_div.remove();
 }
 
@@ -176,7 +176,7 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
  */
 function get_checked_questions() {
     let checkedquestions = [];
-    let questions_div = document.querySelector(".oldQuizzes");
+    let questions_div = document.querySelector(".old_quizzes");
 
     // Loop through all quizzes and get the checked questions.
     for (let quiz_div of questions_div.children) { // Loop through all quizzes.

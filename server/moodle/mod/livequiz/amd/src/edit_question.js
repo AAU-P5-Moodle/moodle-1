@@ -25,7 +25,7 @@ export function add_edit_question_listeners(quizid, lecturerid) {
 
 function render_edit_question_menu_popup(quizid, lecturerid, questionid) {
 
-if(!document.querySelector('.Modal_div')){
+if(!document.querySelector('.modal_div')){
     // This will call the function to load and render our template.
     Templates.renderForPromise("mod_livequiz/question_menu_popup")
 
@@ -113,7 +113,7 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
             .catch((error) => displayException(error));
     });
     //Remove edit question pop-up
-    let modal_div = document.querySelector(".Modal_div");
+    let modal_div = document.querySelector(".modal_div");
     modal_div.remove();
 }
 function restore_question_data_in_popup(questiondata){
