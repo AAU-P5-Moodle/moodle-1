@@ -603,15 +603,16 @@
   * Quiz results page
   */
 
-.correct {
-    background-color: rgba(0, 128, 0);
-}
-.incorrect {
-    background-color: rgba(255, 0, 0);
+  .answer.correct {
+   background-color: rgba(0, 128, 0, 0.2) !important; /* Light green */
 }
 
-.correctnotchosen {
-    background-color: rgba(255, 200, 12);
+.answer.incorrect {
+   background-color: rgba(255, 0, 0, 0.2) !important; /* Light red */
+}
+
+.answer.correctnotchosen {
+   background-color: rgba(255, 200, 12, 0.2) !important; /* Light yellow */
 }
 
 /* Sidebar Styling */
@@ -742,4 +743,25 @@
    .main-content-runner {
        width: 100%;
    }
+}
+
+/* Back-to-Menu Button */
+#menuPageBtn {
+   display: inline-block;
+   margin-top: 20px;
+   padding: 10px 20px;
+   font-size: 1rem;
+   background-color: #007bff;
+   color: white;
+   text-align: center;
+   text-decoration: none;
+   border-radius: 4px;
+   border: 1px solid #007bff;
+   cursor: pointer;
+   transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#menuPageBtn:hover {
+   background-color: #0056b3;
+   border-color: #0056b3;
 }

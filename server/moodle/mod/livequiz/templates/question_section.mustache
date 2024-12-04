@@ -31,55 +31,43 @@
 }}
 <div class="main-content-runner">
     <div class="question-container">
-        <div class="moodle-box">
-            <!-- Question Title and Media -->
-            <div class="question-header">
-                <p class="question-title">{{questiontitle}}</p>
-                {{#mediaurl}}
-                <div class="media-container">
-                    <img src="{{mediaurl}}" alt="{{mediaalt}}" />
-                </div>
-                {{/mediaurl}}
-                <p class="question-description">{{questiondescription}}</p>
-            </div>
-
-            <!-- Answers Section -->
-            <div class="answer-container">
-                <fieldset>
-                    {{#answers}}
-                        <div id="{{answerid}}" class="answer
-                            {{^isattempting}}
-                                {{#chosen}}
-                                    {{#correct}}correct{{/correct}}
-                                    {{^correct}}incorrect{{/correct}}
-                                {{/chosen}}
-                                {{^chosen}}
-                                    {{#correctnotchosen}}correctnotchosen{{/correctnotchosen}}
-                                {{/chosen}}
-                            {{/isattempting}}">
-                            <input type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
-                                {{#chosen}} checked {{/chosen}}
-                                {{^isattempting}} disabled {{/isattempting}} />
-                            <label for="{{answerid}}">{{answerdescription}}</label>
-                        </div>
-                    {{/answers}}
-                </fieldset>
-            </div>
-
-            <!-- Conditional Explanation or Hidden Inputs -->
-            {{#isattempting}}
-                <!-- Hidden inputs to pass to the next question -->
-                <input type="hidden" name="cmid" value="{{cmid}}" />
-                <input type="hidden" name="quizid" value="{{quizid}}" />
-                <input type="hidden" name="questionid" value="{{questionid}}" />
-                <input type="hidden" name="questionindex" value="{{questionindex}}" />
-                <input type="hidden" name="questiontitle" value="{{questiontitle}}" />
-                <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
-                <input type="hidden" name="nextquestionindex" value="{{nextquestionindex}}" />
-            {{/isattempting}}
-            {{^isattempting}}
-                <p class="question-explanation">{{questionexplanation}}</p>
-            {{/isattempting}}
+    <div class="moodle-box">
+        <p class="question-title">{{questiontitle}}</p>
+        <p class="question-description">{{questiondescription}}</p>
+        <div class="answer-container">
+            <fieldset>
+                {{#answers}}
+                    <div id="{{answerid}}" class="answer
+                        {{^isattempting}}
+                            {{#chosen}}
+                                {{#correct}}correct{{/correct}}
+                                {{^correct}}incorrect{{/correct}}
+                            {{/chosen}}
+                            {{^chosen}}
+                                {{#correctnotchosen}}correctnotchosen{{/correctnotchosen}}
+                            {{/chosen}}
+                        {{/isattempting}}">
+                        <input type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
+                            {{#chosen}}checked{{/chosen}}
+                            {{^isattempting}}disabled{{/isattempting}}>
+                        <label for="{{answerid}}">{{answerdescription}}</label>
+                    </div>
+                {{/answers}}
+            </fieldset>
         </div>
+        {{#isattempting}}
+            <!-- Hidden inputs to pass to the next question -->
+            <input type="hidden" name="cmid" value="{{cmid}}" />
+            <input type="hidden" name="quizid" value="{{quizid}}" />
+            <input type="hidden" name="questionid" value="{{questionid}}" />
+            <input type="hidden" name="questionindex" value="{{questionindex}}" />
+            <input type="hidden" name="questiontitle" value="{{questiontitle}}" />
+            <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
+            <input type="hidden" name="nextquestionindex" value="{{nextquestionindex}}" />
+        {{/isattempting}}
+        {{^isattempting}}
+            <p class="question-explanation">{{questionexplanation}}</p>
+        {{/isattempting}}
     </div>
+</div>
 </div>
