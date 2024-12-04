@@ -314,3 +314,42 @@ export function validateSubmission(answers) {
   }
   return true;
 }
+
+export function getQuestionData() {
+  let questionTitle = document.getElementById("question_title_id").value.trim();
+  let questionDescription = document.getElementById("question_description_id").value.trim();
+  let questionExplanation = document.getElementById("question_explanation_id").value.trim();
+  let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
+
+  return {
+    title: questionTitle,
+    description: questionDescription,
+    explanation: questionExplanation,
+    type: questionType
+  };
+}
+
+/**
+ *
+ */
+export function prepareAnswers() {
+  let answers = [];
+  let answersDiv = document.querySelector(".all_answers_for_question_div");
+
+  for (let i = 0; i < answersDiv.children.length; i++) {
+    let answerText = answersDiv.children[i]
+        .querySelector(".answer_input")
+        .value.trim();
+
+    let isCorrect =
+        answersDiv.children[i].querySelector(".answer_checkbox").checked;
+    isCorrect = isCorrect ? 1 : 0;
+
+    answers.push({
+      description: answerText,
+      correct: isCorrect,
+      explanation: "",
+    });
+  }
+  return answers;
+}

@@ -5,7 +5,9 @@ import {
     addAnswerButtonEventListener,
     createAnswerContainer,
     addCancelEditButtonListener,
-    validateSubmission} from "./helper";
+    validateSubmission,
+    getQuestionData, prepareAnswers,
+} from "./helper";
 import {addDeleteQuestionListeners} from "./delete_question";
 
 export const init = async(quizId, lecturerId) => {
@@ -76,39 +78,14 @@ function addSaveQuestionButtonListener(quizId, lecturerId, questionId) {
  * @param questionId
  */
 function onSaveQuestionButtonClicked(quizId, lecturerId, questionId) {
-    let questionInputTitle = document.getElementById("question_title_id");
-    let questionInputDescription = document.getElementById("question_description_id");
-    let questionInputExplanation = document.getElementById("question_explanation_id");
-    let questionTitle = questionInputTitle.value.trim();
-    let questionDescription = questionInputDescription.value.trim();
-    let questionExplanation = questionInputExplanation.value.trim();
-    let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
-
-    let answers = [];
-    let answersDiv = document.querySelector(".all_answers_for_question_div");
-    for (let i = 0; i < answersDiv.children.length; i++) {
-        let answerText = answersDiv.children[i]
-            .querySelector(".answer_input")
-            .value.trim();
-
-        let isCorrect =
-            answersDiv.children[i].querySelector(".answer_checkbox").checked;
-        isCorrect = isCorrect ? 1 : 0;
-
-        answers.push({
-            description: answerText,
-            correct: isCorrect,
-            explanation: "",
-        });
-    }
-
+    let questionData = getQuestionData();
     let savedQuestion = {
         id: questionId,
-        title: questionTitle,
-        answers: answers,
-        description: questionDescription,
-        explanation: questionExplanation,
-        type: questionType,
+        title: questionData.title,
+        answers: prepareAnswers(),
+        description: questionData.description,
+        explanation: questionData.explanation,
+        type: questionData.type,
     };
 
     if(!validateSubmission(savedQuestion.answers)) {
