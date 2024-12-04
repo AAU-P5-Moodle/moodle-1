@@ -107,8 +107,7 @@ class get_lecturer_quiz extends external_api {
         $cmid = $quizinstance->activity_id;
         // Get the course module instance.
         $cminstance = $DB->get_record('course_modules', ['id' => $cmid]);
-        $isdeleted = $cminstance->deletioninprogress;
-        if ($isdeleted == 1) { // Check if the course module is deleted.
+        if ($cminstance->deletioninprogress == 1) { // Check if the course module is deleted.
             return false; // Return false if the course module is deleted.
         }
         return true; // Return true if the course module is not deleted.
