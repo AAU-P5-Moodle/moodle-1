@@ -123,7 +123,7 @@ function question_confirmation() {
     ".continue_question_deletion_button"
   );
 
-  let modal_div = document.querySelector(".Modal_div");
+  let modal_div = document.querySelector(".backdrop");
 
   continue_question_deletion_button.addEventListener("click", () => {
     isEditing = false;
