@@ -331,7 +331,6 @@ class livequiz_services {
      * @throws dml_exception
      */
     public function get_newest_participation_for_quiz(int $quizid, int $studentid): participation {
-        global $DB;
         $participations = student_quiz_relation::get_all_student_participation_for_quiz($quizid, $studentid);
         return $participations[0];
     }
@@ -513,10 +512,12 @@ class livequiz_services {
 
         return $submissions;
     }
+
     /**
      * Deletes lecturer/student participations and their corresponding answers.
-     * @param int quizid
-     * @returns bool
+     * @param int $quizid
+     * @param int $studentid
+     * @return bool
      * @throws dml_exception
      */
     public function delete_student_participations_and_answers_by_quizid_and_studentid(int $quizid, int $studentid): bool {

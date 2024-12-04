@@ -26,8 +26,6 @@ require_once($CFG->libdir . '/accesslib.php'); // Include the access library for
 
 use mod_livequiz\output\index_page_student;
 use mod_livequiz\output\index_page_teacher;
-use mod_livequiz\models\student_quiz_relation;
-use mod_livequiz\models\student_answers_relation;
 use mod_livequiz\services\livequiz_services;
 
 global $OUTPUT, $PAGE, $DB, $USER;
@@ -54,8 +52,10 @@ $PAGE->set_heading(get_string('modulename', 'mod_livequiz'));
 // Rendering.
 $output = "";
 $renderer = $PAGE->get_renderer('mod_livequiz');
-if (has_capability('moodle/course:manageactivities', $context)) { // Checks if the user has edit privileges. If they do they are a teacher and the teacher page is rendered.
-    // Don't save the student_answers_relation and student_quiz_relation for the teacher. Otherwise, they won't be able to edit questions after taking their own quiz.
+// Checks if the user has edit privileges. If they do they are a teacher and the teacher page is rendered.
+if (has_capability('moodle/course:manageactivities', $context)) {
+    // Don't save the student_answers_relation and student_quiz_relation for the teacher.
+    // Otherwise, they won't be able to edit questions after taking their own quiz.
     $livequizservice = livequiz_services::get_singleton_service_instance();
     $livequizservice->delete_student_participations_and_answers_by_quizid_and_studentid($instance->id, $USER->id);
     $renderable = new index_page_teacher($instance->id, $USER->id, $cmid);

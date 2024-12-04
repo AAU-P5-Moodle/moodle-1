@@ -90,9 +90,11 @@ class student_quiz_relation {
 
         return $participations;
     }
+
     /**
      * Deletes all participations for a specific quizid
      * This can also be used to delete all teacher participations in a quiz.
+     * @param int $quizid
      * @param int $studentid
      * @return bool
      * @throws dml_exception
