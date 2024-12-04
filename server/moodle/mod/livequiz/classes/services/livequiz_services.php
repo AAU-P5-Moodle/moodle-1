@@ -650,7 +650,7 @@ class livequiz_services {
         $livequiz = livequiz::get_livequiz_instance($id);
         return $livequiz;
     }
-    
+
     /**
      * Deletes lecturer/student participations and their corresponding answers.
      * @param int $quizid
