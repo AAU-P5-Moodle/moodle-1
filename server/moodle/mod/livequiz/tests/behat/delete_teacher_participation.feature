@@ -1,3 +1,4 @@
+@mod @mod_livequiz @javascript
 Feature: Delete teacher participation
   Background:
     Given the following "users" exist:
@@ -28,6 +29,7 @@ Feature: Delete teacher participation
     And I should see "Take Quiz"
     And I click on "Take Quiz" "link"
     And "Submit Quiz" "button" should exist
+    And I click on "Paris" "checkbox"
     And I click on "Submit Quiz" "button"
     And I should see "Results for attempt"
     And I should see "Back to livequiz menu"
@@ -44,5 +46,5 @@ Feature: Delete teacher participation
     # Check if title was changed in list
     And "Question 1 - Edited" "list_item" should exist
     # Check if the question can be delete
-    When I click on "(//li[.//span[text()='Question 1 - Edited']])[1]//button[contains(@class, 'delete-question')]" "xpath_element"
+    When I click on "(//li[.//span[text()='Question 1 - Edited']])[1]//button[contains(@class, 'delete-question')]" "xpath_element" confirming the dialogue
     Then "Question 1 - Edited" "list_item" should not exist
