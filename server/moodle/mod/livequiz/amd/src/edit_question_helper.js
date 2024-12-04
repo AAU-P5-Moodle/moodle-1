@@ -19,8 +19,8 @@ export const add_answer_button_event_listener = () => {
 
 /**
  * Appends a new answer input container to the container holding all answers
- * 
- * This function creates a new answer container with an incremented ID and appends it to the 
+ *
+ * This function creates a new answer container with an incremented ID and appends it to the
  * element with the class "all_answers_for_question_div".
  */
 export function append_answer_input() {
@@ -142,16 +142,16 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
 
   if (hasquestions) {
     //Remove no question paragraph if there are questions.
-    let no_question_paragraph = document.querySelector(".no-question-text");
+    let no_question_paragraph = document.querySelector(".no_question_text");
     if (no_question_paragraph) {
       no_question_paragraph.remove(); //We have just added a question so remove the no question text
     } else {
-      let take_quiz_button = document.querySelector("#takeQuizBtn");
+      let take_quiz_button = document.querySelector("#take_quiz_button");
       take_quiz_button.remove();
     }
   } else {
     //Remove take quiz link if there are no questions
-    let take_quiz_button = document.querySelector("#takeQuizBtn");
+    let take_quiz_button = document.querySelector("#take_quiz_button");
     take_quiz_button.remove();
   }
 
@@ -283,7 +283,7 @@ export function validate_submission(answers) {
     answerDescriptionAlert.style.display = "none";
   }
 
-  // Checks if multiple correct answers have been set, when not allowed to. 
+  // Checks if multiple correct answers have been set, when not allowed to.
   if (questionType) {
     let checkedAnswers = 0;
     answers.forEach(answer => {
@@ -295,7 +295,7 @@ export function validate_submission(answers) {
       maxOneCorrectAnswerAlert.style.display = "block";
     } else {
       maxOneCorrectAnswerAlert.style.display = "none";
-    } 
+    }
   } else {
     maxOneCorrectAnswerAlert.style.display = "none";
   }
