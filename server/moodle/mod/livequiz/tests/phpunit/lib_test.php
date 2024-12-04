@@ -85,7 +85,6 @@ final class lib_test extends advanced_testcase {
         $id = livequiz_add_instance($quizdata);
         $quizdata->instance = $id;
         $quizdata->name = 'Updated Test Quiz';
-        
         // Execute.
         $result = livequiz_update_instance($quizdata);
         $record = $DB->get_record('livequiz', ['id' => $id]);
