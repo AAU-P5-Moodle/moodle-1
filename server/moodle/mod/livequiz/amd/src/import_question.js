@@ -188,11 +188,11 @@ function getCheckedQuestions() {
 /**
  * Adds an event listener to the quiz checkboxes.
  * @param checkbox - The checkbox to add the event listener to.
- * @param questioncheckboxes - The question checkboxes that are manipulated when event is triggered.
+ * @param questionCheckboxes - The question checkboxes that are manipulated when event is triggered.
  */
-function addQuizCheckboxListener(checkbox, questioncheckboxes) {
+function addQuizCheckboxListener(checkbox, questionCheckboxes) {
     checkbox.addEventListener("change", () => {
-        questioncheckboxes.forEach((questionCheckbox) => {
+        questionCheckboxes.forEach((questionCheckbox) => {
             questionCheckbox.checked = checkbox.checked; // Set all questions to checked if the quiz is checked.
         });
     });

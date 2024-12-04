@@ -188,7 +188,7 @@ export function rerenderSavedQuestionsList(questions, callback) {
  * Renders the "mod_livequiz/take_quiz_button" template based on whether there are questions in the quiz.
  *
  * @param {string} url - The URL for the "Take Quiz" button to redirect to.
- * @param {boolean} hasquestions - Indicates if the quiz has questions.
+ * @param {boolean} hasQuestions - Indicates if the quiz has questions.
  * @param {function} [callback] - Optional callback function to execute after re-rendering.
  */
 
@@ -205,7 +205,7 @@ export function rerenderTakeQuizButton(url, hasQuestions, callback) {
 
   const contextTakeQuiz = {
     url: url,
-    hasQuestions: hasQuestions,
+    hasquestions: hasQuestions,
   };
 
   if (hasQuestions) {
