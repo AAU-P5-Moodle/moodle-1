@@ -45,7 +45,7 @@ export const init = async(quizId, lecturerId, url) => {
 function renderCreateQuestionMenuPopup(quizId, lecturerId) {
   // This will call the function to load and render our template.
   if (!document.querySelector('.Modal_div')) {
-    Templates.renderForPromise("mod_livequiz/question_menu_popup")
+    Templates.renderForPromise("mod_livequiz/question_menu_popup",null,"boost")
 
       // It returns a promise that needs to be resolved.
       .then(({html, js}) => {
@@ -105,7 +105,7 @@ function handleQuestionSubmission(quizId, lecturerId) {
  */
 function prepareQuestion() {
   let questionData = getQuestionData();
-  
+
   return {
     id: 0,
     title: questionData.title,

@@ -35,7 +35,7 @@ export const init = async(quizId, lecturerId, url) => {
  */
 async function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
     // This will call the function to load and render our template.
-    Templates.renderForPromise("mod_livequiz/import_question_popup")
+    Templates.renderForPromise("mod_livequiz/import_question_popup", null, "boost")
         // It returns a promise that needs to be resolved.
         .then(async({html, js}) => {
             // Here we have compiled template.

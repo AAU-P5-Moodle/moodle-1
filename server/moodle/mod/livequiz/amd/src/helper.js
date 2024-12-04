@@ -107,7 +107,8 @@ export function rerenderSavedQuestionsList(questions, callback) {
   // Re-render saved questions list.
   Templates.renderForPromise(
     "mod_livequiz/saved_questions_list",
-    contextSavedQuestions
+    contextSavedQuestions,
+    "boost"
   )
     .then(({html, js}) => {
       Templates.appendNodeContents("#saved-questions-container", html, js);
@@ -159,7 +160,7 @@ export function rerenderTakeQuizButton(url, hasQuestions, callback) {
     takeQuizButton.remove();
   }
 
-  Templates.renderForPromise("mod_livequiz/take_quiz_button", contextTakeQuiz)
+  Templates.renderForPromise("mod_livequiz/take_quiz_button", contextTakeQuiz, "boost")
     // It returns a promise that needs to be resolved.
     .then(({html, js}) => {
       // Here we have compiled template.
@@ -184,7 +185,7 @@ export function addCancelEditButtonListener(context) {
   let modalDiv = document.querySelector(".Modal_div");
   let stringForConfirm = "";
 
-  // Set the string for the confirm box based on the context.
+  // Set the string for the confirmation box based on the context.
   switch (context) {
     case "create":
       stringForConfirm = "Are you sure you want to cancel creating the question?";
@@ -220,8 +221,8 @@ export function validateSubmission(answers) {
   let questionTitle = document.getElementById("question_title_id").value.trim();
   let questionTitleTextarea = document.getElementById("question_title_id");
   let questionTitleAlert = document.getElementById("title_textarea_alert");
-  let questionDesription = document.getElementById("question_description_id").value.trim();
-  let questionDesriptionTextarea = document.getElementById("question_description_id");
+  let questionDescription = document.getElementById("question_description_id").value.trim();
+  let questionDescriptionTextarea = document.getElementById("question_description_id");
   let questionDescriptionAlert = document.getElementById("question_textarea_alert");
   let atLeastOneCorrectAnswerAlert = document.getElementById("question_alert_one_correct");
   let answerDescriptionAlert = document.getElementById("question_alert_description");
@@ -247,13 +248,13 @@ export function validateSubmission(answers) {
   }
 
     // Checks if the question description is empty.
-  if (!questionDesription) {
-    setBorderStyle(questionDesriptionTextarea, !!questionDesription);
+  if (!questionDescription) {
+    setBorderStyle(questionDescriptionTextarea, !!questionDescription);
     questionDescriptionAlert.style.display = "block";
     isValid = false;
   } else {
     questionDescriptionAlert.style.display = "none";
-    setBorderStyle(questionDesriptionTextarea, true);
+    setBorderStyle(questionDescriptionTextarea, true);
   }
 
   // Checks if there are at least two answers.
