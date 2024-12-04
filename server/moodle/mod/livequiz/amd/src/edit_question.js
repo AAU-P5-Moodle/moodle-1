@@ -1,6 +1,6 @@
 import Templates from "core/templates";
-import { exception as displayException } from "core/notification";
-import { saveQuestion, getQuestion} from "./repository";
+import {exception as displayException} from "core/notification";
+import {saveQuestion, getQuestion} from "./repository";
 import {
     addAnswerButtonEventListener,
     createAnswerContainer,
@@ -42,38 +42,41 @@ export function addEditQuestionListeners(quizId, lecturerId) {
 /**
  * Render the pop-up for editing a given question.
  *
- * @param quizId
- * @param lecturerId
- * @param questionId
+ * @param {int} quizId
+ * @param {int} lecturerId
+ * @param {int} questionId
  * @returns {void}
  */
 function renderEditQuestionMenuPopup(quizId, lecturerId, questionId) {
 
 if (!document.querySelector('.Modal_div')) {
     // This will call the function to load and render our template.
-    Templates.renderForPromise("mod_livequiz/question_menu_popup",{},"boost")
+    Templates.renderForPromise("mod_livequiz/question_menu_popup", {}, "boost")
 
         // It returns a promise that needs to be resolved.
         .then(({html, js}) => {
             // Here we have the compiled template.
             Templates.appendNodeContents(".main-container", html, js);
-            getQuestion(quizId, questionId).then((question)=> {restoreQuestionDataInPopup(question);});
+            getQuestion(quizId, questionId).then((question)=> { restoreQuestionDataInPopup(question);});
             addAnswerButtonEventListener();
             addSaveQuestionButtonListener(quizId, lecturerId, questionId);
             addCancelEditButtonListener("edit");
         })
 
       // Deal with this exception (Using core/notify exception function is recommended).
-      .catch((error) => displayException(error));
+      .catch((error) => {
+          window.console.log(error);
+          throw error;
+      });
   }
 }
 
 /**
  * Adds an event listener to the save question button.
  *
- * @param quizId
- * @param lecturerId
- * @param questionId
+ * @param {int} quizId
+ * @param {int} lecturerId
+ * @param {int} questionId
  * @returns {void}
  */
 function addSaveQuestionButtonListener(quizId, lecturerId, questionId) {
@@ -87,9 +90,9 @@ function addSaveQuestionButtonListener(quizId, lecturerId, questionId) {
 /**
  * Event handler for when a question is saved.
  *
- * @param quizId
- * @param lecturerId
- * @param questionId
+ * @param {int} quizId
+ * @param {int} lecturerId
+ * @param {int} questionId
  * @returns {void}
  */
 function handleSaveQuestion(quizId, lecturerId, questionId) {
@@ -103,7 +106,7 @@ function handleSaveQuestion(quizId, lecturerId, questionId) {
         type: questionData.type,
     };
 
-    if(!validateSubmission(savedQuestion.answers)) {
+    if (!validateSubmission(savedQuestion.answers)) {
         return;
     }
 
@@ -138,7 +141,7 @@ function handleSaveQuestion(quizId, lecturerId, questionId) {
 /**
  * The data for the question passed as argument is rendered in the edit-question pop-up.
  *
- * @param questionData
+ * @param {Object} questionData
  * @returns {void}
  */
 function restoreQuestionDataInPopup(questionData){
@@ -147,7 +150,7 @@ function restoreQuestionDataInPopup(questionData){
     document.getElementById("question_explanation_id").value = questionData.questionexplanation;
     document.getElementById("question_type_checkbox_id").checked = questionData.questiontype === 'radio';
     let answers = questionData.answers;
-    for(let i=0; i < answers.length; i++){
+    for (let i = 0; i < answers.length; i++) {
         restoreAnswerDataInPopup(answers[i]);
     }
 }
@@ -155,7 +158,7 @@ function restoreQuestionDataInPopup(questionData){
 /**
  * The data for the answer passed as argument is rendered in the edit-question pop-up.
  *
- * @param answer
+ * @param {Object} answer
  * @returns {void}
  */
 function restoreAnswerDataInPopup(answer) {
