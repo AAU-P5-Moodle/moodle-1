@@ -13,8 +13,8 @@ import {addDeleteQuestionListeners} from "./delete_question";
 /**
  * Adds event listeners for when the questions in the list of saved questions are clicked.
  *
- * @param quizId
- * @param lecturerId
+ * @param {int} quizId
+ * @param {int} lecturerId
  * @returns {Promise<void>}
  */
 export const init = async(quizId, lecturerId) => {
@@ -24,8 +24,8 @@ export const init = async(quizId, lecturerId) => {
 /**
  * Helper function for adding click-event listeners on the saved questions.
  *
- * @param quizId
- * @param lecturerId
+ * @param {int} quizId
+ * @param {int} lecturerId
  * @returns {void}
  */
 export function addEditQuestionListeners(quizId, lecturerId) {
@@ -57,17 +57,16 @@ if (!document.querySelector('.Modal_div')) {
         .then(({html, js}) => {
             // Here we have the compiled template.
             Templates.appendNodeContents(".main-container", html, js);
-            getQuestion(quizId, questionId).then((question)=> { restoreQuestionDataInPopup(question);});
+            getQuestion(quizId, questionId)
+                .then((question)=> {
+                    restoreQuestionDataInPopup(question);
+                })
+                .catch((error) => displayException(error));
             addAnswerButtonEventListener();
             addSaveQuestionButtonListener(quizId, lecturerId, questionId);
             addCancelEditButtonListener("edit");
         })
-
-      // Deal with this exception (Using core/notify exception function is recommended).
-      .catch((error) => {
-          window.console.log(error);
-          throw error;
-      });
+      .catch((error) => displayException(error)); // Deal with this exception (Using core/notify exception function is recommended).
   }
 }
 
@@ -85,7 +84,6 @@ function addSaveQuestionButtonListener(quizId, lecturerId, questionId) {
         handleSaveQuestion(quizId, lecturerId, questionId);
     });
 }
-
 
 /**
  * Event handler for when a question is saved.
@@ -111,7 +109,6 @@ function handleSaveQuestion(quizId, lecturerId, questionId) {
     }
 
     saveQuestion(savedQuestion, lecturerId, quizId).then((questions) => {
-
         const contextsavedquestions = {
             questions: questions,
         };
@@ -132,7 +129,8 @@ function handleSaveQuestion(quizId, lecturerId, questionId) {
                 addDeleteQuestionListeners(quizId, lecturerId);
             })
             .catch((error) => displayException(error));
-    });
+    })
+    .catch((error) => displayException(error));
     // Remove edit question pop-up
     let modalDiv = document.querySelector(".Modal_div");
     modalDiv.remove();
@@ -144,7 +142,7 @@ function handleSaveQuestion(quizId, lecturerId, questionId) {
  * @param {Object} questionData
  * @returns {void}
  */
-function restoreQuestionDataInPopup(questionData){
+function restoreQuestionDataInPopup(questionData) {
     document.getElementById("question_title_id").value = questionData.questiontitle;
     document.getElementById("question_description_id").value = questionData.questiondescription;
     document.getElementById("question_explanation_id").value = questionData.questionexplanation;
@@ -168,5 +166,3 @@ function restoreAnswerDataInPopup(answer) {
     let parentElement = document.querySelector(".all_answers_for_question_div");
     parentElement.appendChild(answerContainer);
 }
-
-
