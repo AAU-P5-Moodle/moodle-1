@@ -1,5 +1,4 @@
 import Templates from "core/templates";
-import {exception as displayException} from "core/notification";
 
 let IDs = 0;
 
@@ -118,7 +117,7 @@ export function rerenderSavedQuestionsList(questions, callback) {
                 callback();
             }
         })
-        .catch((error) => displayException(error));
+        .catch((error) => window.console.log(error));
 }
 
 /**
@@ -163,9 +162,7 @@ export function rerenderTakeQuizButton(url, hasQuestions, callback) {
                 callback();
             }
         })
-
-    // Deal with this exception (Using core/notify exception function is recommended).
-    .catch((error) => displayException(error));
+        .catch((error) => window.console.log(error));
 }
 
 /**

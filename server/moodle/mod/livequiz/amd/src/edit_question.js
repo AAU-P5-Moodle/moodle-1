@@ -1,5 +1,4 @@
 import Templates from "core/templates";
-import {exception as displayException} from "core/notification";
 import {saveQuestion, getQuestion} from "./repository";
 import {
     addAnswerButtonEventListener,
@@ -61,12 +60,12 @@ if (!document.querySelector('.Modal_div')) {
                 .then((question)=> {
                     restoreQuestionDataInPopup(question);
                 })
-                .catch((error) => displayException(error));
+                .catch((error) => window.console.log(error));
             addAnswerButtonEventListener();
             addSaveQuestionButtonListener(quizId, lecturerId, questionId);
             addCancelEditButtonListener("edit");
         })
-      .catch((error) => displayException(error)); // Deal with this exception (Using core/notify exception function is recommended).
+      .catch((error) => window.console.log(error)); // Deal with this exception (Using core/notify exception function is recommended).
   }
 }
 
@@ -128,9 +127,9 @@ function handleSaveQuestion(quizId, lecturerId, questionId) {
                 addEditQuestionListeners(quizId, lecturerId);
                 addDeleteQuestionListeners(quizId, lecturerId);
             })
-            .catch((error) => displayException(error));
+            .catch((error) => window.console.log(error));
     })
-    .catch((error) => displayException(error));
+    .catch((error) => window.console.log(error));
     // Remove edit question pop-up
     let modalDiv = document.querySelector(".Modal_div");
     modalDiv.remove();

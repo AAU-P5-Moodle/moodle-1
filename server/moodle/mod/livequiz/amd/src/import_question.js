@@ -2,7 +2,6 @@ import Templates from "core/templates";
 import {addCancelEditButtonListener, rerenderSavedQuestionsList, rerenderTakeQuizButton} from "./helper";
 import {addEditQuestionListeners} from "./edit_question";
 import {addDeleteQuestionListeners} from "./delete_question";
-import {exception as displayException} from "core/notification";
 import {externalReuseQuestions, getLecturerQuiz} from "./repository";
 
 /**
@@ -43,7 +42,7 @@ async function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
             addCancelEditButtonListener("import");
             addOldQuestionsToPopup(lecturerId, quizId);
         })
-        .catch((error) => displayException(error)); // Deal with this exception (Using core/notify exception function is recommended).
+        .catch((error) => window.console.log(error)); // Deal with this exception (Using core/notify exception function is recommended).
 }
 
 /**
@@ -117,7 +116,8 @@ function addOldQuestionsToPopup(lecturerId, quizId) {
                 oldQuizzesContainer.appendChild(quizDiv);
             }
         });
-    }).catch((error) => displayException(error));
+    })
+    .catch((error) => window.console.log(error));
 }
 
 /**
@@ -166,7 +166,7 @@ function callReuseQuestions(quizId, questionIds, lecturerId, quizUrl) {
             // Re-render take quiz button. Since at least one question was imported, hasquestions is true.
             rerenderTakeQuizButton(quizUrl, true);
         })
-        .catch((error) => displayException(error));
+        .catch((error) => window.console.log(error));
     let modalDiv = document.querySelector(".Modal_div");
     modalDiv.remove();
 }

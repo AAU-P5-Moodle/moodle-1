@@ -1,6 +1,5 @@
 import {deleteQuestion} from "./repository";
 import {rerenderTakeQuizButton} from "./helper";
-import {exception as displayException} from "../../../../lib/amd/src/notification";
 
 let takeQuizUrl = "";
 
@@ -49,7 +48,7 @@ export function addDeleteQuestionListeners(quizId, lecturerId) {
                             alert("Cannot delete question: " + response.message);
                         }
                     })
-                    .catch((error) => displayException(error));
+                    .catch((error) => window.console.log(error));
             }
         });
     });

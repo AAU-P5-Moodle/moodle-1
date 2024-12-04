@@ -1,5 +1,4 @@
 import Templates from "core/templates";
-import {exception as displayException} from "core/notification";
 import {saveQuestion} from "./repository";
 import {addDeleteQuestionListeners} from "./delete_question";
 import {addEditQuestionListeners} from "./edit_question";
@@ -55,9 +54,7 @@ function renderCreateQuestionMenuPopup(quizId, lecturerId) {
             addSaveQuestionButtonListener(quizId, lecturerId);
             addCancelEditButtonListener("create");
         })
-
-      // Deal with this exception (Using core/notify exception function is recommended).
-        .catch((error) => displayException(error));
+        .catch((error) => window.console.log(error));
     }
 }
 
@@ -97,7 +94,7 @@ function handleQuestionSubmission(quizId, lecturerId) {
         rerenderSavedQuestionsList(questions, updateEventListeners); // Re-render saved questions list.
         rerenderTakeQuizButton(takeQuizUrl, true); // Re-render take quiz button.
     })
-    .catch((error) => displayException(error));
+    .catch((error) => window.console.log(error));
 
     let modalDiv = document.querySelector(".Modal_div");
     modalDiv.remove();
