@@ -1,5 +1,5 @@
 import {deleteQuestion} from "./repository";
-import {rerenderTakeQuizButton} from "./edit_question_helper";
+import {rerenderTakeQuizButton} from "./helper";
 
 let takeQuizUrl = "";
 

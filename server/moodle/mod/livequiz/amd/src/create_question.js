@@ -9,7 +9,7 @@ import {
   addAnswerButtonEventListener,
   addCancelEditButtonListener,
   validateSubmission,
-} from "./edit_question_helper";
+} from "./helper";
 
 let isEditing = false;
 let editingIndex = 0;

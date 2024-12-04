@@ -1,10 +1,9 @@
 import Templates from "core/templates";
-import {addCancelEditButtonListener, rerenderSavedQuestionsList} from "./edit_question_helper";
+import {addCancelEditButtonListener, rerenderSavedQuestionsList, rerenderTakeQuizButton} from "./helper";
 import {addEditQuestionListeners} from "./edit_question";
 import {addDeleteQuestionListeners} from "./delete_question";
 import {displayException} from "core/notification";
 import {externalReuseQuestions, getLecturerQuiz} from "./repository";
-import {rerenderTakeQuizButton} from "./edit_question_helper";
 
 /**
  * Adds an event listener to the "Import Question" button.

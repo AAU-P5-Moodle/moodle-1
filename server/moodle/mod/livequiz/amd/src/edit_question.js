@@ -5,7 +5,7 @@ import {
     addAnswerButtonEventListener,
     createAnswerContainer,
     addCancelEditButtonListener,
-    validateSubmission} from "./edit_question_helper";
+    validateSubmission} from "./helper";
 import {addDeleteQuestionListeners} from "./delete_question";
 
 export const init = async(quizId, lecturerId) => {
