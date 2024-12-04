@@ -123,7 +123,7 @@ Feature: Delete questions in a livequiz activity
     And "Champagne" "checkbox" should not exist
     And "Nice" "checkbox" should not exist
 
-  Scenario: Delete question with pariticpation
+  Scenario: Delete question with participation
     # Checks that deleting a question with a participation causes an alert to appear.
     And I log out
     And I log in as "student1"
