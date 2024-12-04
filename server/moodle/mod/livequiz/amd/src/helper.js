@@ -10,11 +10,11 @@ let IDs = 0;
  * @returns {void}
  */
 export const addAnswerButtonEventListener = () => {
-  // Adding event listener to add answer button
-  let answerButton = document.querySelector(".add_new_answer_to_question");
-  answerButton.addEventListener("click", () => {
-    appendAnswerInput();
-  });
+  // Adding event listener to add answer button.
+    let answerButton = document.querySelector(".add_new_answer_to_question");
+    answerButton.addEventListener("click", () => {
+        appendAnswerInput();
+    });
 };
 
 /**
@@ -24,10 +24,10 @@ export const addAnswerButtonEventListener = () => {
  * @returns {void}
  */
 export function appendAnswerInput() {
-  let answerContainer = createAnswerContainer(IDs + 1);
-  let parentElement = document.querySelector(".all_answers_for_question_div");
-  parentElement.appendChild(answerContainer);
-  IDs++;
+    let answerContainer = createAnswerContainer(IDs + 1);
+    let parentElement = document.querySelector(".all_answers_for_question_div");
+    parentElement.appendChild(answerContainer);
+    IDs++;
 }
 
 /**
@@ -37,52 +37,50 @@ export function appendAnswerInput() {
  * @returns {HTMLDivElement} The created answer container element.
  */
 export function createAnswerContainer(id) {
-  let answerContainer = document.createElement("div");
-  answerContainer.className = "container_for_new_answer";
+    let answerContainer = document.createElement("div");
+    answerContainer.className = "container_for_new_answer";
 
-  let answerInput = document.createElement("input");
-  answerInput.className = "answer_input";
-  answerInput.placeholder = "Enter answer";
-  answerInput.id = "answer_input_" + id;
-  answerInput.setAttribute("required", true);
+    let answerInput = document.createElement("input");
+    answerInput.className = "answer_input";
+    answerInput.placeholder = "Enter answer";
+    answerInput.id = "answer_input_" + id;
+    answerInput.setAttribute("required", true);
 
-  let answerCheckbox = document.createElement("input");
-  answerCheckbox.setAttribute("type", "checkbox");
-  answerCheckbox.className = "answer_checkbox";
-  answerCheckbox.id = "answer_checkbox_" + id;
+    let answerCheckbox = document.createElement("input");
+    answerCheckbox.setAttribute("type", "checkbox");
+    answerCheckbox.className = "answer_checkbox";
+    answerCheckbox.id = "answer_checkbox_" + id;
 
-  let deleteAnswerButton = createElement(
-    "delete_answer_button",
-    "button",
-    "delete_answer_button",
-    "X"
-  );
-  deleteAnswerButton.id = "delete_answer_button_" + id;
+    let deleteAnswerButton = createElement(
+        "button",
+        "delete_answer_button",
+        "X"
+    );
+    deleteAnswerButton.id = "delete_answer_button_" + id;
 
-  answerContainer.appendChild(answerCheckbox);
-  answerContainer.appendChild(answerInput);
-  answerContainer.appendChild(deleteAnswerButton);
+    answerContainer.appendChild(answerCheckbox);
+    answerContainer.appendChild(answerInput);
+    answerContainer.appendChild(deleteAnswerButton);
 
-  deleteAnswerButton.addEventListener("click", () => {
-    answerContainer.remove();
-  });
-  return answerContainer;
+    deleteAnswerButton.addEventListener("click", () => {
+        answerContainer.remove();
+    });
+    return answerContainer;
 }
 
 /**
  * Creates a new HTML element with the specified type, class, and content.
  *
- * @param {HTMLElement} elementName - The variable to hold the created element.
  * @param {string} type - The type of the HTML element to create (e.g., 'div', 'span').
  * @param {string} className - The class name to assign to the created element.
  * @param {string} content - The text content to set for the created element.
  * @returns {HTMLElement} The newly created HTML element.
  */
-function createElement(elementName, type, className, content) {
-  elementName = document.createElement(type);
-  elementName.className = className;
-  elementName.textContent = content;
-  return elementName;
+function createElement(type, className, content) {
+    let elementName = document.createElement(type);
+    elementName.className = className;
+    elementName.textContent = content;
+    return elementName;
 }
 
 /**
@@ -97,30 +95,30 @@ function createElement(elementName, type, className, content) {
  * @returns {void}
  */
 export function rerenderSavedQuestionsList(questions, callback) {
-  // The template needs to know the questions to render.
-  const contextSavedQuestions = {
-    questions: questions,
-  };
+    // The template needs to know the questions to render.
+    const contextSavedQuestions = {
+        questions: questions,
+    };
 
-  // Remove the saved questions list.
-  let questionsList = document.querySelector("#saved_questions_list");
-  questionsList.remove();
+    // Remove the saved questions list.
+    let questionsList = document.querySelector("#saved_questions_list");
+    questionsList.remove();
 
-  // Re-render saved questions list.
-  Templates.renderForPromise(
-    "mod_livequiz/saved_questions_list",
-    contextSavedQuestions,
-    "boost"
-  )
-    .then(({html, js}) => {
-      Templates.appendNodeContents("#saved-questions-container", html, js);
+    // Re-render saved questions list.
+    Templates.renderForPromise(
+        "mod_livequiz/saved_questions_list",
+        contextSavedQuestions,
+        "boost"
+    )
+      .then(({html, js}) => {
+            Templates.appendNodeContents("#saved-questions-container", html, js);
 
-      // Call the functions in callback, this allows for custom functions to be called after the rerendering.
-      if (typeof callback === "function") {
-        callback();
-      }
-    })
-    .catch((error) => displayException(error));
+            // Call the functions in callback, this allows for custom functions to be called after the rerendering.
+            if (typeof callback === "function") {
+                callback();
+            }
+        })
+        .catch((error) => displayException(error));
 }
 
 /**
@@ -136,35 +134,35 @@ export function rerenderTakeQuizButton(url, hasQuestions, callback) {
   // If there are questions -> Create a button to redirect to the quiz.
   // If there are no questions -> Display a paragraph that says there are no questions.
 
-  const contextTakeQuiz = {
-    url: url,
-    hasquestions: hasQuestions,
-  };
+    const contextTakeQuiz = {
+        url: url,
+        hasquestions: hasQuestions,
+    };
 
-  if (hasQuestions) {
-    // Remove no question paragraph if there are questions.
-    let noQuestionParagraph = document.querySelector(".no-question-text");
-    if (noQuestionParagraph) {
-      noQuestionParagraph.remove(); // We have just added a question so remove the no question text
+    if (hasQuestions) {
+        // Remove no question paragraph if there are questions.
+        let noQuestionParagraph = document.querySelector(".no-question-text");
+        if (noQuestionParagraph) {
+            noQuestionParagraph.remove(); // We have just added a question so remove the no question text.
+        } else {
+            let takeQuizButton = document.querySelector("#takeQuizBtn");
+            takeQuizButton.remove();
+        }
     } else {
-      let takeQuizButton = document.querySelector("#takeQuizBtn");
-      takeQuizButton.remove();
+        // Remove take quiz link if there are no questions.
+        let takeQuizButton = document.querySelector("#takeQuizBtn");
+        takeQuizButton.remove();
     }
-  } else {
-    // Remove take quiz link if there are no questions
-    let takeQuizButton = document.querySelector("#takeQuizBtn");
-    takeQuizButton.remove();
-  }
 
-  Templates.renderForPromise("mod_livequiz/take_quiz_button", contextTakeQuiz, "boost")
-    // It returns a promise that needs to be resolved.
-    .then(({html, js}) => {
-      // Here we have compiled template.
-      Templates.appendNodeContents("#page-mod-livequiz-quizcreator", html, js);
-      if (typeof callback === "function") {
-        callback();
-      }
-    })
+    Templates.renderForPromise("mod_livequiz/take_quiz_button", contextTakeQuiz, "boost")
+        // It returns a promise that needs to be resolved.
+        .then(({html, js}) => {
+            // Here we have compiled template.
+            Templates.appendNodeContents("#page-mod-livequiz-quizcreator", html, js);
+            if (typeof callback === "function") {
+                callback();
+            }
+        })
 
     // Deal with this exception (Using core/notify exception function is recommended).
     .catch((error) => displayException(error));
@@ -177,139 +175,137 @@ export function rerenderTakeQuizButton(url, hasQuestions, callback) {
  * @returns {void}
  */
 export function addCancelEditButtonListener(context) {
-  let discardQuestionButton = document.querySelector(
-      ".discard_question_button"
-  );
-  let modalDiv = document.querySelector(".Modal_div");
-  let stringForConfirm = "";
+    let discardQuestionButton = document.querySelector(
+        ".discard_question_button"
+    );
+    let modalDiv = document.querySelector(".Modal_div");
+    let stringForConfirm = "";
 
-  // Set the string for the confirmation box based on the context.
-  switch (context) {
-    case "create":
-      stringForConfirm = "Are you sure you want to cancel creating the question?";
-      break;
-    case "edit":
-      stringForConfirm = "Are you sure you want to cancel editing the question?";
-      break;
-    case "import":
-      stringForConfirm = "Are you sure you want to cancel importing the question?";
-      break;
-    default:
-      stringForConfirm = "Are you sure you want to cancel the changes made?";
-  }
-  discardQuestionButton.addEventListener("click", () => {
-    if(confirm(stringForConfirm)) {
-      modalDiv.remove();
+    // Set the string for the confirmation box based on the context.
+    switch (context) {
+        case "create":
+            stringForConfirm = "Are you sure you want to cancel creating the question?";
+            break;
+        case "edit":
+            stringForConfirm = "Are you sure you want to cancel editing the question?";
+            break;
+        case "import":
+            stringForConfirm = "Are you sure you want to cancel importing the question?";
+            break;
+        default:
+            stringForConfirm = "Are you sure you want to cancel the changes made?";
     }
-  });
+    discardQuestionButton.addEventListener("click", () => {
+        if (confirm(stringForConfirm)) {
+            modalDiv.remove();
+        }
+    });
 }
 
 
 /**
  * This validates that all inputs to create/edit question, if not all inputs are satisfied, it will return false.
  *
- * @param answers The answers of the question.
+ * @param {Object} answers The answers of the question.
  * @returns {boolean} True if input fields are satisfied, false otherwise.
  */
 export function validateSubmission(answers) {
-  let isValid = true; // Is the question valid.
-  let answersValid = true; // Are all the answers valid.
-  let questionTitle = document.getElementById("question_title_id").value.trim();
-  let questionTitleTextarea = document.getElementById("question_title_id");
-  let questionTitleAlert = document.getElementById("title_textarea_alert");
-  let questionDescription = document.getElementById("question_description_id").value.trim();
-  let questionDescriptionTextarea = document.getElementById("question_description_id");
-  let questionDescriptionAlert = document.getElementById("question_textarea_alert");
-  let atLeastOneCorrectAnswerAlert = document.getElementById("question_alert_one_correct");
-  let answerDescriptionAlert = document.getElementById("question_alert_description");
-  let atLeastTwoAnswersAlert = document.getElementById("question_alert_two_answers");
-  let maxOneCorrectAnswerAlert = document.getElementById("question_alert_max_one_correct");
-  let questionType = document.getElementById("question_type_checkbox_id").checked;
-  let answersBox = document.getElementById("all_answers");
-  let isValidText = document.getElementById("validText");
+    let isValid = true; // Is the question valid.
+    let answersValid = true; // Are all the answers valid.
+    let questionTitle = document.getElementById("question_title_id").value.trim();
+    let questionTitleTextarea = document.getElementById("question_title_id");
+    let questionTitleAlert = document.getElementById("title_textarea_alert");
+    let questionDescription = document.getElementById("question_description_id").value.trim();
+    let questionDescriptionTextarea = document.getElementById("question_description_id");
+    let questionDescriptionAlert = document.getElementById("question_textarea_alert");
+    let atLeastOneCorrectAnswerAlert = document.getElementById("question_alert_one_correct");
+    let answerDescriptionAlert = document.getElementById("question_alert_description");
+    let atLeastTwoAnswersAlert = document.getElementById("question_alert_two_answers");
+    let maxOneCorrectAnswerAlert = document.getElementById("question_alert_max_one_correct");
+    let questionType = document.getElementById("question_type_checkbox_id").checked;
+    let answersBox = document.getElementById("all_answers");
+    let isValidText = document.getElementById("validText");
 
   // Function to set the border style of an element.
-  const setBorderStyle = (element, isValid) => {
-    element.style.border = isValid ? "1px solid #ccc" : "1px solid red";
-  };
+    const setBorderStyle = (element, isValid) => {
+        element.style.border = isValid ? "1px solid #ccc" : "1px solid red";
+    };
 
-  // Checks if the question title is empty.
-  if (!questionTitle) {
-    setBorderStyle(questionTitleTextarea, !!questionTitle);
-    questionTitleAlert.style.display = "block";
-    isValid = false;
-  } else {
-    questionTitleAlert.style.display = "none";
-    setBorderStyle(questionTitleTextarea, true);
-  }
+    // Checks if the question title is empty.
+    if (!questionTitle) {
+        setBorderStyle(questionTitleTextarea, !!questionTitle);
+        questionTitleAlert.style.display = "block";
+        isValid = false;
+    } else {
+        questionTitleAlert.style.display = "none";
+        setBorderStyle(questionTitleTextarea, true);
+    }
 
     // Checks if the question description is empty.
-  if (!questionDescription) {
-    setBorderStyle(questionDescriptionTextarea, !!questionDescription);
-    questionDescriptionAlert.style.display = "block";
-    isValid = false;
-  } else {
-    questionDescriptionAlert.style.display = "none";
-    setBorderStyle(questionDescriptionTextarea, true);
-  }
+    if (!questionDescription) {
+        setBorderStyle(questionDescriptionTextarea, !!questionDescription);
+        questionDescriptionAlert.style.display = "block";
+        isValid = false;
+    } else {
+        questionDescriptionAlert.style.display = "none";
+        setBorderStyle(questionDescriptionTextarea, true);
+    }
 
-  // Checks if there are at least two answers.
-  if (answers.length < 2) {
-    isValid = false;
-    answersValid = false;
-    atLeastTwoAnswersAlert.style.display = "block";
-  }
-  else {
-    atLeastTwoAnswersAlert.style.display = "none";
-  }
+    // Checks if there are at least two answers.
+    if (answers.length < 2) {
+        isValid = false;
+        answersValid = false;
+        atLeastTwoAnswersAlert.style.display = "block";
+    } else {
+        atLeastTwoAnswersAlert.style.display = "none";
+    }
 
   // Checks if at least one answer is correct.
-  if (!answers.some(answer => answer.correct === 1)) {
-    isValid = false;
-    answersValid = false;
-    atLeastOneCorrectAnswerAlert.style.display = "block";
-  }
-  else {
-    atLeastOneCorrectAnswerAlert.style.display = "none";
-  }
+    if (!answers.some(answer => answer.correct === 1)) {
+        isValid = false;
+        answersValid = false;
+        atLeastOneCorrectAnswerAlert.style.display = "block";
+    } else {
+        atLeastOneCorrectAnswerAlert.style.display = "none";
+    }
 
-  // Checks if all answers have a description.
-  if (answers.some(answer => !answer.description.trim())) {
-    isValid = false;
-    answersValid = false;
-    answerDescriptionAlert.style.display = "block";
-  } else {
-    answerDescriptionAlert.style.display = "none";
-  }
+    // Checks if all answers have a description.
+    if (answers.some(answer => !answer.description.trim())) {
+        isValid = false;
+        answersValid = false;
+        answerDescriptionAlert.style.display = "block";
+    } else {
+        answerDescriptionAlert.style.display = "none";
+    }
 
   // Checks if multiple correct answers have been set, when not allowed to.
-  if (questionType) {
-    let checkedAnswers = 0;
-    answers.forEach(answer => {
-      checkedAnswers += answer.correct;
-    });
-    if (checkedAnswers > 1){
-      isValid = false;
-      answersValid = false;
-      maxOneCorrectAnswerAlert.style.display = "block";
+    if (questionType) {
+        let checkedAnswers = 0;
+        answers.forEach(answer => {
+            checkedAnswers += answer.correct;
+        });
+        if (checkedAnswers > 1) {
+            isValid = false;
+            answersValid = false;
+            maxOneCorrectAnswerAlert.style.display = "block";
+        } else {
+            maxOneCorrectAnswerAlert.style.display = "none";
+        }
     } else {
-      maxOneCorrectAnswerAlert.style.display = "none";
+          maxOneCorrectAnswerAlert.style.display = "none";
     }
-  } else {
-    maxOneCorrectAnswerAlert.style.display = "none";
-  }
 
-  if (!answersValid) { // If not all answers are valid show the box with warnings.
-    answersBox.style.display = "block";
-  } else {
-    answersBox.style.display = "none";
-  }
+    if (!answersValid) { // If not all answers are valid show the box with warnings.
+        answersBox.style.display = "block";
+    } else {
+        answersBox.style.display = "none";
+    }
 
-  if (!isValid) { // If the question is not valid show warning.
-    isValidText.style.display = "block";
-    return false;
-  }
-  return true;
+    if (!isValid) { // If the question is not valid show warning.
+        isValidText.style.display = "block";
+        return false;
+    }
+    return true;
 }
 
 /**
@@ -318,17 +314,17 @@ export function validateSubmission(answers) {
  * @returns {{description: *, title: *, explanation: *, type: (number)}}
  */
 export function getQuestionData() {
-  let questionTitle = document.getElementById("question_title_id").value.trim();
-  let questionDescription = document.getElementById("question_description_id").value.trim();
-  let questionExplanation = document.getElementById("question_explanation_id").value.trim();
-  let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
+    let questionTitle = document.getElementById("question_title_id").value.trim();
+    let questionDescription = document.getElementById("question_description_id").value.trim();
+    let questionExplanation = document.getElementById("question_explanation_id").value.trim();
+    let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
 
-  return {
-    title: questionTitle,
-    description: questionDescription,
-    explanation: questionExplanation,
-    type: questionType
-  };
+    return {
+        title: questionTitle,
+        description: questionDescription,
+        explanation: questionExplanation,
+        type: questionType
+    };
 }
 
 /**
@@ -337,23 +333,23 @@ export function getQuestionData() {
  * @returns {array}
  */
 export function prepareAnswers() {
-  let answers = [];
-  let answersDiv = document.querySelector(".all_answers_for_question_div");
+    let answers = [];
+    let answersDiv = document.querySelector(".all_answers_for_question_div");
 
-  for (let i = 0; i < answersDiv.children.length; i++) {
-    let answerText = answersDiv.children[i]
+    for (let i = 0; i < answersDiv.children.length; i++) {
+        let answerText = answersDiv.children[i]
         .querySelector(".answer_input")
         .value.trim();
 
-    let isCorrect =
+        let isCorrect =
         answersDiv.children[i].querySelector(".answer_checkbox").checked;
-    isCorrect = isCorrect ? 1 : 0;
+        isCorrect = isCorrect ? 1 : 0;
 
-    answers.push({
-      description: answerText,
-      correct: isCorrect,
-      explanation: "",
-    });
-  }
-  return answers;
+        answers.push({
+            description: answerText,
+            correct: isCorrect,
+            explanation: "",
+        });
+    }
+    return answers;
 }
