@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This is the test file
+ * Test of lib.php.
  * @package mod_livequiz
  * @copyright 2023
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -46,7 +46,6 @@ final class lib_test extends advanced_testcase {
      * @throws dml_exception
      */
     public function test_livequiz_add_instance(): void {
-        require_once(__DIR__ . '/../../lib.php');
         global $DB;
 
         $quizdata = new stdClass(); // Create a new stdClass object (empty object).
@@ -73,17 +72,19 @@ final class lib_test extends advanced_testcase {
     public function test_livequiz_update_instance(): void {
         global $DB;
 
+        // Prepare the data.
         $quizdata = new stdClass();
         $quizdata->name = 'Test Quiz';
         $quizdata->intro = 'This is a test quiz.';
-
         $id = livequiz_add_instance($quizdata);
-        $quizdata->id = $id;
+        $quizdata->instance = $id;
         $quizdata->name = 'Updated Test Quiz';
 
+        // Execute.
         $result = livequiz_update_instance($quizdata);
-        $this->assertTrue($result);
         $record = $DB->get_record('livequiz', ['id' => $id]);
+        // Assert.
+        $this->assertTrue($result);
         $this->assertEquals('Updated Test Quiz', $record->name);
     }
 

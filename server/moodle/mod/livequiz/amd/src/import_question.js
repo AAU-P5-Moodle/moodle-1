@@ -1,5 +1,5 @@
 import Templates from "core/templates";
-import {add_discard_question_button_listener, rerender_saved_questions_list} from "./edit_question_helper";
+import {add_cancel_edit_button_listener, rerender_saved_questions_list} from "./edit_question_helper";
 import {add_edit_question_listeners} from "./edit_question";
 import {add_delete_question_listeners} from "./delete_question";
 import {displayException} from "core/notification";
@@ -42,8 +42,8 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
             // Here we have compiled template.
             Templates.appendNodeContents(".main-container", html, js);
             await importQuestions(quizid, url, lecturerid);
-            add_discard_question_button_listener();
-            add_old_questions_to_popup(lecturerid);
+            add_cancel_edit_button_listener("import");
+            add_old_questions_to_popup(lecturerid, quizid);
         })
 
         // Deal with this exception (Using core/notify exception function is recommended).
@@ -53,9 +53,11 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
 /**
  * Adds old questions to the import question popup.
  * @param {number} lecturerid - The ID of the lecturer.
+ * @param {number} quizid - The ID of the quiz.
  */
-function add_old_questions_to_popup(lecturerid) {
+function add_old_questions_to_popup(lecturerid, quizid) {
     get_lecturer_quiz(lecturerid).then((oldquizzes) => {
+        oldquizzes = oldquizzes.filter(currentquiz => currentquiz.quizid !== quizid);
         let oldQuizzesContainer = document.querySelector(".oldQuizzes");
         if (oldquizzes.length === 0) {
             let noQuestions = document.createElement("p");
@@ -63,52 +65,59 @@ function add_old_questions_to_popup(lecturerid) {
             oldQuizzesContainer.appendChild(noQuestions);
             return;
         }
-        oldquizzes.forEach((quiz) => {
-            let question_checkboxes = [];
-            let quiz_div = document.createElement('div');
-            //Create quiz checkbox.
-            let quiz_checkbox = document.createElement('input');
-            quiz_checkbox.type = "checkbox";
-            quiz_checkbox.value = quiz.quizid;
-            quiz_checkbox.id = quiz.quizid;
-            quiz_checkbox.name = quiz.quiztitle;
-            // Create quiz Label.
-            let quiz_label = document.createElement('label');
-            quiz_label.htmlFor = `quiz_${quiz.quizid}`;
-            quiz_label.textContent = quiz.quiztitle;
-            quiz_div.class = "oldquiz"; // Might be used for styling.
+        oldquizzes.forEach((quiz) => { // Loop through all quizzes.
+            if (quiz.questions.length > 0) {
+                let question_checkboxes = [];
+                let quiz_div = document.createElement('div');
+                //Create quiz checkbox.
+                let quiz_checkbox = document.createElement('input');
+                quiz_checkbox.type = "checkbox";
+                quiz_checkbox.value = quiz.quizid;
+                quiz_checkbox.id = quiz.quizid;
+                quiz_checkbox.style.marginRight = "5px"; // Add margin so the text is not too close to the checkbox.
+                quiz_checkbox.name = quiz.quiztitle;
+                // Create quiz Label.
+                let quiz_label = document.createElement('label');
+                quiz_label.htmlFor = `quiz_${quiz.quizid}`;
+                quiz_label.textContent = quiz.quiztitle;
+                quiz_label.style.fontWeight = "bold"; // Make the quiz title bold.
+                quiz_div.class = "oldquiz"; // Might be used for styling.
 
-            // Append the checkbox and label to the div.
-            quiz_div.appendChild(quiz_checkbox);
-            quiz_div.appendChild(quiz_label);
-            // Set the border style
-            quiz_div.style.border = "2px solid black";
-            // Create container for questions.
-            let questions_div = document.createElement("div");
-            questions_div.style.marginBottom = "20px";
-            questions_div.id = "questionsdiv";
-            // Loop through each question and add it to the container.
-            quiz.questions.forEach((question) => {
-                //Create question checkbox.
-                let question_div = document.createElement('div');
-                let question_checkbox = document.createElement('input');
-                question_checkbox.type = "checkbox";
-                question_checkbox.value = `question_${question.questionid}`;
-                question_checkbox.id = question.questionid;
-                question_checkbox.name = question.questiontitle;
-                question_checkboxes.push(question_checkbox);
-                // Create question Label.
-                let question_label = document.createElement('label');
-                question_label.htmlFor = `question_${question.questionid}`;
-                question_label.textContent = question.questiontitle;
-                question_div.appendChild(question_checkbox);
-                question_div.appendChild(question_label);
-                questions_div.appendChild(question_div);
-            });
-            add_quiz_checkbox_listener(quiz_checkbox, question_checkboxes);
-            add_question_checkbox_listener(quiz_checkbox, question_checkboxes);
-            quiz_div.appendChild(questions_div);
-            oldQuizzesContainer.appendChild(quiz_div);
+                // Append the checkbox and label to the div.
+                quiz_div.appendChild(quiz_checkbox);
+                quiz_div.appendChild(quiz_label);
+                // Set the border style
+                quiz_div.style.border = "2px solid black";
+                // Create container for questions.
+                let questions_div = document.createElement("div");
+                questions_div.style.marginBottom = "20px";
+                questions_div.style.marginLeft = "20px"; // Add margin to the left so the questions are indented.
+                questions_div.id = "questionsdiv";
+                // Loop through each question and add it to the container.
+                quiz.questions.forEach((question) => {
+                    //Create question checkbox.
+                    let question_div = document.createElement('div');
+                    let question_checkbox = document.createElement('input');
+                    question_checkbox.type = "checkbox";
+                    question_checkbox.value = `question_${question.questionid}`;
+                    question_checkbox.style.marginRight = "5px"; // Add margin so the text is not too close to the checkbox.
+                    question_checkbox.id = question.questionid;
+                    question_checkbox.name = question.questiontitle;
+                    question_checkboxes.push(question_checkbox);
+                    // Create question Label.
+                    let question_label = document.createElement('label');
+                    question_label.htmlFor = `question_${question.questionid}`;
+                    question_label.textContent = question.questiontitle;
+
+                    question_div.appendChild(question_checkbox);
+                    question_div.appendChild(question_label);
+                    questions_div.appendChild(question_div);
+                });
+                add_quiz_checkbox_listener(quiz_checkbox, question_checkboxes);
+                add_question_checkbox_listener(quiz_checkbox, question_checkboxes);
+                quiz_div.appendChild(questions_div);
+                oldQuizzesContainer.appendChild(quiz_div);
+            }
         });
     }).catch((error) => console.log(error));
 }
@@ -128,6 +137,10 @@ async function importQuestions(quizid, url, lecturerid) {
     importQuestionBtn.addEventListener("click", async() => {
         try {
             let questionids = get_checked_questions();
+            if (questionids.length === 0) {
+                alert("No questions selected. Pleas choose at least one question to import.")
+                return;
+            }
             call_reuse_questions(quizid, questionids, lecturerid, quiz_url);
         } catch (error) {
             window.console.error("Error in import of questions");
@@ -139,7 +152,7 @@ async function importQuestions(quizid, url, lecturerid) {
 /**
  * Calls the external function to reuse questions.
  * @param {number} quizid - The ID of the quiz.
- * @param {number} questionids - The IDs of the questions to reuse.
+ * @param {array} questionids - The IDs of the questions to reuse.
  * @param {number} lecturerid - The ID of the lecturer.
  * @param {string} quiz_url - The URL of the quiz page.
  */
@@ -150,7 +163,7 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
             add_delete_question_listeners(quizid, lecturerid);
         };
         rerender_saved_questions_list(questions, update_event_listeners); // Re-render saved questions list.
-        rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button.
+        rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button. Since at least one question was imported, hasquestions is true.
     }). catch((error) => console.log(error));
     let modal_div = document.querySelector(".Modal_div");
     modal_div.remove();

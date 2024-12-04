@@ -31,8 +31,10 @@ Feature: View livequiz activity
     #The questions should be shown in different pages
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
     And I should see "Take Quiz"
+    And I should see "Test description"
     And I click on "Take Quiz" "link"
     Then I should see "Question 1"
+    And I should not see "Test description"
     And I should see "Which of the following cities is in France?"
     #The answer options are shown as checkboxes
     And "Paris" "checkbox" should exist
@@ -42,6 +44,7 @@ Feature: View livequiz activity
     And I should not see "Previous Question"
     And I click on "Next Question" "link"
     Then I should see "Question 2"
+    And I should not see "Test description"
     And I should see "What is the Capital of Denmark?"
     #The answer options are shown as radio buttons
     And "Aarhus" "radio" should exist
@@ -69,7 +72,7 @@ Feature: View livequiz activity
     And I click on "Take Quiz" "link"
     And "Submit Quiz" "button" should exist
     And I click on "Paris" "checkbox"
-    And I click on "Submit Quiz" "button"
+    And I click on "Submit Quiz" "button" confirming the dialogue
     And I should see "Results for attempt"
     And "Paris" "checkbox" should exist
     And "Champagne" "checkbox" should exist
@@ -81,6 +84,21 @@ Feature: View livequiz activity
     And "No" "radio" should exist
     And I press the "back" button in the browser
     Then I should see "You are not allowed to go back after submitting the quiz"
+
+  Scenario: Not confirm a livequiz
+    When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    And I click on "Take Quiz" "link"
+    And "Submit Quiz" "button" should exist
+    And "Paris" "checkbox" should exist
+    And "Champagne" "checkbox" should exist
+    And "Nice" "checkbox" should exist
+    And "Next Question" "link" should exist
+    And I click on "Submit Quiz" "button" dismissing the dialogue
+    And "Submit Quiz" "button" should exist
+    And "Paris" "checkbox" should exist
+    And "Champagne" "checkbox" should exist
+    And "Nice" "checkbox" should exist
+    And "Next Question" "link" should exist
 
   Scenario: Choose an answer to question
     #Testing we can choose an answer to a question, both checkboxes and radio buttons
@@ -139,7 +157,7 @@ Scenario: Submitted quiz has the correct classes
   And I click on "Next Question" "link"
   And "Submit Quiz" "button" should exist
   And I click on "No" "radio"
-  And I click on "Submit Quiz" "button"
+  And I click on "Submit Quiz" "button" confirming the dialogue
   And I should see "Results for attempt"
   And "Paris" "checkbox" should exist
   Then "Paris" should have a parent div with class "answer correct"

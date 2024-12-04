@@ -66,8 +66,16 @@ Feature: Reuse previously created questions in livequiz activity
       And I set the field with xpath "(//input[@class='answer_checkbox'])[2]" to ""
       And I click on "Save Question" "button"
       Then I should see "Saved Questions"
+      And I am on "Test Course 2" course homepage with editing mode on
+      When I click on "livequiz_europe_quiz_2" "link" in the "livequiz" activity
+      And I should see "Quiz editor page"
       Then I click on "Import Question" "button"
+      And "livequiz_europe_quiz" "checkbox" should exist
       And "test 1" "checkbox" should exist
+      And I click on "livequiz_europe_quiz" "checkbox"
+      And I click on "Import Question(s)" "button"
+      And I check that element "test 1" occurs only once in the list
+
 
 
   Scenario: Reuse questions in livequiz
@@ -90,14 +98,17 @@ Feature: Reuse previously created questions in livequiz activity
       And I click on "Save Question" "button"
       Then I should see "Saved Questions"
       And "test 1" "list_item" should exist
+      # Switching quiz
       And I am on "Test Course 2" course homepage with editing mode on
       When I click on "livequiz_europe_quiz_2" "link" in the "livequiz" activity
       And I should see "Quiz editor page"
       And "Import Question" "button" should exist
       And I click on "Import Question" "button"
       Then "Import Question(s)" "button" should exist
-      And "Discard Changes" "button" should exist
+      And "Cancel" "button" should exist
       And I should see "Previously made Quizzes and Questions"
+      And "livequiz_europe_quiz_2" "checkbox" should not exist
+      And "livequiz_europe_quiz" "checkbox" should exist
       And "test 1" "checkbox" should exist
       And I click on "test 1" "checkbox"
       And I click on "Import Question(s)" "button"

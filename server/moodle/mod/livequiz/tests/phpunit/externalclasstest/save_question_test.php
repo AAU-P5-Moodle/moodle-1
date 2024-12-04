@@ -47,6 +47,7 @@ final class save_question_test extends advanced_testcase {
             'title' => 'Question Title 1',
             'description' => 'Question Description 1',
             'explanation' => 'Question Explanation 1',
+            'type' => '1',
             'answers' => [
                 [
                     'description' => 'Answer 1',
