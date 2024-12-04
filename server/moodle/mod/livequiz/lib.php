@@ -43,15 +43,15 @@ function livequiz_add_instance(object $quizdata): bool|int {
         'id'
     );
 
-    $quizdata->timecreated = time();
-    $quizdata->timemodified = time();
-
     if ($modulerecord) {
         $firstrecord = reset($modulerecord);
         $quizdata->activity_id = $firstrecord->id;
     } else {
         $quizdata->activity_id = null; // Handle the case where no record is found.
     }
+
+    $quizdata->timecreated = time();
+    $quizdata->timemodified = time();
 
     $quizdata->id = $DB->insert_record('livequiz', $quizdata);
 
@@ -86,30 +86,6 @@ function livequiz_update_instance(object $quizdata): bool {
  */
 function livequiz_delete_instance(int $id): bool {
     global $DB;
-
     $DB->delete_records('livequiz', ['id' => $id]);
-    $quizid = livequiz::get_quizid_from_activity_id($id);
-    $DB->delete_records('livequiz', ['id' => $quizid]);
-    $service = livequiz_services::get_singleton_service_instance();
-    $service::delete_quiz($quizid);
-    if (quiz_has_no_participations($quizid)) {
-    }
-
     return true;
-}
-/**
- * Checks if a quiz has any participations.
- *
- * @param int $quizid ID of the quiz
- * @return bool True if the quiz has no participations, false otherwise
- * @throws dml_exception When a database error occurs
- */
-function quiz_has_no_participations(int $quizid): bool {
-    $relation = new student_quiz_relation();
-    $participations = $relation->get_participations_from_quizid($quizid);
-
-    if (empty($participations)) {
-        return true;
-    }
-    return false;
 }

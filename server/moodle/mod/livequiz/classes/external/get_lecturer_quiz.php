@@ -69,13 +69,15 @@ class get_lecturer_quiz extends external_api {
         // Loop through all quizzes from the lecturer and find the corresponding questions.
         foreach ($rawquizzes as $rawquiz) {
             $quizobject = livequiz::get_livequiz_instance($rawquiz->quiz_id);
-            $rawquestions = quiz_questions_relation::get_questions_from_quiz_id($rawquiz->quiz_id);
-            foreach ($rawquestions as $rawquestion) {
-                $question = question::get_question_from_id($rawquestion->get_id());
-                $quizobject->add_question($question);
+            if (self::quiz_active($quizobject)) {
+                $rawquestions = quiz_questions_relation::get_questions_from_quiz_id($rawquiz->quiz_id);
+                foreach ($rawquestions as $rawquestion) {
+                    $question = question::get_question_from_id($rawquestion->get_id());
+                    $quizobject->add_question($question);
+                }
+                $preparedquiz = $quizobject->prepare_for_template();
+                $quizzes[] = $preparedquiz;
             }
-            $preparedquiz = $quizobject->prepare_for_template();
-            $quizzes[] = $preparedquiz;
         }
         return $quizzes;
     }
@@ -89,5 +91,17 @@ class get_lecturer_quiz extends external_api {
      */
     public static function execute_returns(): external_multiple_structure {
         return new external_multiple_structure(data_structure_helper::get_quiz_structure(), 'List of quizzes');
+    }
+
+    private static function quiz_active(livequiz $quizobject): bool {
+        global $DB;
+        $quizinstance = $DB->get_record('livequiz', ['id' => $quizobject->get_id()]);
+        $cmid = $quizinstance->activity_id;
+        $cminstance = $DB->get_record('course_modules', ['id' => $cmid]);
+        $isdeleted = $cminstance->deletioninprogress;
+        if ($isdeleted == 1) {
+            return false;
+        }
+        return true;
     }
 }
