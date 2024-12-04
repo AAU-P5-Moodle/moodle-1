@@ -137,8 +137,8 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
             rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button.
         })
         .catch((error) => console.log(error));
-    let modal_div = document.querySelector(".backdrop");
-    modal_div.remove();
+    let popupMenu = document.querySelector(".backdrop");
+    popupMenu.remove();
 }
 
 /**
@@ -148,32 +148,14 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
  */
 function get_checked_questions() {
     let checkedquestions = [];
-    let questions_div = document.querySelector(".oldQuizzes");
-
-    // Loop through all quizzes and get the checked questions.
-    for (let quiz_div of questions_div.children) {
-        // Loop through all quizzes.
-        for (let content of quiz_div.children) {
-            // Loop through all content of the quiz.
-            if (content.tagName === "DIV") {
-                // Only look in div elements
-                for (let question_div of content.children) {
-                    // Loop through all questions.
-                    for (let children of question_div.children) {
-                        // Loop through all children of the question.
-                        if (children.tagName === "INPUT") {
-                            // Only look in input elements.
-                            let checkbox = children;
-                            if (checkbox.checked) {
-                                // If the checkbox is checked, add the id to the array.
-                                checkedquestions.push(parseInt(checkbox.id));
-                            }
-                        }
-                    }
-                }
-            }
+    let questions = document.querySelectorAll(".question");
+    questions.forEach((question) => {
+        if (question.checked) {
+            // If the checkbox is checked, add the id to the array.
+            checkedquestions.push(parseInt(question.id));
         }
-    }
+    });
+
     return checkedquestions; // Returns the checked questions.
 }
 
@@ -203,8 +185,6 @@ function addQuizCheckboxListener(quizId) {
 function addQuestionCheckboxListener(quizId) {
     let quizCheckbox = document.querySelector(".quiz_" + quizId);
     let questionCheckboxes = document.querySelectorAll(".quiz_" + quizId + "_question");
-    console.log(quizCheckbox);
-    console.log(questionCheckboxes);
 
     questionCheckboxes.forEach((questionCheckbox) => {
         questionCheckbox.addEventListener("change", () => {
@@ -230,7 +210,6 @@ function addQuestionCheckboxListener(quizId) {
  * @returns {bool} - True if all questions are checked, false otherwise.
  */
 function areAllQuestionsChecked(questions) {
-    console.log(questions);
     //Convert the NodeList to an array in order to use every function.
     return Array.from(questions).every((question) => question.checked); // Returns true only if all are checked
 }
