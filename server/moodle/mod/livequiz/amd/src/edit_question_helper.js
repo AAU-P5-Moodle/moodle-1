@@ -227,7 +227,7 @@ export function validate_submission(answers) {
   let maxOneCorrectAnswerAlert = document.getElementById("question_alert_max_one_correct");
   let questionType = document.getElementById("question_type_checkbox_id").checked;
   let answersBox = document.getElementById("all_answers");
-  let isValidText = document.getElementById("validText");
+  let isValidText = document.getElementById("valid_text");
 
   // Function to set the border style of an element.
   const setBorderStyle = (element, isValid) => {
