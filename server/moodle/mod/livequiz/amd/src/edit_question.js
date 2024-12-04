@@ -1,7 +1,11 @@
 import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
 import { save_question, get_question} from "./repository";
-import {add_answer_button_event_listener, create_answer_container, add_discard_question_button_listener} from "./edit_question_helper";
+import {
+    add_answer_button_event_listener,
+    create_answer_container,
+    add_cancel_edit_button_listener,
+    validate_submission} from "./edit_question_helper";
 import {add_delete_question_listeners} from "./delete_question";
 
 export const init = async (quizid, lecturerid) => {
@@ -32,7 +36,7 @@ if(!document.querySelector('.Modal_div')){
             get_question(quizid, questionid).then((question)=> {restore_question_data_in_popup(question);});
             add_answer_button_event_listener();
             add_save_question_button_listener(quizid, lecturerid, questionid);
-            add_discard_question_button_listener();
+            add_cancel_edit_button_listener("edit");
         })
 
       // Deal with this exception (Using core/notify exception function is recommended).
@@ -52,16 +56,10 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
     let question_indput_description = document.getElementById("question_description_id");
     let question_indput_explanation = document.getElementById("question_explanation_id");
     let questionTitle = question_input_title.value.trim();
-    let questionDesription = question_indput_description.value.trim();
+    let questionDescription = question_indput_description.value.trim();
     let questionExplanation = question_indput_explanation.value.trim();
+    let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
 
-    if (!questionDesription) {
-        alert("Please enter a question description.");
-        return;
-    }
-    if(!questionTitle){
-        questionTitle = "Question";
-    }
     let answers = [];
     let answers_div = document.querySelector(".all_answers_for_question_div");
     for (let i = 0; i < answers_div.children.length; i++) {
@@ -84,9 +82,15 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
         id: questionid,
         title: questionTitle,
         answers: answers,
-        description: questionDesription,
+        description: questionDescription,
         explanation: questionExplanation,
+        type: questionType,
     };
+
+    if(!validate_submission(savedQuestion.answers)) {
+        return;
+    }
+
     save_question(savedQuestion, lecturerid, quizid).then((questions) => {
         const contextsavedquestions = {
             questions: questions,
@@ -116,12 +120,11 @@ function restore_question_data_in_popup(questiondata){
     document.getElementById("question_title_id").value = questiondata.questiontitle;
     document.getElementById("question_description_id").value = questiondata.questiondescription;
     document.getElementById("question_explanation_id").value = questiondata.questionexplanation;
+    document.getElementById("question_type_checkbox_id").checked = questiondata.questiontype === 'radio';
     let answers = questiondata.answers;
     for(let i=0; i < answers.length; i++){
         restore_answer_data_in_popup(answers[i]);
     }
-    console.log("answers: ",answers);
-
 }
 
 function restore_answer_data_in_popup(answer) {

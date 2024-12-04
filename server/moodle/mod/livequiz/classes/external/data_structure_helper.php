@@ -56,6 +56,7 @@ class data_structure_helper {
                 'questiondescription' => new external_value(PARAM_RAW, 'The description of the question'),
                 'questiontimelimit' => new external_value(PARAM_INT, 'The time limit for the question'),
                 'questionexplanation' => new external_value(PARAM_RAW, 'Explanation of the question'),
+                'questiontype' => new external_value(PARAM_TEXT, 'Type of the question (radio or checkbox)'),
                 'answers' => new external_multiple_structure(
                     new external_single_structure(
                         [
@@ -70,7 +71,6 @@ class data_structure_helper {
                     ),
                     'List of answers for the question'
                 ),
-                'answertype' => new external_value(PARAM_TEXT, 'The type of answers (e.g., checkbox, radio)'),
             ]
         );
     }

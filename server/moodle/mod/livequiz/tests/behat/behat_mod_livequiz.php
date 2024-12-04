@@ -16,7 +16,9 @@
 
 namespace mod_livequiz\tests\behat;
 
+use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Exception\ExpectationException;
+use Behat\Mink\Exception\UnsupportedDriverActionException;
 use behat_base;
 use demodatareader;
 use mod_livequiz\services\livequiz_services;
@@ -105,6 +107,23 @@ class behat_mod_livequiz extends behat_base {
     }
 
     /**
+     * Asserts whether a given element only occurs once in the list
+     * @Then I check that element :itemName occurs only once in the list
+     */
+    public function icheckthatelementoccursonlyonceinthelist($expectedname) {
+        $elements = $this->getSession()->getPage()->findAll('xpath', "//*[text()='$expectedname']");
+
+        // Check if the count is exactly 1.
+        if (count($elements) !== 1) {
+            throw new \Exception(
+                "The element '$expectedname' occurs " .
+                count($elements) .
+                " times, but it should only occur once."
+            );
+        }
+    }
+
+    /**
      * Reads the demo data and creates objects from it.
      *
      * @Given I use demodata :datanumber for the course :coursename and activity :activityname and lecturer :teachername
@@ -177,5 +196,18 @@ class behat_mod_livequiz extends behat_base {
         if (!str_contains($classes, $class)) {
             throw new \Exception("Element with selector '$selector' does not contain class '$class'.  Actual class: $classes");
         }
+    }
+
+
+    /**
+     * Enables automatic dismissal of alerts.
+     *
+     * @When /^I enable automatic dismissal of alerts$/
+     * @throws UnsupportedDriverActionException
+     * @throws DriverException
+     */
+    public function idismissalerts(): void {
+        $driver = $this->getSession()->getDriver();
+        $driver->evaluateScript('window.confirm = function() { return true; };'); // Auto-accept confirms.
     }
 }

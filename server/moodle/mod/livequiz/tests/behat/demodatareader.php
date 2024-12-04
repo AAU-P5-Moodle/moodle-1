@@ -60,6 +60,7 @@ class demodatareader {
                 $question["timelimit"],
                 $question["explanation"]
             );
+            $modelquestion->set_type($question["type"]);
             foreach ($question["answers"] as $answer) {
                 $modelanswer = new answer(
                     $answer["correct"],
