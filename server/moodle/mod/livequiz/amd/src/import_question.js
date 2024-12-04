@@ -162,7 +162,7 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
       rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button.
     })
     .catch((error) => console.log(error));
-  let modal_div = document.querySelector(".Modal_div");
+  let modal_div = document.querySelector(".backdrop");
   modal_div.remove();
 }
 
