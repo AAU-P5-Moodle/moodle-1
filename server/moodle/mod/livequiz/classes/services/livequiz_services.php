@@ -392,24 +392,6 @@ class livequiz_services {
     }
 
     /**
-     * Deletes a quiz, it's questions and any relations to other entities.
-     *
-     * @throws dml_exception
-     * @throws Exception
-     */
-    public static function delete_quiz(int $quizid): void {
-        //$quizid = livequiz::get_quizid_from_activity_id($activityid);
-        $questions = quiz_questions_relation::get_questions_from_quiz_id($quizid);
-        foreach ($questions as $question) {
-            $questionid = $question->get_id();
-            self::delete_question($questionid);
-        }
-        livequiz_quiz_lecturer_relation::delete_lecturer_quiz_relation_by_quizid($quizid);
-        student_quiz_relation::delete_student_quiz_relation_by_quizid($quizid);
-        livequiz::delete_livequiz($quizid);
-    }
-
-    /**
      * A method for fetching the relevant data for the quiz initiation.
      *
      * @param int $quizid
