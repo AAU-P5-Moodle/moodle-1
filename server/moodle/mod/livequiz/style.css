@@ -643,3 +643,14 @@
 .correctnotchosen {
     background-color: rgba(255, 200, 12);
 }
+
+/* Import Question Styling */
+#id_buttonimportquestion{
+      background-color: rgb(32, 138, 176);
+      color: white;
+      padding: 10px 20px;
+      font-size: large;
+      border-radius: 5px;
+      cursor: pointer;
+}
+

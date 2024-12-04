@@ -84,8 +84,8 @@ function add_old_questions_to_popup(lecturerid, quizid) {
                 quiz_label.htmlFor = `quiz_${quiz.quizid}`;
                 quiz_label.textContent = quiz.quiztitle;
                 quiz_label.style.fontWeight = "bold"; // Make the quiz title bold.
+                quiz_label.
                 quiz_div.class = "oldquiz"; // Might be used for styling.
-
                 // Append the checkbox and label to the div.
                 quiz_div.appendChild(quiz_checkbox);
                 quiz_div.appendChild(quiz_label);
