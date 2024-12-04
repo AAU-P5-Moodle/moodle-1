@@ -30,7 +30,7 @@ Feature: Delete teacher participation
     And I click on "Take Quiz" "link"
     And "Submit Quiz" "button" should exist
     And I click on "Paris" "checkbox"
-    And I click on "Submit Quiz" "button"
+    And I click on "Submit Quiz" "button" confirming the dialogue
     And I should see "Results for attempt"
     And I should see "Back to livequiz menu"
     And I click on "Back to livequiz menu" "link"
