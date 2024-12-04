@@ -11,7 +11,7 @@ import {submitQuiz} from "./repository";
 export const init = async(quizId, studentId, resultsUrl) => {
     const submitQuizButton = document.getElementById("submitQuizBtn");
     submitQuizButton.addEventListener("click", async function() {
-        if(submitQuizConfirm()){
+        if (submitQuizConfirm()) {
             try {
                 // Insert participation and the answers given in the quiz.
                 await submitQuiz(quizId, studentId);
