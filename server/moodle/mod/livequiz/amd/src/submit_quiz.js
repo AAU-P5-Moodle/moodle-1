@@ -17,7 +17,7 @@ export const init = async(quizId, studentId, resultsUrl) => {
 };
 
 
-function submit_quiz_confirm() {
+function submitQuizConfirm() {
     if (confirm("Are you sure you want to submit the quiz?")) {
         return true;
     } else {
