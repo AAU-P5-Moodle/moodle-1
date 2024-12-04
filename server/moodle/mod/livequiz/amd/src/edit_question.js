@@ -1,7 +1,11 @@
 import Templates from "core/templates";
-import {exception as displayException} from "core/notification";
-import {saveQuestion, getQuestion} from "./repository";
-import {addAnswerButtonEventListener, createAnswerContainer, addDiscardQuestionButtonListener} from "./edit_question_helper";
+import { exception as displayException } from "core/notification";
+import { saveQuestion, getQuestion} from "./repository";
+import {
+    addAnswerButtonEventListener,
+    createAnswerContainer,
+    addCancelEditButtonListener,
+    validateSubmission} from "./edit_question_helper";
 import {addDeleteQuestionListeners} from "./delete_question";
 
 export const init = async(quizId, lecturerId) => {
@@ -40,12 +44,10 @@ if (!document.querySelector('.Modal_div')) {
         .then(({html, js}) => {
             // Here we have the compiled template.
             Templates.appendNodeContents(".main-container", html, js);
-            getQuestion(quizId, questionId).then((question)=> {
-                restoreQuestionDataInPopup(question);
-            });
+            getQuestion(quizId, questionId).then((question)=> {restoreQuestionDataInPopup(question);});
             addAnswerButtonEventListener();
             addSaveQuestionButtonListener(quizId, lecturerId, questionId);
-            addDiscardQuestionButtonListener();
+            addCancelEditButtonListener("edit");
         })
 
       // Deal with this exception (Using core/notify exception function is recommended).
@@ -66,6 +68,7 @@ function addSaveQuestionButtonListener(quizId, lecturerId, questionId) {
     });
 }
 
+
 /**
  *
  * @param quizId
@@ -79,14 +82,8 @@ function onSaveQuestionButtonClicked(quizId, lecturerId, questionId) {
     let questionTitle = questionInputTitle.value.trim();
     let questionDescription = questionInputDescription.value.trim();
     let questionExplanation = questionInputExplanation.value.trim();
+    let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
 
-    if (!questionDescription) {
-        alert("Please enter a question description.");
-        return;
-    }
-    if (!questionTitle) {
-        questionTitle = "Question";
-    }
     let answers = [];
     let answersDiv = document.querySelector(".all_answers_for_question_div");
     for (let i = 0; i < answersDiv.children.length; i++) {
@@ -111,8 +108,15 @@ function onSaveQuestionButtonClicked(quizId, lecturerId, questionId) {
         answers: answers,
         description: questionDescription,
         explanation: questionExplanation,
+        type: questionType,
     };
+
+    if(!validateSubmission(savedQuestion.answers)) {
+        return;
+    }
+
     saveQuestion(savedQuestion, lecturerId, quizId).then((questions) => {
+
         const contextsavedquestions = {
             questions: questions,
         };
@@ -137,16 +141,18 @@ function onSaveQuestionButtonClicked(quizId, lecturerId, questionId) {
     let modalDiv = document.querySelector(".Modal_div");
     modalDiv.remove();
 }
+
 /**
  *
  * @param questionData
  */
-function restoreQuestionDataInPopup(questionData) {
+function restoreQuestionDataInPopup(questionData){
     document.getElementById("question_title_id").value = questionData.questiontitle;
     document.getElementById("question_description_id").value = questionData.questiondescription;
     document.getElementById("question_explanation_id").value = questionData.questionexplanation;
+    document.getElementById("question_type_checkbox_id").checked = questionData.questiontype === 'radio';
     let answers = questionData.answers;
-    for (let i = 0; i < answers.length; i++) {
+    for(let i=0; i < answers.length; i++){
         restoreAnswerDataInPopup(answers[i]);
     }
 }

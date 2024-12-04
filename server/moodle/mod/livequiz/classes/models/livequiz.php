@@ -17,7 +17,8 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
-use mysql_xdevapi\Exception;
+use InvalidArgumentException;
+use RuntimeException;
 use stdClass;
 
 /**
@@ -249,13 +250,13 @@ class livequiz {
             if ($question->get_id() === $questionid) {
                 // If we already found a question, it means that there are questions with duplicate id.
                 if ($questionwithid !== null) {
-                    throw new \RuntimeException("Something is wrong. Multiple questions found with id {$questionid}");
+                    throw new RuntimeException("Something is wrong. Multiple questions found with id {$questionid}");
                 }
                 $questionwithid = $question;
             }
         }
         if ($questionwithid === null) {
-            throw new \InvalidArgumentException("Could not find question with id {$questionid}");
+            throw new InvalidArgumentException("Could not find question with id {$questionid}");
         }
         return $questionwithid;
     }

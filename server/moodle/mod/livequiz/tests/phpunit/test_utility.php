@@ -72,6 +72,7 @@ final class test_utility {
         string $description,
         int $timelimit,
         string $explanation,
+        int $type,
         array $answers
     ): array {
         return [
@@ -80,6 +81,7 @@ final class test_utility {
             "description" => $description,
             "timelimit" => $timelimit,
             "explanation" => $explanation,
+            "type" => $type,
             "answers" => $answers,
         ];
     }

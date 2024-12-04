@@ -1,5 +1,5 @@
 import Templates from "core/templates";
-import {addDiscardQuestionButtonListener, rerenderSavedQuestionsList} from "./edit_question_helper";
+import {addCancelEditButtonListener, rerenderSavedQuestionsList} from "./edit_question_helper";
 import {addEditQuestionListeners} from "./edit_question";
 import {addDeleteQuestionListeners} from "./delete_question";
 import {displayException} from "core/notification";
@@ -42,8 +42,8 @@ async function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
             // Here we have compiled template.
             Templates.appendNodeContents(".main-container", html, js);
             await importQuestions(quizId, url, lecturerId);
-            addDiscardQuestionButtonListener();
-            addOldQuestionsToPopup(lecturerId);
+            addCancelEditButtonListener("import");
+            addOldQuestionsToPopup(lecturerId, quizId);
         })
 
         // Deal with this exception (Using core/notify exception function is recommended).
@@ -53,9 +53,11 @@ async function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
 /**
  * Adds old questions to the import question popup.
  * @param {number} lecturerId - The ID of the lecturer.
+ * @param {number} quizId - The ID of the quiz.
  */
-function addOldQuestionsToPopup(lecturerId) {
+function addOldQuestionsToPopup(lecturerId, quizId) {
     getLecturerQuiz(lecturerId).then((oldQuizzes) => {
+        oldQuizzes = oldQuizzes.filter(currentQuiz => currentQuiz.quizid !== quizId);
         let oldQuizzesContainer = document.querySelector(".oldQuizzes");
         if (oldQuizzes.length === 0) {
             let noQuestions = document.createElement("p");
@@ -63,52 +65,59 @@ function addOldQuestionsToPopup(lecturerId) {
             oldQuizzesContainer.appendChild(noQuestions);
             return;
         }
-        oldQuizzes.forEach((quiz) => {
-            let questionCheckboxes = [];
-            let quizDiv = document.createElement('div');
-            // Create quiz checkbox.
-            let quizCheckbox = document.createElement('input');
-            quizCheckbox.type = "checkbox";
-            quizCheckbox.value = quiz.quizid;
-            quizCheckbox.id = quiz.quizid;
-            quizCheckbox.name = quiz.quiztitle;
-            // Create quiz Label.
-            let quizLabel = document.createElement('label');
-            quizLabel.htmlFor = `quiz_${quiz.quizid}`;
-            quizLabel.textContent = quiz.quiztitle;
-            quizDiv.class = "oldquiz"; // Might be used for styling.
+        oldQuizzes.forEach((quiz) => { // Loop through all quizzes.
+            if (quiz.questions.length > 0) {
+                let questionCheckboxes = [];
+                let quizDiv = document.createElement('div');
+                //Create quiz checkbox.
+                let quizCheckbox = document.createElement('input');
+                quizCheckbox.type = "checkbox";
+                quizCheckbox.value = quiz.quizid;
+                quizCheckbox.id = quiz.quizid;
+                quizCheckbox.style.marginRight = "5px"; // Add margin so the text is not too close to the checkbox.
+                quizCheckbox.name = quiz.quiztitle;
+                // Create quiz Label.
+                let quizLabel = document.createElement('label');
+                quizLabel.htmlFor = `quiz_${quiz.quizid}`;
+                quizLabel.textContent = quiz.quiztitle;
+                quizLabel.style.fontWeight = "bold"; // Make the quiz title bold.
+                quizDiv.class = "oldquiz"; // Might be used for styling.
 
-            // Append the checkbox and label to the div.
-            quizDiv.appendChild(quizCheckbox);
-            quizDiv.appendChild(quizLabel);
-            // Set the border style
-            quizDiv.style.border = "2px solid black";
-            // Create container for questions.
-            let questionsDiv = document.createElement("div");
-            questionsDiv.style.marginBottom = "20px";
-            questionsDiv.id = "questionsdiv";
-            // Loop through each question and add it to the container.
-            quiz.questions.forEach((question) => {
-                // Create question checkbox.
-                let questionDiv = document.createElement('div');
-                let questionCheckbox = document.createElement('input');
-                questionCheckbox.type = "checkbox";
-                questionCheckbox.value = `question_${question.questionid}`;
-                questionCheckbox.id = question.questionid;
-                questionCheckbox.name = question.questiontitle;
-                questionCheckboxes.push(questionCheckbox);
-                // Create question Label.
-                let questionLabel = document.createElement('label');
-                questionLabel.htmlFor = `question_${question.questionid}`;
-                questionLabel.textContent = question.questiontitle;
-                questionDiv.appendChild(questionCheckbox);
-                questionDiv.appendChild(questionLabel);
-                questionsDiv.appendChild(questionDiv);
-            });
-            addQuizCheckboxListener(quizCheckbox, questionCheckboxes);
-            addQuestionCheckboxListener(quizCheckbox, questionCheckboxes);
-            quizDiv.appendChild(questionsDiv);
-            oldQuizzesContainer.appendChild(quizDiv);
+                // Append the checkbox and label to the div.
+                quizDiv.appendChild(quizCheckbox);
+                quizDiv.appendChild(quizLabel);
+                // Set the border style
+                quizDiv.style.border = "2px solid black";
+                // Create container for questions.
+                let questionsDiv = document.createElement("div");
+                questionsDiv.style.marginBottom = "20px";
+                questionsDiv.style.marginLeft = "20px"; // Add margin to the left so the questions are indented.
+                questionsDiv.id = "questionsdiv";
+                // Loop through each question and add it to the container.
+                quiz.questions.forEach((question) => {
+                    //Create question checkbox.
+                    let questionDiv = document.createElement('div');
+                    let questionCheckbox = document.createElement('input');
+                    questionCheckbox.type = "checkbox";
+                    questionCheckbox.value = `question_${question.questionid}`;
+                    questionCheckbox.style.marginRight = "5px"; // Add margin so the text is not too close to the checkbox.
+                    questionCheckbox.id = question.questionid;
+                    questionCheckbox.name = question.questiontitle;
+                    questionCheckboxes.push(questionCheckbox);
+                    // Create question Label.
+                    let questionLabel = document.createElement('label');
+                    questionLabel.htmlFor = `question_${question.questionid}`;
+                    questionLabel.textContent = question.questiontitle;
+
+                    questionDiv.appendChild(questionCheckbox);
+                    questionDiv.appendChild(questionLabel);
+                    questionsDiv.appendChild(questionDiv);
+                });
+                addQuizCheckboxListener(quizCheckbox, questionCheckboxes);
+                addQuestionCheckboxListener(quizCheckbox, questionCheckboxes);
+                quizDiv.appendChild(questionsDiv);
+                oldQuizzesContainer.appendChild(quizDiv);
+            }
         });
     }).catch((error) => displayException(error));
 }
@@ -128,6 +137,10 @@ async function importQuestions(quizId, url, lecturerId) {
     importQuestionBtn.addEventListener("click", async() => {
         try {
             let questionIds = getCheckedQuestions();
+            if (questionIds.length === 0) {
+                alert("No questions selected. Pleas choose at least one question to import.")
+                return;
+            }
             callReuseQuestions(quizId, questionIds, lecturerId, quizUrl);
         } catch (error) {
             window.console.error("Error in import of questions");
@@ -138,10 +151,10 @@ async function importQuestions(quizId, url, lecturerId) {
 
 /**
  * Calls the external function to reuse questions.
- * @param {number} quizId - The ID of the quiz.
- * @param {Array<number>} questionIds - The IDs of the questions to reuse.
- * @param {number} lecturerId - The ID of the lecturer.
- * @param {string} quizUrl - The URL of the quiz page.
+ @param {number} quizId - The ID of the quiz.
+ @param {Array<number>} questionIds - The IDs of the questions to reuse.
+ @param {number} lecturerId - The ID of the lecturer.
+ @param {string} quizUrl - The URL of the quiz page.
  */
 function callReuseQuestions(quizId, questionIds, lecturerId, quizUrl) {
     externalReuseQuestions(quizId, questionIds, lecturerId).then((questions) => {
@@ -150,7 +163,7 @@ function callReuseQuestions(quizId, questionIds, lecturerId, quizUrl) {
             addDeleteQuestionListeners(quizId, lecturerId);
         };
         rerenderSavedQuestionsList(questions, updateEventListeners); // Re-render saved questions list.
-        rerenderTakeQuizButton(quizUrl, true); // Re-render take quiz button.
+        rerenderTakeQuizButton(quizUrl, true); // Re-render take quiz button. Since at least one question was imported, hasquestions is true.
     }).catch((error) => displayException(error));
     let modalDiv = document.querySelector(".Modal_div");
     modalDiv.remove();

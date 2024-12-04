@@ -14,6 +14,7 @@
         "description": "Which of the following cities is in Sudan?",
         "explanation": "Khartoum is a city in Sudan, Kassala is a city in Sudan",
         "timelimit": "60",
+        "type": "0",
         "answers": [
           {
             "id": "9",
@@ -41,6 +42,7 @@
         "description": "What is the Capital of Kenya?",
         "explanation": "Kenyas's capital",
         "timelimit": "60",
+        "type": "1",
         "answers": [
           {
             "id": "12",
@@ -68,6 +70,7 @@
         "description": "Is Lagos in Nigeria?",
         "explanation": "Lagos is a city in Nigeria",
         "timelimit": "60",
+        "type": "1",
         "answers": [
           {
             "id": "15",

@@ -7,7 +7,8 @@ import {
   rerenderTakeQuizButton,
   rerenderSavedQuestionsList,
   addAnswerButtonEventListener,
-  addDiscardQuestionButtonListener,
+  addCancelEditButtonListener,
+  validateSubmission,
 } from "./edit_question_helper";
 
 let isEditing = false;
@@ -54,7 +55,7 @@ function renderCreateQuestionMenuPopup(quizId, lecturerId) {
         Templates.appendNodeContents(".main-container", html, js);
         addAnswerButtonEventListener();
         addSaveQuestionButtonListener(quizId, lecturerId);
-        addDiscardQuestionButtonListener();
+        addCancelEditButtonListener("create");
       })
 
       // Deal with this exception (Using core/notify exception function is recommended).
@@ -82,6 +83,10 @@ function addSaveQuestionButtonListener(quizId, lecturerId) {
  */
 function handleQuestionSubmission(quizId, lecturerId) {
   let savedQuestion = prepareQuestion(); // Prepare the question object to be sent to DB
+
+    if(!validateSubmission(savedQuestion.answers)) {
+    return;
+  }
 
   let updateEventListeners = () => {
     addEditQuestionListeners(quizId, lecturerId);
@@ -112,22 +117,19 @@ function prepareQuestion() {
   let questionDescription = questionInputDescription.value.trim();
   let questionExplanation = questionInputExplanation.value.trim();
 
-  if (!questionDescription) {
-    alert("Please enter a question description.");
-    return;
-  }
-  if (!questionTitle) {
-    questionTitle = "Question";
-  }
+  let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
+
 
   let answers = prepareAnswers();
 
+  // CHECK HERE IF THE QUESTION IS VALID
   let savedQuestion = {
     id: 0,
     title: questionTitle,
     answers: answers,
     description: questionDescription,
     explanation: questionExplanation,
+    type: questionType,
   };
 
   return savedQuestion;
@@ -157,3 +159,4 @@ function prepareAnswers() {
   }
   return answers;
 }
+

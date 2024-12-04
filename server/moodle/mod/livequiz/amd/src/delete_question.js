@@ -19,20 +19,25 @@ export function addDeleteQuestionListeners(quizId, lecturerId) {
 
   deleteQuestionElements.forEach((element) => {
     element.addEventListener("click", () => {
-      let listItem = element.closest("li"); // Get the list item.
-      let questionId = parseInt(element.dataset.id, 10);
-            if (!confirm("Are you sure you want to delete this question?")) {
-                return;
-            } else {
-                deleteQuestion(questionId, lecturerId, quizId);
-                listItem.remove(); // Remove the question from the list.
-                element.remove(); // Remove the delete button.
-            }
-
-      let updatedListLength = questionList.querySelectorAll("li").length;
-      if (updatedListLength === 0) {
-        rerenderTakeQuizButton(takeQuizUrl, false);
-      }
+        let listItem = element.closest("li"); // Get the list item.
+        let questionId = parseInt(element.dataset.id, 10);
+        if (!confirm("Are you sure you want to delete this question?")) {
+            return;
+        } else {
+            deleteQuestion(questionId, lecturerId, quizId)
+                .then((response) => {
+                    if (response.success) {
+                        listItem.remove(); // Remove the question from the list.
+                        element.remove(); // Remove the delete button.
+                        let updatedListLength = questionList.querySelectorAll("li").length;
+                        if (updatedListLength === 0) {
+                            rerenderTakeQuizButton(takeQuizUrl, false);
+                        }
+                    } else {
+                        alert("Cannot delete question: " + response.message);
+                    }
+                });
+        }
     });
   });
 }

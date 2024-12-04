@@ -62,6 +62,11 @@ class question {
     private array $answers = [];
 
     /**
+     * @var int $type Defines the type of the question.
+     */
+    private int $type = 0;
+
+    /**
      * Constructor for the question class.
      *
      * @param string $title
@@ -93,6 +98,7 @@ class question {
                 'description' => $question->description,
                 'timelimit' => $question->timelimit,
                 'explanation' => $question->explanation,
+                'type' => $question->type,
             ];
 
         return $DB->insert_record('livequiz_questions', $questiondata);
@@ -115,6 +121,7 @@ class question {
             $questioninstance->explanation
         );
         $question->set_id($questioninstance->id);
+        $question->set_type($questioninstance->type);
         return $question;
     }
 
@@ -135,6 +142,7 @@ class question {
             $questioninstance->explanation
         );
         $question->set_id($questioninstance->id);
+        $question->set_type($questioninstance->type);
         $answers = questions_answers_relation::get_answers_from_question($id);
         $question->set_answers($answers);
         return $question;
@@ -155,6 +163,7 @@ class question {
             'description' => $this->description,
             'timelimit' => $this->timelimit,
             'explanation' => $this->explanation,
+            'type' => $this->type,
         ];
         $DB->update_record('livequiz_questions', $questiondata);
     }
@@ -310,29 +319,26 @@ class question {
     }
 
     /**
-     * Getter for question hasmultiplecorrectanswers
-     * @return bool
-     */
-    public function get_hasmultiplecorrectanswers(): bool {
-        // This is a simple check to see if the question has multiple correct answers.
-        $numcorrect = 0;
-
-        foreach ($this->answers as $answer) {
-            if ($answer->get_correct()) {
-                $numcorrect++;
-                if ($numcorrect > 1) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Resets the id of the question such that it can be reused.
      */
     public function reset_id(): void {
         $this->set_id(0);
+    }
+
+    /**
+     * Sets the type of the questiona.
+     */
+    public function set_type(int $type): void {
+        $this->type = $type;
+    }
+
+    /**
+     * Gets the type of the question.
+     * 0 is checkbox, 1 is radiobutton
+     * @return int|0 // Returns the type of the question, if it has one. 0 if it does not.
+     */
+    public function get_type(): int {
+        return $this->type ?? 0;
     }
 
     /**
@@ -355,6 +361,7 @@ class question {
         $data->questiondescription = $this->description;
         $data->questiontimelimit = $this->timelimit;
         $data->questionexplanation = $this->explanation;
+        $data->questiontype = $this->type == 1 ? 'radio' : 'checkbox';
         $data->answers = [];
         foreach ($this->answers as $answer) {
             $data->answers[] = [
@@ -363,11 +370,6 @@ class question {
                 'answerexplanation' => $answer->get_explanation(),
                 'answercorrect' => $answer->get_correct(),
             ];
-        }
-        if ($this->get_hasmultiplecorrectanswers()) {
-            $data->answertype = 'checkbox';
-        } else {
-            $data->answertype = 'radio';
         }
         return $data;
     }

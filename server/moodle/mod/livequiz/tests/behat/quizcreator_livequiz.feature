@@ -41,7 +41,7 @@ Feature: View livequiz activity
     Then the "field" with id "question_explanation_id" should exist
     And "Add Answer" "button" should exist
     And "Save Question" "button" should exist
-    And "Discard" "button" should exist
+    And "Cancel" "button" should exist
     Then I set the field "question_title_id" to "Geography 1"
     And I set the field "question_description_id" to "What is the Capital of Sweden?"
     And I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
@@ -86,20 +86,15 @@ Feature: View livequiz activity
     Then the "field" with id "question_explanation_id" should exist
     And "Add Answer" "button" should exist
     And "Save Question" "button" should exist
-    And "Discard" "button" should exist
+    And "Cancel" "button" should exist
     # Next step should be deleted when css is fixed
     And I click on "Close block drawer" "button"
     Then I set the field "question_title_id" to "Geography 1"
     Then I set the field "question_description_id" to "What is the Capital of Sweden?"
     Then I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
-    And I click on "Discard" "button"
-    Then I should see "Are you sure you want to discard changes?"
-    And "No" "button" should exist
-    And "Yes" "button" should exist
-    And I click on "No" "button"
+    And I click on "Cancel" "button" dismissing the dialogue
     Then the field "question_description_id" matches value "What is the Capital of Sweden?"
-    And I click on "Discard" "button"
-    And I click on "Yes" "button"
+    And I click on "Cancel" "button" confirming the dialogue
     Then "Question 1" "list_item" should exist
     And "Question 2" "list_item" should exist
     And "Question 3" "list_item" should exist
@@ -116,6 +111,9 @@ Feature: View livequiz activity
     And I click on "Add Answer" "button"
     And I set the field with xpath "(//input[@class='answer_input'])[1]" to "Stockholm"
     And I set the field with xpath "(//input[@class='answer_checkbox'])[1]" to "checked"
+    # Set question type to radio button
+    And "Allow only one correct answer" "checkbox" should exist
+    And I click on "Allow only one correct answer" "checkbox"
     And I click on "Add Answer" "button"
     And I set the field with xpath "(//input[@class='answer_input'])[2]" to "Malmö"
     And I click on "Add Answer" "button"
@@ -148,3 +146,38 @@ Feature: View livequiz activity
     And "Stockholm" "radio" should exist
     And "Malmö" "radio" should exist
     And "Gothenburg" "radio" should exist
+
+  Scenario: Validate submission for a question
+    When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
+    And I click on "Add Question" "button"
+    And I click on "Save Question" "button"
+    Then I should see "Please fill out all the required fields"
+    And I should see "The Title is required"
+    And I should see "The Question Text is required"
+    And I should see "*You need to add at least one correct answer"
+    And I should see "*You need to have at least two answers"
+    Then I set the field "question_title_id" to "Geography 1"
+    And I click on "Save Question" "button"
+    Then I should see "Please fill out all the required fields"
+    And I should see "The Question Text is required"
+    And I should see "*You need to add at least one correct answer"
+    And I should see "*You need to have at least two answers"
+    Then I set the field "question_description_id" to "What is the Capital of Sweden?"
+    And I click on "Save Question" "button"
+    Then I should see "Please fill out all the required fields"
+    And I should see "*You need to add at least one correct answer"
+    And I should see "*You need to have at least two answers"
+    Then I click on "Add Answer" "button"
+    And I click on "Add Answer" "button"
+    And I click on "Save Question" "button"
+    Then I should see "Please fill out all the required fields"
+    And I should see "*You need to add at least one correct answer"
+    And I should see "*Each answer must have a description"
+    Then I set the field with xpath "(//input[@class='answer_input'])[1]" to "Stockholm"
+    And I set the field with xpath "(//input[@class='answer_input'])[2]" to "Norway"
+    And I click on "Save Question" "button"
+    Then I should see "Please fill out all the required fields"
+    And I should see "*You need to add at least one correct answer"
+    And I set the field with xpath "(//input[@class='answer_checkbox'])[1]" to "checked"
+    And I click on "Save Question" "button"
+    Then "Geography 1" "list_item" should exist

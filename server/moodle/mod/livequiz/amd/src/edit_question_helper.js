@@ -69,70 +69,6 @@ export function createAnswerContainer(id) {
 }
 
 /**
- * Adds an event listener to the discard question button.
- * When the button is clicked, it triggers the render_question_confirmation function.
- */
-export const addDiscardQuestionButtonListener = () => {
-  let discardQuestionButton = document.querySelector(
-    ".discard_question_button"
-  );
-  discardQuestionButton.addEventListener("click", () => {
-    renderQuestionConfirmation();
-  });
-};
-
-/**
- * Renders the question confirmation modal.
- *
- * Renders "mod_livequiz/question_confirmation" template.
- * Appends the HTML and JavaScript to the ".Modal_div" element
- * Calls the `question_confirmation` function
- *
- * @function
- * @returns {void}
- */
-function renderQuestionConfirmation() {
-  Templates.renderForPromise("mod_livequiz/question_confirmation")
-
-    .then(({html, js}) => {
-      Templates.appendNodeContents(".Modal_div", html, js);
-      questionConfirmation();
-    })
-    .catch((error) => displayException(error));
-}
-
-/**
- * Handles the confirmation process for deleting a question.
- *
- * This function sets up event listeners for the yes and no buttons when discarding a question.
- * When yes is clicked, the editing menu is removed
- * When no is clicked, the confirmation pop-up is removed
- *
- * @function question_confirmation
- */
-function questionConfirmation() {
-  let toastPromiseDeletionDiv = document.querySelector(
-    ".toast_promise_deletion_div"
-  );
-  let cancelQuestionDeletionButton = document.querySelector(
-    ".cancel_question_deletion_button"
-  );
-  let continueQuestionDeletionButton = document.querySelector(
-    ".continue_question_deletion_button"
-  );
-
-  let modalDiv = document.querySelector(".Modal_div");
-
-  continueQuestionDeletionButton.addEventListener("click", () => {
-    modalDiv.remove();
-  });
-
-  cancelQuestionDeletionButton.addEventListener("click", () => {
-    toastPromiseDeletionDiv.remove();
-  });
-}
-
-/**
  * Creates a new HTML element with the specified type, class, and content.
  *
  * @param {HTMLElement} elementName - The variable to hold the created element.
@@ -235,4 +171,148 @@ export function rerenderTakeQuizButton(url, hasQuestions, callback) {
 
     // Deal with this exception (Using core/notify exception function is recommended).
     .catch((error) => displayException(error));
+}
+
+/**
+ * Sets up the event listener for the cancel button
+ * @param {string} context - The context in which the cancel button is being used.
+ */
+export function add_cancel_edit_button_listener(context) {
+  let discard_question_button = document.querySelector(
+      ".discard_question_button"
+  );
+  let modal_div = document.querySelector(".Modal_div");
+  let stringForConfirm = "";
+
+  // Set the string for the confirm box based on the context.
+  switch (context) {
+    case "create":
+      stringForConfirm = "Are you sure you want to cancel creating the question?";
+      break;
+    case "edit":
+      stringForConfirm = "Are you sure you want to cancel editing the question?";
+      break;
+    case "import":
+      stringForConfirm = "Are you sure you want to cancel importing the question?";
+      break;
+    default:
+      stringForConfirm = "Are you sure you want to cancel the changes made?";
+  }
+  discard_question_button.addEventListener("click", () => {
+    if(confirm(stringForConfirm)) {
+      isEditing = false;
+      editingIndex = null;
+      modal_div.remove();
+    }
+    else {
+      return;
+    }
+  });
+}
+
+
+/**
+ * This validates that all inputs to create/edit question, if not all inputs are satisfied, it will return false.
+ * @param answers The answers of the question.
+ * @returns {boolean} True if input fields are satisfied, false otherwise.
+ */
+export function validate_submission(answers) {
+  let isValid = true; // Is the question valid.
+  let answersValid = true; // Are all the answers valid.
+  let questionTitle = document.getElementById("question_title_id").value.trim();
+  let questionTitleTextarea = document.getElementById("question_title_id");
+  let questionTitleAlert = document.getElementById("title_textarea_alert");
+  let questionDesription = document.getElementById("question_description_id").value.trim();
+  let questionDesriptionTextarea = document.getElementById("question_description_id");
+  let questionDescriptionAlert = document.getElementById("question_textarea_alert");
+  let atLeastOneCorrectAnswerAlert = document.getElementById("question_alert_one_correct");
+  let answerDescriptionAlert = document.getElementById("question_alert_description");
+  let atLeastTwoAnswersAlert = document.getElementById("question_alert_two_answers");
+  let maxOneCorrectAnswerAlert = document.getElementById("question_alert_max_one_correct");
+  let questionType = document.getElementById("question_type_checkbox_id").checked;
+  let answersBox = document.getElementById("all_answers");
+  let isValidText = document.getElementById("validText");
+
+  // Function to set the border style of an element.
+  const setBorderStyle = (element, isValid) => {
+    element.style.border = isValid ? "1px solid #ccc" : "1px solid red";
+  };
+
+  // Checks if the question title is empty.
+  if (!questionTitle) {
+    setBorderStyle(questionTitleTextarea, !!questionTitle);
+    questionTitleAlert.style.display = "block";
+    isValid = false;
+  } else {
+    questionTitleAlert.style.display = "none";
+    setBorderStyle(questionTitleTextarea, true);
+  }
+
+    // Checks if the question description is empty.
+  if (!questionDesription) {
+    setBorderStyle(questionDesriptionTextarea, !!questionDesription);
+    questionDescriptionAlert.style.display = "block";
+    isValid = false;
+  } else {
+    questionDescriptionAlert.style.display = "none";
+    setBorderStyle(questionDesriptionTextarea, true);
+  }
+
+  // Checks if there are at least two answers.
+  if (answers.length < 2) {
+    isValid = false;
+    answersValid = false;
+    atLeastTwoAnswersAlert.style.display = "block";
+  }
+  else {
+    atLeastTwoAnswersAlert.style.display = "none";
+  }
+
+  // Checks if at least one answer is correct.
+  if (!answers.some(answer => answer.correct === 1)) {
+    isValid = false;
+    answersValid = false;
+    atLeastOneCorrectAnswerAlert.style.display = "block";
+  }
+  else {
+    atLeastOneCorrectAnswerAlert.style.display = "none";
+  }
+
+  // Checks if all answers have a description.
+  if (answers.some(answer => !answer.description.trim())) {
+    isValid = false;
+    answersValid = false;
+    answerDescriptionAlert.style.display = "block";
+  } else {
+    answerDescriptionAlert.style.display = "none";
+  }
+
+  // Checks if multiple correct answers have been set, when not allowed to.
+  if (questionType) {
+    let checkedAnswers = 0;
+    answers.forEach(answer => {
+      checkedAnswers += answer.correct;
+    });
+    if (checkedAnswers > 1){
+      isValid = false;
+      answersValid = false;
+      maxOneCorrectAnswerAlert.style.display = "block";
+    } else {
+      maxOneCorrectAnswerAlert.style.display = "none";
+    }
+  } else {
+    maxOneCorrectAnswerAlert.style.display = "none";
+  }
+
+  if (!answersValid) { // If not all answers are valid show the box with warnings.
+    answersBox.style.display = "block";
+  } else {
+    answersBox.style.display = "none";
+  }
+
+  if (!isValid) { // If the question is not valid show warning.
+    isValidText.style.display = "block";
+    return false;
+  }
+  return true;
 }
