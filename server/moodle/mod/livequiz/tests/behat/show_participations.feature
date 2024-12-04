@@ -42,7 +42,7 @@ Feature: View livequiz activity
     And "Yes" "radio" should exist
     And I click on "Yes" "radio"
     And "Submit Quiz" "button" should exist
-    And I click on "Submit Quiz" "button"
+    And I click on "Submit Quiz" "button" confirming the dialogue
     Then I should see "Results for attempt"
     Then I should see "Which of the following cities is in France?"
     Then the "Paris" answer should be checked
@@ -72,7 +72,7 @@ Feature: View livequiz activity
     Then the "Yes" answer should not be checked
     And I click on "No" "radio"
     And "Submit Quiz" "button" should exist
-    And I click on "Submit Quiz" "button"
+    And I click on "Submit Quiz" "button" confirming the dialogue
     Then I should see "Results for attempt"
     And "Back to livequiz menu" "link" should exist
     And I click on "Back to livequiz menu" "link"

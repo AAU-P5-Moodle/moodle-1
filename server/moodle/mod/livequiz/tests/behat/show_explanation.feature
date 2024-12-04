@@ -29,7 +29,7 @@ Feature: View explanation of a question
         And I click on "Take Quiz" "link"
         And I click on "Paris" "checkbox"
         And I should see "Submit Quiz"
-        When I click on "Submit Quiz" "button"
+        And I click on "Submit Quiz" "button" confirming the dialogue
         Then I should see "Results for attempt"
         And I should see "Paris is a city in France, Nice is a city in France"
         And I should see "Danish capital"
