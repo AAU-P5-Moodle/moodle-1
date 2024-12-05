@@ -21,8 +21,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    margin: auto;
-    width: 80%;
+    width: 60%;
     z-index: 10;
     color: #333;
     background: #f5f5f5;
@@ -47,7 +46,15 @@
     background-color: #f8f9fa; /* Light gray for the background */
     border: 1px solid #ccc; /* Subtle border */
     border-radius: 8px; /* Rounded corners */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
+.question_type_checkbox:hover {
+    background-color: #e9ecef; /* Light gray on hover */
+}
+
+
 #question_type_checkbox_id {
    width: 20px;
    height: 20px;
@@ -627,6 +634,11 @@
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
+}
+.quiz_label{
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 
 .question_checkbox{
