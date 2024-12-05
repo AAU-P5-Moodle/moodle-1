@@ -307,7 +307,6 @@
     padding: 20px;
     border-radius: 15px;
     margin-top: 20px;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
  }
  #saved_questions_list {
     list-style-type: decimal;
@@ -365,15 +364,6 @@
     text-decoration: none;
     cursor: pointer;
     transition: background-color 0.3s;
-  }
-   /* Styles for active button */
-  .nav_tabs .tab_button.active {
-    background-color: var(--button-active-bg, #9da6b0);
-    font-weight: bold;
-  }
-   /* Optional: Hover effect */
-  .nav_tabs .tab_button:hover {
-    background-color: var(--button-hover-bg, #9da6b0);
   }
 
  /* Form Styling */
@@ -548,6 +538,7 @@
 
 .correct_not_chosen {
     background-color: rgba(255, 200, 12);
+}
 /* Responsive Adjustments */
 @media (max-width: 768px) {
    .main-container-runner {
@@ -559,6 +550,7 @@
        width: 100%;
    }
 }
+
 
 /* Back-to-Menu Button */
 #menuPageBtn {
@@ -582,13 +574,21 @@
 }
 
 /* Import Question Styling */
-#import_question_button{
+#import_question_button {
       background-color: rgb(32, 138, 176);
       color: white;
       padding: 10px 20px;
       font-size: large;
       border-radius: 5px;
       cursor: pointer;
+}
+.import_question_button {
+    background-color: rgb(32, 138, 176);
+    color: white;
+    padding: 10px 20px;
+    font-size: large;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .quiz_label{
