@@ -25,9 +25,7 @@
 namespace mod_livequiz;
 
 use advanced_testcase;
-use dml_exception;
 use mod_livequiz\external\save_question;
-use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use ReflectionClass;
 use ReflectionException;

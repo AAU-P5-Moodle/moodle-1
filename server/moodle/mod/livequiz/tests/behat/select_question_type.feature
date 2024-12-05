@@ -37,13 +37,13 @@ Feature: Choose different question type
     Then the "field" with id "question_explanation_id" should exist
     And "Add Answer" "button" should exist
     And "Save Question" "button" should exist
-    And "Discard" "button" should exist
+    And "Cancel" "button" should exist
     Then I set the field "question_title_id" to "Geography 1"
     And I set the field "question_description_id" to "What is the Capital of Sweden?"
     And I set the field "question_explanation_id" to "Stockholm is the capital of Sweden"
-    # Check if "Allow only one answer" Checkbox is set
-    And "Allow only one answer" "checkbox" should exist
-    And I click on "Allow only one answer" "checkbox"
+    # Check if "Allow only one correct answer" Checkbox is set
+    And "Allow only one correct answer" "checkbox" should exist
+    And I click on "Allow only one correct answer" "checkbox"
     Then the field with xpath "(//input[@class='question_type_checkbox'])" matches value "checked"
 
     And I click on "Add Answer" "button"
@@ -89,9 +89,9 @@ Feature: Choose different question type
     Then I set the field "question_title_id" to "Geography 3"
     And I set the field "question_description_id" to "What is the Capital of Denmark?"
     And I set the field "question_explanation_id" to "Copenhagen is the capital of Denmark"
-    # Check if "Allow only one answer" Checkbox is set
-    And "Allow only one answer" "checkbox" should exist
-    And I click on "Allow only one answer" "checkbox"
+    # Check if "Allow only one correct answer" Checkbox is set
+    And "Allow only one correct answer" "checkbox" should exist
+    And I click on "Allow only one correct answer" "checkbox"
     Then the field with xpath "(//input[@class='question_type_checkbox'])" matches value "checked"
 
     And I click on "Add Answer" "button"
@@ -159,8 +159,8 @@ Feature: Choose different question type
     And I click on "//span[@class='question-title' and text()='Geography 5'][1]" "xpath_element"
     And the field with xpath "(//input[@class='answer_checkbox'])[1]" matches value ""
     And I set the field with xpath "(//input[@class='answer_checkbox'])[1]" to "checked"
-    And "Allow only one answer" "checkbox" should exist
-    And I click on "Allow only one answer" "checkbox"
+    And "Allow only one correct answer" "checkbox" should exist
+    And I click on "Allow only one correct answer" "checkbox"
     Then the field with xpath "(//input[@class='question_type_checkbox'])" matches value "checked"
     And I click on "Save Question" "button"
     And I should see "*You selected the option to allow only one correct answer, but multiple correct answers are currently marked."

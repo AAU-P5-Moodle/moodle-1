@@ -1,5 +1,5 @@
 import Templates from "core/templates";
-import {add_discard_question_button_listener, rerender_saved_questions_list} from "./edit_question_helper";
+import {add_cancel_edit_button_listener, rerender_saved_questions_list} from "./edit_question_helper";
 import {add_edit_question_listeners} from "./edit_question";
 import {add_delete_question_listeners} from "./delete_question";
 import {displayException} from "core/notification";
@@ -42,7 +42,7 @@ async function render_import_question_menu_popup(quizid, lecturerid, url) {
             // Here we have compiled template.
             Templates.appendNodeContents(".main-container", html, js);
             await importQuestions(quizid, url, lecturerid);
-            add_discard_question_button_listener();
+            add_cancel_edit_button_listener("import");
             add_old_questions_to_popup(lecturerid, quizid);
         })
 
