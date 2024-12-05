@@ -29,12 +29,12 @@
     * fill in later
 
 }}
-<div class="main-content-runner">
-    <div class="question-container">
-    <div class="moodle-box">
-        <p class="question-title">{{questiontitle}}</p>
-        <p class="question-description">{{questiondescription}}</p>
-        <div class="answer-container">
+<div class="main_content_runner">
+    <div class="question_container">
+    <div class="moodle_box">
+        <p class="question_title">{{questiontitle}}</p>
+        <p class="question_description">{{questiondescription}}</p>
+        <div class="answer_container">
             <fieldset>
                 {{#answers}}
                     <label id="{{answerid}}" class="answer
@@ -44,7 +44,7 @@
                                     {{^correct}}incorrect{{/correct}}
                                 {{/chosen}}
                                 {{^chosen}}
-                                    {{#correctnotchosen}}correctnotchosen{{/correctnotchosen}}
+                                    {{#correctnotchosen}}correct_not_chosen{{/correctnotchosen}}
                                 {{/chosen}}
                             {{/isattempting}}">
                         <input type="{{questiontype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
@@ -56,7 +56,7 @@
             </fieldset>
         </div>
         {{^isattempting}}
-            <p class="question-explanation">{{questionexplanation}}</p>
+            <p class="question_explanation">{{questionexplanation}}</p>
         {{/isattempting}}
     </div>
 </div>

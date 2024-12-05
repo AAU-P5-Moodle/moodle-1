@@ -15,9 +15,9 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_livequiz/results_page
+    @template mod_livequiz/import_questions_list
 
-    Results Page for the livequiz plugin
+    Element for the list of questions to be imported
 
     Classes required for JS:
     * none
@@ -29,12 +29,28 @@
     * fill in later
 
 }}
-<div class="main_container">
-    <h1>Results for attempt</h1>
-    <div class="questions_container">
-      {{#questions}}
-        {{> mod_livequiz/question_section}}
-      {{/questions}}
+
+<div class="quiz_entry">
+    <input
+        type="checkbox"
+        value="{{quizid}}"
+        id="{{quizid}}"
+        class="quiz_{{quizid}}"
+        name="{{quiztitle}}"
+    />
+    <label for="quiz_{{quizid}}" class="quiz_label">{{quiztitle}}</label>
+    <div id="questionsdiv">
+        {{#questions}}
+        <div class="question_entry question_entry_{{quizid}}">
+            <input
+                type="checkbox"
+                value="question_{{questionid}}"
+                id="{{questionid}}"
+                class="quiz_{{quizid}}_question question_checkbox"
+                name="{{questiontitle}}"
+            />
+            <label for="question_{{questionid}}" class="question_label">{{questiontitle}}</label>
+        </div>
+        {{/questions}}
     </div>
-    <a href="{{menuurl}}" class="button-moodle" id="menu_page_button">Back to Live Quiz menu</a>
 </div>

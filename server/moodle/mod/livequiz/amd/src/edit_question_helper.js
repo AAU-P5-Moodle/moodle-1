@@ -19,8 +19,8 @@ export const add_answer_button_event_listener = () => {
 
 /**
  * Appends a new answer input container to the container holding all answers
- * 
- * This function creates a new answer container with an incremented ID and appends it to the 
+ *
+ * This function creates a new answer container with an incremented ID and appends it to the
  * element with the class "all_answers_for_question_div".
  */
 export function append_answer_input() {
@@ -112,7 +112,7 @@ export function rerender_saved_questions_list(questions, callback) {
     contextsavedquestions
   )
     .then(({ html, js }) => {
-      Templates.appendNodeContents("#saved-questions-container", html, js);
+      Templates.appendNodeContents("#saved_questions_container", html, js);
 
       // Call the functions in callback, this allows for custom functions to be called after the rerendering.
       if (typeof callback === "function") {
@@ -142,16 +142,16 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
 
   if (hasquestions) {
     //Remove no question paragraph if there are questions.
-    let no_question_paragraph = document.querySelector(".no-question-text");
+    let no_question_paragraph = document.querySelector(".no_question_text");
     if (no_question_paragraph) {
       no_question_paragraph.remove(); //We have just added a question so remove the no question text
     } else {
-      let take_quiz_button = document.querySelector("#takeQuizBtn");
+      let take_quiz_button = document.querySelector("#take_quiz_button");
       take_quiz_button.remove();
     }
   } else {
     //Remove take quiz link if there are no questions
-    let take_quiz_button = document.querySelector("#takeQuizBtn");
+    let take_quiz_button = document.querySelector("#take_quiz_button");
     take_quiz_button.remove();
   }
 
@@ -159,7 +159,7 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
     // It returns a promise that needs to be resoved.
     .then(({ html, js }) => {
       // Here we have compiled template.
-      Templates.appendNodeContents("#page-mod-livequiz-quizcreator", html, js);
+      Templates.appendNodeContents("#page_mod_livequiz_quizcreator", html, js);
       if (typeof callback === "function") {
         callback();
       }
@@ -174,10 +174,10 @@ export function rerender_take_quiz_button(url, hasquestions, callback) {
  * @param {string} context - The context in which the cancel button is being used.
  */
 export function add_cancel_edit_button_listener(context) {
-  let discard_question_button = document.querySelector(
-      ".discard_question_button"
+  let cancel_question_button = document.querySelector(
+      ".cancel_question_button"
   );
-  let modal_div = document.querySelector(".backdrop");
+  let modal_div = document.querySelector(".modal_div");
   let stringForConfirm = "";
 
   // Set the string for the confirm box based on the context.
@@ -194,7 +194,7 @@ export function add_cancel_edit_button_listener(context) {
     default:
       stringForConfirm = "Are you sure you want to cancel the changes made?";
   }
-  discard_question_button.addEventListener("click", () => {
+  cancel_question_button.addEventListener("click", () => {
     if(confirm(stringForConfirm)) {
       isEditing = false;
       editingIndex = null;
@@ -227,7 +227,7 @@ export function validate_submission(answers) {
   let maxOneCorrectAnswerAlert = document.getElementById("question_alert_max_one_correct");
   let questionType = document.getElementById("question_type_checkbox_id").checked;
   let answersBox = document.getElementById("all_answers");
-  let isValidText = document.getElementById("validText");
+  let isValidText = document.getElementById("valid_text");
 
   // Function to set the border style of an element.
   const setBorderStyle = (element, isValid) => {
@@ -283,7 +283,7 @@ export function validate_submission(answers) {
     answerDescriptionAlert.style.display = "none";
   }
 
-  // Checks if multiple correct answers have been set, when not allowed to. 
+  // Checks if multiple correct answers have been set, when not allowed to.
   if (questionType) {
     let checkedAnswers = 0;
     answers.forEach(answer => {
@@ -295,7 +295,7 @@ export function validate_submission(answers) {
       maxOneCorrectAnswerAlert.style.display = "block";
     } else {
       maxOneCorrectAnswerAlert.style.display = "none";
-    } 
+    }
   } else {
     maxOneCorrectAnswerAlert.style.display = "none";
   }
