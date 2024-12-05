@@ -110,7 +110,7 @@ export function rerenderSavedQuestionsList(questions, callback) {
         "boost"
     )
       .then(({html, js}) => {
-            Templates.appendNodeContents("#saved-questions-container", html, js);
+            Templates.appendNodeContents("#saved_questions_container", html, js);
 
             // Call the functions in callback, this allows for custom functions to be called after the rerendering.
             if (typeof callback === "function") {
@@ -140,16 +140,16 @@ export function rerenderTakeQuizButton(url, hasQuestions, callback) {
 
     if (hasQuestions) {
         // Remove no question paragraph if there are questions.
-        let noQuestionParagraph = document.querySelector(".no-question-text");
+        let noQuestionParagraph = document.querySelector(".no_question_text");
         if (noQuestionParagraph) {
             noQuestionParagraph.remove(); // We have just added a question so remove the no question text.
         } else {
-            let takeQuizButton = document.querySelector("#takeQuizBtn");
+            let takeQuizButton = document.querySelector("#take_quiz_button");
             takeQuizButton.remove();
         }
     } else {
         // Remove take quiz link if there are no questions.
-        let takeQuizButton = document.querySelector("#takeQuizBtn");
+        let takeQuizButton = document.querySelector("#take_quiz_button");
         takeQuizButton.remove();
     }
 
@@ -157,7 +157,7 @@ export function rerenderTakeQuizButton(url, hasQuestions, callback) {
         // It returns a promise that needs to be resolved.
         .then(({html, js}) => {
             // Here we have compiled template.
-            Templates.appendNodeContents("#page-mod-livequiz-quizcreator", html, js);
+            Templates.appendNodeContents("#page_mod_livequiz_quizcreator", html, js);
             if (typeof callback === "function") {
                 callback();
             }
@@ -173,7 +173,7 @@ export function rerenderTakeQuizButton(url, hasQuestions, callback) {
  */
 export function addCancelEditButtonListener(context) {
     let discardQuestionButton = document.querySelector(
-        ".discard_question_button"
+        ".cancel_question_button"
     );
     let modalDiv = document.querySelector(".backdrop");
     let stringForConfirm = "";
