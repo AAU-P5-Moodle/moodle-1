@@ -19,6 +19,14 @@
     padding: 20px;
     z-index: 1000;
  }
+.required_fields_div {
+    display: flex;
+    align-items: center;
+}
+
+#required_id {
+    margin-left: 5px;
+}
 
 .question_type_checkbox {
     align-items: center;
@@ -200,27 +208,6 @@
     font-size: large;
     cursor: pointer;
     z-index: 1000;
- }
-
- .toast_promise_deletion_div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 60%;
- }
-
- .toast_promise_deletion_div button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 1.1em;
-    cursor: pointer;
  }
 
  #id_buttonaddquestion {

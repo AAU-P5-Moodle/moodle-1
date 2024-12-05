@@ -48,8 +48,8 @@ Feature: View livequiz activity
     Then the "Paris" answer should be checked
     Then the "Copenhagen" answer should be checked
     Then the "Yes" answer should be checked
-    And "Back to livequiz menu" "link" should exist
-    And I click on "Back to livequiz menu" "link"
+    And "Back to Live Quiz menu" "link" should exist
+    And I click on "Back to Live Quiz menu" "link"
     Then "Go to participation 1" "button" should exist
     #Making another participation to test multiple can be shown
     And I should see "Take Quiz"
@@ -74,8 +74,8 @@ Feature: View livequiz activity
     And "Submit Quiz" "button" should exist
     And I click on "Submit Quiz" "button" confirming the dialogue
     Then I should see "Results for attempt"
-    And "Back to livequiz menu" "link" should exist
-    And I click on "Back to livequiz menu" "link"
+    And "Back to Live Quiz menu" "link" should exist
+    And I click on "Back to Live Quiz menu" "link"
     Then "Go to participation 1" "button" should exist
     And "Go to participation 2" "button" should exist
     And I press "Go to participation 1"
@@ -83,7 +83,7 @@ Feature: View livequiz activity
     Then the "Nice" answer should be checked
     Then the "Aalborg" answer should be checked
     Then the "No" answer should be checked
-    And "Back to livequiz menu" "link" should exist
-    And I click on "Back to livequiz menu" "link"
+    And "Back to Live Quiz menu" "link" should exist
+    And I click on "Back to Live Quiz menu" "link"
     Then "Go to participation 1" "button" should exist
     And "Go to participation 2" "button" should exist

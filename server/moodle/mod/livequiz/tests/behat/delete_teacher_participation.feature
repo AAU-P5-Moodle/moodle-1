@@ -32,8 +32,8 @@ Feature: Delete teacher participation
     And I click on "Paris" "checkbox"
     And I click on "Submit Quiz" "button" confirming the dialogue
     And I should see "Results for attempt"
-    And I should see "Back to livequiz menu"
-    And I click on "Back to livequiz menu" "link"
+    And I should see "Back to Live Quiz menu"
+    And I click on "Back to Live Quiz menu" "link"
     And I should see "Quiz editor page"
     And I click on "//span[@class='question-title' and text()='Question 1'][1]" "xpath_element"
     # Check if fields are filled with correct values from demo data
