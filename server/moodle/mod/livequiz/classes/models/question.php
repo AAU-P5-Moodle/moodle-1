@@ -17,7 +17,6 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
-use dml_transaction_exception;
 use stdClass;
 
 /**
@@ -81,103 +80,6 @@ class question {
         $this->explanation = $explanation;
 
         return $this;
-    }
-
-    /**
-     * This function is used to submit a question to the database.
-     *
-     * @param $question
-     * @return int
-     * @throws dml_exception
-     * @throws dml_transaction_exception
-     */
-    public static function insert_question($question): int {
-        global $DB;
-        $questiondata = [
-                'title' => $question->title,
-                'description' => $question->description,
-                'timelimit' => $question->timelimit,
-                'explanation' => $question->explanation,
-                'type' => $question->type,
-            ];
-
-        return $DB->insert_record('livequiz_questions', $questiondata);
-    }
-
-    /**
-     * Gets a question instance.
-     *
-     * @param $id
-     * @return question
-     * @throws dml_exception
-     */
-    public static function get_question_from_id($id): question {
-        global $DB;
-        $questioninstance = $DB->get_record('livequiz_questions', ['id' => $id]);
-        $question = new question(
-            $questioninstance->title,
-            $questioninstance->description,
-            $questioninstance->timelimit,
-            $questioninstance->explanation
-        );
-        $question->set_id($questioninstance->id);
-        $question->set_type($questioninstance->type);
-        return $question;
-    }
-
-    /**
-     * Gets a question instance with answers.
-     *
-     * @param $id
-     * @return question
-     * @throws dml_exception
-     */
-    public static function get_question_with_answers_from_id($id): question {
-        global $DB;
-        $questioninstance = $DB->get_record('livequiz_questions', ['id' => $id]);
-        $question = new question(
-            $questioninstance->title,
-            $questioninstance->description,
-            $questioninstance->timelimit,
-            $questioninstance->explanation
-        );
-        $question->set_id($questioninstance->id);
-        $question->set_type($questioninstance->type);
-        $answers = questions_answers_relation::get_answers_from_question($id);
-        $question->set_answers($answers);
-        return $question;
-    }
-
-    /**
-     * Updates a question in the database.
-     *
-     * @throws dml_exception
-     * @throws dml_transaction_exception
-     * @return void
-     */
-    public function update_question(): void {
-        global $DB;
-        $questiondata = [
-            'id' => $this->id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'timelimit' => $this->timelimit,
-            'explanation' => $this->explanation,
-            'type' => $this->type,
-        ];
-        $DB->update_record('livequiz_questions', $questiondata);
-    }
-
-    /**
-     * Deletes a question from the database.
-     *
-     * @param int $questionid
-     * @return bool
-     * @throws dml_exception
-     */
-    public static function delete_question(int $questionid): bool {
-        global $DB;
-        return $DB->delete_records('livequiz_questions', ['id' => $questionid]);
     }
 
     /**
@@ -319,6 +221,20 @@ class question {
     }
 
     /**
+     * Checks if an answer is in the question.
+     * @param int $answerid
+     * @return bool
+     */
+    public function is_answer_in_question(int $answerid): bool {
+        foreach ($this->get_answers() as $answer) {
+            if ($answer->get_id() == $answerid) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Resets the id of the question such that it can be reused.
      */
     public function reset_id(): void {
@@ -326,7 +242,7 @@ class question {
     }
 
     /**
-     * Sets the type of the questiona.
+     * Sets the type of the question.
      */
     public function set_type(int $type): void {
         $this->type = $type;
@@ -375,16 +291,24 @@ class question {
     }
 
     /**
-     * Checks if an answer is in the question.
-     * @param $answerid
-     * @return bool
+     * Gets a question instance with answers.
+     *
+     * @param $id
+     * @return question
+     * @throws dml_exception
      */
-    public function is_answer_in_question($answerid): bool {
-        foreach ($this->answers as $answer) {
-            if ($answer->get_id() == $answerid) {
-                return true;
-            }
-        }
-        return false;
+    public static function get_question_with_answers_from_id($id): question {
+        global $DB;
+        $questioninstance = $DB->get_record('livequiz_questions', ['id' => $id]);
+        $question = new question(
+            $questioninstance->title,
+            $questioninstance->description,
+            $questioninstance->timelimit,
+            $questioninstance->explanation
+        );
+        $question->set_id($questioninstance->id);
+        $answers = questions_answers_relation::get_answers_from_question($id);
+        $question->set_answers($answers);
+        return $question;
     }
 }

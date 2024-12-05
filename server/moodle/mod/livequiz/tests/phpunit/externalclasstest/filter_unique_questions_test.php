@@ -29,7 +29,7 @@ use dml_exception;
 use mod_livequiz\external\reuse_question;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\question;
-use mod_livequiz\models\questions_answers_relation;
+use mod_livequiz\services\livequiz_services;
 use ReflectionClass;
 use ReflectionException;
 use function PHPUnit\Framework\assertEquals;
@@ -227,69 +227,73 @@ final class filter_unique_questions_test extends advanced_testcase {
             10,
             'This is the explanation for question 2'
         );
-        $this->question1->set_id(question::insert_question($this->question1));
-        $this->question2->set_id(question::insert_question($this->question2));
-        $this->question3->set_id(question::insert_question($this->question3));
-        $this->question4->set_id(question::insert_question($this->question4));
-        $this->question5->set_id(question::insert_question($this->question5));
-        $this->question6->set_id(question::insert_question($this->question6));
-        $this->question7->set_id(question::insert_question($this->question7));
-        $this->question8->set_id(question::insert_question($this->question8));
-        $this->question9->set_id(question::insert_question($this->question9));
-        $answer1->set_id(answer::insert_answer($answer1));
-        $answer2->set_id(answer::insert_answer($answer2));
-        $answer3->set_id(answer::insert_answer($answer3));
-        $answer4->set_id(answer::insert_answer($answer4));
-        $answer5->set_id(answer::insert_answer($answer5));
+
+        $service = livequiz_services::get_singleton_service_instance();
+
+        $this->question1->set_id($service->insert_question($this->question1));
+        $this->question2->set_id($service->insert_question($this->question2));
+        $this->question3->set_id($service->insert_question($this->question3));
+        $this->question4->set_id($service->insert_question($this->question4));
+        $this->question5->set_id($service->insert_question($this->question5));
+        $this->question6->set_id($service->insert_question($this->question6));
+        $this->question7->set_id($service->insert_question($this->question7));
+        $this->question8->set_id($service->insert_question($this->question8));
+        $this->question9->set_id($service->insert_question($this->question9));
+        $answer1->set_id($service->insert_answer($answer1));
+        $answer2->set_id($service->insert_answer($answer2));
+        $answer3->set_id($service->insert_answer($answer3));
+        $answer4->set_id($service->insert_answer($answer4));
+        $answer5->set_id($service->insert_answer($answer5));
+
         // Question 1.
         $id = $this->question1->get_id();
-        questions_answers_relation::insert_question_answer_relation($id, $answer1->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer2->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer3->get_id());
+        $service->insert_question_answer_relation($id, $answer1->get_id());
+        $service->insert_question_answer_relation($id, $answer2->get_id());
+        $service->insert_question_answer_relation($id, $answer3->get_id());
         // Question 2.
         $id = $this->question2->get_id();
-        questions_answers_relation::insert_question_answer_relation($id, $answer1->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer2->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer3->get_id());
+        $service->insert_question_answer_relation($id, $answer1->get_id());
+        $service->insert_question_answer_relation($id, $answer2->get_id());
+        $service->insert_question_answer_relation($id, $answer3->get_id());
         // Question 3.
         $id = $this->question3->get_id();
-        questions_answers_relation::insert_question_answer_relation($id, $answer5->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer2->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer3->get_id());
+        $service->insert_question_answer_relation($id, $answer5->get_id());
+        $service->insert_question_answer_relation($id, $answer2->get_id());
+        $service->insert_question_answer_relation($id, $answer3->get_id());
         // Question 4.
         $id = $this->question4->get_id();
-        questions_answers_relation::insert_question_answer_relation($id, $answer1->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer2->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer3->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer4->get_id());
+        $service->insert_question_answer_relation($id, $answer1->get_id());
+        $service->insert_question_answer_relation($id, $answer2->get_id());
+        $service->insert_question_answer_relation($id, $answer3->get_id());
+        $service->insert_question_answer_relation($id, $answer4->get_id());
         // Question 5.
         $id = $this->question5->get_id();
-        questions_answers_relation::insert_question_answer_relation($id, $answer1->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer2->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer3->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer4->get_id());
+        $service->insert_question_answer_relation($id, $answer1->get_id());
+        $service->insert_question_answer_relation($id, $answer2->get_id());
+        $service->insert_question_answer_relation($id, $answer3->get_id());
+        $service->insert_question_answer_relation($id, $answer4->get_id());
         // Question 6.
         $id = $this->question6->get_id();
-        questions_answers_relation::insert_question_answer_relation($id, $answer1->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer2->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer3->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer4->get_id());
+        $service->insert_question_answer_relation($id, $answer1->get_id());
+        $service->insert_question_answer_relation($id, $answer2->get_id());
+        $service->insert_question_answer_relation($id, $answer3->get_id());
+        $service->insert_question_answer_relation($id, $answer4->get_id());
         // Question 7.
         $id = $this->question7->get_id();
-        questions_answers_relation::insert_question_answer_relation($id, $answer1->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer2->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer3->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer4->get_id());
+        $service->insert_question_answer_relation($id, $answer1->get_id());
+        $service->insert_question_answer_relation($id, $answer2->get_id());
+        $service->insert_question_answer_relation($id, $answer3->get_id());
+        $service->insert_question_answer_relation($id, $answer4->get_id());
         // Question 8.
         $id = $this->question8->get_id();
-        questions_answers_relation::insert_question_answer_relation($id, $answer1->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer2->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer3->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer4->get_id());
+        $service->insert_question_answer_relation($id, $answer1->get_id());
+        $service->insert_question_answer_relation($id, $answer2->get_id());
+        $service->insert_question_answer_relation($id, $answer3->get_id());
+        $service->insert_question_answer_relation($id, $answer4->get_id());
         // Question 9.
         $id = $this->question9->get_id();
-        questions_answers_relation::insert_question_answer_relation($id, $answer1->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer2->get_id());
-        questions_answers_relation::insert_question_answer_relation($id, $answer3->get_id());
+        $service->insert_question_answer_relation($id, $answer1->get_id());
+        $service->insert_question_answer_relation($id, $answer2->get_id());
+        $service->insert_question_answer_relation($id, $answer3->get_id());
     }
 }

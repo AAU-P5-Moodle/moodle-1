@@ -25,6 +25,7 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
+use mod_livequiz\repositories\question_repository;
 
 /**
  * Class quiz_questions_relation
@@ -53,13 +54,14 @@ class quiz_questions_relation {
      */
     public static function get_questions_from_quiz_id(int $quizid): array {
         global $DB;
+        $questionrepository = new question_repository();
 
         $questionrecords = $DB->get_records('livequiz_quiz_questions', ['quiz_id' => $quizid], '', 'question_id');
         $questionids = array_column($questionrecords, 'question_id');
         $questions = [];
 
         foreach ($questionids as $questionid) {
-            $questions[] = question::get_question_from_id($questionid);
+            $questions[] = $questionrepository->get_question_from_id($questionid);
         }
 
         return $questions;

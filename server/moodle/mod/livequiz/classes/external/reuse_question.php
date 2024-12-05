@@ -68,15 +68,15 @@ class reuse_question extends external_api {
             'questionids' => $questionids, // These are id's of the questions to be reused, in the new livequiz.
             'lecturerid' => $lecturerid,
         ]);
-        $services = livequiz_services::get_singleton_service_instance();
+        $service = livequiz_services::get_singleton_service_instance();
         try {
-            $livequiz = $services->get_livequiz_instance($quizid);
+            $livequiz = $service->get_livequiz_instance($quizid);
             $existingquestions = $livequiz->get_questions(); // These are the questions already present in the livequiz.
             $questionids = self::filter_unique_questions($questionids);
             $questionstoadd = [];
             foreach ($questionids as $id) {
                 $unique = true;
-                $tempquestion = question::get_question_with_answers_from_id($id);
+                $tempquestion = $service->get_question_with_answers_from_id($id);
                 $tempquestion->reset_id();
                 foreach ($tempquestion->get_answers() as $answer) {
                     $answer->reset_id();
@@ -94,7 +94,7 @@ class reuse_question extends external_api {
                 }
             }
             $livequiz->add_questions($questionstoadd);
-            $livequiz = $services->submit_quiz($livequiz, $lecturerid); // Refresh the livequiz object.
+            $livequiz = $service->submit_quiz($livequiz, $lecturerid); // Refresh the livequiz object.
             $returnquestions = [];
             $rawquestions = $livequiz->get_questions();
             foreach ($rawquestions as $rawquestion) {
@@ -122,9 +122,10 @@ class reuse_question extends external_api {
      * @throws dml_exception
      */
     private static function filter_unique_questions(array $questions): array {
+        $service = livequiz_services::get_singleton_service_instance();
         $uniquequestions = [];
         foreach ($questions as $questionid) {
-            $question = question::get_question_with_answers_from_id($questionid);
+            $question = $service->get_question_with_answers_from_id($questionid);
             $unique = true;
             foreach ($uniquequestions as $uniquequestion) {
                 // Check if the questions are identical.
