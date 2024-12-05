@@ -93,7 +93,7 @@ function handle_question_submission(quizid, lecturerid) {
     rerender_take_quiz_button(take_quiz_url, true); //Re-render take quiz button
   });
 
-  let modal_div = document.querySelector(".Modal_div");
+  let modal_div = document.querySelector(".backdrop");
   modal_div.remove();
 }
 
