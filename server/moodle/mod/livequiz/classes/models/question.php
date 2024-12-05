@@ -16,6 +16,7 @@
 
 namespace mod_livequiz\models;
 
+use dml_exception;
 use stdClass;
 
 /**
@@ -234,25 +235,6 @@ class question {
     }
 
     /**
-     * Getter for question hasmultiplecorrectanswers
-     * @return bool
-     */
-    public function get_hasmultiplecorrectanswers(): bool {
-        // This is a simple check to see if the question has multiple correct answers.
-        $numcorrect = 0;
-
-        foreach ($this->answers as $answer) {
-            if ($answer->get_correct()) {
-                $numcorrect++;
-                if ($numcorrect > 1) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Resets the id of the question such that it can be reused.
      */
     public function reset_id(): void {
@@ -260,7 +242,7 @@ class question {
     }
 
     /**
-     * Sets the type of the questiona.
+     * Sets the type of the question.
      */
     public function set_type(int $type): void {
         $this->type = $type;

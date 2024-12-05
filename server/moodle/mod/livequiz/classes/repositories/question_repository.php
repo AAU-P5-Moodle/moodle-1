@@ -57,6 +57,7 @@ class question_repository {
             'description' => $question->get_description(),
             'timelimit' => $question->get_timelimit(),
             'explanation' => $question->get_explanation(),
+            'type' => $question->get_type(),
         ];
 
         return $DB->insert_record(self::$tablename, $questiondata);
@@ -79,6 +80,7 @@ class question_repository {
             $questioninstance->explanation
         );
         $question->set_id($questioninstance->id);
+        $question->set_type($questioninstance->type);
         return $question;
     }
 
@@ -99,6 +101,7 @@ class question_repository {
             $questioninstance->explanation
         );
         $question->set_id($questioninstance->id);
+        $question->set_type($questioninstance->type);
         $answers = questions_answers_relation::get_answers_from_question($id);
         $question->set_answers($answers);
         return $question;
@@ -119,6 +122,7 @@ class question_repository {
             'description' => $question->get_description(),
             'timelimit' => $question->get_timelimit(),
             'explanation' => $question->get_explanation(),
+            'type' => $question->get_type(),
         ];
         $DB->update_record(self::$tablename, $questiondata);
     }
