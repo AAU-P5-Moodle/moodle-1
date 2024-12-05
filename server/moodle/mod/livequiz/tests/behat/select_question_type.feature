@@ -156,7 +156,7 @@ Feature: Choose different question type
     And I set the field with xpath "(//input[@class='answer_checkbox'])[3]" to "checked"
     And I click on "Save Question" "button"
     #Question 5 is now edited, such that it causes a warning
-    And I click on "//span[@class='question-title' and text()='Geography 5'][1]" "xpath_element"
+    And I click on "//span[@class='question_list_text' and text()='Geography 5'][1]" "xpath_element"
     And the field with xpath "(//input[@class='answer_checkbox'])[1]" matches value ""
     And I set the field with xpath "(//input[@class='answer_checkbox'])[1]" to "checked"
     And "Allow only one correct answer" "checkbox" should exist

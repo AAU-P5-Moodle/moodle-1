@@ -14,8 +14,8 @@
    width: 100%;
    background: rgba(0, 0, 0, 0.2);
  }
- 
- .Modal_div {
+
+ .modal_div {
    /* Center the modal on the screen */
     position: absolute;
     top: 50%;
@@ -205,7 +205,7 @@
  .save_button:hover {
     background-color: #4cae4c;
  }
- .discard_question_button:hover {
+ .cancel_question_button:hover {
     background-color: #c10600;
  }
 
@@ -232,7 +232,7 @@
     justify-content: space-between;
     margin-top: 20px;
  }
- .discard_question_button {
+ .cancel_question_button {
     float: right;
     background-color: red;
     color: white;
@@ -284,7 +284,7 @@
     cursor: pointer;
  }
 
- #id_buttonaddquestion {
+ #add_question_button {
     background-color: green;
     color: white;
     padding: 10px 20px;
@@ -381,7 +381,6 @@
  }
 
  #saved_questions_container {
-    width: 40%;
     background-color: lightgray;
     padding: 20px;
     border-radius: 15px;
@@ -460,7 +459,7 @@
   */
 
 
-  .main-container {
+  .main_container {
 
   }
 
@@ -487,13 +486,13 @@
     margin-right: 10px;
  }
 
- .question-container {
+ .question_container {
     display: flex;
     flex-direction: column;
     justify-content: center;
  }
 
- .question-container img {
+ .question_container img {
     max-width: 100%;
     height: auto;
  }
@@ -640,12 +639,12 @@
     background-color: rgba(255, 0, 0);
 }
 
-.correctnotchosen {
+.correct_not_chosen {
     background-color: rgba(255, 200, 12);
 }
 
 /* Import Question Styling */
-#id_buttonimportquestion{
+#import_question_button{
       background-color: rgb(32, 138, 176);
       color: white;
       padding: 10px 20px;

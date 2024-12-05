@@ -1,10 +1,9 @@
 import Templates from "core/templates";
 import { exception as displayException } from "core/notification";
-import { add_cancel_edit_button_listener, rerender_saved_questions_list } from "./edit_question_helper";
-import { add_edit_question_listeners } from "./edit_question";
-import { add_delete_question_listeners } from "./delete_question";
-import { external_reuse_questions, get_lecturer_quiz } from "./repository";
-import { rerender_take_quiz_button } from "./edit_question_helper";
+import {addCancelEditButtonListener, rerenderSavedQuestionsList, rerenderTakeQuizButton} from "./helper";
+import {addEditQuestionListeners} from "./edit_question";
+import {addDeleteQuestionListeners} from "./delete_question";
+import {externalReuseQuestions, getLecturerQuiz} from "./repository";
 
 /**
  * Adds an event listener to the "Import Question" button.
@@ -15,8 +14,8 @@ import { rerender_take_quiz_button } from "./edit_question_helper";
  * @param {string} url - The URL to the quiz attempt page.
  * @returns {Promise<void>} A promise that resolves when the initialization is complete.
  */
-export const init = async (quizId, lecturerId, url) => {
-    let importQuestionButton = document.getElementById("id_buttonimportquestion");
+export const init = async(quizId, lecturerId, url) => {
+    let importQuestionButton = document.getElementById("import_question_button");
     importQuestionButton.addEventListener("click", () => {
         renderImportQuestionMenuPopup(quizId, lecturerId, url);
     });
@@ -35,14 +34,14 @@ export const init = async (quizId, lecturerId, url) => {
  */
 function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
     // This will call the function to load and render our template.
-    if (!document.querySelector(".Modal_div")) {
-        Templates.renderForPromise("mod_livequiz/import_question_popup")
+    if (!document.querySelector(".modal_div")) {
+        Templates.renderForPromise("mod_livequiz/import_question_popup", {}, "boost")
             // It returns a promise that needs to be resolved.
             .then(({ html, js }) => {
                 // Here we have compiled template.
-                Templates.appendNodeContents(".main-container", html, js);
+                Templates.appendNodeContents(".main_container", html, js);
                 importQuestions(quizId, url, lecturerId);
-                add_cancel_edit_button_listener("import");
+                addCancelEditButtonListener("import");
                 addOldQuestionsToPopup(lecturerId, quizId);
             })
 
@@ -53,17 +52,19 @@ function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
 
 /**
  * Adds old questions to the import question popup.
+ *
  * @param {number} lecturerId - The ID of the lecturer.
  * @param {number} quizId - The ID of the quiz.
+ * @returns {void}
  */
 function addOldQuestionsToPopup(lecturerId, quizId) {
-    get_lecturer_quiz(lecturerId)
+    getLecturerQuiz(lecturerId)
         .then((oldQuizzes) => {
             // Filter out the current quiz, so you can't import questions from the same quiz.
             oldQuizzes = oldQuizzes.filter((currentquiz) => currentquiz.quizid !== quizId);
 
             // Check how many questions are available.
-            let oldQuizzesContainer = document.querySelector(".oldQuizzes");
+            let oldQuizzesContainer = document.querySelector(".old_quizzes");
             if (oldQuizzes.length === 0) {
                 let noQuestions = document.createElement("p");
                 noQuestions.textContent = "No questions available.";
@@ -81,7 +82,7 @@ function addOldQuestionsToPopup(lecturerId, quizId) {
                 if (quiz.questions.length > 0) {
                     Templates.renderForPromise("mod_livequiz/import_questions_list", quiz_context)
                         .then(({ html, js }) => {
-                            Templates.appendNodeContents(".oldQuizzes", html, js);
+                            Templates.appendNodeContents(".old_quizzes", html, js);
                             addQuizCheckboxListener(quiz.quizid);
                             addQuestionCheckboxListener(quiz.quizid);
                             addQuestionEntryListeners(quiz.quizid);
@@ -97,13 +98,15 @@ function addOldQuestionsToPopup(lecturerId, quizId) {
  * Imports questions into a quiz.
  *
  * @param {number} quizId - The ID of the quiz.
+ * @param {number} quizId - The ID of the quiz.
  * @param {string} url - The URL of the quiz page.
+ * @param {number} lecturerId - The ID of the lecturer.
  * @param {number} lecturerId - The ID of the lecturer.
  * @returns {Promise<void>} A promise that resolves when the questions are imported.
  */
-function importQuestions(quizId, url, lecturerId) {
+async function importQuestions(quizId, url, lecturerId) {
     let quizUrl = url;
-    const importQuestionBtn = document.querySelector(".import_btn");
+    const importQuestionBtn = document.querySelector(".import_question_button");
 
     importQuestionBtn.addEventListener("click", async () => {
         try {
@@ -112,7 +115,7 @@ function importQuestions(quizId, url, lecturerId) {
                 alert("No questions selected. Please choose at least one question to import.");
                 return;
             }
-            call_reuse_questions(quizId, questionIds, lecturerId, quizUrl);
+            callReuseQuestions(quizId, questionIds, lecturerId, quizUrl);
         } catch (error) {
             displayException(error);
         }
@@ -121,20 +124,23 @@ function importQuestions(quizId, url, lecturerId) {
 
 /**
  * Calls the external function to reuse questions.
- * @param {number} quizId - The ID of the quiz.
- * @param {array} questionIds - The IDs of the questions to reuse.
- * @param {number} lecturerId - The ID of the lecturer.
- * @param {string} quizUrl - The URL of the quiz page.
+ *
+ @param {number} quizId - The ID of the quiz.
+ @param {Array<number>} questionIds - The IDs of the questions to reuse.
+ @param {number} lecturerId - The ID of the lecturer.
+ @param {string} quizUrl - The URL of the quiz page.
+ @returns {void}
  */
-function call_reuse_questions(quizId, questionIds, lecturerId, quizUrl) {
-    external_reuse_questions(quizId, questionIds, lecturerId)
+function callReuseQuestions(quizId, questionIds, lecturerId, quizUrl) {
+    externalReuseQuestions(quizId, questionIds, lecturerId)
         .then((questions) => {
-            let update_event_listeners = () => {
-                add_edit_question_listeners(quizId, lecturerId);
-                add_delete_question_listeners(quizId, lecturerId);
+            let updateEventListeners = () => {
+                addEditQuestionListeners(quizId, lecturerId);
+                addDeleteQuestionListeners(quizId, lecturerId);
             };
-            rerender_saved_questions_list(questions, update_event_listeners); // Re-render saved questions list.
-            rerender_take_quiz_button(quizUrl, true); // Re-render take quiz button.
+            rerenderSavedQuestionsList(questions, updateEventListeners); // Re-render saved questions list.
+            // Re-render take quiz button. Since at least one question was imported, hasquestions is true.
+            rerenderTakeQuizButton(quizUrl, true);
         })
         .catch((error) => displayException(error));
     let popupMenu = document.querySelector(".backdrop");

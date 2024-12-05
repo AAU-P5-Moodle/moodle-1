@@ -14,21 +14,21 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-<div id="page-mod-livequiz-quizcreator">
+<div id="page_mod_livequiz_quizcreator">
     <h1>{{quizdata.title}}</h1>
 
-    <div id="form-container" class="quiz_form_container">
-        <button type='button' id='id_buttonaddquestion'>Add Question </button>
-        <button type='button' id='id_buttonimportquestion'>Import Questions from Quiz</button>
+    <div id="form_container" class="quiz_form_container">
+        <button type='button' id='add_question_button'>Add Question </button>
+        <button type='button' id='import_question_button'>Import Question </button>
     </div>
-    
-    <div id="saved-questions-container" style="border-radius: 10px; padding: 15px; background-color: #f9f9f9;">
+
+    <div id="saved_questions_container" style="border-radius: 10px; padding: 15px; background-color: #f9f9f9;">
         <h3>Saved Questions:</h3>
         {{> mod_livequiz/saved_questions_list}}
     </div>
 
-    <div id="file-picker-container">
+    <div id="file_picker_container">
         {{{quizdata.filepicker}}}
     </div>
 
-</div>    
+</div>
