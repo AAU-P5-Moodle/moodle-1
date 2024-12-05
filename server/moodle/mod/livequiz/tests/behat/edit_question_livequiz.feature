@@ -28,7 +28,7 @@ Feature: Edit questions in livequiz activity
 
   Scenario: Edit question in a livequiz
     # Enter editing menu by clicking list element
-    And I click on "//span[@class='question-title' and text()='Question 1'][1]" "xpath_element"
+    And I click on "//span[@class='question_list_text' and text()='Question 1'][1]" "xpath_element"
     # Check if fields are filled with correct values from demo data
     And the field "question_title_id" matches value "Question 1"
     And the field "question_description_id" matches value "Which of the following cities is in France?"
@@ -49,7 +49,7 @@ Feature: Edit questions in livequiz activity
     And I click on "Save Question" "button"
     # Check if title was changed in list
     And "Question 1 - Edited" "list_item" should exist
-    And I click on "//span[@class='question-title' and text()='Question 1 - Edited'][1]" "xpath_element"
+    And I click on "//span[@class='question_list_text' and text()='Question 1 - Edited'][1]" "xpath_element"
     # Check if other fields still remain changed in editing menu
     And the field "question_title_id" matches value "Question 1 - Edited"
     And the field "question_description_id" matches value "Which of the following cities is in France? - Edited"
@@ -90,7 +90,7 @@ Feature: Edit questions in livequiz activity
     And the field with xpath "(//input[@class='answer_checkbox'])[3]" matches value "checked"
 
   Scenario: Edit question in a livequiz for take quiz
-    And I click on "//span[@class='question-title' and text()='Question 1'][1]" "xpath_element"
+    And I click on "//span[@class='question_list_text' and text()='Question 1'][1]" "xpath_element"
     Then I set the field "question_title_id" to "Question 1 - Edited"
     And I set the field "question_description_id" to "Which of the following cities is in France? - Edited"
     And I set the field "question_explanation_id" to "Paris is a city in France, Nice is a city in France - Edited"

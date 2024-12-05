@@ -14,7 +14,7 @@ import {externalReuseQuestions, getLecturerQuiz} from "./repository";
  * @returns {Promise<void>} A promise that resolves when the initialization is complete.
  */
 export const init = async(quizId, lecturerId, url) => {
-    let importQuestionButton = document.getElementById("id_buttonimportquestion");
+    let importQuestionButton = document.getElementById("import_question_button");
     importQuestionButton.addEventListener("click", () => {
         renderImportQuestionMenuPopup(quizId, lecturerId, url);
     });
@@ -37,7 +37,7 @@ async function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
         // It returns a promise that needs to be resolved.
         .then(async({html, js}) => {
             // Here we have compiled template.
-            Templates.appendNodeContents(".main-container", html, js);
+            Templates.appendNodeContents(".main_container", html, js);
             await importQuestions(quizId, url, lecturerId);
             addCancelEditButtonListener("import");
             addOldQuestionsToPopup(lecturerId, quizId);
@@ -55,7 +55,7 @@ async function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
 function addOldQuestionsToPopup(lecturerId, quizId) {
     getLecturerQuiz(lecturerId).then((oldQuizzes) => {
         oldQuizzes = oldQuizzes.filter(currentQuiz => currentQuiz.quizid !== quizId);
-        let oldQuizzesContainer = document.querySelector(".oldQuizzes");
+        let oldQuizzesContainer = document.querySelector(".old_quizzes");
         if (oldQuizzes.length === 0) {
             let noQuestions = document.createElement("p");
             noQuestions.textContent = "No questions available.";
@@ -117,7 +117,7 @@ function addOldQuestionsToPopup(lecturerId, quizId) {
             }
         });
     })
-    .catch((error) => window.console.log(error));
+    .catch((error) => alert(error));
 }
 
 /**
@@ -130,7 +130,7 @@ function addOldQuestionsToPopup(lecturerId, quizId) {
  */
 async function importQuestions(quizId, url, lecturerId) {
     let quizUrl = url;
-    const importQuestionBtn = document.querySelector(".import_btn");
+    const importQuestionBtn = document.querySelector(".import_question_button");
 
     importQuestionBtn.addEventListener("click", async() => {
         try {
@@ -178,7 +178,7 @@ function callReuseQuestions(quizId, questionIds, lecturerId, quizUrl) {
  */
 function getCheckedQuestions() {
     let checkedQuestions = [];
-    let questionsDiv = document.querySelector(".oldQuizzes");
+    let questionsDiv = document.querySelector(".old_quizzes");
 
     // Loop through all quizzes and get the checked questions.
     for (let quizDiv of questionsDiv.children) { // Loop through all quizzes.

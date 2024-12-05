@@ -31,7 +31,7 @@ export function addEditQuestionListeners(quizId, lecturerId) {
     let questionList = document.getElementById("saved_questions_list");
     questionList.addEventListener("click", (event) => {
         let target = event.target;
-        if (target.classList.contains("edit-question-btn") || target.classList.contains("question-title")) {
+        if (target.classList.contains("edit-question-btn") || target.classList.contains("question_list_text")) {
             let questionId = parseInt(target.dataset.id, 10);
             renderEditQuestionMenuPopup(quizId, lecturerId, questionId);
         }
@@ -48,14 +48,14 @@ export function addEditQuestionListeners(quizId, lecturerId) {
  */
 function renderEditQuestionMenuPopup(quizId, lecturerId, questionId) {
 
-if (!document.querySelector('.Modal_div')) {
+if(!document.querySelector('.modal_div')){
     // This will call the function to load and render our template.
     Templates.renderForPromise("mod_livequiz/question_menu_popup", {}, "boost")
 
         // It returns a promise that needs to be resolved.
         .then(({html, js}) => {
             // Here we have the compiled template.
-            Templates.appendNodeContents(".main-container", html, js);
+            Templates.appendNodeContents(".main_container", html, js);
             getQuestion(quizId, questionId)
                 .then((question)=> {
                     restoreQuestionDataInPopup(question);
@@ -123,7 +123,7 @@ function handleSaveQuestion(quizId, lecturerId, questionId) {
             "boost"
         )
             .then(({html, js}) => {
-                Templates.appendNodeContents("#saved-questions-container", html, js);
+                Templates.appendNodeContents("#saved_questions_container", html, js);
                 addEditQuestionListeners(quizId, lecturerId);
                 addDeleteQuestionListeners(quizId, lecturerId);
             })

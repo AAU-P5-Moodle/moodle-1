@@ -25,7 +25,7 @@ let takeQuizUrl = "";
  */
 export const init = async(quizId, lecturerId, url) => {
     takeQuizUrl = url; // Set url to quiz attempt page to global variable.
-    let addQuestionButton = document.getElementById("id_buttonaddquestion");
+    let addQuestionButton = document.getElementById("add_question_button");
     addQuestionButton.addEventListener("click", () => {
         renderCreateQuestionMenuPopup(quizId, lecturerId);
     });
@@ -49,12 +49,12 @@ function renderCreateQuestionMenuPopup(quizId, lecturerId) {
       // It returns a promise that needs to be resolved.
         .then(({html, js}) => {
           // Here we have compiled template.
-            Templates.appendNodeContents(".main-container", html, js);
+            Templates.appendNodeContents(".main_container", html, js);
             addAnswerButtonEventListener();
             addSaveQuestionButtonListener(quizId, lecturerId);
             addCancelEditButtonListener("create");
         })
-        .catch((error) => window.console.log(error));
+        .catch((error) => alert(error));
     }
 }
 

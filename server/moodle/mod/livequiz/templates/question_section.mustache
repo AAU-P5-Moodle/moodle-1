@@ -29,15 +29,15 @@
     * fill in later
 
 }}
-<div class="question-container">
-  <div class="question-container">
-      <p class="question-title">{{questiontitle}}</p>
-      <div class="media-container">
+<div class="question_container">
+  <div class="question_container">
+      <p class="question_title">{{questiontitle}}</p>
+      <div class="media_container">
           <img src="" alt="">
       </div>
-    <p class="question-description">{{questiondescription}}</p>
+    <p class="question_description">{{questiondescription}}</p>
   </div>
-    <div class="answer-container">
+    <div class="answer_container">
         <fieldset>
             {{#answers}}
                 <div id="{{answerid}}" class="answer
@@ -47,7 +47,7 @@
                         {{^correct}}incorrect{{/correct}}
                     {{/chosen}}
                     {{^chosen}}
-                        {{#correctnotchosen}}correctnotchosen{{/correctnotchosen}}
+                        {{#correctnotchosen}}correct_not_chosen{{/correctnotchosen}}
                     {{/chosen}}
                 {{/isattempting}}">
                     <label for="{{answerid}}">{{answerdescription}}</label>
@@ -59,7 +59,7 @@
         </fieldset>
   </div>
   {{^isattempting}}
-      <p class="question-explanation">{{questionexplanation}}</p>
+      <p class="question_explanation">{{questionexplanation}}</p>
   {{/isattempting}}
 </div>
 

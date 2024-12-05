@@ -9,7 +9,7 @@ import {submitQuiz} from "./repository";
  * @returns {Promise<void>}
  */
 export const init = async(quizId, studentId, resultsUrl) => {
-    const submitQuizButton = document.getElementById("submitQuizBtn");
+    const submitQuizButton = document.getElementById("submit_quiz_button");
     submitQuizButton.addEventListener("click", async function() {
         if (submitQuizConfirm()) {
             try {
