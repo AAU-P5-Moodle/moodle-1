@@ -127,11 +127,10 @@ function handleSaveQuestion(quizId, lecturerId, questionId) {
                 addEditQuestionListeners(quizId, lecturerId);
                 addDeleteQuestionListeners(quizId, lecturerId);
             })
-            .catch((error) => window.console.log(error));
-    })
-    .catch((error) => window.console.log(error));
-    // Remove edit question pop-up
-    let modalDiv = document.querySelector(".Modal_div");
+            .catch((error) => displayException(error));
+    }).catch(() => alert("Cannot edit a question, since it already has participations"));
+    //Remove edit question pop-up
+    let modalDiv = document.querySelector(".backdrop");
     modalDiv.remove();
 }
 

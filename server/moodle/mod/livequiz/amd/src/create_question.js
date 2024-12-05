@@ -96,7 +96,7 @@ function handleQuestionSubmission(quizId, lecturerId) {
     })
     .catch((error) => window.console.log(error));
 
-    let modalDiv = document.querySelector(".Modal_div");
+    let modalDiv = document.querySelector(".backdrop");
     modalDiv.remove();
 }
 

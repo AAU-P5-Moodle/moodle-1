@@ -45,11 +45,12 @@ export function addDeleteQuestionListeners(quizId, lecturerId) {
                                 rerenderTakeQuizButton(takeQuizUrl, false);
                             }
                         } else {
-                            alert("Cannot delete question: " + response.message);
+                            throw("Cannot delete question, since it already has participations");
                         }
-                    })
-                    .catch((error) => window.console.log(error));
-            }
-        });
-    });
+                    }).catch((error) => {
+                        alert(error);
+                    });
+                }
+            });
+  });
 }

@@ -42,7 +42,7 @@ async function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
             addCancelEditButtonListener("import");
             addOldQuestionsToPopup(lecturerId, quizId);
         })
-        .catch((error) => window.console.log(error)); // Deal with this exception (Using core/notify exception function is recommended).
+        .catch((error) => alert(error)); // Deal with this exception (Using core/notify exception function is recommended).
 }
 
 /**
@@ -141,7 +141,7 @@ async function importQuestions(quizId, url, lecturerId) {
             }
             callReuseQuestions(quizId, questionIds, lecturerId, quizUrl);
         } catch (error) {
-            window.console.error("Error in import of questions");
+            alert("Error in import of questions", error);
         }
     });
 }
@@ -166,8 +166,8 @@ function callReuseQuestions(quizId, questionIds, lecturerId, quizUrl) {
             // Re-render take quiz button. Since at least one question was imported, hasquestions is true.
             rerenderTakeQuizButton(quizUrl, true);
         })
-        .catch((error) => window.console.log(error));
-    let modalDiv = document.querySelector(".Modal_div");
+        .catch((error) => alert(error));
+    let modalDiv = document.querySelector(".backdrop");
     modalDiv.remove();
 }
 

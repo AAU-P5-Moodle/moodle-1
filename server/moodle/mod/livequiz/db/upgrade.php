@@ -346,6 +346,19 @@ function xmldb_livequiz_upgrade($oldversion): bool {
         // Livequiz savepoint reached.
         upgrade_mod_savepoint(true, 2024072516, 'livequiz');
     }
+    if ($oldversion < 2024072555) {
+        // Define field activityid to be added to livequiz_questions.
+        $table = new xmldb_table('livequiz');
+        $field = new xmldb_field('activity_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'timemodified');
+
+        // Conditionally launch add field activityid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Livequiz savepoint reached.
+        upgrade_mod_savepoint(true, 2024072548, 'livequiz');
+    }
 
     return true;
 }
