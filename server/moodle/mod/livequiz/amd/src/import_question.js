@@ -171,6 +171,13 @@ function addQuizCheckboxListener(quizId) {
     quizCheckbox.addEventListener("change", () => {
         questionCheckboxes.forEach((questionCheckbox) => {
             questionCheckbox.checked = quizCheckbox.checked; // Set all questions to checked if the quiz is checked.
+            if(questionCheckbox.checked){
+                let questionEntry = questionCheckbox.parentElement;
+                questionEntry.classList.add("question_selected");
+            }else{
+                let questionEntry = questionCheckbox.parentElement;
+                questionEntry.classList.remove("question_selected");
+            }
         });
     });
 }
