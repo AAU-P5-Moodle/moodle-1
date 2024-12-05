@@ -22,7 +22,6 @@ use dml_exception;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
-use mod_livequiz\output\renderer;
 use mod_livequiz\output\results_page;
 use mod_livequiz\services\livequiz_services;
 use PhpXmlRpc\Exception;
