@@ -27,8 +27,10 @@
  *
  * @param $oldversion
  * @return true
+ * @throws ddl_exception
+ * @throws ddl_table_missing_exception
  */
-function xmldb_livequiz_upgrade($oldversion) {
+function xmldb_livequiz_upgrade($oldversion): bool {
     global $DB;
 
     $dbman = $DB->get_manager();

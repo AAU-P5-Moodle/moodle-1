@@ -22,12 +22,10 @@ use core_external\external_multiple_structure;
 use core_external\external_value;
 use dml_exception;
 use invalid_parameter_exception;
-use mod_livequiz\models\livequiz_questions_lecturer_relation;
 use mod_livequiz\models\livequiz_quiz_lecturer_relation;
 use mod_livequiz\models\livequiz;
 use mod_livequiz\models\quiz_questions_relation;
 use mod_livequiz\models\question;
-use stdClass;
 
 /**
  * Class get_lecturer_quiz
