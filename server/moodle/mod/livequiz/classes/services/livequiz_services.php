@@ -390,7 +390,6 @@ class livequiz_services {
         question::delete_question($questionid);
     }
 
-
     /**
      * A method for fetching the relevant data for the quiz initiation.
      *
