@@ -25,9 +25,13 @@
 namespace mod_livequiz;
 
 use advanced_testcase;
+use InvalidArgumentException;
 use mod_livequiz\models\question;
+use RuntimeException;
 use stdClass;
 use ReflectionException;
+use function PHPUnit\Framework\assertEquals;
+
 
 defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/../test_utility.php');
@@ -283,6 +287,82 @@ final class livequiz_test extends advanced_testcase {
     }
 
     /**
+     * Tests the function get_question_by_id()
+     *
+     * @covers       \mod_livequiz\models\livequiz::get_question_by_id
+     * get_question_by_id() should return a question object matching the question from the database with the given id.
+     * If there is no question in the database with the given id, an exception is thrown.
+     * questiondescription, questiontimelimit, questionexplanation, answers
+     * @throws ReflectionException
+     */
+    public function test_livequiz_get_question_by_id(): void {
+        $livequiz = test_utility::constructlivequiz(
+            1,
+            "test title",
+            1,
+            "test intro",
+            1,
+            1,
+            2
+        );
+
+        // Create mock questions. Only mock the get_id method.
+        $mockquestion1 = $this->getMockBuilder(question::class)
+            ->setConstructorArgs(['title1', 'description1', 10, 'explanation1'])
+            ->onlyMethods(['get_id'])
+            ->getMock();
+        $mockquestion2 = $this->getMockBuilder(question::class)
+            ->setConstructorArgs(['title2', 'description2', 10, 'explanation2'])
+            ->onlyMethods(['get_id'])
+            ->getMock();
+        $mockquestion3 = $this->getMockBuilder(question::class)
+            ->setConstructorArgs(['title3', 'description3', 10, 'explanation3'])
+            ->onlyMethods(['get_id'])
+            ->getMock();
+
+        // Define mocked method get_id().
+        $mockquestion1->method('get_id')
+            ->willReturn(1);
+        $mockquestion2->method('get_id')
+            ->willReturn(2);
+        $mockquestion3->method('get_id')
+            ->willReturn(99);
+
+        $livequiz->add_question($mockquestion1);
+        $livequiz->add_question($mockquestion2);
+        $livequiz->add_question($mockquestion3);
+
+        $questionwithid1 = $livequiz->get_question_by_id(1);
+        $questionwithid2 = $livequiz->get_question_by_id(2);
+        $questionwithid3 = $livequiz->get_question_by_id(99);
+
+        // Test that correct questions are returned by verifying correct titles.
+        assertEquals($questionwithid1->get_title(), $mockquestion1->get_title());
+        assertEquals($questionwithid2->get_title(), $mockquestion2->get_title());
+        assertEquals($questionwithid3->get_title(), $mockquestion3->get_title());
+
+
+        // Test invalid case: No question with the given ID.
+        $this->expectException(InvalidArgumentException::class); // Expect an InvalidArgumentExceptionException to be thrown.
+        $this->expectExceptionMessage("Could not find question with id 20");
+        $livequiz->get_question_by_id(20); // This ID doesn't exist, should throw an exception.
+
+        // Add question to livequiz with duplicate id.
+        $mockquestion4 = $this->getMockBuilder(Question::class)
+            ->setConstructorArgs(['title4', 'ddescription4', 10, 'explanation4n'])
+            ->onlyMethods(['get_id'])
+            ->getMock();
+        $mockquestion4->method('get_id')->willReturn(1);
+        $livequiz->add_question($mockquestion4);
+
+        // Test invalid case: Multiple questions with the same ID.
+        $this->expectException(RuntimeException::class); // Expect a RuntimeException to be thrown.
+        $this->expectExceptionMessage("Something is wrong. Multiple questions found with id 1");
+        $livequiz->get_question_by_id(1);
+    }
+
+
+    /**
      * Function that defines the data provider, such that a test can be run multiple times with different data
      * @return array
      */
@@ -293,6 +373,7 @@ final class livequiz_test extends advanced_testcase {
             'This is the description for question 1',
             5,
             'This is the explanation for question 1',
+            0,
             []
         );
         $question2 = test_utility::createquestionarray(
@@ -301,6 +382,7 @@ final class livequiz_test extends advanced_testcase {
             'This is the description for question 2',
             10,
             'This is the explanation for question 2',
+            0,
             []
         );
 

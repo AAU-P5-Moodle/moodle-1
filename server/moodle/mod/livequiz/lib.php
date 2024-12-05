@@ -32,6 +32,20 @@
 function livequiz_add_instance(object $quizdata): bool|int {
     global $DB;
 
+    $modulerecord = $DB->get_records( // Get the course module records.
+        'course_modules',
+        ['course' => $quizdata->course, 'module' => $quizdata->module, 'section' => $quizdata->section],
+        'id DESC',
+        'id'
+    );
+
+    if ($modulerecord) { // Check if a record is found.
+        $firstrecord = reset($modulerecord); // Get the latest record.
+        $quizdata->activity_id = $firstrecord->id; // Set the activity ID.
+    } else {
+        $quizdata->activity_id = 0; // Handle the case where no record is found.
+    }
+
     $quizdata->timecreated = time();
     $quizdata->timemodified = time();
 
@@ -51,8 +65,7 @@ function livequiz_update_instance(object $quizdata): bool {
     global $DB;
 
     $quizdata->timemodified = time();
-    // Uncomment the following line if needed.!
-    // $quizdata->id = $quizdata->instance;!
+    $quizdata->id = $quizdata->instance;
 
     $DB->update_record('livequiz', $quizdata);
 
@@ -65,11 +78,10 @@ function livequiz_update_instance(object $quizdata): bool {
  * @param int $id ID of the quiz instance
  * @return bool True on success
  * @throws dml_exception When a database error occurs
+ * @throws dml_exception|\PhpXmlRpc\Exception When a database error occurs
  */
 function livequiz_delete_instance(int $id): bool {
     global $DB;
-
     $DB->delete_records('livequiz', ['id' => $id]);
-
     return true;
 }

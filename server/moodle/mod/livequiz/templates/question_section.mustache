@@ -29,38 +29,35 @@
     * fill in later
 
 }}
-<div class="question-container">
-  <div class="title-container">
-    {{#isattempting}} <h1 class="quiz-title">{{quiztitle}}</h1> {{/isattempting}}
-  </div>
-  <div class="question-container">
-      <p class="question-title">{{questiontitle}}</p>
-      <div class="media-container">
-          <img src="" alt="">
-      </div>
-    <p class="question-description">{{questiondescription}}</p>
-  </div>
-  <div class="answer-container">
-  <fieldset>
-  {{#answers}}
-    <div class="answer">
-      <label for="{{answerid}}">{{answerdescription}}</label>
-      <input type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
-        {{^isattempting}} disabled {{/isattempting}} />
+<div class="main_content_runner">
+    <div class="question_container">
+    <div class="moodle_box">
+        <p class="question_title">{{questiontitle}}</p>
+        <p class="question_description">{{questiondescription}}</p>
+        <div class="answer_container">
+            <fieldset>
+                {{#answers}}
+                    <label id="{{answerid}}" class="answer
+                            {{^isattempting}}
+                                {{#chosen}}
+                                    {{#correct}}correct{{/correct}}
+                                    {{^correct}}incorrect{{/correct}}
+                                {{/chosen}}
+                                {{^chosen}}
+                                    {{#correctnotchosen}}correct_not_chosen{{/correctnotchosen}}
+                                {{/chosen}}
+                            {{/isattempting}}">
+                        <input type="{{questiontype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
+                            {{#chosen}}checked{{/chosen}}
+                            {{^isattempting}}disabled{{/isattempting}}>
+                            {{answerdescription}}
+                    </label>
+                {{/answers}}
+            </fieldset>
+        </div>
+        {{^isattempting}}
+            <p class="question_explanation">{{questionexplanation}}</p>
+        {{/isattempting}}
     </div>
-  {{/answers}}
-  </fieldset>
-  </div>
-  {{#isattempting}}
-      <!-- Hidden inputs to pass to the next question -->
-      <input type="hidden" name="cmid" value="{{cmid}}" />
-      <input type="hidden" name="quizid" value="{{quizid}}" />
-      <input type="hidden" name="questionid" value="{{questionid}}" />
-      <input type="hidden" name="questionindex" value="{{questionindex}}" />
-      <input type="hidden" name="questiontitle" value="{{questiontitle}}" />
-      <input type="hidden" name="numberofquestions" value="{{numberofquestions}}" />
-      <input type="hidden" name="nextquestionindex" value="{{nextquestionindex}}" />
-  {{/isattempting }}
 </div>
-
-
+</div>

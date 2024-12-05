@@ -18,6 +18,7 @@ namespace mod_livequiz\models;
 
 use dml_exception;
 use dml_transaction_exception;
+use mod_livequiz\repositories\answer_repository;
 
 /**
  * 'Static' class, do not instantiate.
@@ -64,14 +65,26 @@ class questions_answers_relation {
      */
     public static function get_answers_from_question(int $questionid): array {
         global $DB;
+        $answerrepository = new answer_repository();
 
         $answerids = $DB->get_records('livequiz_questions_answers', ['question_id' => $questionid], '', 'answer_id');
         $answers = [];
 
         foreach ($answerids as $answerid) {
-            $answers[] = answer::get_answer_from_id($answerid->answer_id);
+            $answers[] = $answerrepository->get_answer_from_id($answerid->answer_id);
         }
 
         return $answers;
+    }
+    /**
+     * Deletes the relation between an answer and a question, given the answer IDs.
+     *
+     * @param int $answerid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_relations_by_answerid(int $answerid): bool {
+        global $DB;
+        return $DB->delete_records('livequiz_questions_answers', ['answer_id' => $answerid]);
     }
 }

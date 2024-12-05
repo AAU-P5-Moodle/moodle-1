@@ -17,6 +17,8 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
+use InvalidArgumentException;
+use RuntimeException;
 use stdClass;
 
 /**
@@ -126,24 +128,6 @@ class livequiz {
     }
 
     /**
-     * Updates the livequiz in the database, and updates the timemodified field.
-     *
-     * @return bool
-     * @throws dml_exception
-     */
-    public function update_quiz(): bool {
-        global $DB;
-
-        $this->set_timemodified();
-
-        $record = new stdClass();
-        $record->id = $this->get_id();
-        $record->timemodified = $this->get_timemodified();
-
-        return $DB->update_record('livequiz', $record);
-    }
-
-    /**
      * Gets the associated ID for the livequiz.
      *
      * @return int
@@ -216,6 +200,50 @@ class livequiz {
     }
 
     /**
+     * Removes a question from the livequiz
+     * @param int $questionid
+     * @return bool was a question with the specified id found and removed form the questions.
+     */
+    public function remove_question_by_id(int $questionid): bool {
+        $questions = $this->get_questions();
+
+        // Filter out the question with the given ID.
+        $filteredquestions = array_filter($questions, function ($question) use ($questionid) {
+            return $question->get_id() !== $questionid;
+        });
+
+        // If the number of questions has decreased, a question was removed.
+        if (count($questions) > count($filteredquestions)) {
+            $this->set_questions($filteredquestions);
+            return true;
+        }
+        return false; // No question was removed.
+    }
+
+    /**
+     * Gets a question from the livequiz
+     * @param int $questionid
+     * @return question was a question with the specified id found and removed form the questions.
+     */
+    public function get_question_by_id(int $questionid): question {
+        $questions = $this->get_questions();
+        $questionwithid = null;
+        foreach ($questions as $question) {
+            if ($question->get_id() === $questionid) {
+                // If we already found a question, it means that there are questions with duplicate id.
+                if ($questionwithid !== null) {
+                    throw new RuntimeException("Something is wrong. Multiple questions found with id {$questionid}");
+                }
+                $questionwithid = $question;
+            }
+        }
+        if ($questionwithid === null) {
+            throw new InvalidArgumentException("Could not find question with id {$questionid}");
+        }
+        return $questionwithid;
+    }
+
+    /**
      * Getter that gets the question object in the parsed index
      * @param int $index the index of the question
      * @return question
@@ -264,6 +292,20 @@ class livequiz {
     }
     /**
      * Prepares the template data for mustache.
+     * The data object will hold the following properties:
+     * - quizid
+     * - quiztitle
+     * - numberofquestions
+     * - questions
+     *
+     * Each question will have the following properties:
+     * - questionid
+     * - questiontitle
+     * - questiondescription
+     * - questiontimelimit
+     * - questionexplanation
+     * - answers
+     * - answertype
      * @return stdClass
      */
     public function prepare_for_template(): stdClass {

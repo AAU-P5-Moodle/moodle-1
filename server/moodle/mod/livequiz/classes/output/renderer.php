@@ -30,12 +30,24 @@ use plugin_renderer_base;
 class renderer extends plugin_renderer_base {
     /**
      *
-     * @param index_page $page
+     * @param index_page_student $page
      *
      * @return string html for the page
      * @throws moodle_exception
      */
-    public function render_index_page(index_page $page): string {
+    public function render_index_page_student(index_page_student $page): string {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('mod_livequiz/index_page', $data);
+    }
+
+    /**
+     *
+     * @param index_page_teacher $page
+     *
+     * @return string html for the page
+     * @throws moodle_exception
+     */
+    public function render_index_page_teacher(index_page_teacher $page): string {
         $data = $page->export_for_template($this);
         return parent::render_from_template('mod_livequiz/index_page', $data);
     }

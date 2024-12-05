@@ -29,11 +29,12 @@
     * fill in later
 
 }}
-<div class="main-container">
+<div class="main_container">
     <h1>Results for attempt</h1>
-    <div class="questions-container">
+    <div class="questions_container">
       {{#questions}}
         {{> mod_livequiz/question_section}}
       {{/questions}}
     </div>
+    <a href="{{menuurl}}" class="button-moodle" id="menu_page_button">Back to Live Quiz menu</a>
 </div>

@@ -24,7 +24,7 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
-use Exception;
+use mod_livequiz\repositories\answer_repository;
 
 /**
  * Class student_answers_relation
@@ -37,7 +37,7 @@ class student_answers_relation {
      * @param int $studentid
      * @param int $answerid
      * @param int $participationid
-     * @return void
+     * @return int
      * @throws dml_exception
      */
     public static function insert_student_answer_relation(int $studentid, int $answerid, int $participationid): int {
@@ -66,8 +66,7 @@ class student_answers_relation {
             '',
             'answer_id'
         );
-        $answerids = array_column($answerrecords, 'answer_id');
-        return $answerids;
+        return array_column($answerrecords, 'answer_id');
     }
 
     /**
@@ -84,6 +83,47 @@ class student_answers_relation {
         return $DB->count_records(
             'livequiz_students_answers',
             ['answer_id' => $answerid]
+        );
+    }
+
+    /**
+     * Get all answers for a given participation
+     *
+     * @param int $participationid
+     * @return array An array of answer objects
+     * @throws dml_exception
+     */
+    public static function get_answers_from_participation(int $participationid): array {
+        global $DB;
+        $answerrepository = new answer_repository();
+
+        $answerrecords = $DB->get_records(
+            'livequiz_students_answers',
+            ['participation_id' => $participationid],
+            '',
+            'answer_id'
+        );
+
+        $answers = [];
+        foreach ($answerrecords as $record) {
+            $id = $record->answer_id;
+            $answers[] = $answerrepository->get_answer_from_id($id);
+        }
+
+        return $answers;
+    }
+
+    /**
+     * Deletes all records in student_answer_relations by participation id
+     * @param int $participationid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_student_answers_relation_by_participationid(int $participationid): bool {
+        global $DB;
+        return $DB->delete_records(
+            'livequiz_students_answers',
+            ['participation_id' => $participationid],
         );
     }
 }

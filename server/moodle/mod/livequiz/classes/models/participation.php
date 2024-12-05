@@ -16,6 +16,7 @@
 
 namespace mod_livequiz\models;
 
+
 /**
  * Class Participation
  *
@@ -25,9 +26,10 @@ namespace mod_livequiz\models;
  * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */class participation {
+ */
+class participation {
     /**
-     * Participation id
+     * Participation id. This is the primary key in the participation table, and is not set by the constructor.
      * @var int $id
      */
     private int $id;

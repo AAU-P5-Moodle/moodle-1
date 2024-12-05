@@ -1,0 +1,95 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_livequiz/index_page
+
+    Index Page for the livequiz plugin
+
+    Classes required for JS:
+    * none
+
+    Context variables required for this template:
+    * fill in later
+
+    Example context (json):
+    * fill in later
+
+}}
+<div class=backdrop>
+<div class="modal_div">
+    <div class="required_fields_div">
+        <h3>Title</h3>
+        <i class="icon fa fa-circle-exclamation text-danger fa-fw" id="required_id"></i>
+    </div>
+    <div id="title_textarea_alert" style="display: none;">
+        <p class="title_alert_text" id="title_alert_text_id" style="color: red">*The Title is required</p>
+    </div>
+    <textarea
+    placeholder="Enter title (ex. Geography 1)"
+    class="question_input_large"
+    id="question_title_id"
+  ></textarea>
+    <div class="required_fields_div">
+    <h3>Question Text</h3>
+        <i class="icon fa fa-circle-exclamation text-danger fa-fw" id="required_id"></i>
+    </div>
+    <div id="question_textarea_alert" style="display: none;">
+        <p class="question_alert_text" id="question_alert_text_id" style="color: red" >*The Question Text is required</p>
+    </div>
+    <textarea
+          placeholder="Enter question (ex. What is the capital of Sweden?)"
+          class="question_input_large"
+          id="question_description_id"
+  ></textarea>
+    <h3>Explanation</h3>
+    <textarea
+            placeholder="Enter question explanation (ex. Stockholm is the capital of Sweden)"
+            class="question_input_large"
+            id="question_explanation_id"
+    ></textarea>
+    <div class="question_menu_required_field">
+        <i class="icon fa fa-circle-exclamation text-danger fa-fw" id="required_id"></i>
+        Required
+    </div>
+  <div class="file_upload_section">
+    <label for="file_input" class="file_upload_section"
+      >+ Add video or image</label
+    ><input
+      class="file_picker_input"
+      type="file"
+      accept="image/*,video/*"
+      id="file_input"
+    /><img />
+  </div>
+  <div class="question_type_checkbox">
+  <input type="checkbox" id="question_type_checkbox_id" class="question_type_checkbox">
+  <label for="question_type_checkbox_id" id="question_type_label_id">Allow only one correct answer</label>
+  </div>
+
+    <button class="add_new_answer_to_question">Add Answer</button>
+    <div class="all_answers_alert" id="all_answers" style="display: none;">
+        <p class="all_answers_alert_max_one_correct" id="question_alert_max_one_correct" style="color: red">*You selected the option to allow only one correct answer, but multiple correct answers are currently marked.</p>
+        <p class="all_answers_alert_one_correct" id="question_alert_one_correct" style="color: red">*You need to add at least one correct answer</p>
+        <p class="all_answers_alert_two_answers" id="question_alert_two_answers" style="color: red">*You need to have at least two answers</p>
+        <p class="all_answers_alert_description" id="question_alert_description" style="color: red">*Each answer must have a description</p>
+    </div>
+  <div class="all_answers_for_question_div"></div>
+    <p id="valid_text" style="color: red;display: none">Please fill out all the required fields</p>
+  <button class="save_button">Save Question</button>
+  <button class="cancel_question_button">Cancel</button>
+</div>
+</div>

@@ -25,15 +25,19 @@
  */
 namespace mod_livequiz;
 
+use advanced_testcase;
+use dml_exception;
+use dml_transaction_exception;
 use mod_livequiz\models\student_quiz_relation;
 
 /**
  * student_quiz_relation_test
  */
-final class student_quiz_relation_test extends \advanced_testcase {
+final class student_quiz_relation_test extends advanced_testcase {
     /**
      * Create participation test data. Used in every test.
      * @return array
+     * @throws dml_exception
      */
     protected function create_test_data(): array {
         // We need a quiz to append the participation to.
@@ -44,6 +48,7 @@ final class student_quiz_relation_test extends \advanced_testcase {
             'introformat' => 1,
             'timecreated' => time(),
             'timemodified' => time(),
+            'activity_id' => 1,
         ];
 
         global $DB;
@@ -53,9 +58,12 @@ final class student_quiz_relation_test extends \advanced_testcase {
             'quizid' => $livequizid,
         ];
     }
+
     /**
      * Setup before each test.
      * @return void
+     * @throws dml_transaction_exception
+     * @throws dml_exception
      */
     protected function setUp(): void {
         parent::setUp();
@@ -63,11 +71,14 @@ final class student_quiz_relation_test extends \advanced_testcase {
         $data = $this->create_test_data();
         $actual = student_quiz_relation::insert_student_quiz_relation($data['quizid'], $data['studentid']);
     }
+
     /**
      * Test of test_append_student_to_quiz.
      * It is impossible to assert the actual table id, since it changes every time.
      * @covers \mod_livequiz\models\student_quiz_relation::append_student_to_quiz
      * @return void
+     * @throws dml_exception
+     * @throws dml_transaction_exception
      */
     public function test_append_student_to_quiz(): void {
         $data = $this->create_test_data();
@@ -76,10 +87,13 @@ final class student_quiz_relation_test extends \advanced_testcase {
         $this->assertIsNumeric($actual);
         $this->assertGreaterThan(0, $actual);
     }
+
     /**
      * Test of get_all_student_participation_for_quiz
      * @covers \mod_livequiz\models\student_quiz_relation::get_all_student_participation_for_quiz
      * @return void
+     * @throws dml_exception
+     * @throws dml_transaction_exception
      */
     public function test_get_all_student_participation_for_quiz(): void {
         $data = $this->create_test_data();

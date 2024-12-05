@@ -14,18 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_livequiz;
-
-
-
-defined('MOODLE_INTERNAL') || die();
-
 use mod_livequiz\models\livequiz;
 use mod_livequiz\models\question;
 use mod_livequiz\models\answer;
 use mod_livequiz\services\livequiz_services;
-
-require_once(dirname(__DIR__) . '/livequiz/classes/models/livequiz.php');
 
 /**
  * Temporary read demo data class
@@ -33,18 +25,16 @@ require_once(dirname(__DIR__) . '/livequiz/classes/models/livequiz.php');
  * @copyright 2024 Software AAU
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class readdemodata {
+class demodatareader {
     /**
      * Reads the demo data and creates objects from it
      * @return livequiz object
      */
-    public static function insertdemodata(livequiz $livequiz): livequiz {
-        global $USER;
-        $userid = $USER->id;
+    public static function insertdemodata(livequiz $livequiz, string $relativepath, int $userid): livequiz {
         $livequizservice = livequiz_services::get_singleton_service_instance();
 
         // Read the JSON file.
-        $json = file_get_contents('demodata.json');
+        $json = file_get_contents(__DIR__ . $relativepath);
 
         // Check if the file was read successfully.
         if ($json === false) {
@@ -59,7 +49,7 @@ class readdemodata {
             die('Error decoding the JSON file');
         }
 
-        $jsondata = $jsondata["quiz1"];
+        $jsondata = $jsondata["quiz"];
         $questions = [];
 
         // Prepare questions.
@@ -70,6 +60,7 @@ class readdemodata {
                 $question["timelimit"],
                 $question["explanation"]
             );
+            $modelquestion->set_type($question["type"]);
             foreach ($question["answers"] as $answer) {
                 $modelanswer = new answer(
                     $answer["correct"],

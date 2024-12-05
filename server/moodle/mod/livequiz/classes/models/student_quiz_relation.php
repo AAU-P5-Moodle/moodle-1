@@ -27,11 +27,11 @@ use dml_transaction_exception;
  */
 class student_quiz_relation {
     /**
-     * Append a student to a quiz, given both their ids.
+     * Append a student-quiz relation given both their ids.
      *
-     * @param int $questionid
-     * @param int $answerid
-     * @return void
+     * @param int $quizid
+     * @param int $studentid
+     * @return int
      * @throws dml_exception
      * @throws dml_transaction_exception
      */
@@ -39,10 +39,13 @@ class student_quiz_relation {
         global $DB;
         return $DB->insert_record('livequiz_quiz_student', ['livequiz_id' => $quizid, 'student_id' => $studentid], true);
     }
+
     /**
-     * Get all participation the student has made for a quiz
+     * Get all participations the student has made for a quiz
      * @param int $quizid
-     * @return void
+     * @param int $studentid
+     * @return array
+     * @throws dml_exception
      */
     public static function get_all_student_participation_for_quiz(int $quizid, int $studentid): array {
         global $DB;
@@ -55,8 +58,53 @@ class student_quiz_relation {
             );
         $participations = [];
         foreach ($participationrecords as $participation) {
-            $participations[] = new participation($participation->student_id, $participation->livequiz_id);
+            $participationobject = new participation($studentid, $quizid);
+            $participationobject->set_id($participation->id);
+            $participations[] = $participationobject;
         }
         return $participations;
+    }
+
+    /**
+     * Get all participations for a quiz
+     * @param int $quizid
+     * @return array
+     * @throws dml_exception
+     */
+    public static function get_participations_from_quizid(int $quizid): array {
+        global $DB;
+        $participationrecords =
+            $DB->get_records(
+                'livequiz_quiz_student',
+                ['livequiz_id' => $quizid],
+                'id DESC',
+                '*'
+            );
+
+        $participations = [];
+        foreach ($participationrecords as $participation) {
+            $newparticipation = new participation($participation->student_id, $participation->livequiz_id);
+            $newparticipation->set_id($participation->id);
+            $participations[] = $newparticipation;
+        }
+
+        return $participations;
+    }
+
+    /**
+     * Deletes all participations for a specific quizid
+     * This can also be used to delete all teacher participations in a quiz.
+     * @param int $quizid
+     * @param int $studentid
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete_all_participations_by_quizid(int $quizid, int $studentid): bool {
+        global $DB;
+        return $DB->delete_records(
+            'livequiz_quiz_student',
+            ['livequiz_id' => $quizid,
+             'student_id' => $studentid],
+        );
     }
 }

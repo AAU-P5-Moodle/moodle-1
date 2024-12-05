@@ -58,6 +58,37 @@ class livequiz_quiz_lecturer_relation {
         global $DB;
         return $DB->get_record('livequiz_quiz_lecturer', ['lecturer_id' => $lecturerid]);
     }
+    /**
+     *
+     * Gets lecturer relation by quizid and lecturerid.
+     * Used to see if a relation exists.
+     *
+     * @param int $quizid
+     * @param int $lecturerid
+     * @return bool
+     * @throws dml_exception
+     * @throws dml_transaction_exception
+     *
+     */
+    public static function check_lecturer_quiz_relation_exists(int $quizid, int $lecturerid): bool {
+        global $DB;
+        return $DB->record_exists('livequiz_quiz_lecturer', ['lecturer_id' => $lecturerid, 'quiz_id' => $quizid]);
+    }
+    /**
+     *
+     * Gets lecturer relations by lecturer id. Will be used to get all the quizes that relates to that teacher
+     *
+     *
+     * @param int $lecturerid
+     * @return array
+     * @throws dml_exception
+     * @throws dml_transaction_exception
+     *
+     */
+    public static function get_lecturer_quiz_relations_by_lecturer_id(int $lecturerid): array {
+        global $DB;
+        return $DB->get_records('livequiz_quiz_lecturer', ['lecturer_id' => $lecturerid]);
+    }
 
     /**
      *

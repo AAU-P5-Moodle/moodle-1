@@ -27,13 +27,15 @@
  *
  * @param $oldversion
  * @return true
+ * @throws ddl_exception
+ * @throws ddl_table_missing_exception
  */
-function xmldb_livequiz_upgrade($oldversion) {
+function xmldb_livequiz_upgrade($oldversion): bool {
     global $DB;
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2024072507) {
+    if ($oldversion < 2024072539) {
         // Define table livequiz to be created.
         $livequiztable = new xmldb_table('livequiz');
         $courseid = new xmldb_field('course', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
@@ -222,7 +224,7 @@ function xmldb_livequiz_upgrade($oldversion) {
         }
 
         // Livequiz savepoint reached.
-        upgrade_mod_savepoint(true, 2024072507, 'livequiz');
+        upgrade_mod_savepoint(true, 2024072538, 'livequiz');
     }
 
     if ($oldversion < 2024072510) {
@@ -271,7 +273,7 @@ function xmldb_livequiz_upgrade($oldversion) {
         $questionslecturertable = new xmldb_table('questions_lecturer');
         $tables[] = $questionslecturertable;
         if ($dbman->table_exists($questionslecturertable)) {
-            $dbman->rename_table($questionslecturertable, 'livequiz_quiestions_lecturer');
+            $dbman->rename_table($questionslecturertable, 'livequiz_questions_lecturer');
         }
 
         // Rename table students_answers to livequiz_students_answers and updated foreign key reftables accordingly.
@@ -343,6 +345,19 @@ function xmldb_livequiz_upgrade($oldversion) {
 
         // Livequiz savepoint reached.
         upgrade_mod_savepoint(true, 2024072516, 'livequiz');
+    }
+    if ($oldversion < 2024072555) {
+        // Define field activityid to be added to livequiz_questions.
+        $table = new xmldb_table('livequiz');
+        $field = new xmldb_field('activity_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'timemodified');
+
+        // Conditionally launch add field activityid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Livequiz savepoint reached.
+        upgrade_mod_savepoint(true, 2024072555, 'livequiz');
     }
 
     return true;

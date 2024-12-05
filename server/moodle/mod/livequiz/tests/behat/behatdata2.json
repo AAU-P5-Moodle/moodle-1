@@ -1,0 +1,91 @@
+{
+  "quiz": {
+    "id": "2",
+    "name": "African Cities Quiz",
+    "course": "2",
+    "intro": "This is a quiz about cities in africa",
+    "introformat": "1",
+    "timecreated": "1234567890",
+    "timemodified": "1234567890",
+    "questions": [
+      {
+        "id": "4",
+        "title": "African cities: Question 1",
+        "description": "Which of the following cities is in Sudan?",
+        "explanation": "Khartoum is a city in Sudan, Kassala is a city in Sudan",
+        "timelimit": "60",
+        "type": "0",
+        "answers": [
+          {
+            "id": "9",
+            "description": "Khartoum",
+            "correct": 1,
+            "explanation": "Khartoum is a city in Sudan"
+          },
+          {
+            "id": "10",
+            "description": "Cairo",
+            "correct": 0,
+            "explanation": "Cairo is not a city in Sudan"
+          },
+          {
+            "id": "11",
+            "description": "Kassala",
+            "correct": 1,
+            "explanation": "Kassala is a city in Sudan"
+          }
+        ]
+      },
+      {
+        "id": "5",
+        "title": "African cities: Question 2",
+        "description": "What is the Capital of Kenya?",
+        "explanation": "Kenyas's capital",
+        "timelimit": "60",
+        "type": "1",
+        "answers": [
+          {
+            "id": "12",
+            "description": "Omdurman",
+            "correct": 0,
+            "explanation": "Omdurman is not the capital of Kenya"
+          },
+          {
+            "id": "13",
+            "description": "Kisumu",
+            "correct": 0,
+            "explanation": "Kisumu is not the capital of Kenya"
+          },
+          {
+            "id": "14",
+            "description": "Nairobi",
+            "correct": 1,
+            "explanation": "Nairobi is the capital of Kenya"
+          }
+        ]
+      },
+      {
+        "id": "6",
+        "title": "African cities: Question 3",
+        "description": "Is Lagos in Nigeria?",
+        "explanation": "Lagos is a city in Nigeria",
+        "timelimit": "60",
+        "type": "1",
+        "answers": [
+          {
+            "id": "15",
+            "description": "Yes",
+            "correct": 1,
+            "explanation": "Lagos is a city in Nigeria"
+          },
+          {
+            "id": "16",
+            "description": "No",
+            "correct": 0,
+            "explanation": "Lagos is a city in Nigeria"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -17,7 +17,6 @@
 namespace mod_livequiz\models;
 
 use dml_exception;
-use dml_transaction_exception;
 use stdClass;
 
 /**
@@ -62,6 +61,11 @@ class question {
     private array $answers = [];
 
     /**
+     * @var int $type Defines the type of the question.
+     */
+    private int $type = 0;
+
+    /**
      * Constructor for the question class.
      *
      * @param string $title
@@ -76,77 +80,6 @@ class question {
         $this->explanation = $explanation;
 
         return $this;
-    }
-
-    /**
-     * This function is used to submit a question to the database.
-     *
-     * @param $question
-     * @return int
-     * @throws dml_exception
-     * @throws dml_transaction_exception
-     */
-    public static function insert_question($question): int {
-        global $DB;
-        $questiondata = [
-                'title' => $question->title,
-                'description' => $question->description,
-                'timelimit' => $question->timelimit,
-                'explanation' => $question->explanation,
-            ];
-
-        return $DB->insert_record('livequiz_questions', $questiondata);
-    }
-
-    /**
-     * Gets a question instance.
-     *
-     * @param $id
-     * @return question
-     * @throws dml_exception
-     */
-    public static function get_question_from_id($id): question {
-        global $DB;
-        $questioninstance = $DB->get_record('livequiz_questions', ['id' => $id]);
-        $question = new question(
-            $questioninstance->title,
-            $questioninstance->description,
-            $questioninstance->timelimit,
-            $questioninstance->explanation
-        );
-        $question->set_id($questioninstance->id);
-        return $question;
-    }
-
-    /**
-     * Updates a question in the database.
-     *
-     * @throws dml_exception
-     * @throws dml_transaction_exception
-     * @return void
-     */
-    public function update_question(): void {
-        global $DB;
-        $questiondata = [
-            'id' => $this->id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'timelimit' => $this->timelimit,
-            'explanation' => $this->explanation,
-        ];
-        $DB->update_record('livequiz_questions', $questiondata);
-    }
-
-    /**
-     * Deletes a question from the database.
-     *
-     * @param int $questionid
-     * @return bool
-     * @throws dml_exception
-     */
-    public static function delete_question(int $questionid): bool {
-        global $DB;
-        return $DB->delete_records('livequiz_questions', ['id' => $questionid]);
     }
 
     /**
@@ -204,9 +137,18 @@ class question {
     }
 
     /**
+     * Sets the answers associated with the question.
+     *
+     * @param array $newanswers
+     */
+    public function set_answers(array $newanswers): void {
+        $this->answers = $newanswers;
+    }
+
+    /**
      * Appends an answer to the question object.
      *
-     * @param array $answers The title of the question.
+     * @param array $answers
      */
     public function add_answers(array $answers): void {
         foreach ($answers as $answer) {
@@ -224,12 +166,21 @@ class question {
     }
 
     /**
+     * Removes all answers from the question
+     *
+     */
+    public function remove_answers(): void {
+        $this->answers = [];
+    }
+
+
+    /**
      * Sets the ID of the question.
      *
      * @param $id
      * @return void The ID of the question.
      */
-    private function set_id($id): void {
+    public function set_id($id): void {
         $this->id = $id;
     }
 
@@ -270,26 +221,52 @@ class question {
     }
 
     /**
-     * Getter for question hasmultiplecorrectanswers
+     * Checks if an answer is in the question.
+     * @param int $answerid
      * @return bool
      */
-    public function get_hasmultiplecorrectanswers(): bool {
-        // This is a simple check to see if the question has multiple correct answers.
-        $numcorrect = 0;
-
-        foreach ($this->answers as $answer) {
-            if ($answer->get_correct()) {
-                $numcorrect++;
-                if ($numcorrect > 1) {
-                    return true;
-                }
+    public function is_answer_in_question(int $answerid): bool {
+        foreach ($this->get_answers() as $answer) {
+            if ($answer->get_id() == $answerid) {
+                return true;
             }
         }
         return false;
     }
 
     /**
+     * Resets the id of the question such that it can be reused.
+     */
+    public function reset_id(): void {
+        $this->set_id(0);
+    }
+
+    /**
+     * Sets the type of the question.
+     */
+    public function set_type(int $type): void {
+        $this->type = $type;
+    }
+
+    /**
+     * Gets the type of the question.
+     * 0 is checkbox, 1 is radiobutton
+     * @return int|0 // Returns the type of the question, if it has one. 0 if it does not.
+     */
+    public function get_type(): int {
+        return $this->type ?? 0;
+    }
+
+    /**
      * Prepares the template data for mustache.
+     * The data object will hold the following properties:
+     * - questionid
+     * - questiontitle
+     * - questiondescription
+     * - questiontimelimit
+     * - questionexplanation
+     * - answers
+     * - answertype
      * @param stdClass $data
      * @return stdClass
      */
@@ -300,6 +277,7 @@ class question {
         $data->questiondescription = $this->description;
         $data->questiontimelimit = $this->timelimit;
         $data->questionexplanation = $this->explanation;
+        $data->questiontype = $this->type == 1 ? 'radio' : 'checkbox';
         $data->answers = [];
         foreach ($this->answers as $answer) {
             $data->answers[] = [
@@ -309,11 +287,28 @@ class question {
                 'answercorrect' => $answer->get_correct(),
             ];
         }
-        if ($this->get_hasmultiplecorrectanswers()) {
-            $data->answertype = 'checkbox';
-        } else {
-            $data->answertype = 'radio';
-        }
         return $data;
+    }
+
+    /**
+     * Gets a question instance with answers.
+     *
+     * @param $id
+     * @return question
+     * @throws dml_exception
+     */
+    public static function get_question_with_answers_from_id($id): question {
+        global $DB;
+        $questioninstance = $DB->get_record('livequiz_questions', ['id' => $id]);
+        $question = new question(
+            $questioninstance->title,
+            $questioninstance->description,
+            $questioninstance->timelimit,
+            $questioninstance->explanation
+        );
+        $question->set_id($questioninstance->id);
+        $answers = questions_answers_relation::get_answers_from_question($id);
+        $question->set_answers($answers);
+        return $question;
     }
 }

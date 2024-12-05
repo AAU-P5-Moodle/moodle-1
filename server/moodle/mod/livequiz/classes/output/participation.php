@@ -16,32 +16,26 @@
 
 namespace mod_livequiz\output;
 
-use core\exception\moodle_exception;
 use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
-use moodle_url;
 
 /**
- * Class index_page
+ * Class results_page
  * @package mod_livequiz
  * @copyright 2024 Software AAU
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class index_page implements renderable, templatable {
-    /** @var string $sometext Some text to show how to pass data to a template. */
-    private string $sometext;
+class participation implements renderable, templatable {
     /** @var int $cmid the course module id */
     protected int $cmid;
 
     /**
      * index_page constructor.
-     * @param string $sometext
      * @param int $id
      */
-    public function __construct(string $sometext, int $id) {
-        $this->sometext = $sometext;
+    public function __construct(int $id) {
         $this->cmid = $id;
     }
 
@@ -50,12 +44,8 @@ class index_page implements renderable, templatable {
      *
      * @param renderer_base $output
      * @return stdClass
-     * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
-        $data = new stdClass();
-        $data->sometext = $this->sometext;
-        $data->url = new moodle_url('/mod/livequiz/attempt.php', ['cmid' => $this->cmid]);
-        return $data;
+        return new stdClass();
     }
 }

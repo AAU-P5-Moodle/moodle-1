@@ -16,11 +16,10 @@
 
 namespace mod_livequiz\external;
 
+use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_value;
-use core_external\external_multiple_structure;
-use core_external\external_single_structure;
-use PhpParser\Node\Param;
+use invalid_parameter_exception;
 
 /**
  * Class update_session
@@ -33,13 +32,14 @@ use PhpParser\Node\Param;
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class update_session extends \core_external\external_api {
+class update_session extends external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
+            'quizid' => new external_value(PARAM_INT, 'quizid'),
             'questionid' => new external_value(PARAM_INT, 'questionid'),
             'answers' => new external_value(PARAM_TEXT, 'answers'),
         ]);
@@ -47,18 +47,18 @@ class update_session extends \core_external\external_api {
 
     /**
      * Summary of execute
+     * @param $quizid
      * @param $questionid
      * @param $answervalue
      * @return bool
-     * @throws \invalid_parameter_exception
+     * @throws invalid_parameter_exception
      */
-    public static function execute($questionid, $answervalue): bool {
-        global $DB;
+    public static function execute($quizid, $questionid, $answervalue): bool {
         self::validate_parameters(
             self::execute_parameters(),
-            ['questionid' => $questionid, 'answers' => $answervalue]
+            ['quizid' => $quizid, 'questionid' => $questionid, 'answers' => $answervalue]
         );
-        return self::update_answers_in_session($questionid, $answervalue);
+        return self::update_answers_in_session($quizid, $questionid, $answervalue);
     }
 
     /**
@@ -72,21 +72,21 @@ class update_session extends \core_external\external_api {
 
     /**
      * Update the session with the currently checked answers.
+     * @param $quizid
      * @param $questionid
      * @param $answervalue
      * @return bool
      */
-    public static function update_answers_in_session($questionid, $answervalue): bool {
+    public static function update_answers_in_session($quizid, $questionid, $answervalue): bool {
         $answers = [];
         $decodeanswer = json_decode($answervalue, true);
-        foreach ($decodeanswer as $key => $value) {
+        foreach ($decodeanswer as $value) {
             $answers[] = $value;
         }
-        if (!isset($_SESSION['quiz_answers'])) { // If the session variable is not set, set it to an empty array.
-            $_SESSION['quiz_answers'] = [];
-        }
-        $_SESSION['quiz_answers'][$questionid] = [ // Update the session with the currently checked answers.
-            'question_id' => $questionid,
+        // The array[$quizid][$questionid][answers] will give an array of the answers for that specific question id.
+        $_SESSION['quiz_answers'][$quizid][$questionid] = [
+            'quizid' => $quizid,
+            'questionid' => $questionid,
             'answers' => $answers,
         ];
         return isset($_SESSION['quiz_answers']); // Return true if the session variable is set.

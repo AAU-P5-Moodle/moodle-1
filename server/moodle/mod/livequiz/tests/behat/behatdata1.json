@@ -1,0 +1,91 @@
+{
+  "quiz": {
+    "id": "1",
+    "name": "Europe Cities Quiz",
+    "course": "2",
+    "intro": "This is a quiz about cities in europe",
+    "introformat": "1",
+    "timecreated": "1234567890",
+    "timemodified": "1234567890",
+    "questions": [
+      {
+        "id": "1",
+        "title": "Question 1",
+        "description": "Which of the following cities is in France?",
+        "explanation": "Paris is a city in France, Nice is a city in France",
+        "timelimit": "60",
+        "type": "0",
+        "answers": [
+          {
+            "id": "1",
+            "description": "Paris",
+            "correct": 1,
+            "explanation": "Paris is a city in France"
+          },
+          {
+            "id": "2",
+            "description": "Champagne",
+            "correct": 0,
+            "explanation": "Champagne is not a city in France"
+          },
+          {
+            "id": "3",
+            "description": "Nice",
+            "correct": 1,
+            "explanation": "Nice is a city in France"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "title": "Question 2",
+        "description": "What is the Capital of Denmark?",
+        "explanation": "Danish capital",
+        "timelimit": "60",
+        "type": "1",
+        "answers": [
+          {
+            "id": "4",
+            "description": "Aarhus",
+            "correct": 0,
+            "explanation": "Aarhus is not the capital of Denmark"
+          },
+          {
+            "id": "5",
+            "description": "Aalborg",
+            "correct": 0,
+            "explanation": "Aalborg is not the capital of Denmark"
+          },
+          {
+            "id": "6",
+            "description": "Copenhagen",
+            "correct": 1,
+            "explanation": "Copenhagen is the capital of Denmark"
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "title": "Question 3",
+        "description": "Is Hamburg in Germany?",
+        "explanation": "Hamburg is a city in Northern Germany",
+        "timelimit": "60",
+        "type": "1",
+        "answers": [
+          {
+            "id": "7",
+            "description": "Yes",
+            "correct": 1,
+            "explanation": "Hamburg is a city in Germany"
+          },
+          {
+            "id": "8",
+            "description": "No",
+            "correct": 0,
+            "explanation": "Hamburg is a city in Germany"
+          }
+        ]
+      }
+    ]
+  }
+}

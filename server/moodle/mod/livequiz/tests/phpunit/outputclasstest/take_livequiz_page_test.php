@@ -79,9 +79,10 @@ final class take_livequiz_page_test extends advanced_testcase {
         );
         $numberofquestions = count($livequiz->get_questions());
         $questionindex = 0;
+        $studentid = 2;
 
-        if ($numberofquestions >= 1) { // When we have at lest 1 question.
-            $takelivequizpage = new take_livequiz_page($courseid, $livequiz, $questionindex);
+        if ($numberofquestions >= 1) { // When we have at least 1 question.
+            $takelivequizpage = new take_livequiz_page($courseid, $livequiz, $questionindex, $studentid);
             while ($takelivequizpage->get_question_index() < $numberofquestions - 1) {
                 // We test that while the question is not the last in the array that
                 // get_next_question_index will return the next index.
@@ -131,9 +132,10 @@ final class take_livequiz_page_test extends advanced_testcase {
             $questions,
         );
         $numberofquestions = count($livequiz->get_questions());
+        $studentid = 2;
 
         if ($numberofquestions >= 1) { // When we have at lest 1 question.
-            $takelivequizpage = new take_livequiz_page($courseid, $livequiz, $numberofquestions - 1);
+            $takelivequizpage = new take_livequiz_page($courseid, $livequiz, $numberofquestions - 1, $studentid);
             while ($takelivequizpage->get_question_index() > 0) {
                 // We test that while the question is not the first in the array that
                 // get_previous_question_index will return the previous index.
@@ -211,6 +213,7 @@ final class take_livequiz_page_test extends advanced_testcase {
             'This is the description for question 1',
             5,
             'This is the explanation for question 1',
+            0,
             []
         );
         $question2 = test_utility::createquestionarray(
@@ -219,6 +222,7 @@ final class take_livequiz_page_test extends advanced_testcase {
             'This is the description for question 2',
             10,
             'This is the explanation for question 2',
+            0,
             []
         );
         $question3 = test_utility::createquestionarray(
@@ -227,6 +231,7 @@ final class take_livequiz_page_test extends advanced_testcase {
             'This is the description for question 3',
             12,
             'This is the explanation for question 3',
+            0,
             []
         );
 

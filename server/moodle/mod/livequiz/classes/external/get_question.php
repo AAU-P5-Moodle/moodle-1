@@ -16,46 +16,64 @@
 
 namespace mod_livequiz\external;
 
+use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_value;
+use core_external\external_single_structure;
+use dml_exception;
+use exception;
+use mod_livequiz\services\livequiz_services;
+use stdClass;
 
 /**
- * Class append_participation
+ * Class get_question
  *
  * This class extends the core_external\external_api and is used to handle
- * the external API for appending participation in the live quiz module.
+ * the external API for saving questions to a livequiz.
  *
  * @return     external_function_parameters The parameters required for the execute function.
  * @copyright 2024 Software AAU
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package    mod_livequiz
  */
-class append_participation extends \core_external\external_api {
+class get_question extends external_api {
     /**
      * Returns the description of the execute_parameters function.
      * @return external_function_parameters The parameters required for the execute function.
      */
-    public static function execute_parameters() {
+    public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
             'quizid' => new external_value(PARAM_INT, 'Quiz ID'),
+            'questionid' => new external_value(PARAM_INT, 'Question ID'),
         ]);
     }
+
     /**
      * Summary of execute
-     * @param mixed $quizid
-     * @return void
+     * Retrieves a question by its ID
+     * @param int $quizid
+     * @param int $questionid
+     * @return stdClass
+     * @throws Exception
+     * @throws dml_exception
      */
-    public static function execute($quizid) {
-        global $DB;
-        self::validate_parameters(self::execute_parameters(), ['quizid' => $quizid]);
-        return $quizid;
+    public static function execute(int $quizid, int $questionid): stdClass {
+        self::validate_parameters(self::execute_parameters(), [
+            'quizid' => $quizid,
+            'questionid' => $questionid,
+        ]);
+        $services = livequiz_services::get_singleton_service_instance();
+        $livequiz = $services->get_livequiz_instance($quizid);
+        $question = $livequiz->get_question_by_id($questionid);
+        return $question->prepare_for_template(new stdClass());
     }
+
     /**
      * Part of the webservice processing flow. Not called directly here,
      * but is in moodle's web service framework.
-     * @return \external_function_parameters
+     * @return external_single_structure
      */
-    public static function execute_returns(): external_value {
-        return new external_value(PARAM_INT, 'Quiz ID');
+    public static function execute_returns(): external_single_structure {
+        return data_structure_helper::get_question_structure();
     }
 }

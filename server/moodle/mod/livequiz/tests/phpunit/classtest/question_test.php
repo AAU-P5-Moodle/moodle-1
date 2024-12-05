@@ -25,8 +25,13 @@
 namespace mod_livequiz;
 
 use advanced_testcase;
+use dml_exception;
 use mod_livequiz\models\answer;
 use mod_livequiz\models\question;
+use mod_livequiz\models\questions_answers_relation;
+use mod_livequiz\repositories\answer_repository;
+use mod_livequiz\repositories\question_repository;
+use mod_livequiz\services\livequiz_services;
 use ReflectionClass;
 use ReflectionException;
 use stdClass;
@@ -58,60 +63,51 @@ final class question_test extends advanced_testcase {
         );
     }
 
-    /**
-     * Test of get_hasmultipleanswers returns true, when there are more than 1 correct answer.
-     * @covers       \mod_livequiz\models\question::get_hasmultiplecorrectanswers
-     */
-    public function test_question_get_hasmultipleanswers_true(): void {
-        $mockanswers = [];
-        for ($x = 0; $x <= 3; $x++) {
-            // Create a mock object of the answer class.
-            $mock = $this->getMockBuilder(answer::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['get_correct'])
-                ->getMock();
-            // Make the first 2 mock objects return 0 and the last 2 return 1.
-            if ($x < 2) {
-                $mock->expects($this->any())
-                    ->method('get_correct')
-                    ->willReturn(0);
-            } else {
-                $mock->expects($this->any())
-                    ->method('get_correct')
-                    ->willReturn(1);
-            }
-            $mockanswers[] = $mock;
-        }
-        $this->question->add_answers($mockanswers);
-        $this->assertTrue($this->question->get_hasmultiplecorrectanswers());
-    }
 
     /**
-     * Test of get_hasmultipleanswers returns false, when there is only 1 correct answer.
-     * @covers       \mod_livequiz\models\question::get_hasmultiplecorrectanswers
+     * Test of get_question_with_answers_from_id for question class.
+     * @covers       \mod_livequiz\models\question::get_question_with_answers_from_id
+     * @throws dml_exception
      */
-    public function test_question_get_hasmultipleanswers_false(): void {
-        $mockanswers = [];
-        for ($x = 0; $x <= 3; $x++) {
-            // Create a mock object of the answer class.
-            $mock = $this->getMockBuilder(answer::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['get_correct'])
-                ->getMock();
-            // Make the first 3 mock objects return 0 and the last 1 return 1.
-            if ($x < 3) {
-                $mock->expects($this->any())
-                    ->method('get_correct')
-                    ->willReturn(0);
-            } else {
-                $mock->expects($this->any())
-                    ->method('get_correct')
-                    ->willReturn(1);
-            }
-            $mockanswers[] = $mock;
-        }
-        $this->question->add_answers($mockanswers);
-        $this->assertnotTrue($this->question->get_hasmultiplecorrectanswers());
+    public function test_get_question_with_answers_from_id(): void {
+        $service = livequiz_services::get_singleton_service_instance();
+        $questionid = $service->insert_question($this->question);
+
+        $answer1 = new answer(1, "This is the description for answer 1", "This is the explanation for answer 1");
+        $answer2 = new answer(0, "This is the description for answer 2", "This is the explanation for answer 2");
+        $answer3 = new answer(0, "This is the description for answer 3", "This is the explanation for answer 3");
+
+        $answerid1 = $service->insert_answer($answer1);
+        $answerid2 = $service->insert_answer($answer2);
+        $answerid3 = $service->insert_answer($answer3);
+
+        $service->insert_question_answer_relation($questionid, $answerid1);
+        $service->insert_question_answer_relation($questionid, $answerid2);
+        $service->insert_question_answer_relation($questionid, $answerid3);
+
+        $question = $service->get_question_with_answers_from_id($questionid);
+
+        self::assertEquals(3, count($question->get_answers()));
+
+        // Check that the ids are all correct.
+        self::assertEquals($answerid1, $question->get_answers()[0]->get_id());
+        self::assertEquals($answerid2, $question->get_answers()[1]->get_id());
+        self::assertEquals($answerid3, $question->get_answers()[2]->get_id());
+
+        // Check that all correct are correct.
+        self::assertEquals($answer1->get_correct(), $question->get_answers()[0]->get_correct());
+        self::assertEquals($answer2->get_correct(), $question->get_answers()[1]->get_correct());
+        self::assertEquals($answer3->get_correct(), $question->get_answers()[2]->get_correct());
+
+        // Check that all descriptions are correct.
+        self::assertEquals($answer1->get_description(), $question->get_answers()[0]->get_description());
+        self::assertEquals($answer2->get_description(), $question->get_answers()[1]->get_description());
+        self::assertEquals($answer3->get_description(), $question->get_answers()[2]->get_description());
+
+        // Check that all explanations are correct.
+        self::assertEquals($answer1->get_explanation(), $question->get_answers()[0]->get_explanation());
+        self::assertEquals($answer2->get_explanation(), $question->get_answers()[1]->get_explanation());
+        self::assertEquals($answer3->get_explanation(), $question->get_answers()[2]->get_explanation());
     }
 
     /**
@@ -131,6 +127,7 @@ final class question_test extends advanced_testcase {
         string $description,
         int $timelimit,
         string $explanation,
+        int $type,
         array $answers
     ): void {
         $originalquestion = new question($title, $description, $timelimit, $explanation);
@@ -199,12 +196,7 @@ final class question_test extends advanced_testcase {
         $this->assertSameSize($originalquestion->get_answers(), $data->answers);
 
         // Verify correct answer type.
-        $this->assertIsString($data->answertype);
-        if ($originalquestion->get_hasmultiplecorrectanswers()) {
-            $this->assertEquals('checkbox', $data->answertype);
-        } else {
-            $this->assertEquals('radio', $data->answertype);
-        }
+        $this->assertIsString($data->questiontype);
 
         // Verify correct order of answers.
         $counter = 0;
@@ -242,6 +234,7 @@ final class question_test extends advanced_testcase {
                 'This is the description for question 1',
                 5,
                 'This is the explanation for question 1',
+                1,
                 [$answer1, $answer2, $answer3]
             ),
             test_utility::createquestionarray(
@@ -250,6 +243,7 @@ final class question_test extends advanced_testcase {
                 'This is the description for question 2',
                 10,
                 'This is the explanation for question 2',
+                0,
                 [$answer1, $answer2, $answer3, $answer4]
             ),
         ];
