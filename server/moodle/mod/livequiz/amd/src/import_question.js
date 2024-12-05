@@ -1,27 +1,23 @@
 import Templates from "core/templates";
-import {add_cancel_edit_button_listener, rerender_saved_questions_list} from "./edit_question_helper";
-import {add_edit_question_listeners} from "./edit_question";
-import {add_delete_question_listeners} from "./delete_question";
-import {displayException} from "core/notification";
-import {external_reuse_questions, get_lecturer_quiz} from "./repository";
-import {rerender_take_quiz_button} from "./edit_question_helper";
+import {addCancelEditButtonListener, rerenderSavedQuestionsList, rerenderTakeQuizButton} from "./helper";
+import {addEditQuestionListeners} from "./edit_question";
+import {addDeleteQuestionListeners} from "./delete_question";
+import {externalReuseQuestions, getLecturerQuiz} from "./repository";
 
 /**
  * Adds an event listener to the "Import Question" button.
  * When the button is clicked, it renders the import question menu popup.
  *
- * @param {number} quizid - The ID of the quiz.
- * @param {number} lecturerid - The ID of the lecturer.
+ * @param {number} quizId - The ID of the quiz.
+ * @param {number} lecturerId - The ID of the lecturer.
  * @param {string} url - The URL to the quiz attempt page.
  * @returns {Promise<void>} A promise that resolves when the initialization is complete.
  */
-export const init = async (quizid, lecturerid, url) => {
-  let import_question_button = document.getElementById(
-    "id_buttonimportquestion"
-  );
-  import_question_button.addEventListener("click", () => {
-    render_import_question_menu_popup(quizid, lecturerid, url);
-  });
+export const init = async(quizId, lecturerId, url) => {
+    let importQuestionButton = document.getElementById("id_buttonimportquestion");
+    importQuestionButton.addEventListener("click", () => {
+        renderImportQuestionMenuPopup(quizId, lecturerId, url);
+    });
 };
 
 /**
@@ -30,148 +26,149 @@ export const init = async (quizid, lecturerid, url) => {
  * This function loads and renders the import question menu popup template, appends it to the main container,
  * Sets up event listeners for importing questions and cancelling the import.
  *
- * @param {number} quizid - The ID of the quiz.
- * @param {number} lecturerid - The ID of the lecturer.
+ * @param {number} quizId - The ID of the quiz.
+ * @param {number} lecturerId - The ID of the lecturer.
  * @param {string} url - The URL to the quiz attempt page.
  * @returns {void} - Nothing.
  */
-async function render_import_question_menu_popup(quizid, lecturerid, url) {
-  // This will call the function to load and render our template.
-  if (!document.querySelector(".Modal_div")) {
-    Templates.renderForPromise("mod_livequiz/import_question_popup")
+async function renderImportQuestionMenuPopup(quizId, lecturerId, url) {
+    // This will call the function to load and render our template.
+    Templates.renderForPromise("mod_livequiz/import_question_popup", {}, "boost")
         // It returns a promise that needs to be resolved.
         .then(async({html, js}) => {
             // Here we have compiled template.
             Templates.appendNodeContents(".main-container", html, js);
-            await importQuestions(quizid, url, lecturerid);
-            add_cancel_edit_button_listener("import");
-            add_old_questions_to_popup(lecturerid, quizid);
+            await importQuestions(quizId, url, lecturerId);
+            addCancelEditButtonListener("import");
+            addOldQuestionsToPopup(lecturerId, quizId);
         })
-
-      // Deal with this exception (Using core/notify exception function is recommended).
-      .catch((error) => displayException(error));
-  }
+        .catch((error) => alert(error)); // Deal with this exception (Using core/notify exception function is recommended).
 }
 
 /**
  * Adds old questions to the import question popup.
- * @param {number} lecturerid - The ID of the lecturer.
- * @param {number} quizid - The ID of the quiz.
+ *
+ * @param {number} lecturerId - The ID of the lecturer.
+ * @param {number} quizId - The ID of the quiz.
+ * @returns {void}
  */
-function add_old_questions_to_popup(lecturerid, quizid) {
-    get_lecturer_quiz(lecturerid).then((oldquizzes) => {
-        oldquizzes = oldquizzes.filter(currentquiz => currentquiz.quizid !== quizid);
+function addOldQuestionsToPopup(lecturerId, quizId) {
+    getLecturerQuiz(lecturerId).then((oldQuizzes) => {
+        oldQuizzes = oldQuizzes.filter(currentQuiz => currentQuiz.quizid !== quizId);
         let oldQuizzesContainer = document.querySelector(".oldQuizzes");
-        if (oldquizzes.length === 0) {
+        if (oldQuizzes.length === 0) {
             let noQuestions = document.createElement("p");
             noQuestions.textContent = "No questions available.";
             oldQuizzesContainer.appendChild(noQuestions);
             return;
         }
-        oldquizzes.forEach((quiz) => { // Loop through all quizzes.
+        oldQuizzes.forEach((quiz) => { // Loop through all quizzes.
             if (quiz.questions.length > 0) {
-                let question_checkboxes = [];
-                let quiz_div = document.createElement('div');
-                //Create quiz checkbox.
-                let quiz_checkbox = document.createElement('input');
-                quiz_checkbox.type = "checkbox";
-                quiz_checkbox.value = quiz.quizid;
-                quiz_checkbox.id = quiz.quizid;
-                quiz_checkbox.style.marginRight = "5px"; // Add margin so the text is not too close to the checkbox.
-                quiz_checkbox.name = quiz.quiztitle;
+                let questionCheckboxes = [];
+                let quizDiv = document.createElement('div');
+                // Create quiz checkbox.
+                let quizCheckbox = document.createElement('input');
+                quizCheckbox.type = "checkbox";
+                quizCheckbox.value = quiz.quizid;
+                quizCheckbox.id = quiz.quizid;
+                quizCheckbox.style.marginRight = "5px"; // Add margin so the text is not too close to the checkbox.
+                quizCheckbox.name = quiz.quiztitle;
                 // Create quiz Label.
-                let quiz_label = document.createElement('label');
-                quiz_label.htmlFor = `quiz_${quiz.quizid}`;
-                quiz_label.textContent = quiz.quiztitle;
-                quiz_label.style.fontWeight = "bold"; // Make the quiz title bold.
-                quiz_div.class = "oldquiz"; // Might be used for styling.
+                let quizLabel = document.createElement('label');
+                quizLabel.htmlFor = `quiz_${quiz.quizid}`;
+                quizLabel.textContent = quiz.quiztitle;
+                quizLabel.style.fontWeight = "bold"; // Make the quiz title bold.
+                quizDiv.class = "oldquiz"; // Might be used for styling.
 
                 // Append the checkbox and label to the div.
-                quiz_div.appendChild(quiz_checkbox);
-                quiz_div.appendChild(quiz_label);
+                quizDiv.appendChild(quizCheckbox);
+                quizDiv.appendChild(quizLabel);
                 // Set the border style
-                quiz_div.style.border = "2px solid black";
+                quizDiv.style.border = "2px solid black";
                 // Create container for questions.
-                let questions_div = document.createElement("div");
-                questions_div.style.marginBottom = "20px";
-                questions_div.style.marginLeft = "20px"; // Add margin to the left so the questions are indented.
-                questions_div.id = "questionsdiv";
+                let questionsDiv = document.createElement("div");
+                questionsDiv.style.marginBottom = "20px";
+                questionsDiv.style.marginLeft = "20px"; // Add margin to the left so the questions are indented.
+                questionsDiv.id = "questionsdiv";
                 // Loop through each question and add it to the container.
                 quiz.questions.forEach((question) => {
-                    //Create question checkbox.
-                    let question_div = document.createElement('div');
-                    let question_checkbox = document.createElement('input');
-                    question_checkbox.type = "checkbox";
-                    question_checkbox.value = `question_${question.questionid}`;
-                    question_checkbox.style.marginRight = "5px"; // Add margin so the text is not too close to the checkbox.
-                    question_checkbox.id = question.questionid;
-                    question_checkbox.name = question.questiontitle;
-                    question_checkboxes.push(question_checkbox);
+                    // Create question checkbox.
+                    let questionDiv = document.createElement('div');
+                    let questionCheckbox = document.createElement('input');
+                    questionCheckbox.type = "checkbox";
+                    questionCheckbox.value = `question_${question.questionid}`;
+                    questionCheckbox.style.marginRight = "5px"; // Add margin so the text is not too close to the checkbox.
+                    questionCheckbox.id = question.questionid;
+                    questionCheckbox.name = question.questiontitle;
+                    questionCheckboxes.push(questionCheckbox);
                     // Create question Label.
-                    let question_label = document.createElement('label');
-                    question_label.htmlFor = `question_${question.questionid}`;
-                    question_label.textContent = question.questiontitle;
+                    let questionLabel = document.createElement('label');
+                    questionLabel.htmlFor = `question_${question.questionid}`;
+                    questionLabel.textContent = question.questiontitle;
 
-                    question_div.appendChild(question_checkbox);
-                    question_div.appendChild(question_label);
-                    questions_div.appendChild(question_div);
+                    questionDiv.appendChild(questionCheckbox);
+                    questionDiv.appendChild(questionLabel);
+                    questionsDiv.appendChild(questionDiv);
                 });
-                add_quiz_checkbox_listener(quiz_checkbox, question_checkboxes);
-                add_question_checkbox_listener(quiz_checkbox, question_checkboxes);
-                quiz_div.appendChild(questions_div);
-                oldQuizzesContainer.appendChild(quiz_div);
+                addQuizCheckboxListener(quizCheckbox, questionCheckboxes);
+                addQuestionCheckboxListener(quizCheckbox, questionCheckboxes);
+                quizDiv.appendChild(questionsDiv);
+                oldQuizzesContainer.appendChild(quizDiv);
             }
         });
-    }).catch((error) => console.log(error));
+    })
+    .catch((error) => window.console.log(error));
 }
 
 /**
  * Imports questions into a quiz.
  *
- * @param {number} quizid - The ID of the quiz.
+ * @param {number} quizId - The ID of the quiz.
  * @param {string} url - The URL of the quiz page.
- * @param {number} lecturerid - The ID of the lecturer.
+ * @param {number} lecturerId - The ID of the lecturer.
  * @returns {Promise<void>} A promise that resolves when the questions are imported.
  */
-async function importQuestions(quizid, url, lecturerid) {
-  let quiz_url = url;
-  const importQuestionBtn = document.querySelector(".import_btn");
+async function importQuestions(quizId, url, lecturerId) {
+    let quizUrl = url;
+    const importQuestionBtn = document.querySelector(".import_btn");
 
     importQuestionBtn.addEventListener("click", async() => {
         try {
-            let questionids = get_checked_questions();
-            if (questionids.length === 0) {
+            let questionIds = getCheckedQuestions();
+            if (questionIds.length === 0) {
                 alert("No questions selected. Pleas choose at least one question to import.")
                 return;
             }
-            call_reuse_questions(quizid, questionids, lecturerid, quiz_url);
+            callReuseQuestions(quizId, questionIds, lecturerId, quizUrl);
         } catch (error) {
-            window.console.error("Error in import of questions");
-            console.log(error);
+            alert("Error in import of questions", error);
         }
     });
 }
 
 /**
  * Calls the external function to reuse questions.
- * @param {number} quizid - The ID of the quiz.
- * @param {array} questionids - The IDs of the questions to reuse.
- * @param {number} lecturerid - The ID of the lecturer.
- * @param {string} quiz_url - The URL of the quiz page.
+ *
+ @param {number} quizId - The ID of the quiz.
+ @param {Array<number>} questionIds - The IDs of the questions to reuse.
+ @param {number} lecturerId - The ID of the lecturer.
+ @param {string} quizUrl - The URL of the quiz page.
+ @returns {void}
  */
-function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
-  external_reuse_questions(quizid, questionids, lecturerid)
-    .then((questions) => {
-      let update_event_listeners = () => {
-        add_edit_question_listeners(quizid, lecturerid);
-        add_delete_question_listeners(quizid, lecturerid);
-      };
-      rerender_saved_questions_list(questions, update_event_listeners); // Re-render saved questions list.
-      rerender_take_quiz_button(quiz_url, true); // Re-render take quiz button.
-    })
-    .catch((error) => console.log(error));
-  let modal_div = document.querySelector(".backdrop");
-  modal_div.remove();
+function callReuseQuestions(quizId, questionIds, lecturerId, quizUrl) {
+    externalReuseQuestions(quizId, questionIds, lecturerId)
+        .then((questions) => {
+            let updateEventListeners = () => {
+                addEditQuestionListeners(quizId, lecturerId);
+                addDeleteQuestionListeners(quizId, lecturerId);
+            };
+            rerenderSavedQuestionsList(questions, updateEventListeners); // Re-render saved questions list.
+            // Re-render take quiz button. Since at least one question was imported, hasquestions is true.
+            rerenderTakeQuizButton(quizUrl, true);
+        })
+        .catch((error) => alert(error));
+    let modalDiv = document.querySelector(".backdrop");
+    modalDiv.remove();
 }
 
 /**
@@ -179,79 +176,73 @@ function call_reuse_questions(quizid, questionids, lecturerid, quiz_url) {
  *
  * @returns {Array<number>} An array containing the ids of the checked questions.
  */
-function get_checked_questions() {
-  let checkedquestions = [];
-  let questions_div = document.querySelector(".oldQuizzes");
+function getCheckedQuestions() {
+    let checkedQuestions = [];
+    let questionsDiv = document.querySelector(".oldQuizzes");
 
-  // Loop through all quizzes and get the checked questions.
-  for (let quiz_div of questions_div.children) {
-    // Loop through all quizzes.
-    for (let content of quiz_div.children) {
-      // Loop through all content of the quiz.
-      if (content.tagName === "DIV") {
-        // Only look in div elements
-        for (let question_div of content.children) {
-          // Loop through all questions.
-          for (let children of question_div.children) {
-            // Loop through all children of the question.
-            if (children.tagName === "INPUT") {
-              // Only look in input elements.
-              let checkbox = children;
-              if (checkbox.checked) {
-                // If the checkbox is checked, add the id to the array.
-                checkedquestions.push(parseInt(checkbox.id));
-              }
+    // Loop through all quizzes and get the checked questions.
+    for (let quizDiv of questionsDiv.children) { // Loop through all quizzes.
+        for (let content of quizDiv.children) { // Loop through all content of the quiz.
+            if (content.tagName === "DIV") { // Only look in div elements
+                for (let questionDiv of content.children) { // Loop through all questions.
+                    for (let children of questionDiv.children) { // Loop through all children of the question.
+                        if (children.tagName === "INPUT") { // Only look in input elements.
+                            let checkbox = children;
+                            if (checkbox.checked) { // If the checkbox is checked, add the id to the array.
+                                checkedQuestions.push(parseInt(checkbox.id));
+                            }
+                        }
+                    }
+                }
             }
-          }
         }
-      }
     }
-  }
-  return checkedquestions; // Returns the checked questions.
+    return checkedQuestions; // Returns the checked questions.
 }
 
 /**
  * Adds an event listener to the quiz checkboxes.
+ *
  * @param checkbox - The checkbox to add the event listener to.
- * @param questioncheckboxes - The question checkboxes that are manipulated when event is triggered.
+ * @param questionCheckboxes - The question checkboxes that are manipulated when event is triggered.
+ * @returns {void}
  */
-function add_quiz_checkbox_listener(checkbox, questioncheckboxes) {
-  checkbox.addEventListener("change", () => {
-    questioncheckboxes.forEach((questioncheckbox) => {
-      questioncheckbox.checked = checkbox.checked; // Set all questions to checked if the quiz is checked.
+function addQuizCheckboxListener(checkbox, questionCheckboxes) {
+    checkbox.addEventListener("change", () => {
+        questionCheckboxes.forEach((questionCheckbox) => {
+            questionCheckbox.checked = checkbox.checked; // Set all questions to checked if the quiz is checked.
+        });
     });
-  });
 }
 
 /**
  * Adds an event listener to the question checkboxes.
+ *
  * @param checkbox - The checkbox that is manipulated when all questions are checked.
- * @param questioncheckboxes - The question checkboxes to add the event listener to.
+ * @param questionCheckboxes - The question checkboxes to add the event listener to.
+ * @returns {void}
  */
-function add_question_checkbox_listener(checkbox, questioncheckboxes) {
-  questioncheckboxes.forEach((questioncheckbox) => {
-    questioncheckbox.addEventListener("change", () => {
-      if (questioncheckbox.checked) {
-        // If the question is checked, check if all questions are checked.
-        let checkboxes_same = false;
-        checkboxes_same = check_questions_checked(questioncheckboxes);
-        if (checkboxes_same) {
-          // If all questions are checked, check the quiz checkbox.
-          checkbox.checked = questioncheckbox.checked;
-        }
-      } else {
-        // If the question is unchecked, uncheck the quiz checkbox.
-        checkbox.checked = questioncheckbox.checked;
-      }
+function addQuestionCheckboxListener(checkbox, questionCheckboxes) {
+    questionCheckboxes.forEach((questionCheckbox) => {
+        questionCheckbox.addEventListener("change", () => {
+            if (questionCheckbox.checked) { // If the question is checked, check if all questions are checked.
+                let checkboxesSame = checkQuestionsChecked(questionCheckboxes);
+                if (checkboxesSame) { // If all questions are checked, check the quiz checkbox.
+                    checkbox.checked = questionCheckbox.checked;
+                }
+            } else { // If the question is unchecked, uncheck the quiz checkbox.
+                checkbox.checked = questionCheckbox.checked;
+            }
+        });
     });
-  });
 }
 
 /**
  * Checks if all questions are checked.
+ *
  * @param questions
  * @returns {bool} - True if all questions are checked, false otherwise.
  */
-function check_questions_checked(questions) {
-  return questions.every((question) => question.checked); // Returns true only if all are checked
+function checkQuestionsChecked(questions) {
+    return questions.every((question) => question.checked); // Returns true only if all are checked
 }

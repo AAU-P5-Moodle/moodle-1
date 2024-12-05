@@ -1,7 +1,14 @@
 import {call as fetchMany} from 'core/ajax';
 
-// Function to insert a participation.
-export const submit_quiz = async(quizid, studentid, resultsurl) => fetchMany([
+
+/**
+ * Call the submit_quiz service (see "external" folder). Used when a lecturer or student submits answer choices to a quiz.
+ *
+ * @param quizid
+ * @param studentid
+ * @param resultsurl
+ */
+export const submitQuiz = async(quizid, studentid, resultsurl) => fetchMany([
     {
         methodname: 'mod_livequiz_submit_quiz',
         args: {
@@ -12,8 +19,14 @@ export const submit_quiz = async(quizid, studentid, resultsurl) => fetchMany([
     }
 ])[0];
 
-// A function to update session.
-export const update_session = (quizid, questionid, answers) => fetchMany([
+/**
+ * Calls the update_session service (see "external" folder). Used when a lecturer or student attempts a quiz.
+ *
+ * @param quizid
+ * @param questionid
+ * @param answers
+ */
+export const updateSession = (quizid, questionid, answers) => fetchMany([
     {
         methodname: 'mod_livequiz_update_session',
         args: {
@@ -24,8 +37,14 @@ export const update_session = (quizid, questionid, answers) => fetchMany([
     }
 ])[0];
 
-// Function to save a question.
-export const save_question = (question, lecturerid, quizid) => fetchMany([
+/**
+ * Calls the save_question service (see "external" folder). Used when a lecturer adds or edits a quiz.
+ *
+ * @param question
+ * @param lecturerid
+ * @param quizid
+ */
+export const saveQuestion = (question, lecturerid, quizid) => fetchMany([
     {
         methodname: 'mod_livequiz_save_question',
         args: {
@@ -36,8 +55,14 @@ export const save_question = (question, lecturerid, quizid) => fetchMany([
     }
 ])[0];
 
-// Function to delete a question.
-export const delete_question = (questionid, lecturerid, quizid) => fetchMany([
+/**
+ * Calls the delete_question service (see "external" folder). Used when a lecturer deletes a question from a quiz.
+ *
+ * @param questionid
+ * @param lecturerid
+ * @param quizid
+ */
+export const deleteQuestion = (questionid, lecturerid, quizid) => fetchMany([
     {
         methodname: 'mod_livequiz_delete_question',
         args: {
@@ -49,8 +74,13 @@ export const delete_question = (questionid, lecturerid, quizid) => fetchMany([
 ])[0];
 
 
-// Function to retrieve a question.
-export const get_question = (quizid, questionid) => fetchMany([
+/**
+ * Calls the get_question service (see "external" folder). Used when a lecturer opens a questions for editing.
+ *
+ * @param quizid
+ * @param questionid
+ */
+export const getQuestion = (quizid, questionid) => fetchMany([
     {
         methodname: 'mod_livequiz_get_question',
         args: {
@@ -60,8 +90,14 @@ export const get_question = (quizid, questionid) => fetchMany([
     }
 ])[0];
 
-// Function to reuse questions.
-export const external_reuse_questions = (quizid, questionids, lecturerid) => fetchMany([
+/**
+ * Calls the reuse_question service (see "external" folder). Used when a lecturer imports questions from one quiz to another.
+ *
+ * @param quizid
+ * @param questionids
+ * @param lecturerid
+ */
+export const externalReuseQuestions = (quizid, questionids, lecturerid) => fetchMany([
     {
         methodname: 'mod_livequiz_reuse_question',
         args: {
@@ -72,8 +108,12 @@ export const external_reuse_questions = (quizid, questionids, lecturerid) => fet
     }
 ])[0];
 
-// Function to get lecturer questions.
-export const get_lecturer_quiz = (lecturerid) => fetchMany([
+/**
+ * Calls the get_lecturer_quiz service (see "external" folder).
+ *
+ * @param lecturerid
+ */
+export const getLecturerQuiz = (lecturerid) => fetchMany([
     {
         methodname: 'mod_livequiz_get_lecturer_quiz',
         args: {

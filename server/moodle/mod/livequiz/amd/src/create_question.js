@@ -1,37 +1,34 @@
 import Templates from "core/templates";
-import { exception as displayException } from "core/notification";
-import { save_question } from "./repository";
-import { add_delete_question_listeners } from "./delete_question";
-import { add_edit_question_listeners } from "./edit_question";
+import {saveQuestion} from "./repository";
+import {addDeleteQuestionListeners} from "./delete_question";
+import {addEditQuestionListeners} from "./edit_question";
 import {
-  rerender_take_quiz_button,
-  rerender_saved_questions_list,
-  add_answer_button_event_listener,
-  add_cancel_edit_button_listener,
-  validate_submission,
-} from "./edit_question_helper";
+    addAnswerButtonEventListener,
+    addCancelEditButtonListener,
+    rerenderSavedQuestionsList,
+    rerenderTakeQuizButton,
+    validateSubmission,
+    getQuestionData,
+    prepareAnswers,
+} from "./helper";
 
-let isEditing = false;
-let editingIndex = 0;
-let answer_count = 0;
-let IDs = 0;
-let take_quiz_url = "";
+let takeQuizUrl = "";
 
 /**
  * Adds an event listener to the "Add Question" button.
  * When the button is clicked, it renders the create question menu popup.
  *
- * @param {number} quizid - The ID of the quiz.
- * @param {number} lecturerid - The ID of the lecturer.
+ * @param {number} quizId - The ID of the quiz.
+ * @param {number} lecturerId - The ID of the lecturer.
  * @param {string} url - The URL to the quiz attempt page.
  * @returns {Promise<void>} A promise that resolves when the initialization is complete.
  */
-export const init = async (quizid, lecturerid, url) => {
-  take_quiz_url = url; //Set url to quiz attempt page to global variable
-  let add_question_button = document.getElementById("id_buttonaddquestion");
-  add_question_button.addEventListener("click", () => {
-    render_create_question_menu_popup(quizid, lecturerid);
-  });
+export const init = async(quizId, lecturerId, url) => {
+    takeQuizUrl = url; // Set url to quiz attempt page to global variable.
+    let addQuestionButton = document.getElementById("id_buttonaddquestion");
+    addQuestionButton.addEventListener("click", () => {
+        renderCreateQuestionMenuPopup(quizId, lecturerId);
+    });
 };
 
 /**
@@ -40,111 +37,83 @@ export const init = async (quizid, lecturerid, url) => {
  * This function loads and renders the question menu popup template, appends it to the main container,
  * Sets up event listeners for adding answers, saving the question, and discarding the question.
  *
- * @param {number} quizid - The ID of the quiz.
- * @param {number} lecturerid - The ID of the lecturer.
+ * @param {number} quizId - The ID of the quiz.
+ * @param {number} lecturerId - The ID of the lecturer.
  * @returns {void}
  */
-function render_create_question_menu_popup(quizid, lecturerid) {
-  // This will call the function to load and render our template.
-  if(!document.querySelector('.Modal_div')){
-    Templates.renderForPromise("mod_livequiz/question_menu_popup")
+function renderCreateQuestionMenuPopup(quizId, lecturerId) {
+    // This will call the function to load and render our template.
+    if (!document.querySelector('.Modal_div')) {
+        Templates.renderForPromise("mod_livequiz/question_menu_popup", {}, "boost")
 
-      // It returns a promise that needs to be resoved.
-      .then(({ html, js }) => {
-        // Here we have compiled template.
-        Templates.appendNodeContents(".main-container", html, js);
-        add_answer_button_event_listener();
-        add_save_question_button_listener(quizid, lecturerid);
-        add_cancel_edit_button_listener("create");
-      })
-
-      // Deal with this exception (Using core/notify exception function is recommended).
-      .catch((error) => displayException(error));
-  }
+      // It returns a promise that needs to be resolved.
+        .then(({html, js}) => {
+          // Here we have compiled template.
+            Templates.appendNodeContents(".main-container", html, js);
+            addAnswerButtonEventListener();
+            addSaveQuestionButtonListener(quizId, lecturerId);
+            addCancelEditButtonListener("create");
+        })
+        .catch((error) => window.console.log(error));
+    }
 }
 
 /**
  * Adds an event listener to the save question button
  *
- * @param {number} quizid - The ID of the quiz.
- * @param {number} lecturerid - The ID of the lecturer.
+ * @param {number} quizId - The ID of the quiz.
+ * @param {number} lecturerId - The ID of the lecturer.
+ * @return {void}
  */
-function add_save_question_button_listener(quizid, lecturerid) {
-  let save_question_button = document.querySelector(".save_button");
-  save_question_button.addEventListener("click", () => {
-    handle_question_submission(quizid, lecturerid);
-  });
+function addSaveQuestionButtonListener(quizId, lecturerId) {
+    let saveQuestionButton = document.querySelector(".save_button");
+    saveQuestionButton.addEventListener("click", () => {
+        handleQuestionSubmission(quizId, lecturerId);
+    });
 }
 
-function handle_question_submission(quizid, lecturerid) {
-  let savedQuestion = prepare_question(); //Prepare the question object to be sent to DB
+/**
+ * Event handler for when a question is saved.
+ * @param {int} quizId
+ * @param {int} lecturerId
+ * @returns {void}
+ */
+function handleQuestionSubmission(quizId, lecturerId) {
+    let savedQuestion = prepareQuestion(); // Prepare the question object to be sent to DB.
 
-  if(!validate_submission(savedQuestion.answers)) {
-    return;
-  }
+    if (!validateSubmission(savedQuestion.answers)) {
+        return;
+    }
 
-  let update_event_listeners = () => {
-    add_edit_question_listeners(quizid, lecturerid);
-    add_delete_question_listeners(quizid, lecturerid);
-  }
+    let updateEventListeners = () => {
+        addEditQuestionListeners(quizId, lecturerId);
+        addDeleteQuestionListeners(quizId, lecturerId);
+    };
 
-  save_question(savedQuestion, lecturerid, quizid).then((questions) => {
-    rerender_saved_questions_list(questions, update_event_listeners); //Re-render saved questions list
-    rerender_take_quiz_button(take_quiz_url, true); //Re-render take quiz button
-  });
+    saveQuestion(savedQuestion, lecturerId, quizId).then((questions) => {
+        rerenderSavedQuestionsList(questions, updateEventListeners); // Re-render saved questions list.
+        rerenderTakeQuizButton(takeQuizUrl, true); // Re-render take quiz button.
+    })
+    .catch((error) => window.console.log(error));
 
-  let modal_div = document.querySelector(".backdrop");
-  modal_div.remove();
+    let modalDiv = document.querySelector(".backdrop");
+    modalDiv.remove();
 }
 
-function prepare_question() {
-  let question_input_title = document.getElementById("question_title_id");
-  let question_indput_description = document.getElementById(
-    "question_description_id"
-  );
-  let question_indput_explanation = document.getElementById(
-    "question_explanation_id"
-  );
-  let questionTitle = question_input_title.value.trim();
-  let questionDesription = question_indput_description.value.trim();
-  let questionExplanation = question_indput_explanation.value.trim();
+/**
+ * Gets the data for a question inputted in the UI. Used when creating or editing a question.
+ *
+ * @returns {{answers: Array, description: *, id: number, title: *, explanation: *, type: number}}
+ */
+function prepareQuestion() {
+    let questionData = getQuestionData();
 
-  let questionType = document.getElementById("question_type_checkbox_id").checked ? 1 : 0;
-
-  let answers = prepare_answers();
-
-  // CHECK HERE IF THE QUESTION IS VALID
-  let savedQuestion = {
-    id: 0,
-    title: questionTitle,
-    answers: answers,
-    description: questionDesription,
-    explanation: questionExplanation,
-    type: questionType,
-  };
-
-  return savedQuestion;
+    return {
+        id: 0,
+        title: questionData.title,
+        answers: prepareAnswers(),
+        description: questionData.description,
+        explanation: questionData.explanation,
+        type: questionData.type,
+    };
 }
-
-function prepare_answers() {
-  let answers = [];
-  let answers_div = document.querySelector(".all_answers_for_question_div");
-
-  for (let i = 0; i < answers_div.children.length; i++) {
-    let answertext = answers_div.children[i]
-        .querySelector(".answer_input")
-        .value.trim();
-
-    let iscorrect =
-        answers_div.children[i].querySelector(".answer_checkbox").checked;
-    iscorrect = iscorrect ? 1 : 0;
-
-      answers.push({
-        description: answertext,
-        correct: iscorrect,
-        explanation: "",
-      });
-  }
-  return answers;
-}
-

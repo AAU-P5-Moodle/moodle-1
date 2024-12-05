@@ -357,7 +357,7 @@ function xmldb_livequiz_upgrade($oldversion): bool {
         }
 
         // Livequiz savepoint reached.
-        upgrade_mod_savepoint(true, 2024072548, 'livequiz');
+        upgrade_mod_savepoint(true, 2024072555, 'livequiz');
     }
 
     return true;
