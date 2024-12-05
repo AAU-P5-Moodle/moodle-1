@@ -387,7 +387,7 @@ class question {
                 'answerdescription' => $answer->get_description(),
                 'answerexplanation' => $answer->get_explanation(),
                 'answercorrect' => $answer->get_correct(),
-            ];   
+            ];
         }
         if ($this->get_hasmultiplecorrectanswers()) {
             $data->answertype = 'checkbox';
