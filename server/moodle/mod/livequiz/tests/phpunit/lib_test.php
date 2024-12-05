@@ -51,6 +51,9 @@ final class lib_test extends advanced_testcase {
         $quizdata = new stdClass(); // Create a new stdClass object (empty object).
         $quizdata->name = 'Test Quiz';
         $quizdata->intro = 'This is a test quiz.';
+        $quizdata->course = 1;
+        $quizdata->module = 1;
+        $quizdata->section = 1;
 
         $id = livequiz_add_instance($quizdata);
         $this->assertIsInt($id);
@@ -76,10 +79,12 @@ final class lib_test extends advanced_testcase {
         $quizdata = new stdClass();
         $quizdata->name = 'Test Quiz';
         $quizdata->intro = 'This is a test quiz.';
+        $quizdata->course = 1;
+        $quizdata->module = 1;
+        $quizdata->section = 1;
         $id = livequiz_add_instance($quizdata);
         $quizdata->instance = $id;
         $quizdata->name = 'Updated Test Quiz';
-
         // Execute.
         $result = livequiz_update_instance($quizdata);
         $record = $DB->get_record('livequiz', ['id' => $id]);
@@ -104,6 +109,9 @@ final class lib_test extends advanced_testcase {
         $quizdata = new stdClass();
         $quizdata->name = 'Test Quiz';
         $quizdata->intro = 'This is a test quiz.';
+        $quizdata->course = 1;
+        $quizdata->module = 1;
+        $quizdata->section = 1;
 
         $id = livequiz_add_instance($quizdata);
         $result = livequiz_delete_instance($id);

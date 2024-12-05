@@ -15,9 +15,9 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_livequiz/index_page
+    @template mod_livequiz/import_questions_list
 
-    Index Page for the livequiz plugin
+    Element for the list of questions to be imported
 
     Classes required for JS:
     * none
@@ -30,16 +30,27 @@
 
 }}
 
-<div class="participations_container">
-    <h2 class="participation_title">Participations</h2>
-    <div class="participations">
-        {{#participations}}
-        <div class="participation">
-        <p></p>
-            <button class="participation_button" onclick="location.href='{{resultsurl}}'">
-                Go to participation {{participationnumber}}
-            </button>
+<div class="quiz_entry">
+    <input
+        type="checkbox"
+        value="{{quizid}}"
+        id="{{quizid}}"
+        class="quiz_{{quizid}}"
+        name="{{quiztitle}}"
+    />
+    <label for="quiz_{{quizid}}" class="quiz_label">{{quiztitle}}</label>
+    <div id="questionsdiv">
+        {{#questions}}
+        <div class="question_entry question_entry_{{quizid}}">
+            <input
+                type="checkbox"
+                value="question_{{questionid}}"
+                id="{{questionid}}"
+                class="quiz_{{quizid}}_question question_checkbox"
+                name="{{questiontitle}}"
+            />
+            <label for="question_{{questionid}}" class="question_label">{{questiontitle}}</label>
         </div>
-        {{/participations}}
+        {{/questions}}
     </div>
 </div>
