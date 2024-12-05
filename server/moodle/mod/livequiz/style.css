@@ -661,10 +661,9 @@
 }
 
 .question_entry{
-   border: 2px solid black;
    border-radius: 5px;
    margin-left: 2rem;
-   width: 50%;
+   width: 20%;
    padding: 2px 2px 0px 10px;
    cursor: pointer;
 }
@@ -693,9 +692,4 @@
   user-select: none; /* Standard syntax */
 }
 
-.question_checkbox{
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
-}
 

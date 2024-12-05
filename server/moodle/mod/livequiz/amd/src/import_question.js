@@ -84,7 +84,7 @@ function addOldQuestionsToPopup(lecturerId, quizId) {
                             Templates.appendNodeContents(".oldQuizzes", html, js);
                             addQuizCheckboxListener(quiz.quizid);
                             addQuestionCheckboxListener(quiz.quizid);
-                            addQquestionEntryListeners(quiz.quizid);
+                            addQuestionEntryListeners(quiz.quizid);
                         })
                         .catch((error) => displayException(error));
                 }
@@ -212,7 +212,7 @@ function addQuestionCheckboxListener(quizId) {
  * If a question entry is clicked, the checkbox is checked.
  * @param {number} quizId - The ID of the quiz, used to identify the checkboxes.
  */
-function addQquestionEntryListeners(quizId) {
+function addQuestionEntryListeners(quizId) {
     let questionEntries = document.querySelectorAll(".question_entry_" + quizId);
     questionEntries.forEach((questionEntry) => {
         questionEntry.addEventListener("click", () => {

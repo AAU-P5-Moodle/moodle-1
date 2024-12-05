@@ -111,6 +111,7 @@ Feature: Reuse previously created questions in livequiz activity
       And "livequiz_europe_quiz" "checkbox" should exist
       And "test 1" "checkbox" should exist
       And I click on "test 1" "checkbox"
+      And I wait "300" seconds
       And I click on "Import Question(s)" "button"
       And I should see "Saved Questions"
       And "test 1" "list_item" should exist
