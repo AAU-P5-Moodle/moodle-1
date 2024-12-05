@@ -24,7 +24,10 @@
  */
 
 namespace mod_livequiz;
+use advanced_testcase;
+use coding_exception;
 use mod_livequiz_mod_form;
+use MoodleQuickForm;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -40,12 +43,13 @@ require_once($CFG->dirroot . '/mod/livequiz/mod_form.php');
  * @copyright  2023
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class activitysetup_test extends \advanced_testcase {
+final class activitysetup_test extends advanced_testcase {
     /**
      * Activity Setup Test function.
      * This function tests the setup of mod_form without assuming _form as a field.
      * It calls the definition function, standard_coursemodule_elements, and add_action_buttons.
      * @covers \mod_livequiz\activitysetup_test::test_mod_form_setup
+     * @throws coding_exception
      */
     public function test_mod_form_setup(): void {
         $this->resetAfterTest(true);
@@ -60,7 +64,7 @@ final class activitysetup_test extends \advanced_testcase {
             ->getMock();
 
         // Create an instance of MoodleQuickForm and inject it into the _form property using reflection.
-        $form = new \MoodleQuickForm('modform', 'POST', '', null, ['class' => 'mform'], true);
+        $form = new MoodleQuickForm('modform', 'POST', '', null, ['class' => 'mform'], true);
 
         $mock->set_form($form);
 
