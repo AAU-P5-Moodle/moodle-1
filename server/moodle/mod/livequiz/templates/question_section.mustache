@@ -29,38 +29,35 @@
     * fill in later
 
 }}
-<div class="question_container">
-  <div class="question_container">
-      <p class="question_title">{{questiontitle}}</p>
-      <div class="media_container">
-          <img src="" alt="">
-      </div>
-    <p class="question_description">{{questiondescription}}</p>
-  </div>
-    <div class="answer_container">
-        <fieldset>
-            {{#answers}}
-                <div id="{{answerid}}" class="answer
-                {{^isattempting}}
-                    {{#chosen}}
-                        {{#correct}}correct{{/correct}}
-                        {{^correct}}incorrect{{/correct}}
-                    {{/chosen}}
-                    {{^chosen}}
-                        {{#correctnotchosen}}correct_not_chosen{{/correctnotchosen}}
-                    {{/chosen}}
-                {{/isattempting}}">
-                    <label for="{{answerid}}">{{answerdescription}}</label>
-                    <input type="{{questiontype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
-                        {{#chosen}} checked {{/chosen}}
-                        {{^isattempting}} disabled {{/isattempting}} />
-                </div>
-            {{/answers}}
-        </fieldset>
-  </div>
-  {{^isattempting}}
-      <p class="question_explanation">{{questionexplanation}}</p>
-  {{/isattempting}}
+<div class="main_content_runner">
+    <div class="question_container">
+    <div class="moodle_box">
+        <p class="question_title">{{questiontitle}}</p>
+        <p class="question_description">{{questiondescription}}</p>
+        <div class="answer_container">
+            <fieldset>
+                {{#answers}}
+                    <label id="{{answerid}}" class="answer
+                            {{^isattempting}}
+                                {{#chosen}}
+                                    {{#correct}}correct{{/correct}}
+                                    {{^correct}}incorrect{{/correct}}
+                                {{/chosen}}
+                                {{^chosen}}
+                                    {{#correctnotchosen}}correct_not_chosen{{/correctnotchosen}}
+                                {{/chosen}}
+                            {{/isattempting}}">
+                        <input type="{{questiontype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
+                            {{#chosen}}checked{{/chosen}}
+                            {{^isattempting}}disabled{{/isattempting}}>
+                            {{answerdescription}}
+                    </label>
+                {{/answers}}
+            </fieldset>
+        </div>
+        {{^isattempting}}
+            <p class="question_explanation">{{questionexplanation}}</p>
+        {{/isattempting}}
+    </div>
 </div>
-
-
+</div>

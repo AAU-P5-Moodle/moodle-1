@@ -31,7 +31,10 @@
 }}
 <div class=backdrop>
 <div class="modal_div">
-    <h3>Title</h3>
+    <div class="required_fields_div">
+        <h3>Title</h3>
+        <i class="icon fa fa-circle-exclamation text-danger fa-fw" id="required_id"></i>
+    </div>
     <div id="title_textarea_alert" style="display: none;">
         <p class="title_alert_text" id="title_alert_text_id" style="color: red">*The Title is required</p>
     </div>
@@ -40,7 +43,10 @@
     class="question_input_large"
     id="question_title_id"
   ></textarea>
+    <div class="required_fields_div">
     <h3>Question Text</h3>
+        <i class="icon fa fa-circle-exclamation text-danger fa-fw" id="required_id"></i>
+    </div>
     <div id="question_textarea_alert" style="display: none;">
         <p class="question_alert_text" id="question_alert_text_id" style="color: red" >*The Question Text is required</p>
     </div>
@@ -55,6 +61,10 @@
             class="question_input_large"
             id="question_explanation_id"
     ></textarea>
+    <div class="question_menu_required_field">
+        <i class="icon fa fa-circle-exclamation text-danger fa-fw" id="required_id"></i>
+        Required
+    </div>
   <div class="file_upload_section">
     <label for="file_input" class="file_upload_section"
       >+ Add video or image</label

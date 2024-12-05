@@ -6,24 +6,26 @@
 /**
  * Quizcreator.
  */
- .backdrop {
-   position: fixed;
-   top: 0px;
-   left: 0px;
-   height: 100%;
-   width: 100%;
-   background: rgba(0, 0, 0, 0.2);
- }
-
- .modal_div {
-   /* Center the modal on the screen */
+.backdrop {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    flex: 0 1 auto;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    min-height: 100vh;
+}
+
+.modal_div {
+    /* Center the modal on the screen */
     margin: auto;
-    width: 80%;
-    z-index: 10;
+    width: 60%;
+    z-index: 1000;
     color: #333;
     background: #f5f5f5;
     border: 2px solid #ccc;
@@ -32,14 +34,30 @@
     padding: 20px;
     overflow-y: scroll;
     max-height: 90%;
- }
+}
+.required_fields_div {
+    display: flex;
+    align-items: center;
+}
+
+#required_id {
+    margin-left: 5px;
+}
 
 .question_type_checkbox {
     align-items: center;
     background-color: #f8f9fa; /* Light gray for the background */
     border: 1px solid #ccc; /* Subtle border */
     border-radius: 8px; /* Rounded corners */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
+.question_type_checkbox:hover {
+    background-color: #e9ecef; /* Light gray on hover */
+}
+
+
 #question_type_checkbox_id {
    width: 20px;
    height: 20px;
@@ -52,10 +70,9 @@
 
  .question_input_large {
     width: 100%;
-    height: 100px;
+    height: 60px;
     font-size: 1.3em;
     padding: 12px;
-    margin-bottom: 20px;
     border-radius: 8px;
     border: 2px solid #ccc;
     box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
@@ -76,7 +93,6 @@
 
  .container_for_new_answer {
     display: flex;
-    width: 49%;
     align-items: center;
     gap: 10px;
     padding: 10px;
@@ -161,35 +177,6 @@
     text-align: center;
  }
 
- /* Time limit for question styling */
- .time_limit_container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 20px;
- }
- .time_limit_label {
-    font-size: 1.2em;
-    margin-bottom: 5px;
- }
- .timer_input_container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
- }
- .time_limit_checkbox {
-    margin-right: 10px;
- }
- .set_timer_input {
-    width: 150px;
-    padding: 5px 10px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    font-size: 1.1em;
-    text-align: center;
-    outline: none;
- }
-
  .add_new_answer_to_question {
     background-color: #0059ff;
     color: white;
@@ -209,24 +196,6 @@
     background-color: #c10600;
  }
 
- .file_upload_container {
-    margin-bottom: 20px;
- }
-
- .file_upload_input {
-    border: 1px solid #ccc;
-    padding: 8px;
-    border-radius: 5px;
-    font-size: 1rem;
- }
-
- .file_upload_preview {
-    display: block;
-    margin-top: 10px;
-    max-width: 300px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
- }
  .button_container {
     display: flex;
     justify-content: space-between;
@@ -263,27 +232,6 @@
     z-index: 1000;
  }
 
- .toast_promise_deletion_div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 60%;
- }
-
- .toast_promise_deletion_div button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 1.1em;
-    cursor: pointer;
- }
-
  #add_question_button {
     background-color: green;
     color: white;
@@ -291,22 +239,6 @@
     font-size: large;
     border-radius: 5px;
     cursor: pointer;
- }
-
- .div_for_question {
-    margin-top: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
- }
-
- .question_for_main_page {
-    cursor: pointer;
-    background-color: #0000ff;
-    color: white;
-    padding: 10px;
-    font-size: large;
-    border-radius: 5px;
  }
 
  .quiz_form_container {
@@ -385,7 +317,6 @@
     padding: 20px;
     border-radius: 15px;
     margin-top: 20px;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
  }
  #saved_questions_list {
     list-style-type: decimal;
@@ -428,11 +359,11 @@
   * Navbar.
   */
 
- .nav-tabs {
+ .nav_tabs {
     display: flex;
     margin-bottom: 20px;
   }
-   .nav-tabs .tab-button {
+   .nav_tabs .tab_button {
 
     padding: 0px 10px;
     margin: 0px;
@@ -444,167 +375,6 @@
     cursor: pointer;
     transition: background-color 0.3s;
   }
-   /* Styles for active button */
-  .nav-tabs .tab-button.active {
-    background-color: var(--button-active-bg, #9da6b0);
-    font-weight: bold;
-  }
-   /* Optional: Hover effect */
-  .nav-tabs .tab-button:hover {
-    background-color: var(--button-hover-bg, #9da6b0);
-  }
-
-  /**
-  * Quizrunner Styles.
-  */
-
-
-  .main_container {
-
-  }
-
-  .title-container {
-
-  }
-
-  .sidebar {
-
-  }
-
-  .navbar{
-
-  }
-
-  .delete_question_button {
-    float: right;
-    background-color: red;
-    color: white;
-    padding: 10px 20px;
-    font-size: large;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
- }
-
- .question_container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
- }
-
- .question_container img {
-    max-width: 100%;
-    height: auto;
- }
-
- /*multichoice Button Styling */
- .answer.multichoice {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: 20px;
-    justify-items: center;
- }
-
- /* Ensure all buttons have the same size */
- .answer.multichoice button {
-    width: 200px;
-    height: 60px;
-    font-size: 16px;
-    padding: 10px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    background-color: #0073e6;
-    color: white;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
- }
-
- /* Hover effect */
- .answer.multichoice button:hover {
-    background-color: #005bb5;
- }
-
- /* Responsive Grid Adjustments */
- @media (max-width: 600px) {
-    .answer.multichoice {
-        grid-template-columns: 1fr;
-    }
- }
-
- /* Slider Styles */
- .answer.slider input[type="range"] {
-    width: 100%;
-    height: 25px;
-    background: #ddd;
-    border-radius: 5px;
-    outline: none;
-    transition: background 0.3s;
- }
-
- .answer.slider input[type="range"]::-webkit-slider-thumb {
-    width: 25px;
-    height: 25px;
-    background-color: #0073e6;
-    border-radius: 50%;
-    cursor: pointer;
- }
-
- /* Slider Value Display */
- .answer.slider output {
-    font-size: 20px;
-    margin-top: 10px;
-    display: block;
- }
-
- /* Progress Bar Styling */
- .progress-bar {
-    background-color: #e0e0e0;
-    border-radius: 5px;
-    overflow: hidden;
-    margin: 20px 0;
-    width: 100%;
-    max-width: 600px;
-    height: 20px;
- }
-
- /* Progress Indicator (inner div) */
- .progress-bar div {
-    height: 100%;
-    background: linear-gradient(to right, #4CAF50, #81C784);
-    transition: width 0.4s ease-in-out;
-    color: white;
-    text-align: center;
-    line-height: 20px;
-    padding: 0 5px;
- }
-
- /* Progress Text (if placed outside the bar) */
- .progress-text {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    line-height: 20px;
-    color: #333;
-    z-index: 1;
- }
-
- /* Styling for the quiz prompt */
- .prompt {
-    width: 420px;
-    background-color: #f9f9f9;
-    border: 2px solid #0073e6;
-    border-radius: 10px;
-    margin: 20px 0;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    color: #333;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
- }
 
  /* Form Styling */
  form {
@@ -632,9 +402,146 @@
   * Quiz results page
   */
 
-.correct {
-    background-color: rgba(0, 128, 0);
+  .answer.correct {
+   background-color: rgba(0, 128, 0, 0.2) !important; /* Light green */
 }
+
+.answer.incorrect {
+   background-color: rgba(255, 0, 0, 0.2) !important; /* Light red */
+}
+
+.answer.correct_not_chosen {
+   background-color: rgba(255, 200, 12, 0.2) !important; /* Light yellow */
+}
+
+/* Sidebar Styling */
+/* Layout Styling */
+.main_container_runner {
+   display: flex;
+   flex-wrap: nowrap; /* Ensures sidebar stays beside main content */
+   width: 100%;
+   box-sizing: border-box;
+   gap: 20px; /* Adds spacing between sidebar and main content */
+}
+
+.main_content_runner {
+   width: 80%;
+   padding: 20px;
+   box-sizing: border-box;
+}
+
+.sidebar {
+   width: 20%;
+   background-color: #f9f9f9; /* Light background */
+   border-left: 2px solid #ddd;
+   padding: 20px;
+   box-sizing: border-box;
+   display: flex;
+   flex-direction: column; /* Stack content vertically */
+   justify-content: space-between; /* Push Submit Quiz to the bottom */
+   border-radius: 4px; /* Add rounded corners */
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Add light shadow */
+}
+
+/* Sidebar Button Styling */
+.submit_quiz {
+   width: 100%;
+   padding: 10px;
+   background-color: #28a745;
+   color: white;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   font-size: 1rem;
+   margin-top: auto; /* Ensures button is pushed to the bottom */
+}
+
+.submit_quiz:hover {
+   background-color: #218838;
+}
+
+/* Question Section Styling */
+.question_container {
+   margin-bottom: 20px;
+}
+
+.question_title {
+   font-size: 1.2rem;
+   font-weight: bold;
+   margin-bottom: 10px;
+   color: #333;
+}
+
+.question_description {
+   font-size: 1rem;
+   margin-bottom: 15px;
+   color: #555;
+}
+
+.answer_container {
+   margin-top: 15px;
+}
+
+.answer {
+   border: 1px solid #ccc; /* Adds a border around each answer */
+   background-color: #fff;
+   padding: 10px;
+   border-radius: 4px;
+   display: flex;
+   align-items: center;
+   gap: 15px;
+   margin-bottom: 10px;
+   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Adds a light shadow */
+   transition: background-color 0.2s ease;
+}
+
+.answer:hover {
+   background-color: #f5f5f5; /* Slight hover effect for better interactivity */
+}
+
+.answer label {
+   margin-left: 10px;
+   font-size: 1rem;
+   line-height: 1.2;
+   color: #333;
+}
+
+/* Navigation Section */
+.question_navigation {
+   display: flex;
+   justify-content: space-between; /* Ensures buttons are at opposite ends */
+   margin-top: 20px;
+}
+
+/* Prev Button Styles */
+.question_navigation .prev-button {
+   margin-left: 0; /* Align to the left */
+   margin-right: auto;
+}
+
+/* Next Button Styles */
+.question_navigation .next-button {
+   margin-left: auto; /* Align to the right */
+   margin-right: 0;
+}
+
+/* General Button Styles */
+.question_navigation a {
+   text-decoration: none;
+   padding: 10px 20px;
+   font-size: 1rem;
+   background-color: #007bff;
+   color: white;
+   border-radius: 4px;
+   border: 1px solid #007bff;
+   cursor: pointer;
+   transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.question_navigation a:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
 .incorrect {
     background-color: rgba(255, 0, 0);
 }
@@ -642,15 +549,56 @@
 .correct_not_chosen {
     background-color: rgba(255, 200, 12);
 }
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+   .main-container-runner {
+       flex-direction: column;
+   }
+
+   .sidebar,
+   .main-content-runner {
+       width: 100%;
+   }
+}
+
+
+/* Back-to-Menu Button */
+#menuPageBtn {
+   display: inline-block;
+   margin-top: 20px;
+   padding: 10px 20px;
+   font-size: 1rem;
+   background-color: #007bff;
+   color: white;
+   text-align: center;
+   text-decoration: none;
+   border-radius: 4px;
+   border: 1px solid #007bff;
+   cursor: pointer;
+   transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#menuPageBtn:hover {
+   background-color: #0056b3;
+   border-color: #0056b3;
+}
 
 /* Import Question Styling */
-#import_question_button{
+#import_question_button {
       background-color: rgb(32, 138, 176);
       color: white;
       padding: 10px 20px;
       font-size: large;
       border-radius: 5px;
       cursor: pointer;
+}
+.import_question_button {
+    background-color: rgb(32, 138, 176);
+    color: white;
+    padding: 10px 20px;
+    font-size: large;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .quiz_label{
@@ -689,6 +637,11 @@
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
+}
+.quiz_label{
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 
 .question_checkbox{

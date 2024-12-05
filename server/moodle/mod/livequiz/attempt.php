@@ -47,6 +47,7 @@ if ($cm->course !== $course->id) { // Check if the course module matches the cou
 
 require_login($course, false, $cm);
 $PAGE->set_cacheable(false);
+$PAGE->requires->css('/mod/livequiz/style.css'); // Adds styling to the page.
 
 // Suppress the activity description by overriding the module settings.
 $PAGE->set_context(context_module::instance($cmid));
