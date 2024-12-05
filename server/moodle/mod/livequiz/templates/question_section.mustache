@@ -37,7 +37,7 @@
         <div class="answer-container">
             <fieldset>
                 {{#answers}}
-                    <div id="{{answerid}}" class="answer
+                    <label id="{{answerid}}" class="answer
                             {{^isattempting}}
                                 {{#chosen}}
                                     {{#correct}}correct{{/correct}}
@@ -50,8 +50,8 @@
                         <input type="{{questiontype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
                             {{#chosen}}checked{{/chosen}}
                             {{^isattempting}}disabled{{/isattempting}}>
-                        <label for="{{answerid}}">{{answerdescription}}</label>
-                    </div>
+                            {{answerdescription}}
+                    </label>
                 {{/answers}}
             </fieldset>
         </div>

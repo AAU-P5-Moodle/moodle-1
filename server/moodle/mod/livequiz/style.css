@@ -69,7 +69,6 @@
 
  .container_for_new_answer {
     display: flex;
-    width: 49%;
     align-items: center;
     gap: 10px;
     padding: 10px;
