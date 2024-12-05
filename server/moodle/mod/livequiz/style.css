@@ -692,4 +692,9 @@
   user-select: none; /* Standard syntax */
 }
 
+.question_checkbox{
+   z-index: 20;
+   position: relative;
+}
+
 

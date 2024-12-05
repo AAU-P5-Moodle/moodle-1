@@ -224,7 +224,6 @@ function addQuestionEntryListeners(quizId) {
     questionEntries.forEach((questionEntry) => {
         questionEntry.addEventListener("click", () => {
             let questionCheckbox = questionEntry.querySelector(".question_checkbox");
-            questionCheckbox.checked = !questionCheckbox.checked;
             questionCheckbox.dispatchEvent(new Event("change"));
         });
     });
