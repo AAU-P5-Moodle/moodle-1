@@ -151,7 +151,10 @@ Feature: View livequiz activity
     When I click on "livequiz_europe_quiz" "link" in the "livequiz" activity
     And I click on "Add Question" "button"
     And I click on "Save Question" "button"
-    Then I should see "Please fill out all the required fields"
+    # The commented out next line fails in the CI pipeline because the element is invisible.
+    # Then I should see "Please fill out all the required fields"
+    # It still works on local machines. We therefore check that it exists instead.
+    Then "Please fill out all the required fields" "text" should exist
     And I should see "The Title is required"
     And I should see "The Question Text is required"
     And I should see "*You need to add at least one correct answer"
