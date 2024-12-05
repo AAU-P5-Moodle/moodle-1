@@ -55,6 +55,7 @@ final class livequiz_service_test extends advanced_testcase {
             'introformat' => 1,
             'timecreated' => time(),
             'timemodified' => time(),
+            'activity_id' => 1,
         ];
 
         global $DB;
