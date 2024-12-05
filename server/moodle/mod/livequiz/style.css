@@ -20,7 +20,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -45%);
+    transform: translate(-50%, -50%);
     margin: auto;
     width: 80%;
     z-index: 10;
@@ -642,3 +642,58 @@
 .correct_not_chosen {
     background-color: rgba(255, 200, 12);
 }
+
+/* Import Question Styling */
+#import_question_button{
+      background-color: rgb(32, 138, 176);
+      color: white;
+      padding: 10px 20px;
+      font-size: large;
+      border-radius: 5px;
+      cursor: pointer;
+}
+
+.quiz_label{
+   font-size: 20px;
+   font-weight: bold;
+   text-decoration: underline;
+}
+
+.question_entry{
+   border-radius: 5px;
+   margin-left: 2rem;
+   width: 20%;
+   padding: 2px 2px 0px 10px;
+   cursor: pointer;
+}
+
+.question_selected{
+   background-color: rgba(32, 176, 94, 0.2);
+}
+
+.import_btn{
+	float: left;
+	background-color: rgb(32, 138, 176);
+	color: white;
+	padding: 10px 20px;
+	font-size: large;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.import_buttons_wrapper{
+   padding-top: 2rem;
+}
+
+.question_label{
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+.question_checkbox{
+   z-index: 20;
+   position: relative;
+}
+
+
