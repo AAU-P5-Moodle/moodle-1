@@ -113,7 +113,7 @@ function on_save_question_button_clicked(quizid, lecturerid, questionid) {
             .catch((error) => displayException(error));
     });
     //Remove edit question pop-up
-    let modal_div = document.querySelector(".Modal_div");
+    let modal_div = document.querySelector(".backdrop");
     modal_div.remove();
 }
 function restore_question_data_in_popup(questiondata){

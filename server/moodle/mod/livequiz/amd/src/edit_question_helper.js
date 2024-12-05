@@ -177,7 +177,7 @@ export function add_cancel_edit_button_listener(context) {
   let discard_question_button = document.querySelector(
       ".discard_question_button"
   );
-  let modal_div = document.querySelector(".Modal_div");
+  let modal_div = document.querySelector(".backdrop");
   let stringForConfirm = "";
 
   // Set the string for the confirm box based on the context.
