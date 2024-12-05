@@ -171,10 +171,10 @@ function addQuizCheckboxListener(quizId) {
     quizCheckbox.addEventListener("change", () => {
         questionCheckboxes.forEach((questionCheckbox) => {
             questionCheckbox.checked = quizCheckbox.checked; // Set all questions to checked if the quiz is checked.
-            if(questionCheckbox.checked){
+            if (questionCheckbox.checked) {
                 let questionEntry = questionCheckbox.parentElement;
                 questionEntry.classList.add("question_selected");
-            }else{
+            } else {
                 let questionEntry = questionCheckbox.parentElement;
                 questionEntry.classList.remove("question_selected");
             }
@@ -193,22 +193,26 @@ function addQuestionCheckboxListener(quizId) {
     let questionCheckboxes = document.querySelectorAll(".quiz_" + quizId + "_question");
 
     questionCheckboxes.forEach((questionCheckbox) => {
+        questionCheckbox.addEventListener("click", (event) => {
+            questionCheckbox.checked = !questionCheckbox.checked;
+        });
+
         questionCheckbox.addEventListener("change", () => {
+            let questionEntry = questionCheckbox.parentElement;
+
             if (questionCheckbox.checked) {
-                let questionEntry = questionCheckbox.parentElement;
                 questionEntry.classList.add("question_selected");
                 // If the question is checked, check if all questions are checked.
                 let allChecked = false;
                 allChecked = areAllQuestionsChecked(questionCheckboxes);
                 if (allChecked) {
                     // If all questions are checked, check the quiz checkbox.
-                    quizCheckbox.checked = questionCheckbox.checked;
+                    quizCheckbox.checked = true;
                 }
             } else {
                 // If the question is unchecked, uncheck the quiz checkbox.
-                let questionEntry = questionCheckbox.parentElement;
                 questionEntry.classList.remove("question_selected");
-                quizCheckbox.checked = questionCheckbox.checked;
+                quizCheckbox.checked = false;
             }
         });
     });
@@ -224,6 +228,7 @@ function addQuestionEntryListeners(quizId) {
     questionEntries.forEach((questionEntry) => {
         questionEntry.addEventListener("click", () => {
             let questionCheckbox = questionEntry.querySelector(".question_checkbox");
+            questionCheckbox.checked = !questionCheckbox.checked;
             questionCheckbox.dispatchEvent(new Event("change"));
         });
     });
