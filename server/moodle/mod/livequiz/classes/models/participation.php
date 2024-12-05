@@ -16,8 +16,6 @@
 
 namespace mod_livequiz\models;
 
-use dml_exception;
-use stdClass;
 
 /**
  * Class Participation
@@ -54,35 +52,6 @@ class participation {
         $this->studentid = $studentid;
         $this->livequizid = $livequizid;
     }
-    /**
-     * Summary of add_participation
-     * @return boolean
-     */
-    public function add_participation(): bool {
-        global $DB;
-        $record = new stdClass();
-        $record->studentid = $this->studentid;
-        $record->livequizid = $this->livequizid;
-        $success = false;
-        try {
-            $success = $DB->insert_record('participation', $record);
-        } catch (dml_exception $dmle) {
-            echo $dmle->getMessage();
-        }
-        return $success;
-    }
-
-    /**
-     * Summary of get_participation_by_studentid
-     * @param  $studentid
-     * @return false|mixed|stdClass
-     * @throws dml_exception
-     */
-    public static function get_participation_by_studentid($studentid): mixed {
-        global $DB;
-        return $DB->get_record('participation', ['studentid' => $studentid]);
-    }
-
     /**
      * get_id
      * @return int

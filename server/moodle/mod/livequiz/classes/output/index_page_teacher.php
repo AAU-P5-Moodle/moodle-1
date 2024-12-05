@@ -21,6 +21,7 @@ use dml_exception;
 use mod_livequiz\models\livequiz;
 use mod_livequiz\models\livequiz_questions_lecturer_relation;
 use mod_livequiz\models\question;
+use mod_livequiz\repositories\question_repository;
 use mod_livequiz\services\livequiz_services;
 use renderable;
 use renderer_base;
@@ -68,15 +69,16 @@ class index_page_teacher implements renderable, templatable {
      * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
+        $service = livequiz_services::get_singleton_service_instance();
         $data = $this->livequiz->prepare_for_template();
         $data->hasquestions = !empty($this->livequiz->get_questions());
         $data->pagename = "Quiz editor page";
         $data->lecturerid = $this->lecturerid;
         $data->quizid = $this->quizid;
         $data->oldquestions = [];
-        $premadequestions = livequiz_questions_lecturer_relation::get_lecturer_questions_relation_by_lecturer_id($this->lecturerid);
+        $premadequestions = $service->get_lecturer_questions_relation_by_lecturer_id($this->lecturerid);
         foreach ($premadequestions as $premadequestion) {
-            $question = question::get_question_from_id(intval($premadequestion->question_id));
+            $question = $service->get_question_from_id(intval($premadequestion->question_id));
             $data->oldquestions[] = $question->prepare_for_template(new stdClass());
         }
 

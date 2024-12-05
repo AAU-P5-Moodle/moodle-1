@@ -28,6 +28,7 @@ use advanced_testcase;
 use dml_exception;
 use mod_livequiz\models\student_answers_relation;
 use mod_livequiz\models\answer;
+use mod_livequiz\services\livequiz_services;
 
 /**
  * student_answers_relation
@@ -51,11 +52,12 @@ final class student_answers_relation_test extends advanced_testcase {
      * @throws dml_exception
      */
     protected function create_answer_data(): array {
+        $service = livequiz_services::get_singleton_service_instance();
         $answers = [];
         for ($i = 0; $i < 10; $i++) {
             $answer = new answer(1, 'Answer Option' . $i, 'Answer Explenation' . $i);
-            $answerid = answer::insert_answer($answer);
-            $answers[] = answer::get_answer_from_id($answerid); // This ensures ids are set since set_id() is private.
+            $answerid = $service->insert_answer($answer);
+            $answers[] = $service->get_answer_from_id($answerid); // This ensures id's are set since set_id() is private.
         }
         return $answers;
     }
@@ -75,10 +77,11 @@ final class student_answers_relation_test extends advanced_testcase {
      * @throws dml_exception
      */
     public function test_insert_student_answer_relation(): void {
+        $service = livequiz_services::get_singleton_service_instance();
         $data = $this->create_test_data();
 
         // If this call returns an id, it means the data was inserted correctly.
-        $actual = student_answers_relation::insert_student_answer_relation(
+        $actual = $service->insert_student_answer_relation(
             $data['studentid'],
             $data['answerid'],
             $data['participationid'],
@@ -96,6 +99,7 @@ final class student_answers_relation_test extends advanced_testcase {
      */
     public function test_get_answersids_from_student_in_participation(): void {
         $studentanswerdata = $this->create_test_data();
+        $service = livequiz_services::get_singleton_service_instance();
         $answerdata = $this->create_answer_data();
 
         // Simulates multiple answers to a participation from a student.
@@ -108,7 +112,7 @@ final class student_answers_relation_test extends advanced_testcase {
         }
 
         // Get all answerids for a student in a participation.
-        $answerids = student_answers_relation::get_answersids_from_student_in_participation(
+        $answerids = $service->get_answersids_from_student_in_participation(
             $studentanswerdata['studentid'],
             $studentanswerdata['participationid']
         );

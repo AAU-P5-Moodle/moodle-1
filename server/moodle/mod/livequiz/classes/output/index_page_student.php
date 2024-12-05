@@ -74,8 +74,8 @@ class index_page_student implements renderable, templatable {
         $data->hasquestions = !empty($this->livequiz->get_questions());
         $data->quizid = $this->quizid;
         $data->participations = [];
-
-        $participations = student_quiz_relation::get_all_student_participation_for_quiz($this->quizid, $this->studentid);
+        $service = livequiz_services::get_singleton_service_instance();
+        $participations = $service->get_all_student_participation_for_quiz($this->quizid, $this->studentid);
         $_SESSION['participations'] = $participations; // Store participations in session.
 
         foreach ($participations as $index => $participation) {

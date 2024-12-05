@@ -22,10 +22,8 @@ use core_external\external_multiple_structure;
 use core_external\external_value;
 use dml_exception;
 use invalid_parameter_exception;
-use mod_livequiz\models\livequiz_quiz_lecturer_relation;
 use mod_livequiz\models\livequiz;
-use mod_livequiz\models\quiz_questions_relation;
-use mod_livequiz\models\question;
+use mod_livequiz\services\livequiz_services;
 
 /**
  * Class get_lecturer_quiz
@@ -61,16 +59,17 @@ class get_lecturer_quiz extends external_api {
         self::validate_parameters(self::execute_parameters(), [
             'lecturerid' => $lecturerid,
         ]);
+        $service = livequiz_services::get_singleton_service_instance();
         // Get all quizzes from the lecturer.
-        $rawquizzes = livequiz_quiz_lecturer_relation::get_lecturer_quiz_relations_by_lecturer_id($lecturerid);
+        $rawquizzes = $service->get_lecturer_quiz_relations_by_lecturer_id($lecturerid);
         $quizzes = [];
         // Loop through all quizzes from the lecturer and find the corresponding questions.
         foreach ($rawquizzes as $rawquiz) {
             $quizobject = livequiz::get_livequiz_instance($rawquiz->quiz_id);
             if (self::quiz_active($quizobject)) { // Check if the quiz is active/deleted.
-                $rawquestions = quiz_questions_relation::get_questions_from_quiz_id($rawquiz->quiz_id);
+                $rawquestions = $service->get_questions_from_quiz_id($rawquiz->quiz_id);
                 foreach ($rawquestions as $rawquestion) {
-                    $question = question::get_question_from_id($rawquestion->get_id());
+                    $question = $service->get_question_from_id($rawquestion->get_id());
                     $quizobject->add_question($question);
                 }
                 $preparedquiz = $quizobject->prepare_for_template();
