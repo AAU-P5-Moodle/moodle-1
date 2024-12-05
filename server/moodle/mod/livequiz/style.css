@@ -350,11 +350,11 @@
   * Navbar.
   */
 
- .nav-tabs {
+ .nav_tabs {
     display: flex;
     margin-bottom: 20px;
   }
-   .nav-tabs .tab-button {
+   .nav_tabs .tab_button {
 
     padding: 0px 10px;
     margin: 0px;
@@ -367,12 +367,12 @@
     transition: background-color 0.3s;
   }
    /* Styles for active button */
-  .nav-tabs .tab-button.active {
+  .nav_tabs .tab_button.active {
     background-color: var(--button-active-bg, #9da6b0);
     font-weight: bold;
   }
    /* Optional: Hover effect */
-  .nav-tabs .tab-button:hover {
+  .nav_tabs .tab_button:hover {
     background-color: var(--button-hover-bg, #9da6b0);
   }
 
@@ -416,7 +416,7 @@
 
 /* Sidebar Styling */
 /* Layout Styling */
-.main-container-runner {
+.main_container_runner {
    display: flex;
    flex-wrap: nowrap; /* Ensures sidebar stays beside main content */
    width: 100%;
@@ -424,7 +424,7 @@
    gap: 20px; /* Adds spacing between sidebar and main content */
 }
 
-.main-content-runner {
+.main_content_runner {
    width: 80%;
    padding: 20px;
    box-sizing: border-box;
@@ -444,7 +444,7 @@
 }
 
 /* Sidebar Button Styling */
-.submit-quiz {
+.submit_quiz {
    width: 100%;
    padding: 10px;
    background-color: #28a745;
@@ -456,29 +456,29 @@
    margin-top: auto; /* Ensures button is pushed to the bottom */
 }
 
-.submit-quiz:hover {
+.submit_quiz:hover {
    background-color: #218838;
 }
 
 /* Question Section Styling */
-.question-container {
+.question_container {
    margin-bottom: 20px;
 }
 
-.question-title {
+.question_title {
    font-size: 1.2rem;
    font-weight: bold;
    margin-bottom: 10px;
    color: #333;
 }
 
-.question-description {
+.question_description {
    font-size: 1rem;
    margin-bottom: 15px;
    color: #555;
 }
 
-.answer-container {
+.answer_container {
    margin-top: 15px;
 }
 
