@@ -37,21 +37,23 @@
         <div class="answer-container">
             <fieldset>
                 {{#answers}}
-                    <div id="{{answerid}}" class="answer
-                        {{^isattempting}}
-                            {{#chosen}}
-                                {{#correct}}correct{{/correct}}
-                                {{^correct}}incorrect{{/correct}}
-                            {{/chosen}}
-                            {{^chosen}}
-                                {{#correctnotchosen}}correctnotchosen{{/correctnotchosen}}
-                            {{/chosen}}
-                        {{/isattempting}}">
-                        <input type="{{answertype}}" id="{{answerid}}" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
+                    <label id="{{answerid}}" class="answer
+                            {{^isattempting}}
+                                {{#chosen}}
+                                    {{#correct}}correct{{/correct}}
+                                    {{^correct}}incorrect{{/correct}}
+                                {{/chosen}}
+                                {{^chosen}}
+                                    {{#correctnotchosen}}correctnotchosen{{/correctnotchosen}}
+                                {{/chosen}}
+                            {{/isattempting}}">
+                        <input type="{{answertype}}" id="{{answerid}}-input" name="answers_for_question_{{questionid}}[]" value="{{answerid}}" class="{{quizid}}"
                             {{#chosen}}checked{{/chosen}}
                             {{^isattempting}}disabled{{/isattempting}}>
-                        <label for="{{answerid}}">{{answerdescription}}</label>
-                    </div>
+                        <div>
+                            {{answerdescription}}
+                        </div>
+                    </label>
                 {{/answers}}
             </fieldset>
         </div>
