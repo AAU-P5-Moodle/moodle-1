@@ -35,7 +35,7 @@ Feature: Delete teacher participation
     And I should see "Back to Live Quiz menu"
     And I click on "Back to Live Quiz menu" "link"
     And I should see "Quiz editor page"
-    And I click on "//span[@class='question-title' and text()='Question 1'][1]" "xpath_element"
+    And I click on "//span[@class='question_list_text' and text()='Question 1'][1]" "xpath_element"
     # Check if fields are filled with correct values from demo data
     And the field "question_title_id" matches value "Question 1"
     # Edit the question title
