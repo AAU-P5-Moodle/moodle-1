@@ -14,7 +14,7 @@ Development is ongoing and processes on a semester-by-semester basis.
 ## Development documentation
 
 - [LiveQuiz Wiki](https://github.com/AAU-P5-Moodle/moodle-1/wiki):
-Detailed about the project, including techstack, plugin structure, and analysis.
+Details about the project, including tech stack, plugin structure, and analysis.
 - [Setup Guide using Nix-shell](https://github.com/AAU-P5-Moodle/moodle-1/wiki/nix-and-nix%E2%80%90shell): Instructions for setting up the development environment using Nix-shell.
 - [Scrum Board](https://github.com/orgs/AAU-P5-Moodle/projects/2):
 Overview of the development process, including tasks and progress tracking.
@@ -22,16 +22,6 @@ Overview of the development process, including tasks and progress tracking.
 This is the initial readme that is provided with Moodle.
 - [First Good Issues](https://github.com/AAU-P5-Moodle/moodle-1/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22):
 Issues to get you started.
-
-## Tech Stack
-
-- **Moodle**: Version 4.x
-- **PHP**: Version 8.1 or higher
-- **Apache**: Version 2.4 or higher (or compatible web server)
-- **MariaDB**: Version 10.2 or higher
-- **PHPUnit**: Version 9.6 or higher
-- **PHP CodeSniffer**: Version 3.11.1 or higher
-- **Behat**: Version 3.14 or higher
 
 ## License
 
