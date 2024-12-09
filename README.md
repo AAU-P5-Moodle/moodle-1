@@ -21,6 +21,16 @@ Overview of the development process, including tasks and progress tracking.
 - [First Good Issues](https://github.com/AAU-P5-Moodle/moodle-1/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22):
 Issues to get you started.
 
+## Tech Stack
+
+- **Moodle**: Version 4.x
+- **PHP**: Version 8.1 or higher
+- **Apache**: Version 2.4 or higher (or compatible web server)
+- **MariaDB**: Version 10.2 or higher
+- **PHPUnit**: Version 9.6 or higher
+- **PHP CodeSniffer**: Version 3.11.1 or higher
+- **Behat**: Version 3.14 or higher
+
 ## License
 
 LiveQuiz is a plugin for Moodle and is distributed under the GNU General Public License v3 (GPLv3). For details, see the LICENSE file or visit https://www.gnu.org/licenses/gpl-3.0.html.
