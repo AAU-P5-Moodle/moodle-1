@@ -1,7 +1,8 @@
-# LiveQuiz
 [![codesniffer](https://github.com/AAU-P5-Moodle/moodle-1/actions/workflows/codesniffer.yml/badge.svg)](https://github.com/AAU-P5-Moodle/moodle-1/actions/workflows/codesniffer.yml?event=push)
 [![Behat](https://github.com/AAU-P5-Moodle/moodle-1/actions/workflows/behat.yml/badge.svg)](https://github.com/AAU-P5-Moodle/moodle-1/actions/workflows/behat.yml?event=push)
 [![PHPUnit](https://github.com/AAU-P5-Moodle/moodle-1/actions/workflows/phpunit.yml/badge.svg)](https://github.com/AAU-P5-Moodle/moodle-1/actions/workflows/phpunit.yml?event=push)
+
+# LiveQuiz
 
 LiveQuiz is a Moodle module that aims to facilitate interactive quizzes for both live classroom use and self-study, while offering a more active practice and learning to students.
 
