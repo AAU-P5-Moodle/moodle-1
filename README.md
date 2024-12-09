@@ -18,6 +18,8 @@ Detailed about the project, including techstack, plugin structure, and analysis.
 - [Setup Guide using Nix-shell](https://github.com/AAU-P5-Moodle/moodle-1/wiki/nix-and-nix%E2%80%90shell): Instructions for setting up the development environment using Nix-shell.
 - [Scrum Board](https://github.com/orgs/AAU-P5-Moodle/projects/2):
 Overview of the development process, including tasks and progress tracking.
+- [Moodle Readme](https://github.com/AAU-P5-Moodle/moodle-1/wiki/Moodle-Readme):
+This is the initial readme that is provided with Moodle.
 - [First Good Issues](https://github.com/AAU-P5-Moodle/moodle-1/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22):
 Issues to get you started.
 
